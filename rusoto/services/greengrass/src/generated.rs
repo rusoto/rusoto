@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
@@ -7109,10 +7109,11 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| AssociateRoleToGroupError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AssociateRoleToGroupResponse, _>()?;
+                                .deserialize::<AssociateRoleToGroupResponse, _>();
 
                             result
                         })
@@ -7123,11 +7124,10 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(AssociateRoleToGroupError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<AssociateRoleToGroupError>())
+                            .and_then(|response| {
+                                Err(AssociateRoleToGroupError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7152,11 +7152,11 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| AssociateServiceRoleToAccountError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AssociateServiceRoleToAccountResponse, _>(
-                            )?;
+                                .deserialize::<AssociateServiceRoleToAccountResponse, _>();
 
                             result
                         })
@@ -7167,13 +7167,10 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(AssociateServiceRoleToAccountError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<AssociateServiceRoleToAccountError>())
+                            .and_then(|response| {
+                                Err(AssociateServiceRoleToAccountError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7201,10 +7198,11 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| CreateConnectorDefinitionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateConnectorDefinitionResponse, _>()?;
+                                .deserialize::<CreateConnectorDefinitionResponse, _>();
 
                             result
                         })
@@ -7215,13 +7213,10 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(CreateConnectorDefinitionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateConnectorDefinitionError>())
+                            .and_then(|response| {
+                                Err(CreateConnectorDefinitionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7253,11 +7248,12 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| CreateConnectorDefinitionVersionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
                                 .deserialize::<CreateConnectorDefinitionVersionResponse, _>(
-                            )?;
+                            );
 
                             result
                         })
@@ -7268,15 +7264,12 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(CreateConnectorDefinitionVersionError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateConnectorDefinitionVersionError>())
+                            .and_then(|response| {
+                                Err(CreateConnectorDefinitionVersionError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -7304,10 +7297,11 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| CreateCoreDefinitionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateCoreDefinitionResponse, _>()?;
+                                .deserialize::<CreateCoreDefinitionResponse, _>();
 
                             result
                         })
@@ -7318,11 +7312,10 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateCoreDefinitionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateCoreDefinitionError>())
+                            .and_then(|response| {
+                                Err(CreateCoreDefinitionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7353,10 +7346,11 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| CreateCoreDefinitionVersionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateCoreDefinitionVersionResponse, _>()?;
+                                .deserialize::<CreateCoreDefinitionVersionResponse, _>();
 
                             result
                         })
@@ -7367,13 +7361,10 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(CreateCoreDefinitionVersionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateCoreDefinitionVersionError>())
+                            .and_then(|response| {
+                                Err(CreateCoreDefinitionVersionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7404,10 +7395,11 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| CreateDeploymentError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateDeploymentResponse, _>()?;
+                                .deserialize::<CreateDeploymentResponse, _>();
 
                             result
                         })
@@ -7418,11 +7410,10 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateDeploymentError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateDeploymentError>())
+                            .and_then(|response| {
+                                Err(CreateDeploymentError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7450,10 +7441,11 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| CreateDeviceDefinitionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateDeviceDefinitionResponse, _>()?;
+                                .deserialize::<CreateDeviceDefinitionResponse, _>();
 
                             result
                         })
@@ -7464,13 +7456,10 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(CreateDeviceDefinitionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateDeviceDefinitionError>())
+                            .and_then(|response| {
+                                Err(CreateDeviceDefinitionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7502,11 +7491,11 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| CreateDeviceDefinitionVersionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateDeviceDefinitionVersionResponse, _>(
-                            )?;
+                                .deserialize::<CreateDeviceDefinitionVersionResponse, _>();
 
                             result
                         })
@@ -7517,13 +7506,10 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(CreateDeviceDefinitionVersionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateDeviceDefinitionVersionError>())
+                            .and_then(|response| {
+                                Err(CreateDeviceDefinitionVersionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7551,10 +7537,11 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| CreateFunctionDefinitionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateFunctionDefinitionResponse, _>()?;
+                                .deserialize::<CreateFunctionDefinitionResponse, _>();
 
                             result
                         })
@@ -7565,13 +7552,10 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(CreateFunctionDefinitionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateFunctionDefinitionError>())
+                            .and_then(|response| {
+                                Err(CreateFunctionDefinitionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7603,11 +7587,12 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| CreateFunctionDefinitionVersionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
                                 .deserialize::<CreateFunctionDefinitionVersionResponse, _>(
-                            )?;
+                            );
 
                             result
                         })
@@ -7618,15 +7603,12 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(CreateFunctionDefinitionVersionError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateFunctionDefinitionVersionError>())
+                            .and_then(|response| {
+                                Err(CreateFunctionDefinitionVersionError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -7654,10 +7636,11 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| CreateGroupError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateGroupResponse, _>()?;
+                                .deserialize::<CreateGroupResponse, _>();
 
                             result
                         })
@@ -7668,11 +7651,8 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateGroupError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateGroupError>())
+                            .and_then(|response| Err(CreateGroupError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7701,11 +7681,12 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| CreateGroupCertificateAuthorityError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
                                 .deserialize::<CreateGroupCertificateAuthorityResponse, _>(
-                            )?;
+                            );
 
                             result
                         })
@@ -7716,15 +7697,12 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(CreateGroupCertificateAuthorityError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateGroupCertificateAuthorityError>())
+                            .and_then(|response| {
+                                Err(CreateGroupCertificateAuthorityError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -7755,10 +7733,11 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| CreateGroupVersionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateGroupVersionResponse, _>()?;
+                                .deserialize::<CreateGroupVersionResponse, _>();
 
                             result
                         })
@@ -7769,11 +7748,10 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateGroupVersionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateGroupVersionError>())
+                            .and_then(|response| {
+                                Err(CreateGroupVersionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7801,10 +7779,11 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| CreateLoggerDefinitionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateLoggerDefinitionResponse, _>()?;
+                                .deserialize::<CreateLoggerDefinitionResponse, _>();
 
                             result
                         })
@@ -7815,13 +7794,10 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(CreateLoggerDefinitionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateLoggerDefinitionError>())
+                            .and_then(|response| {
+                                Err(CreateLoggerDefinitionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7853,11 +7829,11 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| CreateLoggerDefinitionVersionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateLoggerDefinitionVersionResponse, _>(
-                            )?;
+                                .deserialize::<CreateLoggerDefinitionVersionResponse, _>();
 
                             result
                         })
@@ -7868,13 +7844,10 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(CreateLoggerDefinitionVersionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateLoggerDefinitionVersionError>())
+                            .and_then(|response| {
+                                Err(CreateLoggerDefinitionVersionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7902,10 +7875,11 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| CreateResourceDefinitionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateResourceDefinitionResponse, _>()?;
+                                .deserialize::<CreateResourceDefinitionResponse, _>();
 
                             result
                         })
@@ -7916,13 +7890,10 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(CreateResourceDefinitionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateResourceDefinitionError>())
+                            .and_then(|response| {
+                                Err(CreateResourceDefinitionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7954,11 +7925,12 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| CreateResourceDefinitionVersionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
                                 .deserialize::<CreateResourceDefinitionVersionResponse, _>(
-                            )?;
+                            );
 
                             result
                         })
@@ -7969,15 +7941,12 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(CreateResourceDefinitionVersionError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateResourceDefinitionVersionError>())
+                            .and_then(|response| {
+                                Err(CreateResourceDefinitionVersionError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -8005,10 +7974,11 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| CreateSoftwareUpdateJobError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateSoftwareUpdateJobResponse, _>()?;
+                                .deserialize::<CreateSoftwareUpdateJobResponse, _>();
 
                             result
                         })
@@ -8019,13 +7989,10 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(CreateSoftwareUpdateJobError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateSoftwareUpdateJobError>())
+                            .and_then(|response| {
+                                Err(CreateSoftwareUpdateJobError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8053,11 +8020,11 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| CreateSubscriptionDefinitionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateSubscriptionDefinitionResponse, _>(
-                            )?;
+                                .deserialize::<CreateSubscriptionDefinitionResponse, _>();
 
                             result
                         })
@@ -8068,13 +8035,10 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(CreateSubscriptionDefinitionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateSubscriptionDefinitionError>())
+                            .and_then(|response| {
+                                Err(CreateSubscriptionDefinitionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8108,11 +8072,12 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| CreateSubscriptionDefinitionVersionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
                                 .deserialize::<CreateSubscriptionDefinitionVersionResponse, _>(
-                            )?;
+                            );
 
                             result
                         })
@@ -8123,15 +8088,12 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(CreateSubscriptionDefinitionVersionError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateSubscriptionDefinitionVersionError>())
+                            .and_then(|response| {
+                                Err(CreateSubscriptionDefinitionVersionError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -8155,10 +8117,11 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteConnectorDefinitionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteConnectorDefinitionResponse, _>()?;
+                                .deserialize::<DeleteConnectorDefinitionResponse, _>();
 
                             result
                         })
@@ -8169,13 +8132,10 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(DeleteConnectorDefinitionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteConnectorDefinitionError>())
+                            .and_then(|response| {
+                                Err(DeleteConnectorDefinitionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8199,10 +8159,11 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteCoreDefinitionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteCoreDefinitionResponse, _>()?;
+                                .deserialize::<DeleteCoreDefinitionResponse, _>();
 
                             result
                         })
@@ -8213,11 +8174,10 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteCoreDefinitionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteCoreDefinitionError>())
+                            .and_then(|response| {
+                                Err(DeleteCoreDefinitionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8241,10 +8201,11 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteDeviceDefinitionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteDeviceDefinitionResponse, _>()?;
+                                .deserialize::<DeleteDeviceDefinitionResponse, _>();
 
                             result
                         })
@@ -8255,13 +8216,10 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(DeleteDeviceDefinitionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteDeviceDefinitionError>())
+                            .and_then(|response| {
+                                Err(DeleteDeviceDefinitionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8285,10 +8243,11 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteFunctionDefinitionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteFunctionDefinitionResponse, _>()?;
+                                .deserialize::<DeleteFunctionDefinitionResponse, _>();
 
                             result
                         })
@@ -8299,13 +8258,10 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(DeleteFunctionDefinitionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteFunctionDefinitionError>())
+                            .and_then(|response| {
+                                Err(DeleteFunctionDefinitionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8326,10 +8282,11 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteGroupError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteGroupResponse, _>()?;
+                                .deserialize::<DeleteGroupResponse, _>();
 
                             result
                         })
@@ -8340,11 +8297,8 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteGroupError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteGroupError>())
+                            .and_then(|response| Err(DeleteGroupError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8368,10 +8322,11 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteLoggerDefinitionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteLoggerDefinitionResponse, _>()?;
+                                .deserialize::<DeleteLoggerDefinitionResponse, _>();
 
                             result
                         })
@@ -8382,13 +8337,10 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(DeleteLoggerDefinitionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteLoggerDefinitionError>())
+                            .and_then(|response| {
+                                Err(DeleteLoggerDefinitionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8412,10 +8364,11 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteResourceDefinitionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteResourceDefinitionResponse, _>()?;
+                                .deserialize::<DeleteResourceDefinitionResponse, _>();
 
                             result
                         })
@@ -8426,13 +8379,10 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(DeleteResourceDefinitionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteResourceDefinitionError>())
+                            .and_then(|response| {
+                                Err(DeleteResourceDefinitionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8456,11 +8406,11 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteSubscriptionDefinitionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteSubscriptionDefinitionResponse, _>(
-                            )?;
+                                .deserialize::<DeleteSubscriptionDefinitionResponse, _>();
 
                             result
                         })
@@ -8471,13 +8421,10 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(DeleteSubscriptionDefinitionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteSubscriptionDefinitionError>())
+                            .and_then(|response| {
+                                Err(DeleteSubscriptionDefinitionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8501,10 +8448,11 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| DisassociateRoleFromGroupError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DisassociateRoleFromGroupResponse, _>()?;
+                                .deserialize::<DisassociateRoleFromGroupResponse, _>();
 
                             result
                         })
@@ -8515,13 +8463,10 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(DisassociateRoleFromGroupError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DisassociateRoleFromGroupError>())
+                            .and_then(|response| {
+                                Err(DisassociateRoleFromGroupError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8544,11 +8489,12 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| DisassociateServiceRoleFromAccountError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
                                 .deserialize::<DisassociateServiceRoleFromAccountResponse, _>(
-                            )?;
+                            );
 
                             result
                         })
@@ -8559,15 +8505,12 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(DisassociateServiceRoleFromAccountError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DisassociateServiceRoleFromAccountError>())
+                            .and_then(|response| {
+                                Err(DisassociateServiceRoleFromAccountError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -8591,10 +8534,11 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetAssociatedRoleError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetAssociatedRoleResponse, _>()?;
+                                .deserialize::<GetAssociatedRoleResponse, _>();
 
                             result
                         })
@@ -8605,11 +8549,10 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetAssociatedRoleError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetAssociatedRoleError>())
+                            .and_then(|response| {
+                                Err(GetAssociatedRoleError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8633,10 +8576,11 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetBulkDeploymentStatusError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetBulkDeploymentStatusResponse, _>()?;
+                                .deserialize::<GetBulkDeploymentStatusResponse, _>();
 
                             result
                         })
@@ -8647,13 +8591,10 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(GetBulkDeploymentStatusError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetBulkDeploymentStatusError>())
+                            .and_then(|response| {
+                                Err(GetBulkDeploymentStatusError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8677,10 +8618,11 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetConnectivityInfoError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetConnectivityInfoResponse, _>()?;
+                                .deserialize::<GetConnectivityInfoResponse, _>();
 
                             result
                         })
@@ -8691,11 +8633,10 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetConnectivityInfoError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetConnectivityInfoError>())
+                            .and_then(|response| {
+                                Err(GetConnectivityInfoError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8719,10 +8660,11 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetConnectorDefinitionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetConnectorDefinitionResponse, _>()?;
+                                .deserialize::<GetConnectorDefinitionResponse, _>();
 
                             result
                         })
@@ -8733,13 +8675,10 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(GetConnectorDefinitionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetConnectorDefinitionError>())
+                            .and_then(|response| {
+                                Err(GetConnectorDefinitionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8767,11 +8706,11 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetConnectorDefinitionVersionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetConnectorDefinitionVersionResponse, _>(
-                            )?;
+                                .deserialize::<GetConnectorDefinitionVersionResponse, _>();
 
                             result
                         })
@@ -8782,13 +8721,10 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(GetConnectorDefinitionVersionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetConnectorDefinitionVersionError>())
+                            .and_then(|response| {
+                                Err(GetConnectorDefinitionVersionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8812,10 +8748,11 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetCoreDefinitionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetCoreDefinitionResponse, _>()?;
+                                .deserialize::<GetCoreDefinitionResponse, _>();
 
                             result
                         })
@@ -8826,11 +8763,10 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetCoreDefinitionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetCoreDefinitionError>())
+                            .and_then(|response| {
+                                Err(GetCoreDefinitionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8851,10 +8787,11 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetCoreDefinitionVersionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetCoreDefinitionVersionResponse, _>()?;
+                                .deserialize::<GetCoreDefinitionVersionResponse, _>();
 
                             result
                         })
@@ -8865,13 +8802,10 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(GetCoreDefinitionVersionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetCoreDefinitionVersionError>())
+                            .and_then(|response| {
+                                Err(GetCoreDefinitionVersionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8896,10 +8830,11 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetDeploymentStatusError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetDeploymentStatusResponse, _>()?;
+                                .deserialize::<GetDeploymentStatusResponse, _>();
 
                             result
                         })
@@ -8910,11 +8845,10 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetDeploymentStatusError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetDeploymentStatusError>())
+                            .and_then(|response| {
+                                Err(GetDeploymentStatusError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8938,10 +8872,11 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetDeviceDefinitionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetDeviceDefinitionResponse, _>()?;
+                                .deserialize::<GetDeviceDefinitionResponse, _>();
 
                             result
                         })
@@ -8952,11 +8887,10 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetDeviceDefinitionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetDeviceDefinitionError>())
+                            .and_then(|response| {
+                                Err(GetDeviceDefinitionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8983,10 +8917,11 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetDeviceDefinitionVersionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetDeviceDefinitionVersionResponse, _>()?;
+                                .deserialize::<GetDeviceDefinitionVersionResponse, _>();
 
                             result
                         })
@@ -8997,13 +8932,10 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(GetDeviceDefinitionVersionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetDeviceDefinitionVersionError>())
+                            .and_then(|response| {
+                                Err(GetDeviceDefinitionVersionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9027,10 +8959,11 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetFunctionDefinitionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetFunctionDefinitionResponse, _>()?;
+                                .deserialize::<GetFunctionDefinitionResponse, _>();
 
                             result
                         })
@@ -9041,11 +8974,10 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetFunctionDefinitionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetFunctionDefinitionError>())
+                            .and_then(|response| {
+                                Err(GetFunctionDefinitionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9072,11 +9004,11 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetFunctionDefinitionVersionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetFunctionDefinitionVersionResponse, _>(
-                            )?;
+                                .deserialize::<GetFunctionDefinitionVersionResponse, _>();
 
                             result
                         })
@@ -9087,13 +9019,10 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(GetFunctionDefinitionVersionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetFunctionDefinitionVersionError>())
+                            .and_then(|response| {
+                                Err(GetFunctionDefinitionVersionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9111,10 +9040,11 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetGroupError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetGroupResponse, _>()?;
+                                .deserialize::<GetGroupResponse, _>();
 
                             result
                         })
@@ -9125,11 +9055,8 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetGroupError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetGroupError>())
+                            .and_then(|response| Err(GetGroupError::from_response(response)))
                     })
                     .boxed()
             }
@@ -9154,11 +9081,11 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetGroupCertificateAuthorityError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetGroupCertificateAuthorityResponse, _>(
-                            )?;
+                                .deserialize::<GetGroupCertificateAuthorityResponse, _>();
 
                             result
                         })
@@ -9169,13 +9096,10 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(GetGroupCertificateAuthorityError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetGroupCertificateAuthorityError>())
+                            .and_then(|response| {
+                                Err(GetGroupCertificateAuthorityError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9200,11 +9124,12 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetGroupCertificateConfigurationError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
                                 .deserialize::<GetGroupCertificateConfigurationResponse, _>(
-                            )?;
+                            );
 
                             result
                         })
@@ -9215,15 +9140,12 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(GetGroupCertificateConfigurationError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetGroupCertificateConfigurationError>())
+                            .and_then(|response| {
+                                Err(GetGroupCertificateConfigurationError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -9248,10 +9170,11 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetGroupVersionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetGroupVersionResponse, _>()?;
+                                .deserialize::<GetGroupVersionResponse, _>();
 
                             result
                         })
@@ -9262,11 +9185,8 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetGroupVersionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetGroupVersionError>())
+                            .and_then(|response| Err(GetGroupVersionError::from_response(response)))
                     })
                     .boxed()
             }
@@ -9290,10 +9210,11 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetLoggerDefinitionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetLoggerDefinitionResponse, _>()?;
+                                .deserialize::<GetLoggerDefinitionResponse, _>();
 
                             result
                         })
@@ -9304,11 +9225,10 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetLoggerDefinitionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetLoggerDefinitionError>())
+                            .and_then(|response| {
+                                Err(GetLoggerDefinitionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9335,10 +9255,11 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetLoggerDefinitionVersionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetLoggerDefinitionVersionResponse, _>()?;
+                                .deserialize::<GetLoggerDefinitionVersionResponse, _>();
 
                             result
                         })
@@ -9349,13 +9270,10 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(GetLoggerDefinitionVersionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetLoggerDefinitionVersionError>())
+                            .and_then(|response| {
+                                Err(GetLoggerDefinitionVersionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9379,10 +9297,11 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetResourceDefinitionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetResourceDefinitionResponse, _>()?;
+                                .deserialize::<GetResourceDefinitionResponse, _>();
 
                             result
                         })
@@ -9393,11 +9312,10 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetResourceDefinitionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetResourceDefinitionError>())
+                            .and_then(|response| {
+                                Err(GetResourceDefinitionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9418,11 +9336,11 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetResourceDefinitionVersionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetResourceDefinitionVersionResponse, _>(
-                            )?;
+                                .deserialize::<GetResourceDefinitionVersionResponse, _>();
 
                             result
                         })
@@ -9433,13 +9351,10 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(GetResourceDefinitionVersionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetResourceDefinitionVersionError>())
+                            .and_then(|response| {
+                                Err(GetResourceDefinitionVersionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9459,10 +9374,11 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetServiceRoleForAccountError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetServiceRoleForAccountResponse, _>()?;
+                                .deserialize::<GetServiceRoleForAccountResponse, _>();
 
                             result
                         })
@@ -9473,13 +9389,10 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(GetServiceRoleForAccountError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetServiceRoleForAccountError>())
+                            .and_then(|response| {
+                                Err(GetServiceRoleForAccountError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9503,10 +9416,11 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetSubscriptionDefinitionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetSubscriptionDefinitionResponse, _>()?;
+                                .deserialize::<GetSubscriptionDefinitionResponse, _>();
 
                             result
                         })
@@ -9517,13 +9431,10 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(GetSubscriptionDefinitionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetSubscriptionDefinitionError>())
+                            .and_then(|response| {
+                                Err(GetSubscriptionDefinitionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9551,11 +9462,12 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetSubscriptionDefinitionVersionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
                                 .deserialize::<GetSubscriptionDefinitionVersionResponse, _>(
-                            )?;
+                            );
 
                             result
                         })
@@ -9566,15 +9478,12 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(GetSubscriptionDefinitionVersionError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetSubscriptionDefinitionVersionError>())
+                            .and_then(|response| {
+                                Err(GetSubscriptionDefinitionVersionError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -9610,11 +9519,12 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListBulkDeploymentDetailedReportsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
                                 .deserialize::<ListBulkDeploymentDetailedReportsResponse, _>(
-                            )?;
+                            );
 
                             result
                         })
@@ -9625,15 +9535,12 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(ListBulkDeploymentDetailedReportsError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListBulkDeploymentDetailedReportsError>())
+                            .and_then(|response| {
+                                Err(ListBulkDeploymentDetailedReportsError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -9663,10 +9570,11 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListBulkDeploymentsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListBulkDeploymentsResponse, _>()?;
+                                .deserialize::<ListBulkDeploymentsResponse, _>();
 
                             result
                         })
@@ -9677,11 +9585,10 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListBulkDeploymentsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListBulkDeploymentsError>())
+                            .and_then(|response| {
+                                Err(ListBulkDeploymentsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9715,11 +9622,12 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListConnectorDefinitionVersionsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
                                 .deserialize::<ListConnectorDefinitionVersionsResponse, _>(
-                            )?;
+                            );
 
                             result
                         })
@@ -9730,15 +9638,12 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(ListConnectorDefinitionVersionsError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListConnectorDefinitionVersionsError>())
+                            .and_then(|response| {
+                                Err(ListConnectorDefinitionVersionsError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -9768,10 +9673,11 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListConnectorDefinitionsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListConnectorDefinitionsResponse, _>()?;
+                                .deserialize::<ListConnectorDefinitionsResponse, _>();
 
                             result
                         })
@@ -9782,13 +9688,10 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(ListConnectorDefinitionsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListConnectorDefinitionsError>())
+                            .and_then(|response| {
+                                Err(ListConnectorDefinitionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9821,10 +9724,11 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListCoreDefinitionVersionsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListCoreDefinitionVersionsResponse, _>()?;
+                                .deserialize::<ListCoreDefinitionVersionsResponse, _>();
 
                             result
                         })
@@ -9835,13 +9739,10 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(ListCoreDefinitionVersionsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListCoreDefinitionVersionsError>())
+                            .and_then(|response| {
+                                Err(ListCoreDefinitionVersionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9871,10 +9772,11 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListCoreDefinitionsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListCoreDefinitionsResponse, _>()?;
+                                .deserialize::<ListCoreDefinitionsResponse, _>();
 
                             result
                         })
@@ -9885,11 +9787,10 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListCoreDefinitionsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListCoreDefinitionsError>())
+                            .and_then(|response| {
+                                Err(ListCoreDefinitionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9922,10 +9823,11 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListDeploymentsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListDeploymentsResponse, _>()?;
+                                .deserialize::<ListDeploymentsResponse, _>();
 
                             result
                         })
@@ -9936,11 +9838,8 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListDeploymentsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListDeploymentsError>())
+                            .and_then(|response| Err(ListDeploymentsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -9973,11 +9872,11 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListDeviceDefinitionVersionsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListDeviceDefinitionVersionsResponse, _>(
-                            )?;
+                                .deserialize::<ListDeviceDefinitionVersionsResponse, _>();
 
                             result
                         })
@@ -9988,13 +9887,10 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(ListDeviceDefinitionVersionsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListDeviceDefinitionVersionsError>())
+                            .and_then(|response| {
+                                Err(ListDeviceDefinitionVersionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10024,10 +9920,11 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListDeviceDefinitionsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListDeviceDefinitionsResponse, _>()?;
+                                .deserialize::<ListDeviceDefinitionsResponse, _>();
 
                             result
                         })
@@ -10038,11 +9935,10 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListDeviceDefinitionsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListDeviceDefinitionsError>())
+                            .and_then(|response| {
+                                Err(ListDeviceDefinitionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10076,11 +9972,12 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListFunctionDefinitionVersionsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
                                 .deserialize::<ListFunctionDefinitionVersionsResponse, _>(
-                            )?;
+                            );
 
                             result
                         })
@@ -10091,15 +9988,10 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(ListFunctionDefinitionVersionsError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListFunctionDefinitionVersionsError>())
+                            .and_then(|response| {
+                                Err(ListFunctionDefinitionVersionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10129,10 +10021,11 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListFunctionDefinitionsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListFunctionDefinitionsResponse, _>()?;
+                                .deserialize::<ListFunctionDefinitionsResponse, _>();
 
                             result
                         })
@@ -10143,13 +10036,10 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(ListFunctionDefinitionsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListFunctionDefinitionsError>())
+                            .and_then(|response| {
+                                Err(ListFunctionDefinitionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10174,11 +10064,12 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListGroupCertificateAuthoritiesError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
                                 .deserialize::<ListGroupCertificateAuthoritiesResponse, _>(
-                            )?;
+                            );
 
                             result
                         })
@@ -10189,15 +10080,12 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(ListGroupCertificateAuthoritiesError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListGroupCertificateAuthoritiesError>())
+                            .and_then(|response| {
+                                Err(ListGroupCertificateAuthoritiesError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -10230,10 +10118,11 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListGroupVersionsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListGroupVersionsResponse, _>()?;
+                                .deserialize::<ListGroupVersionsResponse, _>();
 
                             result
                         })
@@ -10244,11 +10133,10 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListGroupVersionsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListGroupVersionsError>())
+                            .and_then(|response| {
+                                Err(ListGroupVersionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10278,10 +10166,11 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListGroupsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListGroupsResponse, _>()?;
+                                .deserialize::<ListGroupsResponse, _>();
 
                             result
                         })
@@ -10292,11 +10181,8 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListGroupsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListGroupsError>())
+                            .and_then(|response| Err(ListGroupsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -10329,11 +10215,11 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListLoggerDefinitionVersionsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListLoggerDefinitionVersionsResponse, _>(
-                            )?;
+                                .deserialize::<ListLoggerDefinitionVersionsResponse, _>();
 
                             result
                         })
@@ -10344,13 +10230,10 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(ListLoggerDefinitionVersionsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListLoggerDefinitionVersionsError>())
+                            .and_then(|response| {
+                                Err(ListLoggerDefinitionVersionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10380,10 +10263,11 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListLoggerDefinitionsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListLoggerDefinitionsResponse, _>()?;
+                                .deserialize::<ListLoggerDefinitionsResponse, _>();
 
                             result
                         })
@@ -10394,11 +10278,10 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListLoggerDefinitionsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListLoggerDefinitionsError>())
+                            .and_then(|response| {
+                                Err(ListLoggerDefinitionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10432,11 +10315,12 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListResourceDefinitionVersionsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
                                 .deserialize::<ListResourceDefinitionVersionsResponse, _>(
-                            )?;
+                            );
 
                             result
                         })
@@ -10447,15 +10331,10 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(ListResourceDefinitionVersionsError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListResourceDefinitionVersionsError>())
+                            .and_then(|response| {
+                                Err(ListResourceDefinitionVersionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10485,10 +10364,11 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListResourceDefinitionsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListResourceDefinitionsResponse, _>()?;
+                                .deserialize::<ListResourceDefinitionsResponse, _>();
 
                             result
                         })
@@ -10499,13 +10379,10 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(ListResourceDefinitionsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListResourceDefinitionsError>())
+                            .and_then(|response| {
+                                Err(ListResourceDefinitionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10541,11 +10418,12 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListSubscriptionDefinitionVersionsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
                                 .deserialize::<ListSubscriptionDefinitionVersionsResponse, _>(
-                            )?;
+                            );
 
                             result
                         })
@@ -10556,15 +10434,12 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(ListSubscriptionDefinitionVersionsError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListSubscriptionDefinitionVersionsError>())
+                            .and_then(|response| {
+                                Err(ListSubscriptionDefinitionVersionsError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -10594,10 +10469,11 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListSubscriptionDefinitionsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListSubscriptionDefinitionsResponse, _>()?;
+                                .deserialize::<ListSubscriptionDefinitionsResponse, _>();
 
                             result
                         })
@@ -10608,13 +10484,10 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(ListSubscriptionDefinitionsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListSubscriptionDefinitionsError>())
+                            .and_then(|response| {
+                                Err(ListSubscriptionDefinitionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10635,10 +10508,11 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListTagsForResourceError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListTagsForResourceResponse, _>()?;
+                                .deserialize::<ListTagsForResourceResponse, _>();
 
                             result
                         })
@@ -10649,11 +10523,10 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListTagsForResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListTagsForResourceError>())
+                            .and_then(|response| {
+                                Err(ListTagsForResourceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10684,10 +10557,11 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ResetDeploymentsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ResetDeploymentsResponse, _>()?;
+                                .deserialize::<ResetDeploymentsResponse, _>();
 
                             result
                         })
@@ -10698,11 +10572,10 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ResetDeploymentsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ResetDeploymentsError>())
+                            .and_then(|response| {
+                                Err(ResetDeploymentsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10730,10 +10603,11 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| StartBulkDeploymentError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StartBulkDeploymentResponse, _>()?;
+                                .deserialize::<StartBulkDeploymentResponse, _>();
 
                             result
                         })
@@ -10744,11 +10618,10 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(StartBulkDeploymentError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<StartBulkDeploymentError>())
+                            .and_then(|response| {
+                                Err(StartBulkDeploymentError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10772,10 +10645,11 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| StopBulkDeploymentError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StopBulkDeploymentResponse, _>()?;
+                                .deserialize::<StopBulkDeploymentResponse, _>();
 
                             result
                         })
@@ -10786,11 +10660,10 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(StopBulkDeploymentError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<StopBulkDeploymentError>())
+                            .and_then(|response| {
+                                Err(StopBulkDeploymentError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10811,8 +10684,9 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| TagResourceError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -10824,11 +10698,8 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(TagResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<TagResourceError>())
+                            .and_then(|response| Err(TagResourceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -10852,8 +10723,9 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| UntagResourceError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -10865,11 +10737,8 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UntagResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UntagResourceError>())
+                            .and_then(|response| Err(UntagResourceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -10896,10 +10765,11 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| UpdateConnectivityInfoError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateConnectivityInfoResponse, _>()?;
+                                .deserialize::<UpdateConnectivityInfoResponse, _>();
 
                             result
                         })
@@ -10910,13 +10780,10 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(UpdateConnectivityInfoError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateConnectivityInfoError>())
+                            .and_then(|response| {
+                                Err(UpdateConnectivityInfoError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10943,10 +10810,11 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| UpdateConnectorDefinitionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateConnectorDefinitionResponse, _>()?;
+                                .deserialize::<UpdateConnectorDefinitionResponse, _>();
 
                             result
                         })
@@ -10957,13 +10825,10 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(UpdateConnectorDefinitionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateConnectorDefinitionError>())
+                            .and_then(|response| {
+                                Err(UpdateConnectorDefinitionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10990,10 +10855,11 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| UpdateCoreDefinitionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateCoreDefinitionResponse, _>()?;
+                                .deserialize::<UpdateCoreDefinitionResponse, _>();
 
                             result
                         })
@@ -11004,11 +10870,10 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateCoreDefinitionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateCoreDefinitionError>())
+                            .and_then(|response| {
+                                Err(UpdateCoreDefinitionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -11035,10 +10900,11 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| UpdateDeviceDefinitionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateDeviceDefinitionResponse, _>()?;
+                                .deserialize::<UpdateDeviceDefinitionResponse, _>();
 
                             result
                         })
@@ -11049,13 +10915,10 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(UpdateDeviceDefinitionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateDeviceDefinitionError>())
+                            .and_then(|response| {
+                                Err(UpdateDeviceDefinitionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -11082,10 +10945,11 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| UpdateFunctionDefinitionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateFunctionDefinitionResponse, _>()?;
+                                .deserialize::<UpdateFunctionDefinitionResponse, _>();
 
                             result
                         })
@@ -11096,13 +10960,10 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(UpdateFunctionDefinitionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateFunctionDefinitionError>())
+                            .and_then(|response| {
+                                Err(UpdateFunctionDefinitionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -11126,10 +10987,11 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| UpdateGroupError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateGroupResponse, _>()?;
+                                .deserialize::<UpdateGroupResponse, _>();
 
                             result
                         })
@@ -11140,11 +11002,8 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateGroupError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateGroupError>())
+                            .and_then(|response| Err(UpdateGroupError::from_response(response)))
                     })
                     .boxed()
             }
@@ -11174,11 +11033,12 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| UpdateGroupCertificateConfigurationError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
                                 .deserialize::<UpdateGroupCertificateConfigurationResponse, _>(
-                            )?;
+                            );
 
                             result
                         })
@@ -11189,15 +11049,12 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(UpdateGroupCertificateConfigurationError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateGroupCertificateConfigurationError>())
+                            .and_then(|response| {
+                                Err(UpdateGroupCertificateConfigurationError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -11224,10 +11081,11 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| UpdateLoggerDefinitionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateLoggerDefinitionResponse, _>()?;
+                                .deserialize::<UpdateLoggerDefinitionResponse, _>();
 
                             result
                         })
@@ -11238,13 +11096,10 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(UpdateLoggerDefinitionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateLoggerDefinitionError>())
+                            .and_then(|response| {
+                                Err(UpdateLoggerDefinitionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -11271,10 +11126,11 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| UpdateResourceDefinitionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateResourceDefinitionResponse, _>()?;
+                                .deserialize::<UpdateResourceDefinitionResponse, _>();
 
                             result
                         })
@@ -11285,13 +11141,10 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(UpdateResourceDefinitionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateResourceDefinitionError>())
+                            .and_then(|response| {
+                                Err(UpdateResourceDefinitionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -11318,11 +11171,11 @@ impl GreenGrass for GreenGrassClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| UpdateSubscriptionDefinitionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateSubscriptionDefinitionResponse, _>(
-                            )?;
+                                .deserialize::<UpdateSubscriptionDefinitionResponse, _>();
 
                             result
                         })
@@ -11333,13 +11186,10 @@ impl GreenGrass for GreenGrassClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(UpdateSubscriptionDefinitionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateSubscriptionDefinitionError>())
+                            .and_then(|response| {
+                                Err(UpdateSubscriptionDefinitionError::from_response(response))
+                            })
                     })
                     .boxed()
             }

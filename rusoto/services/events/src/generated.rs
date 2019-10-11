@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -1676,17 +1676,16 @@ impl CloudWatchEvents for CloudWatchEventsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteRuleError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteRuleError>
+                            })
+                            .and_then(|response| Err(DeleteRuleError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1705,11 +1704,16 @@ impl CloudWatchEvents for CloudWatchEventsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeEventBusError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeEventBusResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeEventBusError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeEventBusResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1717,11 +1721,12 @@ impl CloudWatchEvents for CloudWatchEventsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeEventBusError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeEventBusError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeEventBusError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1744,11 +1749,16 @@ impl CloudWatchEvents for CloudWatchEventsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeRuleError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeRuleResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeRuleError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeRuleResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1756,11 +1766,10 @@ impl CloudWatchEvents for CloudWatchEventsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeRuleError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeRuleError>
+                            })
+                            .and_then(|response| Err(DescribeRuleError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1778,17 +1787,16 @@ impl CloudWatchEvents for CloudWatchEventsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DisableRuleError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DisableRuleError>
+                            })
+                            .and_then(|response| Err(DisableRuleError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1806,17 +1814,16 @@ impl CloudWatchEvents for CloudWatchEventsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(EnableRuleError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<EnableRuleError>
+                            })
+                            .and_then(|response| Err(EnableRuleError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1839,11 +1846,17 @@ impl CloudWatchEvents for CloudWatchEventsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListRuleNamesByTargetError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListRuleNamesByTargetResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListRuleNamesByTargetError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListRuleNamesByTargetResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1851,11 +1864,13 @@ impl CloudWatchEvents for CloudWatchEventsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListRuleNamesByTargetError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListRuleNamesByTargetError>
+                            })
+                            .and_then(|response| {
+                                Err(ListRuleNamesByTargetError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1878,11 +1893,16 @@ impl CloudWatchEvents for CloudWatchEventsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListRulesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListRulesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListRulesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListRulesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1890,11 +1910,10 @@ impl CloudWatchEvents for CloudWatchEventsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListRulesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListRulesError>
+                            })
+                            .and_then(|response| Err(ListRulesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1917,11 +1936,17 @@ impl CloudWatchEvents for CloudWatchEventsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListTagsForResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListTagsForResourceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListTagsForResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListTagsForResourceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1929,11 +1954,13 @@ impl CloudWatchEvents for CloudWatchEventsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListTagsForResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListTagsForResourceError>
+                            })
+                            .and_then(|response| {
+                                Err(ListTagsForResourceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1956,11 +1983,16 @@ impl CloudWatchEvents for CloudWatchEventsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListTargetsByRuleError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListTargetsByRuleResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListTargetsByRuleError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListTargetsByRuleResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1968,11 +2000,12 @@ impl CloudWatchEvents for CloudWatchEventsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListTargetsByRuleError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListTargetsByRuleError>
+                            })
+                            .and_then(|response| {
+                                Err(ListTargetsByRuleError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1995,11 +2028,16 @@ impl CloudWatchEvents for CloudWatchEventsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| PutEventsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PutEventsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<PutEventsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<PutEventsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2007,11 +2045,10 @@ impl CloudWatchEvents for CloudWatchEventsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(PutEventsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<PutEventsError>
+                            })
+                            .and_then(|response| Err(PutEventsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2029,17 +2066,16 @@ impl CloudWatchEvents for CloudWatchEventsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(PutPermissionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<PutPermissionError>
+                            })
+                            .and_then(|response| Err(PutPermissionError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2059,11 +2095,14 @@ impl CloudWatchEvents for CloudWatchEventsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| PutRuleError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PutRuleResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<PutRuleError>)
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<PutRuleResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2071,11 +2110,8 @@ impl CloudWatchEvents for CloudWatchEventsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(PutRuleError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<PutRuleError>)
+                            .and_then(|response| Err(PutRuleError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2098,11 +2134,16 @@ impl CloudWatchEvents for CloudWatchEventsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| PutTargetsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PutTargetsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<PutTargetsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<PutTargetsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2110,11 +2151,10 @@ impl CloudWatchEvents for CloudWatchEventsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(PutTargetsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<PutTargetsError>
+                            })
+                            .and_then(|response| Err(PutTargetsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2135,17 +2175,18 @@ impl CloudWatchEvents for CloudWatchEventsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(RemovePermissionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<RemovePermissionError>
+                            })
+                            .and_then(|response| {
+                                Err(RemovePermissionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2168,11 +2209,16 @@ impl CloudWatchEvents for CloudWatchEventsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| RemoveTargetsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RemoveTargetsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<RemoveTargetsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<RemoveTargetsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2180,11 +2226,10 @@ impl CloudWatchEvents for CloudWatchEventsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(RemoveTargetsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<RemoveTargetsError>
+                            })
+                            .and_then(|response| Err(RemoveTargetsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2207,11 +2252,16 @@ impl CloudWatchEvents for CloudWatchEventsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| TagResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<TagResourceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<TagResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<TagResourceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2219,11 +2269,10 @@ impl CloudWatchEvents for CloudWatchEventsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(TagResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<TagResourceError>
+                            })
+                            .and_then(|response| Err(TagResourceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2246,11 +2295,16 @@ impl CloudWatchEvents for CloudWatchEventsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| TestEventPatternError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<TestEventPatternResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<TestEventPatternError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<TestEventPatternResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2258,11 +2312,12 @@ impl CloudWatchEvents for CloudWatchEventsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(TestEventPatternError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<TestEventPatternError>
+                            })
+                            .and_then(|response| {
+                                Err(TestEventPatternError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2285,11 +2340,16 @@ impl CloudWatchEvents for CloudWatchEventsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UntagResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UntagResourceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UntagResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UntagResourceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2297,11 +2357,10 @@ impl CloudWatchEvents for CloudWatchEventsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UntagResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UntagResourceError>
+                            })
+                            .and_then(|response| Err(UntagResourceError::from_response(response)))
                     })
                     .boxed()
             }

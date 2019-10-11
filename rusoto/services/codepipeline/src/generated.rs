@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -3785,11 +3785,16 @@ impl CodePipeline for CodePipelineClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AcknowledgeJobError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AcknowledgeJobOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<AcknowledgeJobError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AcknowledgeJobOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3797,11 +3802,10 @@ impl CodePipeline for CodePipelineClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(AcknowledgeJobError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<AcknowledgeJobError>
+                            })
+                            .and_then(|response| Err(AcknowledgeJobError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3827,11 +3831,17 @@ impl CodePipeline for CodePipelineClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AcknowledgeThirdPartyJobError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AcknowledgeThirdPartyJobOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AcknowledgeThirdPartyJobError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AcknowledgeThirdPartyJobOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3839,13 +3849,13 @@ impl CodePipeline for CodePipelineClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(AcknowledgeThirdPartyJobError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AcknowledgeThirdPartyJobError>
+                            })
+                            .and_then(|response| {
+                                Err(AcknowledgeThirdPartyJobError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3871,11 +3881,17 @@ impl CodePipeline for CodePipelineClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateCustomActionTypeError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateCustomActionTypeOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateCustomActionTypeError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateCustomActionTypeOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3883,13 +3899,13 @@ impl CodePipeline for CodePipelineClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(CreateCustomActionTypeError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateCustomActionTypeError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateCustomActionTypeError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3912,11 +3928,16 @@ impl CodePipeline for CodePipelineClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreatePipelineError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreatePipelineOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreatePipelineError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreatePipelineOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3924,11 +3945,10 @@ impl CodePipeline for CodePipelineClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreatePipelineError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreatePipelineError>
+                            })
+                            .and_then(|response| Err(CreatePipelineError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3952,19 +3972,19 @@ impl CodePipeline for CodePipelineClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DeleteCustomActionTypeError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteCustomActionTypeError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteCustomActionTypeError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3982,17 +4002,16 @@ impl CodePipeline for CodePipelineClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeletePipelineError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeletePipelineError>
+                            })
+                            .and_then(|response| Err(DeletePipelineError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4015,11 +4034,16 @@ impl CodePipeline for CodePipelineClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteWebhookError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteWebhookOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteWebhookError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteWebhookOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4027,11 +4051,10 @@ impl CodePipeline for CodePipelineClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteWebhookError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteWebhookError>
+                            })
+                            .and_then(|response| Err(DeleteWebhookError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4058,11 +4081,17 @@ impl CodePipeline for CodePipelineClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeregisterWebhookWithThirdPartyError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeregisterWebhookWithThirdPartyOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeregisterWebhookWithThirdPartyError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeregisterWebhookWithThirdPartyOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4070,15 +4099,15 @@ impl CodePipeline for CodePipelineClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DeregisterWebhookWithThirdPartyError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeregisterWebhookWithThirdPartyError>
+                            })
+                            .and_then(|response| {
+                                Err(DeregisterWebhookWithThirdPartyError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -4102,19 +4131,19 @@ impl CodePipeline for CodePipelineClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DisableStageTransitionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DisableStageTransitionError>
+                            })
+                            .and_then(|response| {
+                                Err(DisableStageTransitionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4138,17 +4167,19 @@ impl CodePipeline for CodePipelineClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(EnableStageTransitionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<EnableStageTransitionError>
+                            })
+                            .and_then(|response| {
+                                Err(EnableStageTransitionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4171,11 +4202,16 @@ impl CodePipeline for CodePipelineClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetJobDetailsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetJobDetailsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetJobDetailsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetJobDetailsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4183,11 +4219,10 @@ impl CodePipeline for CodePipelineClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetJobDetailsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetJobDetailsError>
+                            })
+                            .and_then(|response| Err(GetJobDetailsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4210,11 +4245,16 @@ impl CodePipeline for CodePipelineClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetPipelineError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetPipelineOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetPipelineError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetPipelineOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4222,11 +4262,10 @@ impl CodePipeline for CodePipelineClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetPipelineError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetPipelineError>
+                            })
+                            .and_then(|response| Err(GetPipelineError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4249,11 +4288,17 @@ impl CodePipeline for CodePipelineClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetPipelineExecutionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetPipelineExecutionOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetPipelineExecutionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetPipelineExecutionOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4261,11 +4306,13 @@ impl CodePipeline for CodePipelineClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetPipelineExecutionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetPipelineExecutionError>
+                            })
+                            .and_then(|response| {
+                                Err(GetPipelineExecutionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4288,11 +4335,16 @@ impl CodePipeline for CodePipelineClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetPipelineStateError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetPipelineStateOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetPipelineStateError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetPipelineStateOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4300,11 +4352,12 @@ impl CodePipeline for CodePipelineClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetPipelineStateError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetPipelineStateError>
+                            })
+                            .and_then(|response| {
+                                Err(GetPipelineStateError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4330,11 +4383,17 @@ impl CodePipeline for CodePipelineClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetThirdPartyJobDetailsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetThirdPartyJobDetailsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetThirdPartyJobDetailsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetThirdPartyJobDetailsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4342,13 +4401,13 @@ impl CodePipeline for CodePipelineClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(GetThirdPartyJobDetailsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetThirdPartyJobDetailsError>
+                            })
+                            .and_then(|response| {
+                                Err(GetThirdPartyJobDetailsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4371,11 +4430,17 @@ impl CodePipeline for CodePipelineClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListActionExecutionsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListActionExecutionsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListActionExecutionsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListActionExecutionsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4383,11 +4448,13 @@ impl CodePipeline for CodePipelineClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListActionExecutionsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListActionExecutionsError>
+                            })
+                            .and_then(|response| {
+                                Err(ListActionExecutionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4410,11 +4477,16 @@ impl CodePipeline for CodePipelineClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListActionTypesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListActionTypesOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListActionTypesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListActionTypesOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4422,11 +4494,10 @@ impl CodePipeline for CodePipelineClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListActionTypesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListActionTypesError>
+                            })
+                            .and_then(|response| Err(ListActionTypesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4452,11 +4523,17 @@ impl CodePipeline for CodePipelineClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListPipelineExecutionsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListPipelineExecutionsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListPipelineExecutionsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListPipelineExecutionsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4464,13 +4541,13 @@ impl CodePipeline for CodePipelineClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ListPipelineExecutionsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListPipelineExecutionsError>
+                            })
+                            .and_then(|response| {
+                                Err(ListPipelineExecutionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4493,11 +4570,16 @@ impl CodePipeline for CodePipelineClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListPipelinesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListPipelinesOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListPipelinesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListPipelinesOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4505,11 +4587,10 @@ impl CodePipeline for CodePipelineClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListPipelinesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListPipelinesError>
+                            })
+                            .and_then(|response| Err(ListPipelinesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4532,11 +4613,17 @@ impl CodePipeline for CodePipelineClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListTagsForResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListTagsForResourceOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListTagsForResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListTagsForResourceOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4544,11 +4631,13 @@ impl CodePipeline for CodePipelineClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListTagsForResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListTagsForResourceError>
+                            })
+                            .and_then(|response| {
+                                Err(ListTagsForResourceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4571,11 +4660,16 @@ impl CodePipeline for CodePipelineClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListWebhooksError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListWebhooksOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListWebhooksError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListWebhooksOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4583,11 +4677,10 @@ impl CodePipeline for CodePipelineClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListWebhooksError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListWebhooksError>
+                            })
+                            .and_then(|response| Err(ListWebhooksError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4610,11 +4703,16 @@ impl CodePipeline for CodePipelineClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| PollForJobsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PollForJobsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<PollForJobsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<PollForJobsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4622,11 +4720,10 @@ impl CodePipeline for CodePipelineClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(PollForJobsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<PollForJobsError>
+                            })
+                            .and_then(|response| Err(PollForJobsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4652,11 +4749,17 @@ impl CodePipeline for CodePipelineClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| PollForThirdPartyJobsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PollForThirdPartyJobsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<PollForThirdPartyJobsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<PollForThirdPartyJobsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4664,11 +4767,13 @@ impl CodePipeline for CodePipelineClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(PollForThirdPartyJobsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<PollForThirdPartyJobsError>
+                            })
+                            .and_then(|response| {
+                                Err(PollForThirdPartyJobsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4691,11 +4796,16 @@ impl CodePipeline for CodePipelineClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| PutActionRevisionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PutActionRevisionOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<PutActionRevisionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<PutActionRevisionOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4703,11 +4813,12 @@ impl CodePipeline for CodePipelineClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(PutActionRevisionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<PutActionRevisionError>
+                            })
+                            .and_then(|response| {
+                                Err(PutActionRevisionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4730,11 +4841,16 @@ impl CodePipeline for CodePipelineClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| PutApprovalResultError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PutApprovalResultOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<PutApprovalResultError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<PutApprovalResultOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4742,11 +4858,12 @@ impl CodePipeline for CodePipelineClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(PutApprovalResultError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<PutApprovalResultError>
+                            })
+                            .and_then(|response| {
+                                Err(PutApprovalResultError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4767,17 +4884,19 @@ impl CodePipeline for CodePipelineClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(PutJobFailureResultError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<PutJobFailureResultError>
+                            })
+                            .and_then(|response| {
+                                Err(PutJobFailureResultError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4798,17 +4917,19 @@ impl CodePipeline for CodePipelineClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(PutJobSuccessResultError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<PutJobSuccessResultError>
+                            })
+                            .and_then(|response| {
+                                Err(PutJobSuccessResultError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4832,19 +4953,19 @@ impl CodePipeline for CodePipelineClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(PutThirdPartyJobFailureResultError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<PutThirdPartyJobFailureResultError>
+                            })
+                            .and_then(|response| {
+                                Err(PutThirdPartyJobFailureResultError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4868,19 +4989,19 @@ impl CodePipeline for CodePipelineClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(PutThirdPartyJobSuccessResultError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<PutThirdPartyJobSuccessResultError>
+                            })
+                            .and_then(|response| {
+                                Err(PutThirdPartyJobSuccessResultError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4903,11 +5024,16 @@ impl CodePipeline for CodePipelineClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| PutWebhookError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PutWebhookOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<PutWebhookError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<PutWebhookOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4915,11 +5041,10 @@ impl CodePipeline for CodePipelineClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(PutWebhookError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<PutWebhookError>
+                            })
+                            .and_then(|response| Err(PutWebhookError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4945,11 +5070,17 @@ impl CodePipeline for CodePipelineClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| RegisterWebhookWithThirdPartyError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RegisterWebhookWithThirdPartyOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<RegisterWebhookWithThirdPartyError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<RegisterWebhookWithThirdPartyOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4957,13 +5088,13 @@ impl CodePipeline for CodePipelineClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(RegisterWebhookWithThirdPartyError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<RegisterWebhookWithThirdPartyError>
+                            })
+                            .and_then(|response| {
+                                Err(RegisterWebhookWithThirdPartyError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4986,11 +5117,17 @@ impl CodePipeline for CodePipelineClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| RetryStageExecutionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RetryStageExecutionOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<RetryStageExecutionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<RetryStageExecutionOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4998,11 +5135,13 @@ impl CodePipeline for CodePipelineClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(RetryStageExecutionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<RetryStageExecutionError>
+                            })
+                            .and_then(|response| {
+                                Err(RetryStageExecutionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5028,11 +5167,17 @@ impl CodePipeline for CodePipelineClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StartPipelineExecutionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StartPipelineExecutionOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StartPipelineExecutionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StartPipelineExecutionOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5040,13 +5185,13 @@ impl CodePipeline for CodePipelineClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(StartPipelineExecutionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StartPipelineExecutionError>
+                            })
+                            .and_then(|response| {
+                                Err(StartPipelineExecutionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5069,11 +5214,16 @@ impl CodePipeline for CodePipelineClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| TagResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<TagResourceOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<TagResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<TagResourceOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5081,11 +5231,10 @@ impl CodePipeline for CodePipelineClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(TagResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<TagResourceError>
+                            })
+                            .and_then(|response| Err(TagResourceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5108,11 +5257,16 @@ impl CodePipeline for CodePipelineClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UntagResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UntagResourceOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UntagResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UntagResourceOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5120,11 +5274,10 @@ impl CodePipeline for CodePipelineClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UntagResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UntagResourceError>
+                            })
+                            .and_then(|response| Err(UntagResourceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5147,11 +5300,16 @@ impl CodePipeline for CodePipelineClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdatePipelineError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdatePipelineOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdatePipelineError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdatePipelineOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5159,11 +5317,10 @@ impl CodePipeline for CodePipelineClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdatePipelineError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdatePipelineError>
+                            })
+                            .and_then(|response| Err(UpdatePipelineError::from_response(response)))
                     })
                     .boxed()
             }

@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -194,8 +194,9 @@ impl SageMakerRuntime for SageMakerRuntimeClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| InvokeEndpointError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let mut result = InvokeEndpointOutput::default();
                             result.body = response.body;
 
@@ -225,11 +226,8 @@ impl SageMakerRuntime for SageMakerRuntimeClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(InvokeEndpointError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<InvokeEndpointError>())
+                            .and_then(|response| Err(InvokeEndpointError::from_response(response)))
                     })
                     .boxed()
             }

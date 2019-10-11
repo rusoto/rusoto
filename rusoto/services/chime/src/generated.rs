@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
@@ -6347,11 +6347,11 @@ impl Chime for ChimeClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| AssociatePhoneNumberWithUserError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AssociatePhoneNumberWithUserResponse, _>(
-                            )?;
+                                .deserialize::<AssociatePhoneNumberWithUserResponse, _>();
 
                             result
                         })
@@ -6362,13 +6362,10 @@ impl Chime for ChimeClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(AssociatePhoneNumberWithUserError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<AssociatePhoneNumberWithUserError>())
+                            .and_then(|response| {
+                                Err(AssociatePhoneNumberWithUserError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6402,11 +6399,12 @@ impl Chime for ChimeClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| AssociatePhoneNumbersWithVoiceConnectorError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
                                 .deserialize::<AssociatePhoneNumbersWithVoiceConnectorResponse, _>(
-                            )?;
+                            );
 
                             result
                         })
@@ -6417,17 +6415,12 @@ impl Chime for ChimeClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(
-                                        AssociatePhoneNumbersWithVoiceConnectorError::from_response(
-                                            response,
-                                        ),
-                                    )
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<AssociatePhoneNumbersWithVoiceConnectorError>())
+                            .and_then(|response| {
+                                Err(AssociatePhoneNumbersWithVoiceConnectorError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -6455,10 +6448,11 @@ impl Chime for ChimeClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| BatchDeletePhoneNumberError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<BatchDeletePhoneNumberResponse, _>()?;
+                                .deserialize::<BatchDeletePhoneNumberResponse, _>();
 
                             result
                         })
@@ -6469,13 +6463,10 @@ impl Chime for ChimeClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(BatchDeletePhoneNumberError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<BatchDeletePhoneNumberError>())
+                            .and_then(|response| {
+                                Err(BatchDeletePhoneNumberError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6506,10 +6497,11 @@ impl Chime for ChimeClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| BatchSuspendUserError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<BatchSuspendUserResponse, _>()?;
+                                .deserialize::<BatchSuspendUserResponse, _>();
 
                             result
                         })
@@ -6520,11 +6512,10 @@ impl Chime for ChimeClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(BatchSuspendUserError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<BatchSuspendUserError>())
+                            .and_then(|response| {
+                                Err(BatchSuspendUserError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6555,10 +6546,11 @@ impl Chime for ChimeClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| BatchUnsuspendUserError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<BatchUnsuspendUserResponse, _>()?;
+                                .deserialize::<BatchUnsuspendUserResponse, _>();
 
                             result
                         })
@@ -6569,11 +6561,10 @@ impl Chime for ChimeClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(BatchUnsuspendUserError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<BatchUnsuspendUserError>())
+                            .and_then(|response| {
+                                Err(BatchUnsuspendUserError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6601,10 +6592,11 @@ impl Chime for ChimeClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| BatchUpdatePhoneNumberError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<BatchUpdatePhoneNumberResponse, _>()?;
+                                .deserialize::<BatchUpdatePhoneNumberResponse, _>();
 
                             result
                         })
@@ -6615,13 +6607,10 @@ impl Chime for ChimeClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(BatchUpdatePhoneNumberError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<BatchUpdatePhoneNumberError>())
+                            .and_then(|response| {
+                                Err(BatchUpdatePhoneNumberError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6648,10 +6637,11 @@ impl Chime for ChimeClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| BatchUpdateUserError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<BatchUpdateUserResponse, _>()?;
+                                .deserialize::<BatchUpdateUserResponse, _>();
 
                             result
                         })
@@ -6662,11 +6652,8 @@ impl Chime for ChimeClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(BatchUpdateUserError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<BatchUpdateUserError>())
+                            .and_then(|response| Err(BatchUpdateUserError::from_response(response)))
                     })
                     .boxed()
             }
@@ -6690,10 +6677,11 @@ impl Chime for ChimeClient {
             if response.status.as_u16() == 201 {
                 response
                     .buffer()
+                    .map_err(|e| CreateAccountError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateAccountResponse, _>()?;
+                                .deserialize::<CreateAccountResponse, _>();
 
                             result
                         })
@@ -6704,11 +6692,8 @@ impl Chime for ChimeClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateAccountError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateAccountError>())
+                            .and_then(|response| Err(CreateAccountError::from_response(response)))
                     })
                     .boxed()
             }
@@ -6732,10 +6717,11 @@ impl Chime for ChimeClient {
             if response.status.as_u16() == 201 {
                 response
                     .buffer()
+                    .map_err(|e| CreateBotError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateBotResponse, _>()?;
+                                .deserialize::<CreateBotResponse, _>();
 
                             result
                         })
@@ -6746,11 +6732,8 @@ impl Chime for ChimeClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateBotError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateBotError>())
+                            .and_then(|response| Err(CreateBotError::from_response(response)))
                     })
                     .boxed()
             }
@@ -6774,10 +6757,11 @@ impl Chime for ChimeClient {
             if response.status.as_u16() == 201 {
                 response
                     .buffer()
+                    .map_err(|e| CreatePhoneNumberOrderError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreatePhoneNumberOrderResponse, _>()?;
+                                .deserialize::<CreatePhoneNumberOrderResponse, _>();
 
                             result
                         })
@@ -6788,13 +6772,10 @@ impl Chime for ChimeClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(CreatePhoneNumberOrderError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreatePhoneNumberOrderError>())
+                            .and_then(|response| {
+                                Err(CreatePhoneNumberOrderError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6818,10 +6799,11 @@ impl Chime for ChimeClient {
             if response.status.as_u16() == 201 {
                 response
                     .buffer()
+                    .map_err(|e| CreateVoiceConnectorError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateVoiceConnectorResponse, _>()?;
+                                .deserialize::<CreateVoiceConnectorResponse, _>();
 
                             result
                         })
@@ -6832,11 +6814,10 @@ impl Chime for ChimeClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateVoiceConnectorError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateVoiceConnectorError>())
+                            .and_then(|response| {
+                                Err(CreateVoiceConnectorError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6857,10 +6838,11 @@ impl Chime for ChimeClient {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteAccountError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteAccountResponse, _>()?;
+                                .deserialize::<DeleteAccountResponse, _>();
 
                             result
                         })
@@ -6871,11 +6853,8 @@ impl Chime for ChimeClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteAccountError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteAccountError>())
+                            .and_then(|response| Err(DeleteAccountError::from_response(response)))
                     })
                     .boxed()
             }
@@ -6900,8 +6879,9 @@ impl Chime for ChimeClient {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteEventsConfigurationError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -6913,13 +6893,10 @@ impl Chime for ChimeClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(DeleteEventsConfigurationError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteEventsConfigurationError>())
+                            .and_then(|response| {
+                                Err(DeleteEventsConfigurationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6943,8 +6920,9 @@ impl Chime for ChimeClient {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| DeletePhoneNumberError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -6956,11 +6934,10 @@ impl Chime for ChimeClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeletePhoneNumberError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeletePhoneNumberError>())
+                            .and_then(|response| {
+                                Err(DeletePhoneNumberError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6984,8 +6961,9 @@ impl Chime for ChimeClient {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteVoiceConnectorError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -6997,11 +6975,10 @@ impl Chime for ChimeClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteVoiceConnectorError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteVoiceConnectorError>())
+                            .and_then(|response| {
+                                Err(DeleteVoiceConnectorError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7025,8 +7002,9 @@ impl Chime for ChimeClient {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteVoiceConnectorOriginationError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -7038,15 +7016,12 @@ impl Chime for ChimeClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(DeleteVoiceConnectorOriginationError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteVoiceConnectorOriginationError>())
+                            .and_then(|response| {
+                                Err(DeleteVoiceConnectorOriginationError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -7070,8 +7045,9 @@ impl Chime for ChimeClient {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteVoiceConnectorTerminationError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -7083,15 +7059,12 @@ impl Chime for ChimeClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(DeleteVoiceConnectorTerminationError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteVoiceConnectorTerminationError>())
+                            .and_then(|response| {
+                                Err(DeleteVoiceConnectorTerminationError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -7119,23 +7092,37 @@ impl Chime for ChimeClient {
         request.set_params(params);
 
         self.client.sign_and_dispatch(request, |response| {
-                        if response.status.as_u16() == 204 {
-                            response.buffer().map(|try_response| {
-                                try_response.map(|response| {
-                                    let result = ::std::mem::drop(response);
-                                    
-                                    
-                                    result
-                                })
-                            }).boxed()
-                        } else {
-                            response.buffer().map(|try_response| {
-                                try_response.map_or_else(|e| Err(e), |response| {
-                                    Err(DeleteVoiceConnectorTerminationCredentialsError::from_response(response))
-                                }).boxed()
-                            }).boxed()
-                        }
+            if response.status.as_u16() == 204 {
+                response
+                    .buffer()
+                    .map_err(|e| DeleteVoiceConnectorTerminationCredentialsError::from(e))
+                    .map(|try_response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            let result = ::std::mem::drop(response);
+
+                            result
+                        })
                     })
+                    .boxed()
+            } else {
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_err(|e| {
+                                e.into::<DeleteVoiceConnectorTerminationCredentialsError>()
+                            })
+                            .and_then(|response| {
+                                Err(
+                                    DeleteVoiceConnectorTerminationCredentialsError::from_response(
+                                        response,
+                                    ),
+                                )
+                            })
+                    })
+                    .boxed()
+            }
+        })
     }
 
     /// <p>Disassociates the primary provisioned phone number from the specified Amazon Chime user.</p>
@@ -7161,11 +7148,12 @@ impl Chime for ChimeClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| DisassociatePhoneNumberFromUserError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
                                 .deserialize::<DisassociatePhoneNumberFromUserResponse, _>(
-                            )?;
+                            );
 
                             result
                         })
@@ -7176,15 +7164,12 @@ impl Chime for ChimeClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(DisassociatePhoneNumberFromUserError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DisassociatePhoneNumberFromUserError>())
+                            .and_then(|response| {
+                                Err(DisassociatePhoneNumberFromUserError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -7216,19 +7201,25 @@ impl Chime for ChimeClient {
 
         self.client.sign_and_dispatch(request, |response| {
                         if response.status.as_u16() == 200 {
-                            response.buffer().map(|try_response| {
-                                try_response.map(|response| {
-                                    let  result = proto::json::ResponsePayload::new(&response).deserialize::<DisassociatePhoneNumbersFromVoiceConnectorResponse, _>()?;
-                                    
-                                    
-                                    result
-                                })
-                            }).boxed()
+                            response.buffer()
+                                .map_err(|e| DisassociatePhoneNumbersFromVoiceConnectorError::from(e))
+                                .map(|try_response| {
+                                    try_response
+                                        .map_err(|e| e.into())
+                                        .and_then(|response| {
+                                            let  result = proto::json::ResponsePayload::new(&response).deserialize::<DisassociatePhoneNumbersFromVoiceConnectorResponse, _>();
+                                            
+                                            
+                                            result
+                                        })
+                                }).boxed()
                         } else {
                             response.buffer().map(|try_response| {
-                                try_response.map_or_else(|e| Err(e), |response| {
-                                    Err(DisassociatePhoneNumbersFromVoiceConnectorError::from_response(response))
-                                }).boxed()
+                                try_response
+                                    .map_err(|e| e.into::<DisassociatePhoneNumbersFromVoiceConnectorError>())
+                                    .and_then(|response| {
+                                        Err(DisassociatePhoneNumbersFromVoiceConnectorError::from_response(response))
+                                    })
                             }).boxed()
                         }
                     })
@@ -7248,10 +7239,11 @@ impl Chime for ChimeClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetAccountError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetAccountResponse, _>()?;
+                                .deserialize::<GetAccountResponse, _>();
 
                             result
                         })
@@ -7262,11 +7254,8 @@ impl Chime for ChimeClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetAccountError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetAccountError>())
+                            .and_then(|response| Err(GetAccountError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7290,10 +7279,11 @@ impl Chime for ChimeClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetAccountSettingsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetAccountSettingsResponse, _>()?;
+                                .deserialize::<GetAccountSettingsResponse, _>();
 
                             result
                         })
@@ -7304,11 +7294,10 @@ impl Chime for ChimeClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetAccountSettingsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetAccountSettingsError>())
+                            .and_then(|response| {
+                                Err(GetAccountSettingsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7330,10 +7319,11 @@ impl Chime for ChimeClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetBotError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetBotResponse, _>()?;
+                                .deserialize::<GetBotResponse, _>();
 
                             result
                         })
@@ -7344,11 +7334,8 @@ impl Chime for ChimeClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetBotError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetBotError>())
+                            .and_then(|response| Err(GetBotError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7373,10 +7360,11 @@ impl Chime for ChimeClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetEventsConfigurationError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetEventsConfigurationResponse, _>()?;
+                                .deserialize::<GetEventsConfigurationResponse, _>();
 
                             result
                         })
@@ -7387,13 +7375,10 @@ impl Chime for ChimeClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(GetEventsConfigurationError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetEventsConfigurationError>())
+                            .and_then(|response| {
+                                Err(GetEventsConfigurationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7413,10 +7398,11 @@ impl Chime for ChimeClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetGlobalSettingsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetGlobalSettingsResponse, _>()?;
+                                .deserialize::<GetGlobalSettingsResponse, _>();
 
                             result
                         })
@@ -7427,11 +7413,10 @@ impl Chime for ChimeClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetGlobalSettingsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetGlobalSettingsError>())
+                            .and_then(|response| {
+                                Err(GetGlobalSettingsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7455,10 +7440,11 @@ impl Chime for ChimeClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetPhoneNumberError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetPhoneNumberResponse, _>()?;
+                                .deserialize::<GetPhoneNumberResponse, _>();
 
                             result
                         })
@@ -7469,11 +7455,8 @@ impl Chime for ChimeClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetPhoneNumberError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetPhoneNumberError>())
+                            .and_then(|response| Err(GetPhoneNumberError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7497,10 +7480,11 @@ impl Chime for ChimeClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetPhoneNumberOrderError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetPhoneNumberOrderResponse, _>()?;
+                                .deserialize::<GetPhoneNumberOrderResponse, _>();
 
                             result
                         })
@@ -7511,11 +7495,10 @@ impl Chime for ChimeClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetPhoneNumberOrderError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetPhoneNumberOrderError>())
+                            .and_then(|response| {
+                                Err(GetPhoneNumberOrderError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7537,10 +7520,11 @@ impl Chime for ChimeClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetUserError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetUserResponse, _>()?;
+                                .deserialize::<GetUserResponse, _>();
 
                             result
                         })
@@ -7551,11 +7535,8 @@ impl Chime for ChimeClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetUserError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetUserError>())
+                            .and_then(|response| Err(GetUserError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7580,10 +7561,11 @@ impl Chime for ChimeClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetUserSettingsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetUserSettingsResponse, _>()?;
+                                .deserialize::<GetUserSettingsResponse, _>();
 
                             result
                         })
@@ -7594,11 +7576,8 @@ impl Chime for ChimeClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetUserSettingsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetUserSettingsError>())
+                            .and_then(|response| Err(GetUserSettingsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7622,10 +7601,11 @@ impl Chime for ChimeClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetVoiceConnectorError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetVoiceConnectorResponse, _>()?;
+                                .deserialize::<GetVoiceConnectorResponse, _>();
 
                             result
                         })
@@ -7636,11 +7616,10 @@ impl Chime for ChimeClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetVoiceConnectorError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetVoiceConnectorError>())
+                            .and_then(|response| {
+                                Err(GetVoiceConnectorError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7664,11 +7643,11 @@ impl Chime for ChimeClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetVoiceConnectorOriginationError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetVoiceConnectorOriginationResponse, _>(
-                            )?;
+                                .deserialize::<GetVoiceConnectorOriginationResponse, _>();
 
                             result
                         })
@@ -7679,13 +7658,10 @@ impl Chime for ChimeClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(GetVoiceConnectorOriginationError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetVoiceConnectorOriginationError>())
+                            .and_then(|response| {
+                                Err(GetVoiceConnectorOriginationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7709,11 +7685,11 @@ impl Chime for ChimeClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetVoiceConnectorTerminationError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetVoiceConnectorTerminationResponse, _>(
-                            )?;
+                                .deserialize::<GetVoiceConnectorTerminationResponse, _>();
 
                             result
                         })
@@ -7724,13 +7700,10 @@ impl Chime for ChimeClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(GetVoiceConnectorTerminationError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetVoiceConnectorTerminationError>())
+                            .and_then(|response| {
+                                Err(GetVoiceConnectorTerminationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7757,11 +7730,12 @@ impl Chime for ChimeClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetVoiceConnectorTerminationHealthError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
                                 .deserialize::<GetVoiceConnectorTerminationHealthResponse, _>(
-                            )?;
+                            );
 
                             result
                         })
@@ -7772,15 +7746,12 @@ impl Chime for ChimeClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(GetVoiceConnectorTerminationHealthError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetVoiceConnectorTerminationHealthError>())
+                            .and_then(|response| {
+                                Err(GetVoiceConnectorTerminationHealthError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -7811,10 +7782,11 @@ impl Chime for ChimeClient {
             if response.status.as_u16() == 201 {
                 response
                     .buffer()
+                    .map_err(|e| InviteUsersError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<InviteUsersResponse, _>()?;
+                                .deserialize::<InviteUsersResponse, _>();
 
                             result
                         })
@@ -7825,11 +7797,8 @@ impl Chime for ChimeClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(InviteUsersError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<InviteUsersError>())
+                            .and_then(|response| Err(InviteUsersError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7865,10 +7834,11 @@ impl Chime for ChimeClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListAccountsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListAccountsResponse, _>()?;
+                                .deserialize::<ListAccountsResponse, _>();
 
                             result
                         })
@@ -7879,11 +7849,8 @@ impl Chime for ChimeClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListAccountsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListAccountsError>())
+                            .and_then(|response| Err(ListAccountsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7910,10 +7877,11 @@ impl Chime for ChimeClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListBotsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListBotsResponse, _>()?;
+                                .deserialize::<ListBotsResponse, _>();
 
                             result
                         })
@@ -7924,11 +7892,8 @@ impl Chime for ChimeClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListBotsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListBotsError>())
+                            .and_then(|response| Err(ListBotsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7958,10 +7923,11 @@ impl Chime for ChimeClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListPhoneNumberOrdersError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListPhoneNumberOrdersResponse, _>()?;
+                                .deserialize::<ListPhoneNumberOrdersResponse, _>();
 
                             result
                         })
@@ -7972,11 +7938,10 @@ impl Chime for ChimeClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListPhoneNumberOrdersError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListPhoneNumberOrdersError>())
+                            .and_then(|response| {
+                                Err(ListPhoneNumberOrdersError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8018,10 +7983,11 @@ impl Chime for ChimeClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListPhoneNumbersError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListPhoneNumbersResponse, _>()?;
+                                .deserialize::<ListPhoneNumbersResponse, _>();
 
                             result
                         })
@@ -8032,11 +7998,10 @@ impl Chime for ChimeClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListPhoneNumbersError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListPhoneNumbersError>())
+                            .and_then(|response| {
+                                Err(ListPhoneNumbersError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8072,10 +8037,11 @@ impl Chime for ChimeClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListUsersError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListUsersResponse, _>()?;
+                                .deserialize::<ListUsersResponse, _>();
 
                             result
                         })
@@ -8086,11 +8052,8 @@ impl Chime for ChimeClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListUsersError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListUsersError>())
+                            .and_then(|response| Err(ListUsersError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8114,23 +8077,37 @@ impl Chime for ChimeClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         self.client.sign_and_dispatch(request, |response| {
-                        if response.status.as_u16() == 200 {
-                            response.buffer().map(|try_response| {
-                                try_response.map(|response| {
-                                    let  result = proto::json::ResponsePayload::new(&response).deserialize::<ListVoiceConnectorTerminationCredentialsResponse, _>()?;
-                                    
-                                    
-                                    result
-                                })
-                            }).boxed()
-                        } else {
-                            response.buffer().map(|try_response| {
-                                try_response.map_or_else(|e| Err(e), |response| {
-                                    Err(ListVoiceConnectorTerminationCredentialsError::from_response(response))
-                                }).boxed()
-                            }).boxed()
-                        }
+            if response.status.as_u16() == 200 {
+                response
+                    .buffer()
+                    .map_err(|e| ListVoiceConnectorTerminationCredentialsError::from(e))
+                    .map(|try_response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            let result = proto::json::ResponsePayload::new(&response)
+                                .deserialize::<ListVoiceConnectorTerminationCredentialsResponse, _>(
+                            );
+
+                            result
+                        })
                     })
+                    .boxed()
+            } else {
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_err(|e| e.into::<ListVoiceConnectorTerminationCredentialsError>())
+                            .and_then(|response| {
+                                Err(
+                                    ListVoiceConnectorTerminationCredentialsError::from_response(
+                                        response,
+                                    ),
+                                )
+                            })
+                    })
+                    .boxed()
+            }
+        })
     }
 
     /// <p>Lists the Amazon Chime Voice Connectors for the administrator's AWS account.</p>
@@ -8156,10 +8133,11 @@ impl Chime for ChimeClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListVoiceConnectorsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListVoiceConnectorsResponse, _>()?;
+                                .deserialize::<ListVoiceConnectorsResponse, _>();
 
                             result
                         })
@@ -8170,11 +8148,10 @@ impl Chime for ChimeClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListVoiceConnectorsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListVoiceConnectorsError>())
+                            .and_then(|response| {
+                                Err(ListVoiceConnectorsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8203,10 +8180,11 @@ impl Chime for ChimeClient {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| LogoutUserError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<LogoutUserResponse, _>()?;
+                                .deserialize::<LogoutUserResponse, _>();
 
                             result
                         })
@@ -8217,11 +8195,8 @@ impl Chime for ChimeClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(LogoutUserError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<LogoutUserError>())
+                            .and_then(|response| Err(LogoutUserError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8249,10 +8224,11 @@ impl Chime for ChimeClient {
             if response.status.as_u16() == 201 {
                 response
                     .buffer()
+                    .map_err(|e| PutEventsConfigurationError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PutEventsConfigurationResponse, _>()?;
+                                .deserialize::<PutEventsConfigurationResponse, _>();
 
                             result
                         })
@@ -8263,13 +8239,10 @@ impl Chime for ChimeClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(PutEventsConfigurationError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<PutEventsConfigurationError>())
+                            .and_then(|response| {
+                                Err(PutEventsConfigurationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8296,11 +8269,11 @@ impl Chime for ChimeClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| PutVoiceConnectorOriginationError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PutVoiceConnectorOriginationResponse, _>(
-                            )?;
+                                .deserialize::<PutVoiceConnectorOriginationResponse, _>();
 
                             result
                         })
@@ -8311,13 +8284,10 @@ impl Chime for ChimeClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(PutVoiceConnectorOriginationError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<PutVoiceConnectorOriginationError>())
+                            .and_then(|response| {
+                                Err(PutVoiceConnectorOriginationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8344,11 +8314,11 @@ impl Chime for ChimeClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| PutVoiceConnectorTerminationError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PutVoiceConnectorTerminationResponse, _>(
-                            )?;
+                                .deserialize::<PutVoiceConnectorTerminationResponse, _>();
 
                             result
                         })
@@ -8359,13 +8329,10 @@ impl Chime for ChimeClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(PutVoiceConnectorTerminationError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<PutVoiceConnectorTerminationError>())
+                            .and_then(|response| {
+                                Err(PutVoiceConnectorTerminationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8396,8 +8363,9 @@ impl Chime for ChimeClient {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| PutVoiceConnectorTerminationCredentialsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -8409,17 +8377,12 @@ impl Chime for ChimeClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(
-                                        PutVoiceConnectorTerminationCredentialsError::from_response(
-                                            response,
-                                        ),
-                                    )
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<PutVoiceConnectorTerminationCredentialsError>())
+                            .and_then(|response| {
+                                Err(PutVoiceConnectorTerminationCredentialsError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -8448,10 +8411,11 @@ impl Chime for ChimeClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| RegenerateSecurityTokenError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RegenerateSecurityTokenResponse, _>()?;
+                                .deserialize::<RegenerateSecurityTokenResponse, _>();
 
                             result
                         })
@@ -8462,13 +8426,10 @@ impl Chime for ChimeClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(RegenerateSecurityTokenError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<RegenerateSecurityTokenError>())
+                            .and_then(|response| {
+                                Err(RegenerateSecurityTokenError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8497,10 +8458,11 @@ impl Chime for ChimeClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ResetPersonalPINError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ResetPersonalPINResponse, _>()?;
+                                .deserialize::<ResetPersonalPINResponse, _>();
 
                             result
                         })
@@ -8511,11 +8473,10 @@ impl Chime for ChimeClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ResetPersonalPINError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ResetPersonalPINError>())
+                            .and_then(|response| {
+                                Err(ResetPersonalPINError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8543,10 +8504,11 @@ impl Chime for ChimeClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| RestorePhoneNumberError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RestorePhoneNumberResponse, _>()?;
+                                .deserialize::<RestorePhoneNumberResponse, _>();
 
                             result
                         })
@@ -8557,11 +8519,10 @@ impl Chime for ChimeClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(RestorePhoneNumberError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<RestorePhoneNumberError>())
+                            .and_then(|response| {
+                                Err(RestorePhoneNumberError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8607,10 +8568,11 @@ impl Chime for ChimeClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| SearchAvailablePhoneNumbersError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<SearchAvailablePhoneNumbersResponse, _>()?;
+                                .deserialize::<SearchAvailablePhoneNumbersResponse, _>();
 
                             result
                         })
@@ -8621,13 +8583,10 @@ impl Chime for ChimeClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(SearchAvailablePhoneNumbersError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<SearchAvailablePhoneNumbersError>())
+                            .and_then(|response| {
+                                Err(SearchAvailablePhoneNumbersError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8651,10 +8610,11 @@ impl Chime for ChimeClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| UpdateAccountError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateAccountResponse, _>()?;
+                                .deserialize::<UpdateAccountResponse, _>();
 
                             result
                         })
@@ -8665,11 +8625,8 @@ impl Chime for ChimeClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateAccountError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateAccountError>())
+                            .and_then(|response| Err(UpdateAccountError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8696,10 +8653,11 @@ impl Chime for ChimeClient {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| UpdateAccountSettingsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateAccountSettingsResponse, _>()?;
+                                .deserialize::<UpdateAccountSettingsResponse, _>();
 
                             result
                         })
@@ -8710,11 +8668,10 @@ impl Chime for ChimeClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateAccountSettingsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateAccountSettingsError>())
+                            .and_then(|response| {
+                                Err(UpdateAccountSettingsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8742,10 +8699,11 @@ impl Chime for ChimeClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| UpdateBotError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateBotResponse, _>()?;
+                                .deserialize::<UpdateBotResponse, _>();
 
                             result
                         })
@@ -8756,11 +8714,8 @@ impl Chime for ChimeClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateBotError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateBotError>())
+                            .and_then(|response| Err(UpdateBotError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8784,8 +8739,9 @@ impl Chime for ChimeClient {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| UpdateGlobalSettingsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -8797,11 +8753,10 @@ impl Chime for ChimeClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateGlobalSettingsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateGlobalSettingsError>())
+                            .and_then(|response| {
+                                Err(UpdateGlobalSettingsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8828,10 +8783,11 @@ impl Chime for ChimeClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| UpdatePhoneNumberError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdatePhoneNumberResponse, _>()?;
+                                .deserialize::<UpdatePhoneNumberResponse, _>();
 
                             result
                         })
@@ -8842,11 +8798,10 @@ impl Chime for ChimeClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdatePhoneNumberError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdatePhoneNumberError>())
+                            .and_then(|response| {
+                                Err(UpdatePhoneNumberError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8874,10 +8829,11 @@ impl Chime for ChimeClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| UpdateUserError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateUserResponse, _>()?;
+                                .deserialize::<UpdateUserResponse, _>();
 
                             result
                         })
@@ -8888,11 +8844,8 @@ impl Chime for ChimeClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateUserError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateUserError>())
+                            .and_then(|response| Err(UpdateUserError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8920,8 +8873,9 @@ impl Chime for ChimeClient {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| UpdateUserSettingsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -8933,11 +8887,10 @@ impl Chime for ChimeClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateUserSettingsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateUserSettingsError>())
+                            .and_then(|response| {
+                                Err(UpdateUserSettingsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8964,10 +8917,11 @@ impl Chime for ChimeClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| UpdateVoiceConnectorError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateVoiceConnectorResponse, _>()?;
+                                .deserialize::<UpdateVoiceConnectorResponse, _>();
 
                             result
                         })
@@ -8978,11 +8932,10 @@ impl Chime for ChimeClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateVoiceConnectorError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateVoiceConnectorError>())
+                            .and_then(|response| {
+                                Err(UpdateVoiceConnectorError::from_response(response))
+                            })
                     })
                     .boxed()
             }

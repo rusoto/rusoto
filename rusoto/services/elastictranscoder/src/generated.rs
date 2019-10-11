@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
@@ -2477,10 +2477,11 @@ impl Ets for EtsClient {
             if response.status.as_u16() == 202 {
                 response
                     .buffer()
+                    .map_err(|e| CancelJobError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CancelJobResponse, _>()?;
+                                .deserialize::<CancelJobResponse, _>();
 
                             result
                         })
@@ -2491,11 +2492,8 @@ impl Ets for EtsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CancelJobError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CancelJobError>())
+                            .and_then(|response| Err(CancelJobError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2520,10 +2518,11 @@ impl Ets for EtsClient {
             if response.status.as_u16() == 201 {
                 response
                     .buffer()
+                    .map_err(|e| CreateJobError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateJobResponse, _>()?;
+                                .deserialize::<CreateJobResponse, _>();
 
                             result
                         })
@@ -2534,11 +2533,8 @@ impl Ets for EtsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateJobError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateJobError>())
+                            .and_then(|response| Err(CreateJobError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2563,10 +2559,11 @@ impl Ets for EtsClient {
             if response.status.as_u16() == 201 {
                 response
                     .buffer()
+                    .map_err(|e| CreatePipelineError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreatePipelineResponse, _>()?;
+                                .deserialize::<CreatePipelineResponse, _>();
 
                             result
                         })
@@ -2577,11 +2574,8 @@ impl Ets for EtsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreatePipelineError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreatePipelineError>())
+                            .and_then(|response| Err(CreatePipelineError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2606,10 +2600,11 @@ impl Ets for EtsClient {
             if response.status.as_u16() == 201 {
                 response
                     .buffer()
+                    .map_err(|e| CreatePresetError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreatePresetResponse, _>()?;
+                                .deserialize::<CreatePresetResponse, _>();
 
                             result
                         })
@@ -2620,11 +2615,8 @@ impl Ets for EtsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreatePresetError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreatePresetError>())
+                            .and_then(|response| Err(CreatePresetError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2646,10 +2638,11 @@ impl Ets for EtsClient {
             if response.status.as_u16() == 202 {
                 response
                     .buffer()
+                    .map_err(|e| DeletePipelineError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeletePipelineResponse, _>()?;
+                                .deserialize::<DeletePipelineResponse, _>();
 
                             result
                         })
@@ -2660,11 +2653,8 @@ impl Ets for EtsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeletePipelineError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeletePipelineError>())
+                            .and_then(|response| Err(DeletePipelineError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2686,10 +2676,11 @@ impl Ets for EtsClient {
             if response.status.as_u16() == 202 {
                 response
                     .buffer()
+                    .map_err(|e| DeletePresetError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeletePresetResponse, _>()?;
+                                .deserialize::<DeletePresetResponse, _>();
 
                             result
                         })
@@ -2700,11 +2691,8 @@ impl Ets for EtsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeletePresetError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeletePresetError>())
+                            .and_then(|response| Err(DeletePresetError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2738,10 +2726,11 @@ impl Ets for EtsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListJobsByPipelineError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListJobsByPipelineResponse, _>()?;
+                                .deserialize::<ListJobsByPipelineResponse, _>();
 
                             result
                         })
@@ -2752,11 +2741,10 @@ impl Ets for EtsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListJobsByPipelineError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListJobsByPipelineError>())
+                            .and_then(|response| {
+                                Err(ListJobsByPipelineError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2787,10 +2775,11 @@ impl Ets for EtsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListJobsByStatusError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListJobsByStatusResponse, _>()?;
+                                .deserialize::<ListJobsByStatusResponse, _>();
 
                             result
                         })
@@ -2801,11 +2790,10 @@ impl Ets for EtsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListJobsByStatusError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListJobsByStatusError>())
+                            .and_then(|response| {
+                                Err(ListJobsByStatusError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2836,10 +2824,11 @@ impl Ets for EtsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListPipelinesError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListPipelinesResponse, _>()?;
+                                .deserialize::<ListPipelinesResponse, _>();
 
                             result
                         })
@@ -2850,11 +2839,8 @@ impl Ets for EtsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListPipelinesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListPipelinesError>())
+                            .and_then(|response| Err(ListPipelinesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2885,10 +2871,11 @@ impl Ets for EtsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListPresetsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListPresetsResponse, _>()?;
+                                .deserialize::<ListPresetsResponse, _>();
 
                             result
                         })
@@ -2899,11 +2886,8 @@ impl Ets for EtsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListPresetsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListPresetsError>())
+                            .and_then(|response| Err(ListPresetsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2922,10 +2906,11 @@ impl Ets for EtsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ReadJobError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ReadJobResponse, _>()?;
+                                .deserialize::<ReadJobResponse, _>();
 
                             result
                         })
@@ -2936,11 +2921,8 @@ impl Ets for EtsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ReadJobError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ReadJobError>())
+                            .and_then(|response| Err(ReadJobError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2962,10 +2944,11 @@ impl Ets for EtsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ReadPipelineError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ReadPipelineResponse, _>()?;
+                                .deserialize::<ReadPipelineResponse, _>();
 
                             result
                         })
@@ -2976,11 +2959,8 @@ impl Ets for EtsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ReadPipelineError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ReadPipelineError>())
+                            .and_then(|response| Err(ReadPipelineError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3002,10 +2982,11 @@ impl Ets for EtsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ReadPresetError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ReadPresetResponse, _>()?;
+                                .deserialize::<ReadPresetResponse, _>();
 
                             result
                         })
@@ -3016,11 +2997,8 @@ impl Ets for EtsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ReadPresetError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ReadPresetError>())
+                            .and_then(|response| Err(ReadPresetError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3042,10 +3020,11 @@ impl Ets for EtsClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| TestRoleError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<TestRoleResponse, _>()?;
+                                .deserialize::<TestRoleResponse, _>();
 
                             result
                         })
@@ -3056,11 +3035,8 @@ impl Ets for EtsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(TestRoleError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<TestRoleError>())
+                            .and_then(|response| Err(TestRoleError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3085,10 +3061,11 @@ impl Ets for EtsClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| UpdatePipelineError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdatePipelineResponse, _>()?;
+                                .deserialize::<UpdatePipelineResponse, _>();
 
                             result
                         })
@@ -3099,11 +3076,8 @@ impl Ets for EtsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdatePipelineError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdatePipelineError>())
+                            .and_then(|response| Err(UpdatePipelineError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3128,10 +3102,11 @@ impl Ets for EtsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdatePipelineNotificationsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdatePipelineNotificationsResponse, _>()?;
+                                .deserialize::<UpdatePipelineNotificationsResponse, _>();
 
                             result
                         })
@@ -3142,13 +3117,10 @@ impl Ets for EtsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(UpdatePipelineNotificationsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdatePipelineNotificationsError>())
+                            .and_then(|response| {
+                                Err(UpdatePipelineNotificationsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3173,10 +3145,11 @@ impl Ets for EtsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdatePipelineStatusError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdatePipelineStatusResponse, _>()?;
+                                .deserialize::<UpdatePipelineStatusResponse, _>();
 
                             result
                         })
@@ -3187,11 +3160,10 @@ impl Ets for EtsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdatePipelineStatusError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdatePipelineStatusError>())
+                            .and_then(|response| {
+                                Err(UpdatePipelineStatusError::from_response(response))
+                            })
                     })
                     .boxed()
             }

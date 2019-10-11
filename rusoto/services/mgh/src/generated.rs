@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -1869,11 +1869,17 @@ impl MigrationHub for MigrationHubClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AssociateCreatedArtifactError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AssociateCreatedArtifactResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AssociateCreatedArtifactError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AssociateCreatedArtifactResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1881,13 +1887,13 @@ impl MigrationHub for MigrationHubClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(AssociateCreatedArtifactError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AssociateCreatedArtifactError>
+                            })
+                            .and_then(|response| {
+                                Err(AssociateCreatedArtifactError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1913,11 +1919,17 @@ impl MigrationHub for MigrationHubClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AssociateDiscoveredResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AssociateDiscoveredResourceResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AssociateDiscoveredResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AssociateDiscoveredResourceResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1925,13 +1937,13 @@ impl MigrationHub for MigrationHubClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(AssociateDiscoveredResourceError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AssociateDiscoveredResourceError>
+                            })
+                            .and_then(|response| {
+                                Err(AssociateDiscoveredResourceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1954,11 +1966,17 @@ impl MigrationHub for MigrationHubClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateProgressUpdateStreamError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateProgressUpdateStreamResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateProgressUpdateStreamError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateProgressUpdateStreamResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1966,13 +1984,13 @@ impl MigrationHub for MigrationHubClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(CreateProgressUpdateStreamError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateProgressUpdateStreamError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateProgressUpdateStreamError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1995,11 +2013,17 @@ impl MigrationHub for MigrationHubClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteProgressUpdateStreamError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteProgressUpdateStreamResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteProgressUpdateStreamError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteProgressUpdateStreamResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2007,13 +2031,13 @@ impl MigrationHub for MigrationHubClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DeleteProgressUpdateStreamError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteProgressUpdateStreamError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteProgressUpdateStreamError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2036,11 +2060,17 @@ impl MigrationHub for MigrationHubClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeApplicationStateError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeApplicationStateResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeApplicationStateError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeApplicationStateResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2048,13 +2078,13 @@ impl MigrationHub for MigrationHubClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeApplicationStateError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeApplicationStateError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeApplicationStateError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2077,11 +2107,17 @@ impl MigrationHub for MigrationHubClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeMigrationTaskError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeMigrationTaskResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeMigrationTaskError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeMigrationTaskResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2089,11 +2125,13 @@ impl MigrationHub for MigrationHubClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeMigrationTaskError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeMigrationTaskError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeMigrationTaskError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2119,11 +2157,17 @@ impl MigrationHub for MigrationHubClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DisassociateCreatedArtifactError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DisassociateCreatedArtifactResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DisassociateCreatedArtifactError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DisassociateCreatedArtifactResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2131,13 +2175,13 @@ impl MigrationHub for MigrationHubClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DisassociateCreatedArtifactError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DisassociateCreatedArtifactError>
+                            })
+                            .and_then(|response| {
+                                Err(DisassociateCreatedArtifactError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2164,11 +2208,17 @@ impl MigrationHub for MigrationHubClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DisassociateDiscoveredResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DisassociateDiscoveredResourceResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DisassociateDiscoveredResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DisassociateDiscoveredResourceResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2176,15 +2226,13 @@ impl MigrationHub for MigrationHubClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DisassociateDiscoveredResourceError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DisassociateDiscoveredResourceError>
+                            })
+                            .and_then(|response| {
+                                Err(DisassociateDiscoveredResourceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2207,11 +2255,17 @@ impl MigrationHub for MigrationHubClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ImportMigrationTaskError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ImportMigrationTaskResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ImportMigrationTaskError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ImportMigrationTaskResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2219,11 +2273,13 @@ impl MigrationHub for MigrationHubClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ImportMigrationTaskError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ImportMigrationTaskError>
+                            })
+                            .and_then(|response| {
+                                Err(ImportMigrationTaskError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2246,11 +2302,17 @@ impl MigrationHub for MigrationHubClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListCreatedArtifactsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListCreatedArtifactsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListCreatedArtifactsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListCreatedArtifactsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2258,11 +2320,13 @@ impl MigrationHub for MigrationHubClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListCreatedArtifactsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListCreatedArtifactsError>
+                            })
+                            .and_then(|response| {
+                                Err(ListCreatedArtifactsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2285,11 +2349,17 @@ impl MigrationHub for MigrationHubClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListDiscoveredResourcesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListDiscoveredResourcesResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListDiscoveredResourcesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListDiscoveredResourcesResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2297,13 +2367,13 @@ impl MigrationHub for MigrationHubClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ListDiscoveredResourcesError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListDiscoveredResourcesError>
+                            })
+                            .and_then(|response| {
+                                Err(ListDiscoveredResourcesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2326,11 +2396,16 @@ impl MigrationHub for MigrationHubClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListMigrationTasksError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListMigrationTasksResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListMigrationTasksError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListMigrationTasksResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2338,11 +2413,12 @@ impl MigrationHub for MigrationHubClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListMigrationTasksError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListMigrationTasksError>
+                            })
+                            .and_then(|response| {
+                                Err(ListMigrationTasksError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2365,11 +2441,17 @@ impl MigrationHub for MigrationHubClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListProgressUpdateStreamsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListProgressUpdateStreamsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListProgressUpdateStreamsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListProgressUpdateStreamsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2377,13 +2459,13 @@ impl MigrationHub for MigrationHubClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ListProgressUpdateStreamsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListProgressUpdateStreamsError>
+                            })
+                            .and_then(|response| {
+                                Err(ListProgressUpdateStreamsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2406,11 +2488,17 @@ impl MigrationHub for MigrationHubClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| NotifyApplicationStateError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<NotifyApplicationStateResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<NotifyApplicationStateError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<NotifyApplicationStateResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2418,13 +2506,13 @@ impl MigrationHub for MigrationHubClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(NotifyApplicationStateError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<NotifyApplicationStateError>
+                            })
+                            .and_then(|response| {
+                                Err(NotifyApplicationStateError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2447,11 +2535,17 @@ impl MigrationHub for MigrationHubClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| NotifyMigrationTaskStateError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<NotifyMigrationTaskStateResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<NotifyMigrationTaskStateError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<NotifyMigrationTaskStateResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2459,13 +2553,13 @@ impl MigrationHub for MigrationHubClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(NotifyMigrationTaskStateError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<NotifyMigrationTaskStateError>
+                            })
+                            .and_then(|response| {
+                                Err(NotifyMigrationTaskStateError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2488,11 +2582,17 @@ impl MigrationHub for MigrationHubClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| PutResourceAttributesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PutResourceAttributesResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<PutResourceAttributesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<PutResourceAttributesResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2500,11 +2600,13 @@ impl MigrationHub for MigrationHubClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(PutResourceAttributesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<PutResourceAttributesError>
+                            })
+                            .and_then(|response| {
+                                Err(PutResourceAttributesError::from_response(response))
+                            })
                     })
                     .boxed()
             }

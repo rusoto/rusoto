@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -12612,11 +12612,17 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AddCustomAttributesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AddCustomAttributesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AddCustomAttributesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AddCustomAttributesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -12624,11 +12630,13 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(AddCustomAttributesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AddCustomAttributesError>
+                            })
+                            .and_then(|response| {
+                                Err(AddCustomAttributesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -12652,17 +12660,19 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(AdminAddUserToGroupError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AdminAddUserToGroupError>
+                            })
+                            .and_then(|response| {
+                                Err(AdminAddUserToGroupError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -12688,11 +12698,16 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AdminConfirmSignUpError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AdminConfirmSignUpResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<AdminConfirmSignUpError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AdminConfirmSignUpResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -12700,11 +12715,12 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(AdminConfirmSignUpError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<AdminConfirmSignUpError>
+                            })
+                            .and_then(|response| {
+                                Err(AdminConfirmSignUpError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -12730,11 +12746,16 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AdminCreateUserError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AdminCreateUserResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<AdminCreateUserError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AdminCreateUserResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -12742,11 +12763,10 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(AdminCreateUserError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<AdminCreateUserError>
+                            })
+                            .and_then(|response| Err(AdminCreateUserError::from_response(response)))
                     })
                     .boxed()
             }
@@ -12770,17 +12790,16 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(AdminDeleteUserError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<AdminDeleteUserError>
+                            })
+                            .and_then(|response| Err(AdminDeleteUserError::from_response(response)))
                     })
                     .boxed()
             }
@@ -12806,11 +12825,17 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AdminDeleteUserAttributesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AdminDeleteUserAttributesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AdminDeleteUserAttributesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AdminDeleteUserAttributesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -12818,13 +12843,13 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(AdminDeleteUserAttributesError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AdminDeleteUserAttributesError>
+                            })
+                            .and_then(|response| {
+                                Err(AdminDeleteUserAttributesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -12850,11 +12875,17 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AdminDisableProviderForUserError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AdminDisableProviderForUserResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AdminDisableProviderForUserError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AdminDisableProviderForUserResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -12862,13 +12893,13 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(AdminDisableProviderForUserError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AdminDisableProviderForUserError>
+                            })
+                            .and_then(|response| {
+                                Err(AdminDisableProviderForUserError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -12894,11 +12925,16 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AdminDisableUserError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AdminDisableUserResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<AdminDisableUserError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AdminDisableUserResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -12906,11 +12942,12 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(AdminDisableUserError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<AdminDisableUserError>
+                            })
+                            .and_then(|response| {
+                                Err(AdminDisableUserError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -12936,11 +12973,16 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AdminEnableUserError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AdminEnableUserResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<AdminEnableUserError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AdminEnableUserResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -12948,11 +12990,10 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(AdminEnableUserError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<AdminEnableUserError>
+                            })
+                            .and_then(|response| Err(AdminEnableUserError::from_response(response)))
                     })
                     .boxed()
             }
@@ -12976,17 +13017,18 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(AdminForgetDeviceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<AdminForgetDeviceError>
+                            })
+                            .and_then(|response| {
+                                Err(AdminForgetDeviceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -13012,11 +13054,16 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AdminGetDeviceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AdminGetDeviceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<AdminGetDeviceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AdminGetDeviceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -13024,11 +13071,10 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(AdminGetDeviceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<AdminGetDeviceError>
+                            })
+                            .and_then(|response| Err(AdminGetDeviceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -13054,11 +13100,16 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AdminGetUserError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AdminGetUserResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<AdminGetUserError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AdminGetUserResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -13066,11 +13117,10 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(AdminGetUserError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<AdminGetUserError>
+                            })
+                            .and_then(|response| Err(AdminGetUserError::from_response(response)))
                     })
                     .boxed()
             }
@@ -13096,11 +13146,16 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AdminInitiateAuthError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AdminInitiateAuthResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<AdminInitiateAuthError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AdminInitiateAuthResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -13108,11 +13163,12 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(AdminInitiateAuthError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<AdminInitiateAuthError>
+                            })
+                            .and_then(|response| {
+                                Err(AdminInitiateAuthError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -13138,11 +13194,17 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AdminLinkProviderForUserError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AdminLinkProviderForUserResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AdminLinkProviderForUserError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AdminLinkProviderForUserResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -13150,13 +13212,13 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(AdminLinkProviderForUserError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AdminLinkProviderForUserError>
+                            })
+                            .and_then(|response| {
+                                Err(AdminLinkProviderForUserError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -13182,11 +13244,16 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AdminListDevicesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AdminListDevicesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<AdminListDevicesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AdminListDevicesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -13194,11 +13261,12 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(AdminListDevicesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<AdminListDevicesError>
+                            })
+                            .and_then(|response| {
+                                Err(AdminListDevicesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -13224,11 +13292,17 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AdminListGroupsForUserError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AdminListGroupsForUserResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AdminListGroupsForUserError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AdminListGroupsForUserResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -13236,13 +13310,13 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(AdminListGroupsForUserError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AdminListGroupsForUserError>
+                            })
+                            .and_then(|response| {
+                                Err(AdminListGroupsForUserError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -13268,11 +13342,17 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AdminListUserAuthEventsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AdminListUserAuthEventsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AdminListUserAuthEventsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AdminListUserAuthEventsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -13280,13 +13360,13 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(AdminListUserAuthEventsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AdminListUserAuthEventsError>
+                            })
+                            .and_then(|response| {
+                                Err(AdminListUserAuthEventsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -13310,19 +13390,19 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(AdminRemoveUserFromGroupError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AdminRemoveUserFromGroupError>
+                            })
+                            .and_then(|response| {
+                                Err(AdminRemoveUserFromGroupError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -13348,11 +13428,17 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AdminResetUserPasswordError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AdminResetUserPasswordResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AdminResetUserPasswordError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AdminResetUserPasswordResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -13360,13 +13446,13 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(AdminResetUserPasswordError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AdminResetUserPasswordError>
+                            })
+                            .and_then(|response| {
+                                Err(AdminResetUserPasswordError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -13392,11 +13478,17 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AdminRespondToAuthChallengeError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AdminRespondToAuthChallengeResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AdminRespondToAuthChallengeError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AdminRespondToAuthChallengeResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -13404,13 +13496,13 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(AdminRespondToAuthChallengeError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AdminRespondToAuthChallengeError>
+                            })
+                            .and_then(|response| {
+                                Err(AdminRespondToAuthChallengeError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -13436,11 +13528,17 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AdminSetUserMFAPreferenceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AdminSetUserMFAPreferenceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AdminSetUserMFAPreferenceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AdminSetUserMFAPreferenceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -13448,13 +13546,13 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(AdminSetUserMFAPreferenceError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AdminSetUserMFAPreferenceError>
+                            })
+                            .and_then(|response| {
+                                Err(AdminSetUserMFAPreferenceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -13479,11 +13577,17 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AdminSetUserPasswordError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AdminSetUserPasswordResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AdminSetUserPasswordError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AdminSetUserPasswordResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -13491,11 +13595,13 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(AdminSetUserPasswordError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AdminSetUserPasswordError>
+                            })
+                            .and_then(|response| {
+                                Err(AdminSetUserPasswordError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -13521,11 +13627,17 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AdminSetUserSettingsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AdminSetUserSettingsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AdminSetUserSettingsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AdminSetUserSettingsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -13533,11 +13645,13 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(AdminSetUserSettingsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AdminSetUserSettingsError>
+                            })
+                            .and_then(|response| {
+                                Err(AdminSetUserSettingsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -13563,11 +13677,17 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AdminUpdateAuthEventFeedbackError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AdminUpdateAuthEventFeedbackResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AdminUpdateAuthEventFeedbackError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AdminUpdateAuthEventFeedbackResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -13575,13 +13695,13 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(AdminUpdateAuthEventFeedbackError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AdminUpdateAuthEventFeedbackError>
+                            })
+                            .and_then(|response| {
+                                Err(AdminUpdateAuthEventFeedbackError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -13607,11 +13727,17 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AdminUpdateDeviceStatusError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AdminUpdateDeviceStatusResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AdminUpdateDeviceStatusError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AdminUpdateDeviceStatusResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -13619,13 +13745,13 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(AdminUpdateDeviceStatusError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AdminUpdateDeviceStatusError>
+                            })
+                            .and_then(|response| {
+                                Err(AdminUpdateDeviceStatusError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -13651,11 +13777,17 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AdminUpdateUserAttributesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AdminUpdateUserAttributesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AdminUpdateUserAttributesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AdminUpdateUserAttributesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -13663,13 +13795,13 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(AdminUpdateUserAttributesError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AdminUpdateUserAttributesError>
+                            })
+                            .and_then(|response| {
+                                Err(AdminUpdateUserAttributesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -13695,11 +13827,17 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AdminUserGlobalSignOutError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AdminUserGlobalSignOutResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AdminUserGlobalSignOutError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AdminUserGlobalSignOutResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -13707,13 +13845,13 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(AdminUserGlobalSignOutError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AdminUserGlobalSignOutError>
+                            })
+                            .and_then(|response| {
+                                Err(AdminUserGlobalSignOutError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -13739,11 +13877,17 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AssociateSoftwareTokenError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AssociateSoftwareTokenResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AssociateSoftwareTokenError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AssociateSoftwareTokenResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -13751,13 +13895,13 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(AssociateSoftwareTokenError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AssociateSoftwareTokenError>
+                            })
+                            .and_then(|response| {
+                                Err(AssociateSoftwareTokenError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -13783,11 +13927,16 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ChangePasswordError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ChangePasswordResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ChangePasswordError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ChangePasswordResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -13795,11 +13944,10 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ChangePasswordError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ChangePasswordError>
+                            })
+                            .and_then(|response| Err(ChangePasswordError::from_response(response)))
                     })
                     .boxed()
             }
@@ -13825,11 +13973,16 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ConfirmDeviceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ConfirmDeviceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ConfirmDeviceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ConfirmDeviceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -13837,11 +13990,10 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ConfirmDeviceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ConfirmDeviceError>
+                            })
+                            .and_then(|response| Err(ConfirmDeviceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -13867,11 +14019,17 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ConfirmForgotPasswordError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ConfirmForgotPasswordResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ConfirmForgotPasswordError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ConfirmForgotPasswordResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -13879,11 +14037,13 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ConfirmForgotPasswordError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ConfirmForgotPasswordError>
+                            })
+                            .and_then(|response| {
+                                Err(ConfirmForgotPasswordError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -13909,11 +14069,16 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ConfirmSignUpError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ConfirmSignUpResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ConfirmSignUpError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ConfirmSignUpResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -13921,11 +14086,10 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ConfirmSignUpError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ConfirmSignUpError>
+                            })
+                            .and_then(|response| Err(ConfirmSignUpError::from_response(response)))
                     })
                     .boxed()
             }
@@ -13951,11 +14115,16 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateGroupError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateGroupResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateGroupError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateGroupResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -13963,11 +14132,10 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateGroupError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateGroupError>
+                            })
+                            .and_then(|response| Err(CreateGroupError::from_response(response)))
                     })
                     .boxed()
             }
@@ -13993,11 +14161,17 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateIdentityProviderError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateIdentityProviderResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateIdentityProviderError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateIdentityProviderResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -14005,13 +14179,13 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(CreateIdentityProviderError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateIdentityProviderError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateIdentityProviderError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -14037,11 +14211,17 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateResourceServerError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateResourceServerResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateResourceServerError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateResourceServerResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -14049,11 +14229,13 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateResourceServerError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateResourceServerError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateResourceServerError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -14079,11 +14261,17 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateUserImportJobError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateUserImportJobResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateUserImportJobError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateUserImportJobResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -14091,11 +14279,13 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateUserImportJobError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateUserImportJobError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateUserImportJobError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -14121,11 +14311,16 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateUserPoolError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateUserPoolResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateUserPoolError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateUserPoolResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -14133,11 +14328,10 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateUserPoolError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateUserPoolError>
+                            })
+                            .and_then(|response| Err(CreateUserPoolError::from_response(response)))
                     })
                     .boxed()
             }
@@ -14163,11 +14357,17 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateUserPoolClientError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateUserPoolClientResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateUserPoolClientError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateUserPoolClientResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -14175,11 +14375,13 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateUserPoolClientError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateUserPoolClientError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateUserPoolClientError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -14205,11 +14407,17 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateUserPoolDomainError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateUserPoolDomainResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateUserPoolDomainError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateUserPoolDomainResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -14217,11 +14425,13 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateUserPoolDomainError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateUserPoolDomainError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateUserPoolDomainError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -14242,17 +14452,16 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteGroupError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteGroupError>
+                            })
+                            .and_then(|response| Err(DeleteGroupError::from_response(response)))
                     })
                     .boxed()
             }
@@ -14276,19 +14485,19 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DeleteIdentityProviderError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteIdentityProviderError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteIdentityProviderError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -14312,17 +14521,19 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteResourceServerError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteResourceServerError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteResourceServerError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -14343,17 +14554,16 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteUserError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteUserError>
+                            })
+                            .and_then(|response| Err(DeleteUserError::from_response(response)))
                     })
                     .boxed()
             }
@@ -14379,11 +14589,17 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteUserAttributesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteUserAttributesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteUserAttributesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteUserAttributesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -14391,11 +14607,13 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteUserAttributesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteUserAttributesError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteUserAttributesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -14419,17 +14637,16 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteUserPoolError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteUserPoolError>
+                            })
+                            .and_then(|response| Err(DeleteUserPoolError::from_response(response)))
                     })
                     .boxed()
             }
@@ -14453,17 +14670,19 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteUserPoolClientError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteUserPoolClientError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteUserPoolClientError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -14489,11 +14708,17 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteUserPoolDomainError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteUserPoolDomainResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteUserPoolDomainError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteUserPoolDomainResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -14501,11 +14726,13 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteUserPoolDomainError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteUserPoolDomainError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteUserPoolDomainError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -14531,11 +14758,17 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeIdentityProviderError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeIdentityProviderResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeIdentityProviderError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeIdentityProviderResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -14543,13 +14776,13 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeIdentityProviderError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeIdentityProviderError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeIdentityProviderError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -14575,11 +14808,17 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeResourceServerError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeResourceServerResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeResourceServerError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeResourceServerResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -14587,13 +14826,13 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeResourceServerError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeResourceServerError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeResourceServerError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -14619,11 +14858,17 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeRiskConfigurationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeRiskConfigurationResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeRiskConfigurationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeRiskConfigurationResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -14631,13 +14876,13 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeRiskConfigurationError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeRiskConfigurationError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeRiskConfigurationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -14663,11 +14908,17 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeUserImportJobError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeUserImportJobResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeUserImportJobError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeUserImportJobResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -14675,11 +14926,13 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeUserImportJobError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeUserImportJobError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeUserImportJobError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -14705,11 +14958,16 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeUserPoolError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeUserPoolResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeUserPoolError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeUserPoolResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -14717,11 +14975,12 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeUserPoolError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeUserPoolError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeUserPoolError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -14747,11 +15006,17 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeUserPoolClientError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeUserPoolClientResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeUserPoolClientError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeUserPoolClientResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -14759,13 +15024,13 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeUserPoolClientError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeUserPoolClientError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeUserPoolClientError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -14791,11 +15056,17 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeUserPoolDomainError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeUserPoolDomainResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeUserPoolDomainError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeUserPoolDomainResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -14803,13 +15074,13 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeUserPoolDomainError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeUserPoolDomainError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeUserPoolDomainError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -14830,17 +15101,16 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ForgetDeviceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ForgetDeviceError>
+                            })
+                            .and_then(|response| Err(ForgetDeviceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -14866,11 +15136,16 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ForgotPasswordError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ForgotPasswordResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ForgotPasswordError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ForgotPasswordResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -14878,11 +15153,10 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ForgotPasswordError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ForgotPasswordError>
+                            })
+                            .and_then(|response| Err(ForgotPasswordError::from_response(response)))
                     })
                     .boxed()
             }
@@ -14908,11 +15182,16 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetCSVHeaderError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetCSVHeaderResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetCSVHeaderError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetCSVHeaderResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -14920,11 +15199,10 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetCSVHeaderError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetCSVHeaderError>
+                            })
+                            .and_then(|response| Err(GetCSVHeaderError::from_response(response)))
                     })
                     .boxed()
             }
@@ -14950,11 +15228,16 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetDeviceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetDeviceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetDeviceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetDeviceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -14962,11 +15245,10 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetDeviceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetDeviceError>
+                            })
+                            .and_then(|response| Err(GetDeviceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -14986,11 +15268,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetGroupError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetGroupResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<GetGroupError>)
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetGroupResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -14998,11 +15283,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetGroupError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<GetGroupError>)
+                            .and_then(|response| Err(GetGroupError::from_response(response)))
                     })
                     .boxed()
             }
@@ -15029,11 +15311,17 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetIdentityProviderByIdentifierError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetIdentityProviderByIdentifierResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetIdentityProviderByIdentifierError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetIdentityProviderByIdentifierResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -15041,15 +15329,15 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(GetIdentityProviderByIdentifierError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetIdentityProviderByIdentifierError>
+                            })
+                            .and_then(|response| {
+                                Err(GetIdentityProviderByIdentifierError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -15075,11 +15363,17 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetSigningCertificateError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetSigningCertificateResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetSigningCertificateError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetSigningCertificateResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -15087,11 +15381,13 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetSigningCertificateError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetSigningCertificateError>
+                            })
+                            .and_then(|response| {
+                                Err(GetSigningCertificateError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -15117,11 +15413,16 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetUICustomizationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetUICustomizationResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetUICustomizationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetUICustomizationResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -15129,11 +15430,12 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetUICustomizationError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetUICustomizationError>
+                            })
+                            .and_then(|response| {
+                                Err(GetUICustomizationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -15153,11 +15455,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetUserError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetUserResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<GetUserError>)
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetUserResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -15165,11 +15470,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetUserError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<GetUserError>)
+                            .and_then(|response| Err(GetUserError::from_response(response)))
                     })
                     .boxed()
             }
@@ -15196,11 +15498,17 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetUserAttributeVerificationCodeError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetUserAttributeVerificationCodeResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetUserAttributeVerificationCodeError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetUserAttributeVerificationCodeResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -15208,15 +15516,15 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(GetUserAttributeVerificationCodeError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetUserAttributeVerificationCodeError>
+                            })
+                            .and_then(|response| {
+                                Err(GetUserAttributeVerificationCodeError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -15242,11 +15550,17 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetUserPoolMfaConfigError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetUserPoolMfaConfigResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetUserPoolMfaConfigError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetUserPoolMfaConfigResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -15254,11 +15568,13 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetUserPoolMfaConfigError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetUserPoolMfaConfigError>
+                            })
+                            .and_then(|response| {
+                                Err(GetUserPoolMfaConfigError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -15284,11 +15600,16 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GlobalSignOutError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GlobalSignOutResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GlobalSignOutError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GlobalSignOutResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -15296,11 +15617,10 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GlobalSignOutError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GlobalSignOutError>
+                            })
+                            .and_then(|response| Err(GlobalSignOutError::from_response(response)))
                     })
                     .boxed()
             }
@@ -15326,11 +15646,16 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| InitiateAuthError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<InitiateAuthResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<InitiateAuthError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<InitiateAuthResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -15338,11 +15663,10 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(InitiateAuthError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<InitiateAuthError>
+                            })
+                            .and_then(|response| Err(InitiateAuthError::from_response(response)))
                     })
                     .boxed()
             }
@@ -15368,11 +15692,16 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListDevicesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListDevicesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListDevicesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListDevicesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -15380,11 +15709,10 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListDevicesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListDevicesError>
+                            })
+                            .and_then(|response| Err(ListDevicesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -15410,11 +15738,16 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListGroupsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListGroupsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListGroupsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListGroupsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -15422,11 +15755,10 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListGroupsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListGroupsError>
+                            })
+                            .and_then(|response| Err(ListGroupsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -15452,11 +15784,17 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListIdentityProvidersError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListIdentityProvidersResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListIdentityProvidersError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListIdentityProvidersResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -15464,11 +15802,13 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListIdentityProvidersError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListIdentityProvidersError>
+                            })
+                            .and_then(|response| {
+                                Err(ListIdentityProvidersError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -15494,11 +15834,17 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListResourceServersError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListResourceServersResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListResourceServersError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListResourceServersResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -15506,11 +15852,13 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListResourceServersError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListResourceServersError>
+                            })
+                            .and_then(|response| {
+                                Err(ListResourceServersError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -15536,11 +15884,17 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListTagsForResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListTagsForResourceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListTagsForResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListTagsForResourceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -15548,11 +15902,13 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListTagsForResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListTagsForResourceError>
+                            })
+                            .and_then(|response| {
+                                Err(ListTagsForResourceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -15578,11 +15934,16 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListUserImportJobsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListUserImportJobsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListUserImportJobsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListUserImportJobsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -15590,11 +15951,12 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListUserImportJobsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListUserImportJobsError>
+                            })
+                            .and_then(|response| {
+                                Err(ListUserImportJobsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -15620,11 +15982,17 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListUserPoolClientsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListUserPoolClientsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListUserPoolClientsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListUserPoolClientsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -15632,11 +16000,13 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListUserPoolClientsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListUserPoolClientsError>
+                            })
+                            .and_then(|response| {
+                                Err(ListUserPoolClientsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -15662,11 +16032,16 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListUserPoolsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListUserPoolsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListUserPoolsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListUserPoolsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -15674,11 +16049,10 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListUserPoolsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListUserPoolsError>
+                            })
+                            .and_then(|response| Err(ListUserPoolsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -15704,11 +16078,16 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListUsersError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListUsersResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListUsersError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListUsersResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -15716,11 +16095,10 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListUsersError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListUsersError>
+                            })
+                            .and_then(|response| Err(ListUsersError::from_response(response)))
                     })
                     .boxed()
             }
@@ -15746,11 +16124,16 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListUsersInGroupError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListUsersInGroupResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListUsersInGroupError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListUsersInGroupResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -15758,11 +16141,12 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListUsersInGroupError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListUsersInGroupError>
+                            })
+                            .and_then(|response| {
+                                Err(ListUsersInGroupError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -15788,11 +16172,17 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ResendConfirmationCodeError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ResendConfirmationCodeResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ResendConfirmationCodeError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ResendConfirmationCodeResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -15800,13 +16190,13 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ResendConfirmationCodeError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ResendConfirmationCodeError>
+                            })
+                            .and_then(|response| {
+                                Err(ResendConfirmationCodeError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -15832,11 +16222,17 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| RespondToAuthChallengeError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RespondToAuthChallengeResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<RespondToAuthChallengeError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<RespondToAuthChallengeResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -15844,13 +16240,13 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(RespondToAuthChallengeError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<RespondToAuthChallengeError>
+                            })
+                            .and_then(|response| {
+                                Err(RespondToAuthChallengeError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -15876,11 +16272,17 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| SetRiskConfigurationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<SetRiskConfigurationResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<SetRiskConfigurationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<SetRiskConfigurationResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -15888,11 +16290,13 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(SetRiskConfigurationError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<SetRiskConfigurationError>
+                            })
+                            .and_then(|response| {
+                                Err(SetRiskConfigurationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -15918,11 +16322,16 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| SetUICustomizationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<SetUICustomizationResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<SetUICustomizationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<SetUICustomizationResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -15930,11 +16339,12 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(SetUICustomizationError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<SetUICustomizationError>
+                            })
+                            .and_then(|response| {
+                                Err(SetUICustomizationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -15960,11 +16370,17 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| SetUserMFAPreferenceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<SetUserMFAPreferenceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<SetUserMFAPreferenceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<SetUserMFAPreferenceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -15972,11 +16388,13 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(SetUserMFAPreferenceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<SetUserMFAPreferenceError>
+                            })
+                            .and_then(|response| {
+                                Err(SetUserMFAPreferenceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -16002,11 +16420,17 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| SetUserPoolMfaConfigError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<SetUserPoolMfaConfigResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<SetUserPoolMfaConfigError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<SetUserPoolMfaConfigResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -16014,11 +16438,13 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(SetUserPoolMfaConfigError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<SetUserPoolMfaConfigError>
+                            })
+                            .and_then(|response| {
+                                Err(SetUserPoolMfaConfigError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -16044,11 +16470,16 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| SetUserSettingsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<SetUserSettingsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<SetUserSettingsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<SetUserSettingsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -16056,11 +16487,10 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(SetUserSettingsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<SetUserSettingsError>
+                            })
+                            .and_then(|response| Err(SetUserSettingsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -16080,11 +16510,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| SignUpError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<SignUpResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<SignUpError>)
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<SignUpResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -16092,11 +16525,8 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(SignUpError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<SignUpError>)
+                            .and_then(|response| Err(SignUpError::from_response(response)))
                     })
                     .boxed()
             }
@@ -16122,11 +16552,16 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StartUserImportJobError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StartUserImportJobResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StartUserImportJobError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StartUserImportJobResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -16134,11 +16569,12 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(StartUserImportJobError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StartUserImportJobError>
+                            })
+                            .and_then(|response| {
+                                Err(StartUserImportJobError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -16164,11 +16600,16 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StopUserImportJobError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StopUserImportJobResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StopUserImportJobError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StopUserImportJobResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -16176,11 +16617,12 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(StopUserImportJobError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StopUserImportJobError>
+                            })
+                            .and_then(|response| {
+                                Err(StopUserImportJobError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -16206,11 +16648,16 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| TagResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<TagResourceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<TagResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<TagResourceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -16218,11 +16665,10 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(TagResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<TagResourceError>
+                            })
+                            .and_then(|response| Err(TagResourceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -16248,11 +16694,16 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UntagResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UntagResourceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UntagResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UntagResourceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -16260,11 +16711,10 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UntagResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UntagResourceError>
+                            })
+                            .and_then(|response| Err(UntagResourceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -16290,11 +16740,17 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateAuthEventFeedbackError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateAuthEventFeedbackResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateAuthEventFeedbackError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateAuthEventFeedbackResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -16302,13 +16758,13 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(UpdateAuthEventFeedbackError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateAuthEventFeedbackError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateAuthEventFeedbackError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -16334,11 +16790,16 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateDeviceStatusError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateDeviceStatusResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateDeviceStatusError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateDeviceStatusResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -16346,11 +16807,12 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateDeviceStatusError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateDeviceStatusError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateDeviceStatusError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -16376,11 +16838,16 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateGroupError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateGroupResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateGroupError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateGroupResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -16388,11 +16855,10 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateGroupError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateGroupError>
+                            })
+                            .and_then(|response| Err(UpdateGroupError::from_response(response)))
                     })
                     .boxed()
             }
@@ -16418,11 +16884,17 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateIdentityProviderError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateIdentityProviderResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateIdentityProviderError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateIdentityProviderResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -16430,13 +16902,13 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(UpdateIdentityProviderError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateIdentityProviderError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateIdentityProviderError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -16462,11 +16934,17 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateResourceServerError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateResourceServerResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateResourceServerError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateResourceServerResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -16474,11 +16952,13 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateResourceServerError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateResourceServerError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateResourceServerError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -16504,11 +16984,17 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateUserAttributesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateUserAttributesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateUserAttributesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateUserAttributesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -16516,11 +17002,13 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateUserAttributesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateUserAttributesError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateUserAttributesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -16546,11 +17034,16 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateUserPoolError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateUserPoolResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateUserPoolError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateUserPoolResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -16558,11 +17051,10 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateUserPoolError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateUserPoolError>
+                            })
+                            .and_then(|response| Err(UpdateUserPoolError::from_response(response)))
                     })
                     .boxed()
             }
@@ -16588,11 +17080,17 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateUserPoolClientError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateUserPoolClientResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateUserPoolClientError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateUserPoolClientResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -16600,11 +17098,13 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateUserPoolClientError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateUserPoolClientError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateUserPoolClientError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -16630,11 +17130,17 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateUserPoolDomainError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateUserPoolDomainResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateUserPoolDomainError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateUserPoolDomainResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -16642,11 +17148,13 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateUserPoolDomainError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateUserPoolDomainError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateUserPoolDomainError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -16672,11 +17180,17 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| VerifySoftwareTokenError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<VerifySoftwareTokenResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<VerifySoftwareTokenError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<VerifySoftwareTokenResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -16684,11 +17198,13 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(VerifySoftwareTokenError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<VerifySoftwareTokenError>
+                            })
+                            .and_then(|response| {
+                                Err(VerifySoftwareTokenError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -16714,11 +17230,17 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| VerifyUserAttributeError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<VerifyUserAttributeResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<VerifyUserAttributeError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<VerifyUserAttributeResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -16726,11 +17248,13 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(VerifyUserAttributeError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<VerifyUserAttributeError>
+                            })
+                            .and_then(|response| {
+                                Err(VerifyUserAttributeError::from_response(response))
+                            })
                     })
                     .boxed()
             }

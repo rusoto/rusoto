@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -1854,11 +1854,17 @@ impl LicenseManager for LicenseManagerClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateLicenseConfigurationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateLicenseConfigurationResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateLicenseConfigurationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateLicenseConfigurationResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1866,13 +1872,13 @@ impl LicenseManager for LicenseManagerClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(CreateLicenseConfigurationError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateLicenseConfigurationError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateLicenseConfigurationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1898,11 +1904,17 @@ impl LicenseManager for LicenseManagerClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteLicenseConfigurationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteLicenseConfigurationResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteLicenseConfigurationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteLicenseConfigurationResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1910,13 +1922,13 @@ impl LicenseManager for LicenseManagerClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DeleteLicenseConfigurationError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteLicenseConfigurationError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteLicenseConfigurationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1939,11 +1951,17 @@ impl LicenseManager for LicenseManagerClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetLicenseConfigurationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetLicenseConfigurationResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetLicenseConfigurationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetLicenseConfigurationResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1951,13 +1969,13 @@ impl LicenseManager for LicenseManagerClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(GetLicenseConfigurationError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetLicenseConfigurationError>
+                            })
+                            .and_then(|response| {
+                                Err(GetLicenseConfigurationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1978,11 +1996,16 @@ impl LicenseManager for LicenseManagerClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetServiceSettingsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetServiceSettingsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetServiceSettingsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetServiceSettingsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1990,11 +2013,12 @@ impl LicenseManager for LicenseManagerClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetServiceSettingsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetServiceSettingsError>
+                            })
+                            .and_then(|response| {
+                                Err(GetServiceSettingsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2021,16 +2045,22 @@ impl LicenseManager for LicenseManagerClient {
 
         self.client.sign_and_dispatch(request, |response| {
                         if response.status.is_success() {
-                            response.buffer().map(|try_response| {
-                try_response.and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<ListAssociationsForLicenseConfigurationResponse, _>()
-                })
-            }).boxed()
+                            response.buffer()
+                .map_err(|e| ListAssociationsForLicenseConfigurationError::from(e))
+                .map(|try_response| {
+                    try_response
+                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<ListAssociationsForLicenseConfigurationError>)
+                    .and_then(|response| {
+                        proto::json::ResponsePayload::new(&response).deserialize::<ListAssociationsForLicenseConfigurationResponse, _>()
+                    })
+                }).boxed()
                         } else {
                             response.buffer().map(|try_response| {
-                                try_response.map_or_else(|e| e, |response| {
-                                    Err(ListAssociationsForLicenseConfigurationError::from_response(response))
-                                }).boxed()
+                                try_response
+                                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<ListAssociationsForLicenseConfigurationError>)
+                                    .and_then(|response| {
+                                        Err(ListAssociationsForLicenseConfigurationError::from_response(response))
+                                    })
                             }).boxed()
                         }
                     })
@@ -2055,11 +2085,17 @@ impl LicenseManager for LicenseManagerClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListLicenseConfigurationsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListLicenseConfigurationsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListLicenseConfigurationsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListLicenseConfigurationsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2067,13 +2103,13 @@ impl LicenseManager for LicenseManagerClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ListLicenseConfigurationsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListLicenseConfigurationsError>
+                            })
+                            .and_then(|response| {
+                                Err(ListLicenseConfigurationsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2100,16 +2136,22 @@ impl LicenseManager for LicenseManagerClient {
 
         self.client.sign_and_dispatch(request, |response| {
                         if response.status.is_success() {
-                            response.buffer().map(|try_response| {
-                try_response.and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<ListLicenseSpecificationsForResourceResponse, _>()
-                })
-            }).boxed()
+                            response.buffer()
+                .map_err(|e| ListLicenseSpecificationsForResourceError::from(e))
+                .map(|try_response| {
+                    try_response
+                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<ListLicenseSpecificationsForResourceError>)
+                    .and_then(|response| {
+                        proto::json::ResponsePayload::new(&response).deserialize::<ListLicenseSpecificationsForResourceResponse, _>()
+                    })
+                }).boxed()
                         } else {
                             response.buffer().map(|try_response| {
-                                try_response.map_or_else(|e| e, |response| {
-                                    Err(ListLicenseSpecificationsForResourceError::from_response(response))
-                                }).boxed()
+                                try_response
+                                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<ListLicenseSpecificationsForResourceError>)
+                                    .and_then(|response| {
+                                        Err(ListLicenseSpecificationsForResourceError::from_response(response))
+                                    })
                             }).boxed()
                         }
                     })
@@ -2131,11 +2173,17 @@ impl LicenseManager for LicenseManagerClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListResourceInventoryError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListResourceInventoryResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListResourceInventoryError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListResourceInventoryResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2143,11 +2191,13 @@ impl LicenseManager for LicenseManagerClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListResourceInventoryError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListResourceInventoryError>
+                            })
+                            .and_then(|response| {
+                                Err(ListResourceInventoryError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2170,11 +2220,17 @@ impl LicenseManager for LicenseManagerClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListTagsForResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListTagsForResourceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListTagsForResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListTagsForResourceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2182,11 +2238,13 @@ impl LicenseManager for LicenseManagerClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListTagsForResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListTagsForResourceError>
+                            })
+                            .and_then(|response| {
+                                Err(ListTagsForResourceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2213,11 +2271,17 @@ impl LicenseManager for LicenseManagerClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListUsageForLicenseConfigurationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListUsageForLicenseConfigurationResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListUsageForLicenseConfigurationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListUsageForLicenseConfigurationResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2225,15 +2289,15 @@ impl LicenseManager for LicenseManagerClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ListUsageForLicenseConfigurationError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListUsageForLicenseConfigurationError>
+                            })
+                            .and_then(|response| {
+                                Err(ListUsageForLicenseConfigurationError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -2256,11 +2320,16 @@ impl LicenseManager for LicenseManagerClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| TagResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<TagResourceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<TagResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<TagResourceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2268,11 +2337,10 @@ impl LicenseManager for LicenseManagerClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(TagResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<TagResourceError>
+                            })
+                            .and_then(|response| Err(TagResourceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2295,11 +2363,16 @@ impl LicenseManager for LicenseManagerClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UntagResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UntagResourceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UntagResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UntagResourceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2307,11 +2380,10 @@ impl LicenseManager for LicenseManagerClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UntagResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UntagResourceError>
+                            })
+                            .and_then(|response| Err(UntagResourceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2337,11 +2409,17 @@ impl LicenseManager for LicenseManagerClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateLicenseConfigurationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateLicenseConfigurationResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateLicenseConfigurationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateLicenseConfigurationResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2349,13 +2427,13 @@ impl LicenseManager for LicenseManagerClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(UpdateLicenseConfigurationError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateLicenseConfigurationError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateLicenseConfigurationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2382,16 +2460,22 @@ impl LicenseManager for LicenseManagerClient {
 
         self.client.sign_and_dispatch(request, |response| {
                         if response.status.is_success() {
-                            response.buffer().map(|try_response| {
-                try_response.and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<UpdateLicenseSpecificationsForResourceResponse, _>()
-                })
-            }).boxed()
+                            response.buffer()
+                .map_err(|e| UpdateLicenseSpecificationsForResourceError::from(e))
+                .map(|try_response| {
+                    try_response
+                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<UpdateLicenseSpecificationsForResourceError>)
+                    .and_then(|response| {
+                        proto::json::ResponsePayload::new(&response).deserialize::<UpdateLicenseSpecificationsForResourceResponse, _>()
+                    })
+                }).boxed()
                         } else {
                             response.buffer().map(|try_response| {
-                                try_response.map_or_else(|e| e, |response| {
-                                    Err(UpdateLicenseSpecificationsForResourceError::from_response(response))
-                                }).boxed()
+                                try_response
+                                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<UpdateLicenseSpecificationsForResourceError>)
+                                    .and_then(|response| {
+                                        Err(UpdateLicenseSpecificationsForResourceError::from_response(response))
+                                    })
                             }).boxed()
                         }
                     })
@@ -2413,11 +2497,17 @@ impl LicenseManager for LicenseManagerClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateServiceSettingsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateServiceSettingsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateServiceSettingsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateServiceSettingsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2425,11 +2515,13 @@ impl LicenseManager for LicenseManagerClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateServiceSettingsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateServiceSettingsError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateServiceSettingsError::from_response(response))
+                            })
                     })
                     .boxed()
             }

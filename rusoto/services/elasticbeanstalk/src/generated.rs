@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto::xml::error::*;
 use rusoto_core::proto::xml::util::{
@@ -9959,16 +9959,18 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<AbortEnvironmentUpdateError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(AbortEnvironmentUpdateError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(AbortEnvironmentUpdateError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            futures::future::ready(::std::mem::drop(response)).boxed()
+            futures::future::ready(Ok(std::mem::drop(response))).boxed()
         })
     }
 
@@ -9990,41 +9992,45 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e)
+                            as RusotoError<ApplyEnvironmentManagedActionError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| {
-                                Err(ApplyEnvironmentManagedActionError::from_response(response))
-                            },
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(ApplyEnvironmentManagedActionError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = ApplyEnvironmentManagedActionResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = ApplyEnvironmentManagedActionResultDeserializer::deserialize(
-                        "ApplyEnvironmentManagedActionResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(ApplyEnvironmentManagedActionResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = ApplyEnvironmentManagedActionResultDeserializer::deserialize(
+                            "ApplyEnvironmentManagedActionResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -10046,39 +10052,44 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<CheckDNSAvailabilityError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(CheckDNSAvailabilityError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(CheckDNSAvailabilityError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = CheckDNSAvailabilityResultMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = CheckDNSAvailabilityResultMessageDeserializer::deserialize(
-                        "CheckDNSAvailabilityResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(CheckDNSAvailabilityResultMessage::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = CheckDNSAvailabilityResultMessageDeserializer::deserialize(
+                            "CheckDNSAvailabilityResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -10100,39 +10111,44 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<ComposeEnvironmentsError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(ComposeEnvironmentsError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(ComposeEnvironmentsError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = EnvironmentDescriptionsMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = EnvironmentDescriptionsMessageDeserializer::deserialize(
-                        "ComposeEnvironmentsResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(EnvironmentDescriptionsMessage::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = EnvironmentDescriptionsMessageDeserializer::deserialize(
+                            "ComposeEnvironmentsResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -10154,39 +10170,44 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<CreateApplicationError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(CreateApplicationError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(CreateApplicationError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = ApplicationDescriptionMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = ApplicationDescriptionMessageDeserializer::deserialize(
-                        "CreateApplicationResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(ApplicationDescriptionMessage::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = ApplicationDescriptionMessageDeserializer::deserialize(
+                            "CreateApplicationResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -10208,39 +10229,44 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<CreateApplicationVersionError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(CreateApplicationVersionError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(CreateApplicationVersionError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = ApplicationVersionDescriptionMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = ApplicationVersionDescriptionMessageDeserializer::deserialize(
-                        "CreateApplicationVersionResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(ApplicationVersionDescriptionMessage::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = ApplicationVersionDescriptionMessageDeserializer::deserialize(
+                            "CreateApplicationVersionResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -10262,41 +10288,45 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e)
+                            as RusotoError<CreateConfigurationTemplateError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| {
-                                Err(CreateConfigurationTemplateError::from_response(response))
-                            },
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(CreateConfigurationTemplateError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = ConfigurationSettingsDescription::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = ConfigurationSettingsDescriptionDeserializer::deserialize(
-                        "CreateConfigurationTemplateResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(ConfigurationSettingsDescription::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = ConfigurationSettingsDescriptionDeserializer::deserialize(
+                            "CreateConfigurationTemplateResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -10318,39 +10348,44 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<CreateEnvironmentError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(CreateEnvironmentError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(CreateEnvironmentError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = EnvironmentDescription::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = EnvironmentDescriptionDeserializer::deserialize(
-                        "CreateEnvironmentResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(EnvironmentDescription::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = EnvironmentDescriptionDeserializer::deserialize(
+                            "CreateEnvironmentResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -10372,39 +10407,44 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<CreatePlatformVersionError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(CreatePlatformVersionError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(CreatePlatformVersionError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = CreatePlatformVersionResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = CreatePlatformVersionResultDeserializer::deserialize(
-                        "CreatePlatformVersionResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(CreatePlatformVersionResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = CreatePlatformVersionResultDeserializer::deserialize(
+                            "CreatePlatformVersionResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -10425,39 +10465,44 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<CreateStorageLocationError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(CreateStorageLocationError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(CreateStorageLocationError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = CreateStorageLocationResultMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = CreateStorageLocationResultMessageDeserializer::deserialize(
-                        "CreateStorageLocationResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(CreateStorageLocationResultMessage::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = CreateStorageLocationResultMessageDeserializer::deserialize(
+                            "CreateStorageLocationResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -10479,16 +10524,18 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<DeleteApplicationError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(DeleteApplicationError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DeleteApplicationError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            futures::future::ready(::std::mem::drop(response)).boxed()
+            futures::future::ready(Ok(std::mem::drop(response))).boxed()
         })
     }
 
@@ -10510,16 +10557,18 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<DeleteApplicationVersionError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(DeleteApplicationVersionError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DeleteApplicationVersionError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            futures::future::ready(::std::mem::drop(response)).boxed()
+            futures::future::ready(Ok(std::mem::drop(response))).boxed()
         })
     }
 
@@ -10541,18 +10590,19 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e)
+                            as RusotoError<DeleteConfigurationTemplateError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| {
-                                Err(DeleteConfigurationTemplateError::from_response(response))
-                            },
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DeleteConfigurationTemplateError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            futures::future::ready(::std::mem::drop(response)).boxed()
+            futures::future::ready(Ok(std::mem::drop(response))).boxed()
         })
     }
 
@@ -10574,18 +10624,19 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e)
+                            as RusotoError<DeleteEnvironmentConfigurationError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| {
-                                Err(DeleteEnvironmentConfigurationError::from_response(response))
-                            },
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DeleteEnvironmentConfigurationError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            futures::future::ready(::std::mem::drop(response)).boxed()
+            futures::future::ready(Ok(std::mem::drop(response))).boxed()
         })
     }
 
@@ -10607,39 +10658,44 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<DeletePlatformVersionError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(DeletePlatformVersionError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DeletePlatformVersionError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = DeletePlatformVersionResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DeletePlatformVersionResultDeserializer::deserialize(
-                        "DeletePlatformVersionResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(DeletePlatformVersionResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = DeletePlatformVersionResultDeserializer::deserialize(
+                            "DeletePlatformVersionResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -10660,39 +10716,44 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<DescribeAccountAttributesError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(DescribeAccountAttributesError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DescribeAccountAttributesError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = DescribeAccountAttributesResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribeAccountAttributesResultDeserializer::deserialize(
-                        "DescribeAccountAttributesResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(DescribeAccountAttributesResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = DescribeAccountAttributesResultDeserializer::deserialize(
+                            "DescribeAccountAttributesResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -10714,41 +10775,45 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e)
+                            as RusotoError<DescribeApplicationVersionsError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| {
-                                Err(DescribeApplicationVersionsError::from_response(response))
-                            },
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DescribeApplicationVersionsError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = ApplicationVersionDescriptionsMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = ApplicationVersionDescriptionsMessageDeserializer::deserialize(
-                        "DescribeApplicationVersionsResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(ApplicationVersionDescriptionsMessage::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = ApplicationVersionDescriptionsMessageDeserializer::deserialize(
+                            "DescribeApplicationVersionsResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -10770,39 +10835,44 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<DescribeApplicationsError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(DescribeApplicationsError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DescribeApplicationsError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = ApplicationDescriptionsMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = ApplicationDescriptionsMessageDeserializer::deserialize(
-                        "DescribeApplicationsResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(ApplicationDescriptionsMessage::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = ApplicationDescriptionsMessageDeserializer::deserialize(
+                            "DescribeApplicationsResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -10824,41 +10894,45 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e)
+                            as RusotoError<DescribeConfigurationOptionsError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| {
-                                Err(DescribeConfigurationOptionsError::from_response(response))
-                            },
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DescribeConfigurationOptionsError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = ConfigurationOptionsDescription::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = ConfigurationOptionsDescriptionDeserializer::deserialize(
-                        "DescribeConfigurationOptionsResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(ConfigurationOptionsDescription::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = ConfigurationOptionsDescriptionDeserializer::deserialize(
+                            "DescribeConfigurationOptionsResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -10880,41 +10954,45 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e)
+                            as RusotoError<DescribeConfigurationSettingsError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| {
-                                Err(DescribeConfigurationSettingsError::from_response(response))
-                            },
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DescribeConfigurationSettingsError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = ConfigurationSettingsDescriptions::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = ConfigurationSettingsDescriptionsDeserializer::deserialize(
-                        "DescribeConfigurationSettingsResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(ConfigurationSettingsDescriptions::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = ConfigurationSettingsDescriptionsDeserializer::deserialize(
+                            "DescribeConfigurationSettingsResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -10936,39 +11014,44 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<DescribeEnvironmentHealthError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(DescribeEnvironmentHealthError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DescribeEnvironmentHealthError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = DescribeEnvironmentHealthResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribeEnvironmentHealthResultDeserializer::deserialize(
-                        "DescribeEnvironmentHealthResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(DescribeEnvironmentHealthResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = DescribeEnvironmentHealthResultDeserializer::deserialize(
+                            "DescribeEnvironmentHealthResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -10997,44 +11080,48 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e)
+                            as RusotoError<DescribeEnvironmentManagedActionHistoryError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| {
-                                Err(DescribeEnvironmentManagedActionHistoryError::from_response(
-                                    response,
-                                ))
-                            },
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DescribeEnvironmentManagedActionHistoryError::from_response(
+                                response,
+                            ))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = DescribeEnvironmentManagedActionHistoryResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result =
-                        DescribeEnvironmentManagedActionHistoryResultDeserializer::deserialize(
-                            "DescribeEnvironmentManagedActionHistoryResult",
-                            &mut stack,
-                        )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(DescribeEnvironmentManagedActionHistoryResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result =
+                            DescribeEnvironmentManagedActionHistoryResultDeserializer::deserialize(
+                                "DescribeEnvironmentManagedActionHistoryResult",
+                                &mut stack,
+                            );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -11057,43 +11144,47 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e)
+                            as RusotoError<DescribeEnvironmentManagedActionsError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| {
-                                Err(DescribeEnvironmentManagedActionsError::from_response(
-                                    response,
-                                ))
-                            },
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DescribeEnvironmentManagedActionsError::from_response(
+                                response,
+                            ))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = DescribeEnvironmentManagedActionsResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribeEnvironmentManagedActionsResultDeserializer::deserialize(
-                        "DescribeEnvironmentManagedActionsResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(DescribeEnvironmentManagedActionsResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = DescribeEnvironmentManagedActionsResultDeserializer::deserialize(
+                            "DescribeEnvironmentManagedActionsResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -11116,41 +11207,45 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e)
+                            as RusotoError<DescribeEnvironmentResourcesError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| {
-                                Err(DescribeEnvironmentResourcesError::from_response(response))
-                            },
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DescribeEnvironmentResourcesError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = EnvironmentResourceDescriptionsMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = EnvironmentResourceDescriptionsMessageDeserializer::deserialize(
-                        "DescribeEnvironmentResourcesResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(EnvironmentResourceDescriptionsMessage::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = EnvironmentResourceDescriptionsMessageDeserializer::deserialize(
+                            "DescribeEnvironmentResourcesResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -11172,39 +11267,44 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<DescribeEnvironmentsError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(DescribeEnvironmentsError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DescribeEnvironmentsError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = EnvironmentDescriptionsMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = EnvironmentDescriptionsMessageDeserializer::deserialize(
-                        "DescribeEnvironmentsResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(EnvironmentDescriptionsMessage::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = EnvironmentDescriptionsMessageDeserializer::deserialize(
+                            "DescribeEnvironmentsResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -11226,39 +11326,42 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<DescribeEventsError>)
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(DescribeEventsError::from_response(response)),
-                        )
+                        try_response
+                            .map_err(|e| e.into())
+                            .and_then(|response| Err(DescribeEventsError::from_response(response)))
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = EventDescriptionsMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = EventDescriptionsMessageDeserializer::deserialize(
-                        "DescribeEventsResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(EventDescriptionsMessage::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = EventDescriptionsMessageDeserializer::deserialize(
+                            "DescribeEventsResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -11280,39 +11383,44 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<DescribeInstancesHealthError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(DescribeInstancesHealthError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DescribeInstancesHealthError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = DescribeInstancesHealthResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribeInstancesHealthResultDeserializer::deserialize(
-                        "DescribeInstancesHealthResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(DescribeInstancesHealthResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = DescribeInstancesHealthResultDeserializer::deserialize(
+                            "DescribeInstancesHealthResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -11334,39 +11442,44 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<DescribePlatformVersionError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(DescribePlatformVersionError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DescribePlatformVersionError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = DescribePlatformVersionResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribePlatformVersionResultDeserializer::deserialize(
-                        "DescribePlatformVersionResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(DescribePlatformVersionResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = DescribePlatformVersionResultDeserializer::deserialize(
+                            "DescribePlatformVersionResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -11388,41 +11501,45 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e)
+                            as RusotoError<ListAvailableSolutionStacksError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| {
-                                Err(ListAvailableSolutionStacksError::from_response(response))
-                            },
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(ListAvailableSolutionStacksError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = ListAvailableSolutionStacksResultMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = ListAvailableSolutionStacksResultMessageDeserializer::deserialize(
-                        "ListAvailableSolutionStacksResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(ListAvailableSolutionStacksResultMessage::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = ListAvailableSolutionStacksResultMessageDeserializer::deserialize(
+                            "ListAvailableSolutionStacksResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -11444,39 +11561,44 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<ListPlatformVersionsError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(ListPlatformVersionsError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(ListPlatformVersionsError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = ListPlatformVersionsResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = ListPlatformVersionsResultDeserializer::deserialize(
-                        "ListPlatformVersionsResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(ListPlatformVersionsResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = ListPlatformVersionsResultDeserializer::deserialize(
+                            "ListPlatformVersionsResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -11498,39 +11620,44 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<ListTagsForResourceError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(ListTagsForResourceError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(ListTagsForResourceError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = ResourceTagsDescriptionMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = ResourceTagsDescriptionMessageDeserializer::deserialize(
-                        "ListTagsForResourceResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(ResourceTagsDescriptionMessage::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = ResourceTagsDescriptionMessageDeserializer::deserialize(
+                            "ListTagsForResourceResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -11552,16 +11679,18 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<RebuildEnvironmentError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(RebuildEnvironmentError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(RebuildEnvironmentError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            futures::future::ready(::std::mem::drop(response)).boxed()
+            futures::future::ready(Ok(std::mem::drop(response))).boxed()
         })
     }
 
@@ -11583,16 +11712,18 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<RequestEnvironmentInfoError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(RequestEnvironmentInfoError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(RequestEnvironmentInfoError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            futures::future::ready(::std::mem::drop(response)).boxed()
+            futures::future::ready(Ok(std::mem::drop(response))).boxed()
         })
     }
 
@@ -11614,16 +11745,16 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<RestartAppServerError>)
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(RestartAppServerError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(RestartAppServerError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            futures::future::ready(::std::mem::drop(response)).boxed()
+            futures::future::ready(Ok(std::mem::drop(response))).boxed()
         })
     }
 
@@ -11645,39 +11776,44 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<RetrieveEnvironmentInfoError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(RetrieveEnvironmentInfoError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(RetrieveEnvironmentInfoError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = RetrieveEnvironmentInfoResultMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = RetrieveEnvironmentInfoResultMessageDeserializer::deserialize(
-                        "RetrieveEnvironmentInfoResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(RetrieveEnvironmentInfoResultMessage::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = RetrieveEnvironmentInfoResultMessageDeserializer::deserialize(
+                            "RetrieveEnvironmentInfoResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -11699,16 +11835,18 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<SwapEnvironmentCNAMEsError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(SwapEnvironmentCNAMEsError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(SwapEnvironmentCNAMEsError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            futures::future::ready(::std::mem::drop(response)).boxed()
+            futures::future::ready(Ok(std::mem::drop(response))).boxed()
         })
     }
 
@@ -11730,39 +11868,44 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<TerminateEnvironmentError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(TerminateEnvironmentError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(TerminateEnvironmentError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = EnvironmentDescription::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = EnvironmentDescriptionDeserializer::deserialize(
-                        "TerminateEnvironmentResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(EnvironmentDescription::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = EnvironmentDescriptionDeserializer::deserialize(
+                            "TerminateEnvironmentResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -11784,39 +11927,44 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<UpdateApplicationError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(UpdateApplicationError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(UpdateApplicationError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = ApplicationDescriptionMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = ApplicationDescriptionMessageDeserializer::deserialize(
-                        "UpdateApplicationResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(ApplicationDescriptionMessage::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = ApplicationDescriptionMessageDeserializer::deserialize(
+                            "UpdateApplicationResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -11841,44 +11989,48 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e)
+                            as RusotoError<UpdateApplicationResourceLifecycleError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| {
-                                Err(UpdateApplicationResourceLifecycleError::from_response(
-                                    response,
-                                ))
-                            },
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(UpdateApplicationResourceLifecycleError::from_response(
+                                response,
+                            ))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = ApplicationResourceLifecycleDescriptionMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result =
-                        ApplicationResourceLifecycleDescriptionMessageDeserializer::deserialize(
-                            "UpdateApplicationResourceLifecycleResult",
-                            &mut stack,
-                        )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(ApplicationResourceLifecycleDescriptionMessage::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result =
+                            ApplicationResourceLifecycleDescriptionMessageDeserializer::deserialize(
+                                "UpdateApplicationResourceLifecycleResult",
+                                &mut stack,
+                            );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -11900,39 +12052,44 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<UpdateApplicationVersionError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(UpdateApplicationVersionError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(UpdateApplicationVersionError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = ApplicationVersionDescriptionMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = ApplicationVersionDescriptionMessageDeserializer::deserialize(
-                        "UpdateApplicationVersionResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(ApplicationVersionDescriptionMessage::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = ApplicationVersionDescriptionMessageDeserializer::deserialize(
+                            "UpdateApplicationVersionResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -11954,41 +12111,45 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e)
+                            as RusotoError<UpdateConfigurationTemplateError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| {
-                                Err(UpdateConfigurationTemplateError::from_response(response))
-                            },
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(UpdateConfigurationTemplateError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = ConfigurationSettingsDescription::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = ConfigurationSettingsDescriptionDeserializer::deserialize(
-                        "UpdateConfigurationTemplateResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(ConfigurationSettingsDescription::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = ConfigurationSettingsDescriptionDeserializer::deserialize(
+                            "UpdateConfigurationTemplateResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -12010,39 +12171,44 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<UpdateEnvironmentError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(UpdateEnvironmentError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(UpdateEnvironmentError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = EnvironmentDescription::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = EnvironmentDescriptionDeserializer::deserialize(
-                        "UpdateEnvironmentResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(EnvironmentDescription::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = EnvironmentDescriptionDeserializer::deserialize(
+                            "UpdateEnvironmentResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -12064,16 +12230,18 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<UpdateTagsForResourceError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(UpdateTagsForResourceError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(UpdateTagsForResourceError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            futures::future::ready(::std::mem::drop(response)).boxed()
+            futures::future::ready(Ok(std::mem::drop(response))).boxed()
         })
     }
 
@@ -12096,41 +12264,45 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e)
+                            as RusotoError<ValidateConfigurationSettingsError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| {
-                                Err(ValidateConfigurationSettingsError::from_response(response))
-                            },
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(ValidateConfigurationSettingsError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = ConfigurationSettingsValidationMessages::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = ConfigurationSettingsValidationMessagesDeserializer::deserialize(
-                        "ValidateConfigurationSettingsResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(ConfigurationSettingsValidationMessages::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = ConfigurationSettingsValidationMessagesDeserializer::deserialize(
+                            "ValidateConfigurationSettingsResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 }

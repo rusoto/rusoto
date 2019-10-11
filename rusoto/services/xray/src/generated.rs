@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -2489,10 +2489,11 @@ impl XRay for XRayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| BatchGetTracesError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<BatchGetTracesResult, _>()?;
+                                .deserialize::<BatchGetTracesResult, _>();
 
                             result
                         })
@@ -2503,11 +2504,8 @@ impl XRay for XRayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(BatchGetTracesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<BatchGetTracesError>())
+                            .and_then(|response| Err(BatchGetTracesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2531,10 +2529,11 @@ impl XRay for XRayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateGroupError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateGroupResult, _>()?;
+                                .deserialize::<CreateGroupResult, _>();
 
                             result
                         })
@@ -2545,11 +2544,8 @@ impl XRay for XRayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateGroupError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateGroupError>())
+                            .and_then(|response| Err(CreateGroupError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2573,10 +2569,11 @@ impl XRay for XRayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateSamplingRuleError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateSamplingRuleResult, _>()?;
+                                .deserialize::<CreateSamplingRuleResult, _>();
 
                             result
                         })
@@ -2587,11 +2584,10 @@ impl XRay for XRayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateSamplingRuleError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateSamplingRuleError>())
+                            .and_then(|response| {
+                                Err(CreateSamplingRuleError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2615,10 +2611,11 @@ impl XRay for XRayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteGroupError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteGroupResult, _>()?;
+                                .deserialize::<DeleteGroupResult, _>();
 
                             result
                         })
@@ -2629,11 +2626,8 @@ impl XRay for XRayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteGroupError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteGroupError>())
+                            .and_then(|response| Err(DeleteGroupError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2657,10 +2651,11 @@ impl XRay for XRayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteSamplingRuleError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteSamplingRuleResult, _>()?;
+                                .deserialize::<DeleteSamplingRuleResult, _>();
 
                             result
                         })
@@ -2671,11 +2666,10 @@ impl XRay for XRayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteSamplingRuleError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteSamplingRuleError>())
+                            .and_then(|response| {
+                                Err(DeleteSamplingRuleError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2695,10 +2689,11 @@ impl XRay for XRayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetEncryptionConfigError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetEncryptionConfigResult, _>()?;
+                                .deserialize::<GetEncryptionConfigResult, _>();
 
                             result
                         })
@@ -2709,11 +2704,10 @@ impl XRay for XRayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetEncryptionConfigError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetEncryptionConfigError>())
+                            .and_then(|response| {
+                                Err(GetEncryptionConfigError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2734,10 +2728,11 @@ impl XRay for XRayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetGroupError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetGroupResult, _>()?;
+                                .deserialize::<GetGroupResult, _>();
 
                             result
                         })
@@ -2748,11 +2743,8 @@ impl XRay for XRayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetGroupError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetGroupError>())
+                            .and_then(|response| Err(GetGroupError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2773,10 +2765,11 @@ impl XRay for XRayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetGroupsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetGroupsResult, _>()?;
+                                .deserialize::<GetGroupsResult, _>();
 
                             result
                         })
@@ -2787,11 +2780,8 @@ impl XRay for XRayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetGroupsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetGroupsError>())
+                            .and_then(|response| Err(GetGroupsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2815,10 +2805,11 @@ impl XRay for XRayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetSamplingRulesError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetSamplingRulesResult, _>()?;
+                                .deserialize::<GetSamplingRulesResult, _>();
 
                             result
                         })
@@ -2829,11 +2820,10 @@ impl XRay for XRayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetSamplingRulesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetSamplingRulesError>())
+                            .and_then(|response| {
+                                Err(GetSamplingRulesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2857,10 +2847,11 @@ impl XRay for XRayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetSamplingStatisticSummariesError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetSamplingStatisticSummariesResult, _>()?;
+                                .deserialize::<GetSamplingStatisticSummariesResult, _>();
 
                             result
                         })
@@ -2871,13 +2862,10 @@ impl XRay for XRayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(GetSamplingStatisticSummariesError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetSamplingStatisticSummariesError>())
+                            .and_then(|response| {
+                                Err(GetSamplingStatisticSummariesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2901,10 +2889,11 @@ impl XRay for XRayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetSamplingTargetsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetSamplingTargetsResult, _>()?;
+                                .deserialize::<GetSamplingTargetsResult, _>();
 
                             result
                         })
@@ -2915,11 +2904,10 @@ impl XRay for XRayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetSamplingTargetsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetSamplingTargetsError>())
+                            .and_then(|response| {
+                                Err(GetSamplingTargetsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2943,10 +2931,11 @@ impl XRay for XRayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetServiceGraphError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetServiceGraphResult, _>()?;
+                                .deserialize::<GetServiceGraphResult, _>();
 
                             result
                         })
@@ -2957,11 +2946,8 @@ impl XRay for XRayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetServiceGraphError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetServiceGraphError>())
+                            .and_then(|response| Err(GetServiceGraphError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2986,11 +2972,11 @@ impl XRay for XRayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetTimeSeriesServiceStatisticsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetTimeSeriesServiceStatisticsResult, _>(
-                            )?;
+                                .deserialize::<GetTimeSeriesServiceStatisticsResult, _>();
 
                             result
                         })
@@ -3001,15 +2987,10 @@ impl XRay for XRayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(GetTimeSeriesServiceStatisticsError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetTimeSeriesServiceStatisticsError>())
+                            .and_then(|response| {
+                                Err(GetTimeSeriesServiceStatisticsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3033,10 +3014,11 @@ impl XRay for XRayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetTraceGraphError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetTraceGraphResult, _>()?;
+                                .deserialize::<GetTraceGraphResult, _>();
 
                             result
                         })
@@ -3047,11 +3029,8 @@ impl XRay for XRayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetTraceGraphError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetTraceGraphError>())
+                            .and_then(|response| Err(GetTraceGraphError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3075,10 +3054,11 @@ impl XRay for XRayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetTraceSummariesError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetTraceSummariesResult, _>()?;
+                                .deserialize::<GetTraceSummariesResult, _>();
 
                             result
                         })
@@ -3089,11 +3069,10 @@ impl XRay for XRayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetTraceSummariesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetTraceSummariesError>())
+                            .and_then(|response| {
+                                Err(GetTraceSummariesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3117,10 +3096,11 @@ impl XRay for XRayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| PutEncryptionConfigError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PutEncryptionConfigResult, _>()?;
+                                .deserialize::<PutEncryptionConfigResult, _>();
 
                             result
                         })
@@ -3131,11 +3111,10 @@ impl XRay for XRayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(PutEncryptionConfigError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<PutEncryptionConfigError>())
+                            .and_then(|response| {
+                                Err(PutEncryptionConfigError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3159,10 +3138,11 @@ impl XRay for XRayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| PutTelemetryRecordsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PutTelemetryRecordsResult, _>()?;
+                                .deserialize::<PutTelemetryRecordsResult, _>();
 
                             result
                         })
@@ -3173,11 +3153,10 @@ impl XRay for XRayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(PutTelemetryRecordsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<PutTelemetryRecordsError>())
+                            .and_then(|response| {
+                                Err(PutTelemetryRecordsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3201,10 +3180,11 @@ impl XRay for XRayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| PutTraceSegmentsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PutTraceSegmentsResult, _>()?;
+                                .deserialize::<PutTraceSegmentsResult, _>();
 
                             result
                         })
@@ -3215,11 +3195,10 @@ impl XRay for XRayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(PutTraceSegmentsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<PutTraceSegmentsError>())
+                            .and_then(|response| {
+                                Err(PutTraceSegmentsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3243,10 +3222,11 @@ impl XRay for XRayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateGroupError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateGroupResult, _>()?;
+                                .deserialize::<UpdateGroupResult, _>();
 
                             result
                         })
@@ -3257,11 +3237,8 @@ impl XRay for XRayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateGroupError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateGroupError>())
+                            .and_then(|response| Err(UpdateGroupError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3285,10 +3262,11 @@ impl XRay for XRayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateSamplingRuleError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateSamplingRuleResult, _>()?;
+                                .deserialize::<UpdateSamplingRuleResult, _>();
 
                             result
                         })
@@ -3299,11 +3277,10 @@ impl XRay for XRayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateSamplingRuleError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateSamplingRuleError>())
+                            .and_then(|response| {
+                                Err(UpdateSamplingRuleError::from_response(response))
+                            })
                     })
                     .boxed()
             }

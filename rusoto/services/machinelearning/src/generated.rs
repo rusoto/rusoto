@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -3135,11 +3135,14 @@ impl MachineLearning for MachineLearningClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AddTagsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AddTagsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<AddTagsError>)
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AddTagsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3147,11 +3150,8 @@ impl MachineLearning for MachineLearningClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(AddTagsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<AddTagsError>)
+                            .and_then(|response| Err(AddTagsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3174,11 +3174,17 @@ impl MachineLearning for MachineLearningClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateBatchPredictionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateBatchPredictionOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateBatchPredictionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateBatchPredictionOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3186,11 +3192,13 @@ impl MachineLearning for MachineLearningClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateBatchPredictionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateBatchPredictionError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateBatchPredictionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3213,11 +3221,17 @@ impl MachineLearning for MachineLearningClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateDataSourceFromRDSError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateDataSourceFromRDSOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateDataSourceFromRDSError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateDataSourceFromRDSOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3225,13 +3239,13 @@ impl MachineLearning for MachineLearningClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(CreateDataSourceFromRDSError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateDataSourceFromRDSError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateDataSourceFromRDSError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3257,11 +3271,17 @@ impl MachineLearning for MachineLearningClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateDataSourceFromRedshiftError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateDataSourceFromRedshiftOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateDataSourceFromRedshiftError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateDataSourceFromRedshiftOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3269,13 +3289,13 @@ impl MachineLearning for MachineLearningClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(CreateDataSourceFromRedshiftError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateDataSourceFromRedshiftError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateDataSourceFromRedshiftError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3298,11 +3318,17 @@ impl MachineLearning for MachineLearningClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateDataSourceFromS3Error::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateDataSourceFromS3Output, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateDataSourceFromS3Error>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateDataSourceFromS3Output, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3310,13 +3336,13 @@ impl MachineLearning for MachineLearningClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(CreateDataSourceFromS3Error::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateDataSourceFromS3Error>
+                            })
+                            .and_then(|response| {
+                                Err(CreateDataSourceFromS3Error::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3339,11 +3365,16 @@ impl MachineLearning for MachineLearningClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateEvaluationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateEvaluationOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateEvaluationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateEvaluationOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3351,11 +3382,12 @@ impl MachineLearning for MachineLearningClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateEvaluationError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateEvaluationError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateEvaluationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3378,11 +3410,16 @@ impl MachineLearning for MachineLearningClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateMLModelError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateMLModelOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateMLModelError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateMLModelOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3390,11 +3427,10 @@ impl MachineLearning for MachineLearningClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateMLModelError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateMLModelError>
+                            })
+                            .and_then(|response| Err(CreateMLModelError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3417,11 +3453,17 @@ impl MachineLearning for MachineLearningClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateRealtimeEndpointError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateRealtimeEndpointOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateRealtimeEndpointError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateRealtimeEndpointOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3429,13 +3471,13 @@ impl MachineLearning for MachineLearningClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(CreateRealtimeEndpointError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateRealtimeEndpointError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateRealtimeEndpointError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3458,11 +3500,17 @@ impl MachineLearning for MachineLearningClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteBatchPredictionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteBatchPredictionOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteBatchPredictionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteBatchPredictionOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3470,11 +3518,13 @@ impl MachineLearning for MachineLearningClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteBatchPredictionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteBatchPredictionError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteBatchPredictionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3497,11 +3547,16 @@ impl MachineLearning for MachineLearningClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteDataSourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteDataSourceOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteDataSourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteDataSourceOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3509,11 +3564,12 @@ impl MachineLearning for MachineLearningClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteDataSourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteDataSourceError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteDataSourceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3536,11 +3592,16 @@ impl MachineLearning for MachineLearningClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteEvaluationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteEvaluationOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteEvaluationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteEvaluationOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3548,11 +3609,12 @@ impl MachineLearning for MachineLearningClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteEvaluationError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteEvaluationError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteEvaluationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3575,11 +3637,16 @@ impl MachineLearning for MachineLearningClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteMLModelError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteMLModelOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteMLModelError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteMLModelOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3587,11 +3654,10 @@ impl MachineLearning for MachineLearningClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteMLModelError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteMLModelError>
+                            })
+                            .and_then(|response| Err(DeleteMLModelError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3614,11 +3680,17 @@ impl MachineLearning for MachineLearningClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteRealtimeEndpointError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteRealtimeEndpointOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteRealtimeEndpointError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteRealtimeEndpointOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3626,13 +3698,13 @@ impl MachineLearning for MachineLearningClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DeleteRealtimeEndpointError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteRealtimeEndpointError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteRealtimeEndpointError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3655,11 +3727,16 @@ impl MachineLearning for MachineLearningClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteTagsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteTagsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteTagsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteTagsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3667,11 +3744,10 @@ impl MachineLearning for MachineLearningClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteTagsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteTagsError>
+                            })
+                            .and_then(|response| Err(DeleteTagsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3694,11 +3770,17 @@ impl MachineLearning for MachineLearningClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeBatchPredictionsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeBatchPredictionsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeBatchPredictionsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeBatchPredictionsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3706,13 +3788,13 @@ impl MachineLearning for MachineLearningClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeBatchPredictionsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeBatchPredictionsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeBatchPredictionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3735,11 +3817,17 @@ impl MachineLearning for MachineLearningClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeDataSourcesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeDataSourcesOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeDataSourcesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeDataSourcesOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3747,11 +3835,13 @@ impl MachineLearning for MachineLearningClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeDataSourcesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeDataSourcesError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeDataSourcesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3774,11 +3864,17 @@ impl MachineLearning for MachineLearningClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeEvaluationsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeEvaluationsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeEvaluationsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeEvaluationsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3786,11 +3882,13 @@ impl MachineLearning for MachineLearningClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeEvaluationsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeEvaluationsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeEvaluationsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3813,11 +3911,16 @@ impl MachineLearning for MachineLearningClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeMLModelsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeMLModelsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeMLModelsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeMLModelsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3825,11 +3928,12 @@ impl MachineLearning for MachineLearningClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeMLModelsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeMLModelsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeMLModelsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3852,11 +3956,16 @@ impl MachineLearning for MachineLearningClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeTagsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeTagsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeTagsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeTagsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3864,11 +3973,10 @@ impl MachineLearning for MachineLearningClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeTagsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeTagsError>
+                            })
+                            .and_then(|response| Err(DescribeTagsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3891,11 +3999,16 @@ impl MachineLearning for MachineLearningClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetBatchPredictionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetBatchPredictionOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetBatchPredictionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetBatchPredictionOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3903,11 +4016,12 @@ impl MachineLearning for MachineLearningClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetBatchPredictionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetBatchPredictionError>
+                            })
+                            .and_then(|response| {
+                                Err(GetBatchPredictionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3930,11 +4044,16 @@ impl MachineLearning for MachineLearningClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetDataSourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetDataSourceOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetDataSourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetDataSourceOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3942,11 +4061,10 @@ impl MachineLearning for MachineLearningClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetDataSourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetDataSourceError>
+                            })
+                            .and_then(|response| Err(GetDataSourceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3969,11 +4087,16 @@ impl MachineLearning for MachineLearningClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetEvaluationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetEvaluationOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetEvaluationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetEvaluationOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3981,11 +4104,10 @@ impl MachineLearning for MachineLearningClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetEvaluationError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetEvaluationError>
+                            })
+                            .and_then(|response| Err(GetEvaluationError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4008,11 +4130,16 @@ impl MachineLearning for MachineLearningClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetMLModelError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetMLModelOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetMLModelError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetMLModelOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4020,11 +4147,10 @@ impl MachineLearning for MachineLearningClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetMLModelError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetMLModelError>
+                            })
+                            .and_then(|response| Err(GetMLModelError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4044,11 +4170,14 @@ impl MachineLearning for MachineLearningClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| PredictError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PredictOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<PredictError>)
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<PredictOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4056,11 +4185,8 @@ impl MachineLearning for MachineLearningClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(PredictError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<PredictError>)
+                            .and_then(|response| Err(PredictError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4083,11 +4209,17 @@ impl MachineLearning for MachineLearningClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateBatchPredictionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateBatchPredictionOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateBatchPredictionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateBatchPredictionOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4095,11 +4227,13 @@ impl MachineLearning for MachineLearningClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateBatchPredictionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateBatchPredictionError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateBatchPredictionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4122,11 +4256,16 @@ impl MachineLearning for MachineLearningClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateDataSourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateDataSourceOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateDataSourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateDataSourceOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4134,11 +4273,12 @@ impl MachineLearning for MachineLearningClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateDataSourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateDataSourceError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateDataSourceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4161,11 +4301,16 @@ impl MachineLearning for MachineLearningClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateEvaluationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateEvaluationOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateEvaluationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateEvaluationOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4173,11 +4318,12 @@ impl MachineLearning for MachineLearningClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateEvaluationError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateEvaluationError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateEvaluationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4200,11 +4346,16 @@ impl MachineLearning for MachineLearningClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateMLModelError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateMLModelOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateMLModelError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateMLModelOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4212,11 +4363,10 @@ impl MachineLearning for MachineLearningClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateMLModelError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateMLModelError>
+                            })
+                            .and_then(|response| Err(UpdateMLModelError::from_response(response)))
                     })
                     .boxed()
             }

@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -618,17 +618,18 @@ impl Translate for TranslateClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteTerminologyError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteTerminologyError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteTerminologyError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -654,11 +655,16 @@ impl Translate for TranslateClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetTerminologyError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetTerminologyResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetTerminologyError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetTerminologyResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -666,11 +672,10 @@ impl Translate for TranslateClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetTerminologyError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetTerminologyError>
+                            })
+                            .and_then(|response| Err(GetTerminologyError::from_response(response)))
                     })
                     .boxed()
             }
@@ -696,11 +701,16 @@ impl Translate for TranslateClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ImportTerminologyError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ImportTerminologyResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ImportTerminologyError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ImportTerminologyResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -708,11 +718,12 @@ impl Translate for TranslateClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ImportTerminologyError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ImportTerminologyError>
+                            })
+                            .and_then(|response| {
+                                Err(ImportTerminologyError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -738,11 +749,16 @@ impl Translate for TranslateClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListTerminologiesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListTerminologiesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListTerminologiesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListTerminologiesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -750,11 +766,12 @@ impl Translate for TranslateClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListTerminologiesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListTerminologiesError>
+                            })
+                            .and_then(|response| {
+                                Err(ListTerminologiesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -780,11 +797,16 @@ impl Translate for TranslateClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| TranslateTextError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<TranslateTextResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<TranslateTextError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<TranslateTextResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -792,11 +814,10 @@ impl Translate for TranslateClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(TranslateTextError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<TranslateTextError>
+                            })
+                            .and_then(|response| Err(TranslateTextError::from_response(response)))
                     })
                     .boxed()
             }

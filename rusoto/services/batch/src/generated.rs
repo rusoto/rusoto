@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -2041,10 +2041,11 @@ impl Batch for BatchClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CancelJobError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CancelJobResponse, _>()?;
+                                .deserialize::<CancelJobResponse, _>();
 
                             result
                         })
@@ -2055,11 +2056,8 @@ impl Batch for BatchClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CancelJobError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CancelJobError>())
+                            .and_then(|response| Err(CancelJobError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2083,10 +2081,11 @@ impl Batch for BatchClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateComputeEnvironmentError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateComputeEnvironmentResponse, _>()?;
+                                .deserialize::<CreateComputeEnvironmentResponse, _>();
 
                             result
                         })
@@ -2097,13 +2096,10 @@ impl Batch for BatchClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(CreateComputeEnvironmentError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateComputeEnvironmentError>())
+                            .and_then(|response| {
+                                Err(CreateComputeEnvironmentError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2127,10 +2123,11 @@ impl Batch for BatchClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateJobQueueError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateJobQueueResponse, _>()?;
+                                .deserialize::<CreateJobQueueResponse, _>();
 
                             result
                         })
@@ -2141,11 +2138,8 @@ impl Batch for BatchClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateJobQueueError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateJobQueueError>())
+                            .and_then(|response| Err(CreateJobQueueError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2169,10 +2163,11 @@ impl Batch for BatchClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteComputeEnvironmentError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteComputeEnvironmentResponse, _>()?;
+                                .deserialize::<DeleteComputeEnvironmentResponse, _>();
 
                             result
                         })
@@ -2183,13 +2178,10 @@ impl Batch for BatchClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(DeleteComputeEnvironmentError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteComputeEnvironmentError>())
+                            .and_then(|response| {
+                                Err(DeleteComputeEnvironmentError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2213,10 +2205,11 @@ impl Batch for BatchClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteJobQueueError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteJobQueueResponse, _>()?;
+                                .deserialize::<DeleteJobQueueResponse, _>();
 
                             result
                         })
@@ -2227,11 +2220,8 @@ impl Batch for BatchClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteJobQueueError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteJobQueueError>())
+                            .and_then(|response| Err(DeleteJobQueueError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2255,10 +2245,11 @@ impl Batch for BatchClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeregisterJobDefinitionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeregisterJobDefinitionResponse, _>()?;
+                                .deserialize::<DeregisterJobDefinitionResponse, _>();
 
                             result
                         })
@@ -2269,13 +2260,10 @@ impl Batch for BatchClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(DeregisterJobDefinitionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeregisterJobDefinitionError>())
+                            .and_then(|response| {
+                                Err(DeregisterJobDefinitionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2299,10 +2287,11 @@ impl Batch for BatchClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeComputeEnvironmentsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeComputeEnvironmentsResponse, _>()?;
+                                .deserialize::<DescribeComputeEnvironmentsResponse, _>();
 
                             result
                         })
@@ -2313,13 +2302,10 @@ impl Batch for BatchClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(DescribeComputeEnvironmentsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeComputeEnvironmentsError>())
+                            .and_then(|response| {
+                                Err(DescribeComputeEnvironmentsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2343,10 +2329,11 @@ impl Batch for BatchClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeJobDefinitionsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeJobDefinitionsResponse, _>()?;
+                                .deserialize::<DescribeJobDefinitionsResponse, _>();
 
                             result
                         })
@@ -2357,13 +2344,10 @@ impl Batch for BatchClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(DescribeJobDefinitionsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeJobDefinitionsError>())
+                            .and_then(|response| {
+                                Err(DescribeJobDefinitionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2387,10 +2371,11 @@ impl Batch for BatchClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeJobQueuesError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeJobQueuesResponse, _>()?;
+                                .deserialize::<DescribeJobQueuesResponse, _>();
 
                             result
                         })
@@ -2401,11 +2386,10 @@ impl Batch for BatchClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DescribeJobQueuesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeJobQueuesError>())
+                            .and_then(|response| {
+                                Err(DescribeJobQueuesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2429,10 +2413,11 @@ impl Batch for BatchClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeJobsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeJobsResponse, _>()?;
+                                .deserialize::<DescribeJobsResponse, _>();
 
                             result
                         })
@@ -2443,11 +2428,8 @@ impl Batch for BatchClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DescribeJobsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeJobsError>())
+                            .and_then(|response| Err(DescribeJobsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2468,10 +2450,11 @@ impl Batch for BatchClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListJobsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListJobsResponse, _>()?;
+                                .deserialize::<ListJobsResponse, _>();
 
                             result
                         })
@@ -2482,11 +2465,8 @@ impl Batch for BatchClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListJobsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListJobsError>())
+                            .and_then(|response| Err(ListJobsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2510,10 +2490,11 @@ impl Batch for BatchClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| RegisterJobDefinitionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RegisterJobDefinitionResponse, _>()?;
+                                .deserialize::<RegisterJobDefinitionResponse, _>();
 
                             result
                         })
@@ -2524,11 +2505,10 @@ impl Batch for BatchClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(RegisterJobDefinitionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<RegisterJobDefinitionError>())
+                            .and_then(|response| {
+                                Err(RegisterJobDefinitionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2552,10 +2532,11 @@ impl Batch for BatchClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| SubmitJobError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<SubmitJobResponse, _>()?;
+                                .deserialize::<SubmitJobResponse, _>();
 
                             result
                         })
@@ -2566,11 +2547,8 @@ impl Batch for BatchClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(SubmitJobError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<SubmitJobError>())
+                            .and_then(|response| Err(SubmitJobError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2594,10 +2572,11 @@ impl Batch for BatchClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| TerminateJobError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<TerminateJobResponse, _>()?;
+                                .deserialize::<TerminateJobResponse, _>();
 
                             result
                         })
@@ -2608,11 +2587,8 @@ impl Batch for BatchClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(TerminateJobError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<TerminateJobError>())
+                            .and_then(|response| Err(TerminateJobError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2636,10 +2612,11 @@ impl Batch for BatchClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateComputeEnvironmentError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateComputeEnvironmentResponse, _>()?;
+                                .deserialize::<UpdateComputeEnvironmentResponse, _>();
 
                             result
                         })
@@ -2650,13 +2627,10 @@ impl Batch for BatchClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(UpdateComputeEnvironmentError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateComputeEnvironmentError>())
+                            .and_then(|response| {
+                                Err(UpdateComputeEnvironmentError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2680,10 +2654,11 @@ impl Batch for BatchClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateJobQueueError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateJobQueueResponse, _>()?;
+                                .deserialize::<UpdateJobQueueResponse, _>();
 
                             result
                         })
@@ -2694,11 +2669,8 @@ impl Batch for BatchClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateJobQueueError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateJobQueueError>())
+                            .and_then(|response| Err(UpdateJobQueueError::from_response(response)))
                     })
                     .boxed()
             }

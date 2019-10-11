@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -3453,11 +3453,17 @@ impl Workmail for WorkmailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AssociateDelegateToResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AssociateDelegateToResourceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AssociateDelegateToResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AssociateDelegateToResourceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3465,13 +3471,13 @@ impl Workmail for WorkmailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(AssociateDelegateToResourceError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AssociateDelegateToResourceError>
+                            })
+                            .and_then(|response| {
+                                Err(AssociateDelegateToResourceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3494,11 +3500,17 @@ impl Workmail for WorkmailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AssociateMemberToGroupError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AssociateMemberToGroupResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AssociateMemberToGroupError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AssociateMemberToGroupResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3506,13 +3518,13 @@ impl Workmail for WorkmailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(AssociateMemberToGroupError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AssociateMemberToGroupError>
+                            })
+                            .and_then(|response| {
+                                Err(AssociateMemberToGroupError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3535,11 +3547,16 @@ impl Workmail for WorkmailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateAliasError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateAliasResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateAliasError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateAliasResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3547,11 +3564,10 @@ impl Workmail for WorkmailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateAliasError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateAliasError>
+                            })
+                            .and_then(|response| Err(CreateAliasError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3574,11 +3590,16 @@ impl Workmail for WorkmailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateGroupError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateGroupResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateGroupError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateGroupResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3586,11 +3607,10 @@ impl Workmail for WorkmailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateGroupError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateGroupError>
+                            })
+                            .and_then(|response| Err(CreateGroupError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3613,11 +3633,16 @@ impl Workmail for WorkmailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateResourceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateResourceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3625,11 +3650,10 @@ impl Workmail for WorkmailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateResourceError>
+                            })
+                            .and_then(|response| Err(CreateResourceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3652,11 +3676,16 @@ impl Workmail for WorkmailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateUserError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateUserResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateUserError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateUserResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3664,11 +3693,10 @@ impl Workmail for WorkmailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateUserError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateUserError>
+                            })
+                            .and_then(|response| Err(CreateUserError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3691,11 +3719,16 @@ impl Workmail for WorkmailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteAliasError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteAliasResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteAliasError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteAliasResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3703,11 +3736,10 @@ impl Workmail for WorkmailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteAliasError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteAliasError>
+                            })
+                            .and_then(|response| Err(DeleteAliasError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3730,11 +3762,16 @@ impl Workmail for WorkmailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteGroupError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteGroupResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteGroupError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteGroupResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3742,11 +3779,10 @@ impl Workmail for WorkmailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteGroupError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteGroupError>
+                            })
+                            .and_then(|response| Err(DeleteGroupError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3769,11 +3805,17 @@ impl Workmail for WorkmailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteMailboxPermissionsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteMailboxPermissionsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteMailboxPermissionsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteMailboxPermissionsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3781,13 +3823,13 @@ impl Workmail for WorkmailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DeleteMailboxPermissionsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteMailboxPermissionsError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteMailboxPermissionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3810,11 +3852,16 @@ impl Workmail for WorkmailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteResourceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteResourceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3822,11 +3869,10 @@ impl Workmail for WorkmailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteResourceError>
+                            })
+                            .and_then(|response| Err(DeleteResourceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3849,11 +3895,16 @@ impl Workmail for WorkmailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteUserError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteUserResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteUserError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteUserResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3861,11 +3912,10 @@ impl Workmail for WorkmailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteUserError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteUserError>
+                            })
+                            .and_then(|response| Err(DeleteUserError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3888,11 +3938,17 @@ impl Workmail for WorkmailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeregisterFromWorkMailError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeregisterFromWorkMailResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeregisterFromWorkMailError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeregisterFromWorkMailResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3900,13 +3956,13 @@ impl Workmail for WorkmailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DeregisterFromWorkMailError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeregisterFromWorkMailError>
+                            })
+                            .and_then(|response| {
+                                Err(DeregisterFromWorkMailError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3929,11 +3985,16 @@ impl Workmail for WorkmailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeGroupError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeGroupResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeGroupError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeGroupResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3941,11 +4002,10 @@ impl Workmail for WorkmailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeGroupError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeGroupError>
+                            })
+                            .and_then(|response| Err(DescribeGroupError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3968,11 +4028,17 @@ impl Workmail for WorkmailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeOrganizationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeOrganizationResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeOrganizationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeOrganizationResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3980,11 +4046,13 @@ impl Workmail for WorkmailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeOrganizationError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeOrganizationError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeOrganizationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4007,11 +4075,16 @@ impl Workmail for WorkmailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeResourceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeResourceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4019,11 +4092,12 @@ impl Workmail for WorkmailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeResourceError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeResourceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4046,11 +4120,16 @@ impl Workmail for WorkmailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeUserError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeUserResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeUserError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeUserResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4058,11 +4137,10 @@ impl Workmail for WorkmailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeUserError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeUserError>
+                            })
+                            .and_then(|response| Err(DescribeUserError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4089,11 +4167,17 @@ impl Workmail for WorkmailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DisassociateDelegateFromResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DisassociateDelegateFromResourceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DisassociateDelegateFromResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DisassociateDelegateFromResourceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4101,15 +4185,15 @@ impl Workmail for WorkmailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DisassociateDelegateFromResourceError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DisassociateDelegateFromResourceError>
+                            })
+                            .and_then(|response| {
+                                Err(DisassociateDelegateFromResourceError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -4135,11 +4219,17 @@ impl Workmail for WorkmailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DisassociateMemberFromGroupError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DisassociateMemberFromGroupResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DisassociateMemberFromGroupError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DisassociateMemberFromGroupResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4147,13 +4237,13 @@ impl Workmail for WorkmailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DisassociateMemberFromGroupError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DisassociateMemberFromGroupError>
+                            })
+                            .and_then(|response| {
+                                Err(DisassociateMemberFromGroupError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4176,11 +4266,16 @@ impl Workmail for WorkmailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetMailboxDetailsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetMailboxDetailsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetMailboxDetailsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetMailboxDetailsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4188,11 +4283,12 @@ impl Workmail for WorkmailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetMailboxDetailsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetMailboxDetailsError>
+                            })
+                            .and_then(|response| {
+                                Err(GetMailboxDetailsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4215,11 +4311,16 @@ impl Workmail for WorkmailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListAliasesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListAliasesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListAliasesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListAliasesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4227,11 +4328,10 @@ impl Workmail for WorkmailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListAliasesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListAliasesError>
+                            })
+                            .and_then(|response| Err(ListAliasesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4254,11 +4354,16 @@ impl Workmail for WorkmailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListGroupMembersError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListGroupMembersResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListGroupMembersError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListGroupMembersResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4266,11 +4371,12 @@ impl Workmail for WorkmailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListGroupMembersError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListGroupMembersError>
+                            })
+                            .and_then(|response| {
+                                Err(ListGroupMembersError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4293,11 +4399,16 @@ impl Workmail for WorkmailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListGroupsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListGroupsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListGroupsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListGroupsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4305,11 +4416,10 @@ impl Workmail for WorkmailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListGroupsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListGroupsError>
+                            })
+                            .and_then(|response| Err(ListGroupsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4332,11 +4442,17 @@ impl Workmail for WorkmailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListMailboxPermissionsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListMailboxPermissionsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListMailboxPermissionsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListMailboxPermissionsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4344,13 +4460,13 @@ impl Workmail for WorkmailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ListMailboxPermissionsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListMailboxPermissionsError>
+                            })
+                            .and_then(|response| {
+                                Err(ListMailboxPermissionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4373,11 +4489,16 @@ impl Workmail for WorkmailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListOrganizationsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListOrganizationsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListOrganizationsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListOrganizationsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4385,11 +4506,12 @@ impl Workmail for WorkmailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListOrganizationsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListOrganizationsError>
+                            })
+                            .and_then(|response| {
+                                Err(ListOrganizationsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4412,11 +4534,17 @@ impl Workmail for WorkmailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListResourceDelegatesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListResourceDelegatesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListResourceDelegatesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListResourceDelegatesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4424,11 +4552,13 @@ impl Workmail for WorkmailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListResourceDelegatesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListResourceDelegatesError>
+                            })
+                            .and_then(|response| {
+                                Err(ListResourceDelegatesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4451,11 +4581,16 @@ impl Workmail for WorkmailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListResourcesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListResourcesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListResourcesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListResourcesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4463,11 +4598,10 @@ impl Workmail for WorkmailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListResourcesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListResourcesError>
+                            })
+                            .and_then(|response| Err(ListResourcesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4490,11 +4624,16 @@ impl Workmail for WorkmailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListUsersError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListUsersResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListUsersError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListUsersResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4502,11 +4641,10 @@ impl Workmail for WorkmailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListUsersError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListUsersError>
+                            })
+                            .and_then(|response| Err(ListUsersError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4529,11 +4667,17 @@ impl Workmail for WorkmailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| PutMailboxPermissionsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PutMailboxPermissionsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<PutMailboxPermissionsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<PutMailboxPermissionsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4541,11 +4685,13 @@ impl Workmail for WorkmailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(PutMailboxPermissionsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<PutMailboxPermissionsError>
+                            })
+                            .and_then(|response| {
+                                Err(PutMailboxPermissionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4568,11 +4714,16 @@ impl Workmail for WorkmailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| RegisterToWorkMailError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RegisterToWorkMailResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<RegisterToWorkMailError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<RegisterToWorkMailResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4580,11 +4731,12 @@ impl Workmail for WorkmailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(RegisterToWorkMailError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<RegisterToWorkMailError>
+                            })
+                            .and_then(|response| {
+                                Err(RegisterToWorkMailError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4607,11 +4759,16 @@ impl Workmail for WorkmailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ResetPasswordError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ResetPasswordResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ResetPasswordError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ResetPasswordResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4619,11 +4776,10 @@ impl Workmail for WorkmailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ResetPasswordError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ResetPasswordError>
+                            })
+                            .and_then(|response| Err(ResetPasswordError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4646,11 +4802,16 @@ impl Workmail for WorkmailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateMailboxQuotaError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateMailboxQuotaResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateMailboxQuotaError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateMailboxQuotaResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4658,11 +4819,12 @@ impl Workmail for WorkmailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateMailboxQuotaError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateMailboxQuotaError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateMailboxQuotaError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4685,11 +4847,17 @@ impl Workmail for WorkmailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdatePrimaryEmailAddressError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdatePrimaryEmailAddressResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdatePrimaryEmailAddressError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdatePrimaryEmailAddressResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4697,13 +4865,13 @@ impl Workmail for WorkmailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(UpdatePrimaryEmailAddressError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdatePrimaryEmailAddressError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdatePrimaryEmailAddressError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4726,11 +4894,16 @@ impl Workmail for WorkmailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateResourceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateResourceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4738,11 +4911,10 @@ impl Workmail for WorkmailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateResourceError>
+                            })
+                            .and_then(|response| Err(UpdateResourceError::from_response(response)))
                     })
                     .boxed()
             }

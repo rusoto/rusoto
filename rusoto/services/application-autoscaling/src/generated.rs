@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -1265,11 +1265,17 @@ impl ApplicationAutoScaling for ApplicationAutoScalingClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteScalingPolicyError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteScalingPolicyResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteScalingPolicyError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteScalingPolicyResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1277,11 +1283,13 @@ impl ApplicationAutoScaling for ApplicationAutoScalingClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteScalingPolicyError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteScalingPolicyError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteScalingPolicyError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1307,11 +1315,17 @@ impl ApplicationAutoScaling for ApplicationAutoScalingClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteScheduledActionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteScheduledActionResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteScheduledActionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteScheduledActionResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1319,11 +1333,13 @@ impl ApplicationAutoScaling for ApplicationAutoScalingClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteScheduledActionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteScheduledActionError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteScheduledActionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1349,11 +1365,17 @@ impl ApplicationAutoScaling for ApplicationAutoScalingClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeregisterScalableTargetError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeregisterScalableTargetResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeregisterScalableTargetError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeregisterScalableTargetResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1361,13 +1383,13 @@ impl ApplicationAutoScaling for ApplicationAutoScalingClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DeregisterScalableTargetError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeregisterScalableTargetError>
+                            })
+                            .and_then(|response| {
+                                Err(DeregisterScalableTargetError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1393,11 +1415,17 @@ impl ApplicationAutoScaling for ApplicationAutoScalingClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeScalableTargetsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeScalableTargetsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeScalableTargetsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeScalableTargetsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1405,13 +1433,13 @@ impl ApplicationAutoScaling for ApplicationAutoScalingClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeScalableTargetsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeScalableTargetsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeScalableTargetsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1437,11 +1465,17 @@ impl ApplicationAutoScaling for ApplicationAutoScalingClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeScalingActivitiesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeScalingActivitiesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeScalingActivitiesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeScalingActivitiesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1449,13 +1483,13 @@ impl ApplicationAutoScaling for ApplicationAutoScalingClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeScalingActivitiesError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeScalingActivitiesError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeScalingActivitiesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1481,11 +1515,17 @@ impl ApplicationAutoScaling for ApplicationAutoScalingClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeScalingPoliciesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeScalingPoliciesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeScalingPoliciesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeScalingPoliciesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1493,13 +1533,13 @@ impl ApplicationAutoScaling for ApplicationAutoScalingClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeScalingPoliciesError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeScalingPoliciesError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeScalingPoliciesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1525,11 +1565,17 @@ impl ApplicationAutoScaling for ApplicationAutoScalingClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeScheduledActionsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeScheduledActionsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeScheduledActionsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeScheduledActionsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1537,13 +1583,13 @@ impl ApplicationAutoScaling for ApplicationAutoScalingClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeScheduledActionsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeScheduledActionsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeScheduledActionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1566,11 +1612,16 @@ impl ApplicationAutoScaling for ApplicationAutoScalingClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| PutScalingPolicyError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PutScalingPolicyResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<PutScalingPolicyError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<PutScalingPolicyResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1578,11 +1629,12 @@ impl ApplicationAutoScaling for ApplicationAutoScalingClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(PutScalingPolicyError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<PutScalingPolicyError>
+                            })
+                            .and_then(|response| {
+                                Err(PutScalingPolicyError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1605,11 +1657,16 @@ impl ApplicationAutoScaling for ApplicationAutoScalingClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| PutScheduledActionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PutScheduledActionResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<PutScheduledActionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<PutScheduledActionResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1617,11 +1674,12 @@ impl ApplicationAutoScaling for ApplicationAutoScalingClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(PutScheduledActionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<PutScheduledActionError>
+                            })
+                            .and_then(|response| {
+                                Err(PutScheduledActionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1647,11 +1705,17 @@ impl ApplicationAutoScaling for ApplicationAutoScalingClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| RegisterScalableTargetError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RegisterScalableTargetResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<RegisterScalableTargetError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<RegisterScalableTargetResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1659,13 +1723,13 @@ impl ApplicationAutoScaling for ApplicationAutoScalingClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(RegisterScalableTargetError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<RegisterScalableTargetError>
+                            })
+                            .and_then(|response| {
+                                Err(RegisterScalableTargetError::from_response(response))
+                            })
                     })
                     .boxed()
             }

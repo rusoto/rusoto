@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -1281,17 +1281,19 @@ impl Fms for FmsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(AssociateAdminAccountError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AssociateAdminAccountError>
+                            })
+                            .and_then(|response| {
+                                Err(AssociateAdminAccountError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1308,19 +1310,19 @@ impl Fms for FmsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DeleteNotificationChannelError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteNotificationChannelError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteNotificationChannelError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1338,17 +1340,16 @@ impl Fms for FmsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeletePolicyError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeletePolicyError>
+                            })
+                            .and_then(|response| Err(DeletePolicyError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1365,19 +1366,19 @@ impl Fms for FmsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DisassociateAdminAccountError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DisassociateAdminAccountError>
+                            })
+                            .and_then(|response| {
+                                Err(DisassociateAdminAccountError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1396,11 +1397,16 @@ impl Fms for FmsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetAdminAccountError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetAdminAccountResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetAdminAccountError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetAdminAccountResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1408,11 +1414,10 @@ impl Fms for FmsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetAdminAccountError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetAdminAccountError>
+                            })
+                            .and_then(|response| Err(GetAdminAccountError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1435,11 +1440,17 @@ impl Fms for FmsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetComplianceDetailError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetComplianceDetailResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetComplianceDetailError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetComplianceDetailResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1447,11 +1458,13 @@ impl Fms for FmsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetComplianceDetailError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetComplianceDetailError>
+                            })
+                            .and_then(|response| {
+                                Err(GetComplianceDetailError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1472,11 +1485,17 @@ impl Fms for FmsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetNotificationChannelError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetNotificationChannelResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetNotificationChannelError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetNotificationChannelResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1484,13 +1503,13 @@ impl Fms for FmsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(GetNotificationChannelError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetNotificationChannelError>
+                            })
+                            .and_then(|response| {
+                                Err(GetNotificationChannelError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1513,11 +1532,16 @@ impl Fms for FmsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetPolicyError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetPolicyResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetPolicyError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetPolicyResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1525,11 +1549,10 @@ impl Fms for FmsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetPolicyError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetPolicyError>
+                            })
+                            .and_then(|response| Err(GetPolicyError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1552,11 +1575,17 @@ impl Fms for FmsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetProtectionStatusError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetProtectionStatusResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetProtectionStatusError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetProtectionStatusResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1564,11 +1593,13 @@ impl Fms for FmsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetProtectionStatusError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetProtectionStatusError>
+                            })
+                            .and_then(|response| {
+                                Err(GetProtectionStatusError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1591,11 +1622,17 @@ impl Fms for FmsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListComplianceStatusError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListComplianceStatusResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListComplianceStatusError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListComplianceStatusResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1603,11 +1640,13 @@ impl Fms for FmsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListComplianceStatusError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListComplianceStatusError>
+                            })
+                            .and_then(|response| {
+                                Err(ListComplianceStatusError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1630,11 +1669,16 @@ impl Fms for FmsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListMemberAccountsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListMemberAccountsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListMemberAccountsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListMemberAccountsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1642,11 +1686,12 @@ impl Fms for FmsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListMemberAccountsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListMemberAccountsError>
+                            })
+                            .and_then(|response| {
+                                Err(ListMemberAccountsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1669,11 +1714,16 @@ impl Fms for FmsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListPoliciesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListPoliciesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListPoliciesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListPoliciesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1681,11 +1731,10 @@ impl Fms for FmsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListPoliciesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListPoliciesError>
+                            })
+                            .and_then(|response| Err(ListPoliciesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1706,19 +1755,19 @@ impl Fms for FmsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(PutNotificationChannelError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<PutNotificationChannelError>
+                            })
+                            .and_then(|response| {
+                                Err(PutNotificationChannelError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1741,11 +1790,16 @@ impl Fms for FmsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| PutPolicyError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PutPolicyResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<PutPolicyError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<PutPolicyResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1753,11 +1807,10 @@ impl Fms for FmsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(PutPolicyError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<PutPolicyError>
+                            })
+                            .and_then(|response| Err(PutPolicyError::from_response(response)))
                     })
                     .boxed()
             }

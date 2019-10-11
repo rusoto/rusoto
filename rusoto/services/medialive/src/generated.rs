@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
@@ -6956,10 +6956,11 @@ impl MediaLive for MediaLiveClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| BatchUpdateScheduleError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<BatchUpdateScheduleResponse, _>()?;
+                                .deserialize::<BatchUpdateScheduleResponse, _>();
 
                             result
                         })
@@ -6970,11 +6971,10 @@ impl MediaLive for MediaLiveClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(BatchUpdateScheduleError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<BatchUpdateScheduleError>())
+                            .and_then(|response| {
+                                Err(BatchUpdateScheduleError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6998,10 +6998,11 @@ impl MediaLive for MediaLiveClient {
             if response.status.as_u16() == 201 {
                 response
                     .buffer()
+                    .map_err(|e| CreateChannelError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateChannelResponse, _>()?;
+                                .deserialize::<CreateChannelResponse, _>();
 
                             result
                         })
@@ -7012,11 +7013,8 @@ impl MediaLive for MediaLiveClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateChannelError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateChannelError>())
+                            .and_then(|response| Err(CreateChannelError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7040,10 +7038,11 @@ impl MediaLive for MediaLiveClient {
             if response.status.as_u16() == 201 {
                 response
                     .buffer()
+                    .map_err(|e| CreateInputError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateInputResponse, _>()?;
+                                .deserialize::<CreateInputResponse, _>();
 
                             result
                         })
@@ -7054,11 +7053,8 @@ impl MediaLive for MediaLiveClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateInputError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateInputError>())
+                            .and_then(|response| Err(CreateInputError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7082,10 +7078,11 @@ impl MediaLive for MediaLiveClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| CreateInputSecurityGroupError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateInputSecurityGroupResponse, _>()?;
+                                .deserialize::<CreateInputSecurityGroupResponse, _>();
 
                             result
                         })
@@ -7096,13 +7093,10 @@ impl MediaLive for MediaLiveClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(CreateInputSecurityGroupError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateInputSecurityGroupError>())
+                            .and_then(|response| {
+                                Err(CreateInputSecurityGroupError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7126,8 +7120,9 @@ impl MediaLive for MediaLiveClient {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| CreateTagsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -7139,11 +7134,8 @@ impl MediaLive for MediaLiveClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateTagsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateTagsError>())
+                            .and_then(|response| Err(CreateTagsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7164,10 +7156,11 @@ impl MediaLive for MediaLiveClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteChannelError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteChannelResponse, _>()?;
+                                .deserialize::<DeleteChannelResponse, _>();
 
                             result
                         })
@@ -7178,11 +7171,8 @@ impl MediaLive for MediaLiveClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteChannelError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteChannelError>())
+                            .and_then(|response| Err(DeleteChannelError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7203,10 +7193,11 @@ impl MediaLive for MediaLiveClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteInputError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteInputResponse, _>()?;
+                                .deserialize::<DeleteInputResponse, _>();
 
                             result
                         })
@@ -7217,11 +7208,8 @@ impl MediaLive for MediaLiveClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteInputError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteInputError>())
+                            .and_then(|response| Err(DeleteInputError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7245,10 +7233,11 @@ impl MediaLive for MediaLiveClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteInputSecurityGroupError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteInputSecurityGroupResponse, _>()?;
+                                .deserialize::<DeleteInputSecurityGroupResponse, _>();
 
                             result
                         })
@@ -7259,13 +7248,10 @@ impl MediaLive for MediaLiveClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(DeleteInputSecurityGroupError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteInputSecurityGroupError>())
+                            .and_then(|response| {
+                                Err(DeleteInputSecurityGroupError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7289,10 +7275,11 @@ impl MediaLive for MediaLiveClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteReservationError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteReservationResponse, _>()?;
+                                .deserialize::<DeleteReservationResponse, _>();
 
                             result
                         })
@@ -7303,11 +7290,10 @@ impl MediaLive for MediaLiveClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteReservationError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteReservationError>())
+                            .and_then(|response| {
+                                Err(DeleteReservationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7331,10 +7317,11 @@ impl MediaLive for MediaLiveClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteScheduleError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteScheduleResponse, _>()?;
+                                .deserialize::<DeleteScheduleResponse, _>();
 
                             result
                         })
@@ -7345,11 +7332,8 @@ impl MediaLive for MediaLiveClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteScheduleError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteScheduleError>())
+                            .and_then(|response| Err(DeleteScheduleError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7376,8 +7360,9 @@ impl MediaLive for MediaLiveClient {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteTagsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -7389,11 +7374,8 @@ impl MediaLive for MediaLiveClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteTagsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteTagsError>())
+                            .and_then(|response| Err(DeleteTagsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7414,10 +7396,11 @@ impl MediaLive for MediaLiveClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| DescribeChannelError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeChannelResponse, _>()?;
+                                .deserialize::<DescribeChannelResponse, _>();
 
                             result
                         })
@@ -7428,11 +7411,8 @@ impl MediaLive for MediaLiveClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DescribeChannelError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeChannelError>())
+                            .and_then(|response| Err(DescribeChannelError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7453,10 +7433,11 @@ impl MediaLive for MediaLiveClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| DescribeInputError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeInputResponse, _>()?;
+                                .deserialize::<DescribeInputResponse, _>();
 
                             result
                         })
@@ -7467,11 +7448,8 @@ impl MediaLive for MediaLiveClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DescribeInputError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeInputError>())
+                            .and_then(|response| Err(DescribeInputError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7495,10 +7473,11 @@ impl MediaLive for MediaLiveClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| DescribeInputSecurityGroupError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeInputSecurityGroupResponse, _>()?;
+                                .deserialize::<DescribeInputSecurityGroupResponse, _>();
 
                             result
                         })
@@ -7509,13 +7488,10 @@ impl MediaLive for MediaLiveClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(DescribeInputSecurityGroupError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeInputSecurityGroupError>())
+                            .and_then(|response| {
+                                Err(DescribeInputSecurityGroupError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7539,10 +7515,11 @@ impl MediaLive for MediaLiveClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| DescribeOfferingError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeOfferingResponse, _>()?;
+                                .deserialize::<DescribeOfferingResponse, _>();
 
                             result
                         })
@@ -7553,11 +7530,10 @@ impl MediaLive for MediaLiveClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DescribeOfferingError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeOfferingError>())
+                            .and_then(|response| {
+                                Err(DescribeOfferingError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7581,10 +7557,11 @@ impl MediaLive for MediaLiveClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| DescribeReservationError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeReservationResponse, _>()?;
+                                .deserialize::<DescribeReservationResponse, _>();
 
                             result
                         })
@@ -7595,11 +7572,10 @@ impl MediaLive for MediaLiveClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DescribeReservationError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeReservationError>())
+                            .and_then(|response| {
+                                Err(DescribeReservationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7632,10 +7608,11 @@ impl MediaLive for MediaLiveClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| DescribeScheduleError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeScheduleResponse, _>()?;
+                                .deserialize::<DescribeScheduleResponse, _>();
 
                             result
                         })
@@ -7646,11 +7623,10 @@ impl MediaLive for MediaLiveClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DescribeScheduleError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeScheduleError>())
+                            .and_then(|response| {
+                                Err(DescribeScheduleError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7680,10 +7656,11 @@ impl MediaLive for MediaLiveClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListChannelsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListChannelsResponse, _>()?;
+                                .deserialize::<ListChannelsResponse, _>();
 
                             result
                         })
@@ -7694,11 +7671,8 @@ impl MediaLive for MediaLiveClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListChannelsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListChannelsError>())
+                            .and_then(|response| Err(ListChannelsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7728,10 +7702,11 @@ impl MediaLive for MediaLiveClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListInputSecurityGroupsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListInputSecurityGroupsResponse, _>()?;
+                                .deserialize::<ListInputSecurityGroupsResponse, _>();
 
                             result
                         })
@@ -7742,13 +7717,10 @@ impl MediaLive for MediaLiveClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(ListInputSecurityGroupsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListInputSecurityGroupsError>())
+                            .and_then(|response| {
+                                Err(ListInputSecurityGroupsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7778,10 +7750,11 @@ impl MediaLive for MediaLiveClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListInputsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListInputsResponse, _>()?;
+                                .deserialize::<ListInputsResponse, _>();
 
                             result
                         })
@@ -7792,11 +7765,8 @@ impl MediaLive for MediaLiveClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListInputsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListInputsError>())
+                            .and_then(|response| Err(ListInputsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7853,10 +7823,11 @@ impl MediaLive for MediaLiveClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListOfferingsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListOfferingsResponse, _>()?;
+                                .deserialize::<ListOfferingsResponse, _>();
 
                             result
                         })
@@ -7867,11 +7838,8 @@ impl MediaLive for MediaLiveClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListOfferingsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListOfferingsError>())
+                            .and_then(|response| Err(ListOfferingsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7925,10 +7893,11 @@ impl MediaLive for MediaLiveClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListReservationsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListReservationsResponse, _>()?;
+                                .deserialize::<ListReservationsResponse, _>();
 
                             result
                         })
@@ -7939,11 +7908,10 @@ impl MediaLive for MediaLiveClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListReservationsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListReservationsError>())
+                            .and_then(|response| {
+                                Err(ListReservationsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7967,10 +7935,11 @@ impl MediaLive for MediaLiveClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListTagsForResourceError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListTagsForResourceResponse, _>()?;
+                                .deserialize::<ListTagsForResourceResponse, _>();
 
                             result
                         })
@@ -7981,11 +7950,10 @@ impl MediaLive for MediaLiveClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListTagsForResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListTagsForResourceError>())
+                            .and_then(|response| {
+                                Err(ListTagsForResourceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8012,10 +7980,11 @@ impl MediaLive for MediaLiveClient {
             if response.status.as_u16() == 201 {
                 response
                     .buffer()
+                    .map_err(|e| PurchaseOfferingError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PurchaseOfferingResponse, _>()?;
+                                .deserialize::<PurchaseOfferingResponse, _>();
 
                             result
                         })
@@ -8026,11 +7995,10 @@ impl MediaLive for MediaLiveClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(PurchaseOfferingError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<PurchaseOfferingError>())
+                            .and_then(|response| {
+                                Err(PurchaseOfferingError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8054,10 +8022,11 @@ impl MediaLive for MediaLiveClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| StartChannelError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StartChannelResponse, _>()?;
+                                .deserialize::<StartChannelResponse, _>();
 
                             result
                         })
@@ -8068,11 +8037,8 @@ impl MediaLive for MediaLiveClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(StartChannelError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<StartChannelError>())
+                            .and_then(|response| Err(StartChannelError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8096,10 +8062,11 @@ impl MediaLive for MediaLiveClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| StopChannelError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StopChannelResponse, _>()?;
+                                .deserialize::<StopChannelResponse, _>();
 
                             result
                         })
@@ -8110,11 +8077,8 @@ impl MediaLive for MediaLiveClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(StopChannelError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<StopChannelError>())
+                            .and_then(|response| Err(StopChannelError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8138,10 +8102,11 @@ impl MediaLive for MediaLiveClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| UpdateChannelError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateChannelResponse, _>()?;
+                                .deserialize::<UpdateChannelResponse, _>();
 
                             result
                         })
@@ -8152,11 +8117,8 @@ impl MediaLive for MediaLiveClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateChannelError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateChannelError>())
+                            .and_then(|response| Err(UpdateChannelError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8183,10 +8145,11 @@ impl MediaLive for MediaLiveClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| UpdateChannelClassError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateChannelClassResponse, _>()?;
+                                .deserialize::<UpdateChannelClassResponse, _>();
 
                             result
                         })
@@ -8197,11 +8160,10 @@ impl MediaLive for MediaLiveClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateChannelClassError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateChannelClassError>())
+                            .and_then(|response| {
+                                Err(UpdateChannelClassError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8225,10 +8187,11 @@ impl MediaLive for MediaLiveClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| UpdateInputError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateInputResponse, _>()?;
+                                .deserialize::<UpdateInputResponse, _>();
 
                             result
                         })
@@ -8239,11 +8202,8 @@ impl MediaLive for MediaLiveClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateInputError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateInputError>())
+                            .and_then(|response| Err(UpdateInputError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8270,10 +8230,11 @@ impl MediaLive for MediaLiveClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| UpdateInputSecurityGroupError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateInputSecurityGroupResponse, _>()?;
+                                .deserialize::<UpdateInputSecurityGroupResponse, _>();
 
                             result
                         })
@@ -8284,13 +8245,10 @@ impl MediaLive for MediaLiveClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(UpdateInputSecurityGroupError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateInputSecurityGroupError>())
+                            .and_then(|response| {
+                                Err(UpdateInputSecurityGroupError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8317,10 +8275,11 @@ impl MediaLive for MediaLiveClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| UpdateReservationError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateReservationResponse, _>()?;
+                                .deserialize::<UpdateReservationResponse, _>();
 
                             result
                         })
@@ -8331,11 +8290,10 @@ impl MediaLive for MediaLiveClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateReservationError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateReservationError>())
+                            .and_then(|response| {
+                                Err(UpdateReservationError::from_response(response))
+                            })
                     })
                     .boxed()
             }

@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
@@ -2080,10 +2080,11 @@ impl MediaPackage for MediaPackageClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| CreateChannelError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateChannelResponse, _>()?;
+                                .deserialize::<CreateChannelResponse, _>();
 
                             result
                         })
@@ -2094,11 +2095,8 @@ impl MediaPackage for MediaPackageClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateChannelError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateChannelError>())
+                            .and_then(|response| Err(CreateChannelError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2122,10 +2120,11 @@ impl MediaPackage for MediaPackageClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| CreateOriginEndpointError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateOriginEndpointResponse, _>()?;
+                                .deserialize::<CreateOriginEndpointResponse, _>();
 
                             result
                         })
@@ -2136,11 +2135,10 @@ impl MediaPackage for MediaPackageClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateOriginEndpointError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateOriginEndpointError>())
+                            .and_then(|response| {
+                                Err(CreateOriginEndpointError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2161,10 +2159,11 @@ impl MediaPackage for MediaPackageClient {
             if response.status.as_u16() == 202 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteChannelError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteChannelResponse, _>()?;
+                                .deserialize::<DeleteChannelResponse, _>();
 
                             result
                         })
@@ -2175,11 +2174,8 @@ impl MediaPackage for MediaPackageClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteChannelError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteChannelError>())
+                            .and_then(|response| Err(DeleteChannelError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2200,10 +2196,11 @@ impl MediaPackage for MediaPackageClient {
             if response.status.as_u16() == 202 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteOriginEndpointError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteOriginEndpointResponse, _>()?;
+                                .deserialize::<DeleteOriginEndpointResponse, _>();
 
                             result
                         })
@@ -2214,11 +2211,10 @@ impl MediaPackage for MediaPackageClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteOriginEndpointError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteOriginEndpointError>())
+                            .and_then(|response| {
+                                Err(DeleteOriginEndpointError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2239,10 +2235,11 @@ impl MediaPackage for MediaPackageClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| DescribeChannelError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeChannelResponse, _>()?;
+                                .deserialize::<DescribeChannelResponse, _>();
 
                             result
                         })
@@ -2253,11 +2250,8 @@ impl MediaPackage for MediaPackageClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DescribeChannelError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeChannelError>())
+                            .and_then(|response| Err(DescribeChannelError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2278,10 +2272,11 @@ impl MediaPackage for MediaPackageClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| DescribeOriginEndpointError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeOriginEndpointResponse, _>()?;
+                                .deserialize::<DescribeOriginEndpointResponse, _>();
 
                             result
                         })
@@ -2292,13 +2287,10 @@ impl MediaPackage for MediaPackageClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(DescribeOriginEndpointError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeOriginEndpointError>())
+                            .and_then(|response| {
+                                Err(DescribeOriginEndpointError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2328,10 +2320,11 @@ impl MediaPackage for MediaPackageClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListChannelsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListChannelsResponse, _>()?;
+                                .deserialize::<ListChannelsResponse, _>();
 
                             result
                         })
@@ -2342,11 +2335,8 @@ impl MediaPackage for MediaPackageClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListChannelsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListChannelsError>())
+                            .and_then(|response| Err(ListChannelsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2379,10 +2369,11 @@ impl MediaPackage for MediaPackageClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListOriginEndpointsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListOriginEndpointsResponse, _>()?;
+                                .deserialize::<ListOriginEndpointsResponse, _>();
 
                             result
                         })
@@ -2393,11 +2384,10 @@ impl MediaPackage for MediaPackageClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListOriginEndpointsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListOriginEndpointsError>())
+                            .and_then(|response| {
+                                Err(ListOriginEndpointsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2417,10 +2407,11 @@ impl MediaPackage for MediaPackageClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListTagsForResourceError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListTagsForResourceResponse, _>()?;
+                                .deserialize::<ListTagsForResourceResponse, _>();
 
                             result
                         })
@@ -2431,11 +2422,10 @@ impl MediaPackage for MediaPackageClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListTagsForResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListTagsForResourceError>())
+                            .and_then(|response| {
+                                Err(ListTagsForResourceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2456,10 +2446,11 @@ impl MediaPackage for MediaPackageClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| RotateChannelCredentialsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RotateChannelCredentialsResponse, _>()?;
+                                .deserialize::<RotateChannelCredentialsResponse, _>();
 
                             result
                         })
@@ -2470,13 +2461,10 @@ impl MediaPackage for MediaPackageClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(RotateChannelCredentialsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<RotateChannelCredentialsError>())
+                            .and_then(|response| {
+                                Err(RotateChannelCredentialsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2502,11 +2490,12 @@ impl MediaPackage for MediaPackageClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| RotateIngestEndpointCredentialsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
                                 .deserialize::<RotateIngestEndpointCredentialsResponse, _>(
-                            )?;
+                            );
 
                             result
                         })
@@ -2517,15 +2506,12 @@ impl MediaPackage for MediaPackageClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(RotateIngestEndpointCredentialsError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<RotateIngestEndpointCredentialsError>())
+                            .and_then(|response| {
+                                Err(RotateIngestEndpointCredentialsError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -2545,8 +2531,9 @@ impl MediaPackage for MediaPackageClient {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| TagResourceError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -2558,11 +2545,8 @@ impl MediaPackage for MediaPackageClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(TagResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<TagResourceError>())
+                            .and_then(|response| Err(TagResourceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2585,8 +2569,9 @@ impl MediaPackage for MediaPackageClient {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| UntagResourceError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -2598,11 +2583,8 @@ impl MediaPackage for MediaPackageClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UntagResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UntagResourceError>())
+                            .and_then(|response| Err(UntagResourceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2626,10 +2608,11 @@ impl MediaPackage for MediaPackageClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| UpdateChannelError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateChannelResponse, _>()?;
+                                .deserialize::<UpdateChannelResponse, _>();
 
                             result
                         })
@@ -2640,11 +2623,8 @@ impl MediaPackage for MediaPackageClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateChannelError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateChannelError>())
+                            .and_then(|response| Err(UpdateChannelError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2668,10 +2648,11 @@ impl MediaPackage for MediaPackageClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| UpdateOriginEndpointError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateOriginEndpointResponse, _>()?;
+                                .deserialize::<UpdateOriginEndpointResponse, _>();
 
                             result
                         })
@@ -2682,11 +2663,10 @@ impl MediaPackage for MediaPackageClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateOriginEndpointError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateOriginEndpointError>())
+                            .and_then(|response| {
+                                Err(UpdateOriginEndpointError::from_response(response))
+                            })
                     })
                     .boxed()
             }

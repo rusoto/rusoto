@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto::xml::error::*;
 use rusoto_core::proto::xml::util::{
@@ -16779,41 +16779,44 @@ impl Redshift for RedshiftClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<AcceptReservedNodeExchangeError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| {
-                                Err(AcceptReservedNodeExchangeError::from_response(response))
-                            },
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(AcceptReservedNodeExchangeError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = AcceptReservedNodeExchangeOutputMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = AcceptReservedNodeExchangeOutputMessageDeserializer::deserialize(
-                        "AcceptReservedNodeExchangeResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(AcceptReservedNodeExchangeOutputMessage::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = AcceptReservedNodeExchangeOutputMessageDeserializer::deserialize(
+                            "AcceptReservedNodeExchangeResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -16838,43 +16841,48 @@ impl Redshift for RedshiftClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e)
+                            as RusotoError<AuthorizeClusterSecurityGroupIngressError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| {
-                                Err(AuthorizeClusterSecurityGroupIngressError::from_response(
-                                    response,
-                                ))
-                            },
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(AuthorizeClusterSecurityGroupIngressError::from_response(
+                                response,
+                            ))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = AuthorizeClusterSecurityGroupIngressResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = AuthorizeClusterSecurityGroupIngressResultDeserializer::deserialize(
-                        "AuthorizeClusterSecurityGroupIngressResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(AuthorizeClusterSecurityGroupIngressResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result =
+                            AuthorizeClusterSecurityGroupIngressResultDeserializer::deserialize(
+                                "AuthorizeClusterSecurityGroupIngressResult",
+                                &mut stack,
+                            );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -16896,39 +16904,44 @@ impl Redshift for RedshiftClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<AuthorizeSnapshotAccessError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(AuthorizeSnapshotAccessError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(AuthorizeSnapshotAccessError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = AuthorizeSnapshotAccessResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = AuthorizeSnapshotAccessResultDeserializer::deserialize(
-                        "AuthorizeSnapshotAccessResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(AuthorizeSnapshotAccessResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = AuthorizeSnapshotAccessResultDeserializer::deserialize(
+                            "AuthorizeSnapshotAccessResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -16950,41 +16963,45 @@ impl Redshift for RedshiftClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e)
+                            as RusotoError<BatchDeleteClusterSnapshotsError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| {
-                                Err(BatchDeleteClusterSnapshotsError::from_response(response))
-                            },
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(BatchDeleteClusterSnapshotsError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = BatchDeleteClusterSnapshotsResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = BatchDeleteClusterSnapshotsResultDeserializer::deserialize(
-                        "BatchDeleteClusterSnapshotsResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(BatchDeleteClusterSnapshotsResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = BatchDeleteClusterSnapshotsResultDeserializer::deserialize(
+                            "BatchDeleteClusterSnapshotsResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -17007,41 +17024,45 @@ impl Redshift for RedshiftClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e)
+                            as RusotoError<BatchModifyClusterSnapshotsError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| {
-                                Err(BatchModifyClusterSnapshotsError::from_response(response))
-                            },
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(BatchModifyClusterSnapshotsError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = BatchModifyClusterSnapshotsOutputMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = BatchModifyClusterSnapshotsOutputMessageDeserializer::deserialize(
-                        "BatchModifyClusterSnapshotsResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(BatchModifyClusterSnapshotsOutputMessage::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = BatchModifyClusterSnapshotsOutputMessageDeserializer::deserialize(
+                            "BatchModifyClusterSnapshotsResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -17063,39 +17084,42 @@ impl Redshift for RedshiftClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<CancelResizeError>)
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(CancelResizeError::from_response(response)),
-                        )
+                        try_response
+                            .map_err(|e| e.into())
+                            .and_then(|response| Err(CancelResizeError::from_response(response)))
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = ResizeProgressMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = ResizeProgressMessageDeserializer::deserialize(
-                        "CancelResizeResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(ResizeProgressMessage::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = ResizeProgressMessageDeserializer::deserialize(
+                            "CancelResizeResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -17117,39 +17141,44 @@ impl Redshift for RedshiftClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<CopyClusterSnapshotError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(CopyClusterSnapshotError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(CopyClusterSnapshotError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = CopyClusterSnapshotResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = CopyClusterSnapshotResultDeserializer::deserialize(
-                        "CopyClusterSnapshotResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(CopyClusterSnapshotResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = CopyClusterSnapshotResultDeserializer::deserialize(
+                            "CopyClusterSnapshotResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -17171,39 +17200,42 @@ impl Redshift for RedshiftClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<CreateClusterError>)
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(CreateClusterError::from_response(response)),
-                        )
+                        try_response
+                            .map_err(|e| e.into())
+                            .and_then(|response| Err(CreateClusterError::from_response(response)))
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = CreateClusterResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = CreateClusterResultDeserializer::deserialize(
-                        "CreateClusterResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(CreateClusterResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = CreateClusterResultDeserializer::deserialize(
+                            "CreateClusterResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -17225,41 +17257,45 @@ impl Redshift for RedshiftClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e)
+                            as RusotoError<CreateClusterParameterGroupError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| {
-                                Err(CreateClusterParameterGroupError::from_response(response))
-                            },
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(CreateClusterParameterGroupError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = CreateClusterParameterGroupResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = CreateClusterParameterGroupResultDeserializer::deserialize(
-                        "CreateClusterParameterGroupResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(CreateClusterParameterGroupResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = CreateClusterParameterGroupResultDeserializer::deserialize(
+                            "CreateClusterParameterGroupResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -17281,41 +17317,44 @@ impl Redshift for RedshiftClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<CreateClusterSecurityGroupError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| {
-                                Err(CreateClusterSecurityGroupError::from_response(response))
-                            },
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(CreateClusterSecurityGroupError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = CreateClusterSecurityGroupResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = CreateClusterSecurityGroupResultDeserializer::deserialize(
-                        "CreateClusterSecurityGroupResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(CreateClusterSecurityGroupResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = CreateClusterSecurityGroupResultDeserializer::deserialize(
+                            "CreateClusterSecurityGroupResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -17337,39 +17376,44 @@ impl Redshift for RedshiftClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<CreateClusterSnapshotError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(CreateClusterSnapshotError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(CreateClusterSnapshotError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = CreateClusterSnapshotResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = CreateClusterSnapshotResultDeserializer::deserialize(
-                        "CreateClusterSnapshotResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(CreateClusterSnapshotResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = CreateClusterSnapshotResultDeserializer::deserialize(
+                            "CreateClusterSnapshotResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -17391,39 +17435,44 @@ impl Redshift for RedshiftClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<CreateClusterSubnetGroupError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(CreateClusterSubnetGroupError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(CreateClusterSubnetGroupError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = CreateClusterSubnetGroupResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = CreateClusterSubnetGroupResultDeserializer::deserialize(
-                        "CreateClusterSubnetGroupResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(CreateClusterSubnetGroupResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = CreateClusterSubnetGroupResultDeserializer::deserialize(
+                            "CreateClusterSubnetGroupResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -17445,39 +17494,44 @@ impl Redshift for RedshiftClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<CreateEventSubscriptionError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(CreateEventSubscriptionError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(CreateEventSubscriptionError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = CreateEventSubscriptionResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = CreateEventSubscriptionResultDeserializer::deserialize(
-                        "CreateEventSubscriptionResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(CreateEventSubscriptionResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = CreateEventSubscriptionResultDeserializer::deserialize(
+                            "CreateEventSubscriptionResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -17499,41 +17553,44 @@ impl Redshift for RedshiftClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<CreateHsmClientCertificateError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| {
-                                Err(CreateHsmClientCertificateError::from_response(response))
-                            },
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(CreateHsmClientCertificateError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = CreateHsmClientCertificateResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = CreateHsmClientCertificateResultDeserializer::deserialize(
-                        "CreateHsmClientCertificateResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(CreateHsmClientCertificateResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = CreateHsmClientCertificateResultDeserializer::deserialize(
+                            "CreateHsmClientCertificateResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -17555,39 +17612,44 @@ impl Redshift for RedshiftClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<CreateHsmConfigurationError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(CreateHsmConfigurationError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(CreateHsmConfigurationError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = CreateHsmConfigurationResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = CreateHsmConfigurationResultDeserializer::deserialize(
-                        "CreateHsmConfigurationResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(CreateHsmConfigurationResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = CreateHsmConfigurationResultDeserializer::deserialize(
+                            "CreateHsmConfigurationResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -17609,39 +17671,44 @@ impl Redshift for RedshiftClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<CreateSnapshotCopyGrantError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(CreateSnapshotCopyGrantError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(CreateSnapshotCopyGrantError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = CreateSnapshotCopyGrantResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = CreateSnapshotCopyGrantResultDeserializer::deserialize(
-                        "CreateSnapshotCopyGrantResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(CreateSnapshotCopyGrantResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = CreateSnapshotCopyGrantResultDeserializer::deserialize(
+                            "CreateSnapshotCopyGrantResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -17663,39 +17730,44 @@ impl Redshift for RedshiftClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<CreateSnapshotScheduleError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(CreateSnapshotScheduleError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(CreateSnapshotScheduleError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = SnapshotSchedule::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = SnapshotScheduleDeserializer::deserialize(
-                        "CreateSnapshotScheduleResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(SnapshotSchedule::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = SnapshotScheduleDeserializer::deserialize(
+                            "CreateSnapshotScheduleResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -17714,16 +17786,16 @@ impl Redshift for RedshiftClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<CreateTagsError>)
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(CreateTagsError::from_response(response)),
-                        )
+                        try_response
+                            .map_err(|e| e.into())
+                            .and_then(|response| Err(CreateTagsError::from_response(response)))
                     })
                     .boxed();
             }
 
-            futures::future::ready(::std::mem::drop(response)).boxed()
+            futures::future::ready(Ok(std::mem::drop(response))).boxed()
         })
     }
 
@@ -17745,39 +17817,42 @@ impl Redshift for RedshiftClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<DeleteClusterError>)
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(DeleteClusterError::from_response(response)),
-                        )
+                        try_response
+                            .map_err(|e| e.into())
+                            .and_then(|response| Err(DeleteClusterError::from_response(response)))
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = DeleteClusterResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DeleteClusterResultDeserializer::deserialize(
-                        "DeleteClusterResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(DeleteClusterResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = DeleteClusterResultDeserializer::deserialize(
+                            "DeleteClusterResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -17799,18 +17874,19 @@ impl Redshift for RedshiftClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e)
+                            as RusotoError<DeleteClusterParameterGroupError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| {
-                                Err(DeleteClusterParameterGroupError::from_response(response))
-                            },
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DeleteClusterParameterGroupError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            futures::future::ready(::std::mem::drop(response)).boxed()
+            futures::future::ready(Ok(std::mem::drop(response))).boxed()
         })
     }
 
@@ -17832,18 +17908,18 @@ impl Redshift for RedshiftClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<DeleteClusterSecurityGroupError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| {
-                                Err(DeleteClusterSecurityGroupError::from_response(response))
-                            },
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DeleteClusterSecurityGroupError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            futures::future::ready(::std::mem::drop(response)).boxed()
+            futures::future::ready(Ok(std::mem::drop(response))).boxed()
         })
     }
 
@@ -17865,39 +17941,44 @@ impl Redshift for RedshiftClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<DeleteClusterSnapshotError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(DeleteClusterSnapshotError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DeleteClusterSnapshotError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = DeleteClusterSnapshotResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DeleteClusterSnapshotResultDeserializer::deserialize(
-                        "DeleteClusterSnapshotResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(DeleteClusterSnapshotResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = DeleteClusterSnapshotResultDeserializer::deserialize(
+                            "DeleteClusterSnapshotResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -17919,16 +18000,18 @@ impl Redshift for RedshiftClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<DeleteClusterSubnetGroupError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(DeleteClusterSubnetGroupError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DeleteClusterSubnetGroupError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            futures::future::ready(::std::mem::drop(response)).boxed()
+            futures::future::ready(Ok(std::mem::drop(response))).boxed()
         })
     }
 
@@ -17950,16 +18033,18 @@ impl Redshift for RedshiftClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<DeleteEventSubscriptionError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(DeleteEventSubscriptionError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DeleteEventSubscriptionError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            futures::future::ready(::std::mem::drop(response)).boxed()
+            futures::future::ready(Ok(std::mem::drop(response))).boxed()
         })
     }
 
@@ -17981,18 +18066,18 @@ impl Redshift for RedshiftClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<DeleteHsmClientCertificateError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| {
-                                Err(DeleteHsmClientCertificateError::from_response(response))
-                            },
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DeleteHsmClientCertificateError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            futures::future::ready(::std::mem::drop(response)).boxed()
+            futures::future::ready(Ok(std::mem::drop(response))).boxed()
         })
     }
 
@@ -18014,16 +18099,18 @@ impl Redshift for RedshiftClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<DeleteHsmConfigurationError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(DeleteHsmConfigurationError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DeleteHsmConfigurationError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            futures::future::ready(::std::mem::drop(response)).boxed()
+            futures::future::ready(Ok(std::mem::drop(response))).boxed()
         })
     }
 
@@ -18045,16 +18132,18 @@ impl Redshift for RedshiftClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<DeleteSnapshotCopyGrantError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(DeleteSnapshotCopyGrantError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DeleteSnapshotCopyGrantError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            futures::future::ready(::std::mem::drop(response)).boxed()
+            futures::future::ready(Ok(std::mem::drop(response))).boxed()
         })
     }
 
@@ -18076,16 +18165,18 @@ impl Redshift for RedshiftClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<DeleteSnapshotScheduleError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(DeleteSnapshotScheduleError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DeleteSnapshotScheduleError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            futures::future::ready(::std::mem::drop(response)).boxed()
+            futures::future::ready(Ok(std::mem::drop(response))).boxed()
         })
     }
 
@@ -18104,16 +18195,16 @@ impl Redshift for RedshiftClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<DeleteTagsError>)
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(DeleteTagsError::from_response(response)),
-                        )
+                        try_response
+                            .map_err(|e| e.into())
+                            .and_then(|response| Err(DeleteTagsError::from_response(response)))
                     })
                     .boxed();
             }
 
-            futures::future::ready(::std::mem::drop(response)).boxed()
+            futures::future::ready(Ok(std::mem::drop(response))).boxed()
         })
     }
 
@@ -18135,39 +18226,44 @@ impl Redshift for RedshiftClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<DescribeAccountAttributesError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(DescribeAccountAttributesError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DescribeAccountAttributesError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = AccountAttributeList::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = AccountAttributeListDeserializer::deserialize(
-                        "DescribeAccountAttributesResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(AccountAttributeList::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = AccountAttributeListDeserializer::deserialize(
+                            "DescribeAccountAttributesResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -18189,41 +18285,44 @@ impl Redshift for RedshiftClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<DescribeClusterDbRevisionsError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| {
-                                Err(DescribeClusterDbRevisionsError::from_response(response))
-                            },
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DescribeClusterDbRevisionsError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = ClusterDbRevisionsMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = ClusterDbRevisionsMessageDeserializer::deserialize(
-                        "DescribeClusterDbRevisionsResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(ClusterDbRevisionsMessage::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = ClusterDbRevisionsMessageDeserializer::deserialize(
+                            "DescribeClusterDbRevisionsResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -18245,41 +18344,45 @@ impl Redshift for RedshiftClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e)
+                            as RusotoError<DescribeClusterParameterGroupsError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| {
-                                Err(DescribeClusterParameterGroupsError::from_response(response))
-                            },
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DescribeClusterParameterGroupsError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = ClusterParameterGroupsMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = ClusterParameterGroupsMessageDeserializer::deserialize(
-                        "DescribeClusterParameterGroupsResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(ClusterParameterGroupsMessage::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = ClusterParameterGroupsMessageDeserializer::deserialize(
+                            "DescribeClusterParameterGroupsResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -18301,39 +18404,44 @@ impl Redshift for RedshiftClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<DescribeClusterParametersError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(DescribeClusterParametersError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DescribeClusterParametersError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = ClusterParameterGroupDetails::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = ClusterParameterGroupDetailsDeserializer::deserialize(
-                        "DescribeClusterParametersResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(ClusterParameterGroupDetails::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = ClusterParameterGroupDetailsDeserializer::deserialize(
+                            "DescribeClusterParametersResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -18355,41 +18463,45 @@ impl Redshift for RedshiftClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e)
+                            as RusotoError<DescribeClusterSecurityGroupsError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| {
-                                Err(DescribeClusterSecurityGroupsError::from_response(response))
-                            },
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DescribeClusterSecurityGroupsError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = ClusterSecurityGroupMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = ClusterSecurityGroupMessageDeserializer::deserialize(
-                        "DescribeClusterSecurityGroupsResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(ClusterSecurityGroupMessage::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = ClusterSecurityGroupMessageDeserializer::deserialize(
+                            "DescribeClusterSecurityGroupsResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -18411,39 +18523,44 @@ impl Redshift for RedshiftClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<DescribeClusterSnapshotsError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(DescribeClusterSnapshotsError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DescribeClusterSnapshotsError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = SnapshotMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = SnapshotMessageDeserializer::deserialize(
-                        "DescribeClusterSnapshotsResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(SnapshotMessage::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = SnapshotMessageDeserializer::deserialize(
+                            "DescribeClusterSnapshotsResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -18465,41 +18582,45 @@ impl Redshift for RedshiftClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e)
+                            as RusotoError<DescribeClusterSubnetGroupsError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| {
-                                Err(DescribeClusterSubnetGroupsError::from_response(response))
-                            },
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DescribeClusterSubnetGroupsError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = ClusterSubnetGroupMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = ClusterSubnetGroupMessageDeserializer::deserialize(
-                        "DescribeClusterSubnetGroupsResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(ClusterSubnetGroupMessage::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = ClusterSubnetGroupMessageDeserializer::deserialize(
+                            "DescribeClusterSubnetGroupsResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -18521,39 +18642,44 @@ impl Redshift for RedshiftClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<DescribeClusterTracksError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(DescribeClusterTracksError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DescribeClusterTracksError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = TrackListMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = TrackListMessageDeserializer::deserialize(
-                        "DescribeClusterTracksResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(TrackListMessage::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = TrackListMessageDeserializer::deserialize(
+                            "DescribeClusterTracksResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -18575,39 +18701,44 @@ impl Redshift for RedshiftClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<DescribeClusterVersionsError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(DescribeClusterVersionsError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DescribeClusterVersionsError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = ClusterVersionsMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = ClusterVersionsMessageDeserializer::deserialize(
-                        "DescribeClusterVersionsResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(ClusterVersionsMessage::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = ClusterVersionsMessageDeserializer::deserialize(
+                            "DescribeClusterVersionsResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -18629,39 +18760,42 @@ impl Redshift for RedshiftClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<DescribeClustersError>)
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(DescribeClustersError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DescribeClustersError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = ClustersMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = ClustersMessageDeserializer::deserialize(
-                        "DescribeClustersResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(ClustersMessage::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = ClustersMessageDeserializer::deserialize(
+                            "DescribeClustersResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -18684,43 +18818,47 @@ impl Redshift for RedshiftClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e)
+                            as RusotoError<DescribeDefaultClusterParametersError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| {
-                                Err(DescribeDefaultClusterParametersError::from_response(
-                                    response,
-                                ))
-                            },
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DescribeDefaultClusterParametersError::from_response(
+                                response,
+                            ))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = DescribeDefaultClusterParametersResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribeDefaultClusterParametersResultDeserializer::deserialize(
-                        "DescribeDefaultClusterParametersResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(DescribeDefaultClusterParametersResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = DescribeDefaultClusterParametersResultDeserializer::deserialize(
+                            "DescribeDefaultClusterParametersResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -18742,39 +18880,44 @@ impl Redshift for RedshiftClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<DescribeEventCategoriesError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(DescribeEventCategoriesError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DescribeEventCategoriesError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = EventCategoriesMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = EventCategoriesMessageDeserializer::deserialize(
-                        "DescribeEventCategoriesResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(EventCategoriesMessage::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = EventCategoriesMessageDeserializer::deserialize(
+                            "DescribeEventCategoriesResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -18796,41 +18939,44 @@ impl Redshift for RedshiftClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<DescribeEventSubscriptionsError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| {
-                                Err(DescribeEventSubscriptionsError::from_response(response))
-                            },
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DescribeEventSubscriptionsError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = EventSubscriptionsMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = EventSubscriptionsMessageDeserializer::deserialize(
-                        "DescribeEventSubscriptionsResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(EventSubscriptionsMessage::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = EventSubscriptionsMessageDeserializer::deserialize(
+                            "DescribeEventSubscriptionsResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -18852,37 +18998,42 @@ impl Redshift for RedshiftClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<DescribeEventsError>)
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(DescribeEventsError::from_response(response)),
-                        )
+                        try_response
+                            .map_err(|e| e.into())
+                            .and_then(|response| Err(DescribeEventsError::from_response(response)))
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = EventsMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result =
-                        EventsMessageDeserializer::deserialize("DescribeEventsResult", &mut stack)?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(EventsMessage::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = EventsMessageDeserializer::deserialize(
+                            "DescribeEventsResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -18904,41 +19055,45 @@ impl Redshift for RedshiftClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e)
+                            as RusotoError<DescribeHsmClientCertificatesError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| {
-                                Err(DescribeHsmClientCertificatesError::from_response(response))
-                            },
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DescribeHsmClientCertificatesError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = HsmClientCertificateMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = HsmClientCertificateMessageDeserializer::deserialize(
-                        "DescribeHsmClientCertificatesResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(HsmClientCertificateMessage::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = HsmClientCertificateMessageDeserializer::deserialize(
+                            "DescribeHsmClientCertificatesResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -18960,39 +19115,44 @@ impl Redshift for RedshiftClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<DescribeHsmConfigurationsError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(DescribeHsmConfigurationsError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DescribeHsmConfigurationsError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = HsmConfigurationMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = HsmConfigurationMessageDeserializer::deserialize(
-                        "DescribeHsmConfigurationsResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(HsmConfigurationMessage::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = HsmConfigurationMessageDeserializer::deserialize(
+                            "DescribeHsmConfigurationsResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -19014,39 +19174,44 @@ impl Redshift for RedshiftClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<DescribeLoggingStatusError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(DescribeLoggingStatusError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DescribeLoggingStatusError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = LoggingStatus::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = LoggingStatusDeserializer::deserialize(
-                        "DescribeLoggingStatusResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(LoggingStatus::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = LoggingStatusDeserializer::deserialize(
+                            "DescribeLoggingStatusResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -19068,43 +19233,47 @@ impl Redshift for RedshiftClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e)
+                            as RusotoError<DescribeOrderableClusterOptionsError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| {
-                                Err(DescribeOrderableClusterOptionsError::from_response(
-                                    response,
-                                ))
-                            },
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DescribeOrderableClusterOptionsError::from_response(
+                                response,
+                            ))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = OrderableClusterOptionsMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = OrderableClusterOptionsMessageDeserializer::deserialize(
-                        "DescribeOrderableClusterOptionsResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(OrderableClusterOptionsMessage::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = OrderableClusterOptionsMessageDeserializer::deserialize(
+                            "DescribeOrderableClusterOptionsResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -19126,41 +19295,45 @@ impl Redshift for RedshiftClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e)
+                            as RusotoError<DescribeReservedNodeOfferingsError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| {
-                                Err(DescribeReservedNodeOfferingsError::from_response(response))
-                            },
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DescribeReservedNodeOfferingsError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = ReservedNodeOfferingsMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = ReservedNodeOfferingsMessageDeserializer::deserialize(
-                        "DescribeReservedNodeOfferingsResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(ReservedNodeOfferingsMessage::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = ReservedNodeOfferingsMessageDeserializer::deserialize(
+                            "DescribeReservedNodeOfferingsResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -19182,39 +19355,44 @@ impl Redshift for RedshiftClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<DescribeReservedNodesError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(DescribeReservedNodesError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DescribeReservedNodesError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = ReservedNodesMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = ReservedNodesMessageDeserializer::deserialize(
-                        "DescribeReservedNodesResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(ReservedNodesMessage::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = ReservedNodesMessageDeserializer::deserialize(
+                            "DescribeReservedNodesResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -19236,39 +19414,42 @@ impl Redshift for RedshiftClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<DescribeResizeError>)
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(DescribeResizeError::from_response(response)),
-                        )
+                        try_response
+                            .map_err(|e| e.into())
+                            .and_then(|response| Err(DescribeResizeError::from_response(response)))
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = ResizeProgressMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = ResizeProgressMessageDeserializer::deserialize(
-                        "DescribeResizeResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(ResizeProgressMessage::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = ResizeProgressMessageDeserializer::deserialize(
+                            "DescribeResizeResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -19290,41 +19471,44 @@ impl Redshift for RedshiftClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<DescribeSnapshotCopyGrantsError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| {
-                                Err(DescribeSnapshotCopyGrantsError::from_response(response))
-                            },
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DescribeSnapshotCopyGrantsError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = SnapshotCopyGrantMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = SnapshotCopyGrantMessageDeserializer::deserialize(
-                        "DescribeSnapshotCopyGrantsResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(SnapshotCopyGrantMessage::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = SnapshotCopyGrantMessageDeserializer::deserialize(
+                            "DescribeSnapshotCopyGrantsResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -19346,39 +19530,44 @@ impl Redshift for RedshiftClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<DescribeSnapshotSchedulesError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(DescribeSnapshotSchedulesError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DescribeSnapshotSchedulesError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = DescribeSnapshotSchedulesOutputMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribeSnapshotSchedulesOutputMessageDeserializer::deserialize(
-                        "DescribeSnapshotSchedulesResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(DescribeSnapshotSchedulesOutputMessage::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = DescribeSnapshotSchedulesOutputMessageDeserializer::deserialize(
+                            "DescribeSnapshotSchedulesResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -19397,39 +19586,42 @@ impl Redshift for RedshiftClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<DescribeStorageError>)
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(DescribeStorageError::from_response(response)),
-                        )
+                        try_response
+                            .map_err(|e| e.into())
+                            .and_then(|response| Err(DescribeStorageError::from_response(response)))
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = CustomerStorageMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = CustomerStorageMessageDeserializer::deserialize(
-                        "DescribeStorageResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(CustomerStorageMessage::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = CustomerStorageMessageDeserializer::deserialize(
+                            "DescribeStorageResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -19451,41 +19643,44 @@ impl Redshift for RedshiftClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<DescribeTableRestoreStatusError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| {
-                                Err(DescribeTableRestoreStatusError::from_response(response))
-                            },
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DescribeTableRestoreStatusError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = TableRestoreStatusMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = TableRestoreStatusMessageDeserializer::deserialize(
-                        "DescribeTableRestoreStatusResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(TableRestoreStatusMessage::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = TableRestoreStatusMessageDeserializer::deserialize(
+                            "DescribeTableRestoreStatusResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -19507,39 +19702,42 @@ impl Redshift for RedshiftClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<DescribeTagsError>)
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(DescribeTagsError::from_response(response)),
-                        )
+                        try_response
+                            .map_err(|e| e.into())
+                            .and_then(|response| Err(DescribeTagsError::from_response(response)))
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = TaggedResourceListMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = TaggedResourceListMessageDeserializer::deserialize(
-                        "DescribeTagsResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(TaggedResourceListMessage::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = TaggedResourceListMessageDeserializer::deserialize(
+                            "DescribeTagsResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -19561,37 +19759,42 @@ impl Redshift for RedshiftClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<DisableLoggingError>)
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(DisableLoggingError::from_response(response)),
-                        )
+                        try_response
+                            .map_err(|e| e.into())
+                            .and_then(|response| Err(DisableLoggingError::from_response(response)))
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = LoggingStatus::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result =
-                        LoggingStatusDeserializer::deserialize("DisableLoggingResult", &mut stack)?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(LoggingStatus::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = LoggingStatusDeserializer::deserialize(
+                            "DisableLoggingResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -19613,39 +19816,44 @@ impl Redshift for RedshiftClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<DisableSnapshotCopyError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(DisableSnapshotCopyError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DisableSnapshotCopyError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = DisableSnapshotCopyResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DisableSnapshotCopyResultDeserializer::deserialize(
-                        "DisableSnapshotCopyResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(DisableSnapshotCopyResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = DisableSnapshotCopyResultDeserializer::deserialize(
+                            "DisableSnapshotCopyResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -19667,37 +19875,42 @@ impl Redshift for RedshiftClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<EnableLoggingError>)
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(EnableLoggingError::from_response(response)),
-                        )
+                        try_response
+                            .map_err(|e| e.into())
+                            .and_then(|response| Err(EnableLoggingError::from_response(response)))
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = LoggingStatus::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result =
-                        LoggingStatusDeserializer::deserialize("EnableLoggingResult", &mut stack)?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(LoggingStatus::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = LoggingStatusDeserializer::deserialize(
+                            "EnableLoggingResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -19719,39 +19932,44 @@ impl Redshift for RedshiftClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<EnableSnapshotCopyError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(EnableSnapshotCopyError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(EnableSnapshotCopyError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = EnableSnapshotCopyResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = EnableSnapshotCopyResultDeserializer::deserialize(
-                        "EnableSnapshotCopyResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(EnableSnapshotCopyResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = EnableSnapshotCopyResultDeserializer::deserialize(
+                            "EnableSnapshotCopyResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -19773,39 +19991,44 @@ impl Redshift for RedshiftClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<GetClusterCredentialsError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(GetClusterCredentialsError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(GetClusterCredentialsError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = ClusterCredentials::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = ClusterCredentialsDeserializer::deserialize(
-                        "GetClusterCredentialsResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(ClusterCredentials::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = ClusterCredentialsDeserializer::deserialize(
+                            "GetClusterCredentialsResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -19830,44 +20053,48 @@ impl Redshift for RedshiftClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e)
+                            as RusotoError<GetReservedNodeExchangeOfferingsError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| {
-                                Err(GetReservedNodeExchangeOfferingsError::from_response(
-                                    response,
-                                ))
-                            },
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(GetReservedNodeExchangeOfferingsError::from_response(
+                                response,
+                            ))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = GetReservedNodeExchangeOfferingsOutputMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result =
-                        GetReservedNodeExchangeOfferingsOutputMessageDeserializer::deserialize(
-                            "GetReservedNodeExchangeOfferingsResult",
-                            &mut stack,
-                        )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(GetReservedNodeExchangeOfferingsOutputMessage::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result =
+                            GetReservedNodeExchangeOfferingsOutputMessageDeserializer::deserialize(
+                                "GetReservedNodeExchangeOfferingsResult",
+                                &mut stack,
+                            );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -19889,39 +20116,42 @@ impl Redshift for RedshiftClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<ModifyClusterError>)
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(ModifyClusterError::from_response(response)),
-                        )
+                        try_response
+                            .map_err(|e| e.into())
+                            .and_then(|response| Err(ModifyClusterError::from_response(response)))
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = ModifyClusterResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = ModifyClusterResultDeserializer::deserialize(
-                        "ModifyClusterResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(ModifyClusterResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = ModifyClusterResultDeserializer::deserialize(
+                            "ModifyClusterResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -19943,39 +20173,44 @@ impl Redshift for RedshiftClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<ModifyClusterDbRevisionError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(ModifyClusterDbRevisionError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(ModifyClusterDbRevisionError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = ModifyClusterDbRevisionResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = ModifyClusterDbRevisionResultDeserializer::deserialize(
-                        "ModifyClusterDbRevisionResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(ModifyClusterDbRevisionResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = ModifyClusterDbRevisionResultDeserializer::deserialize(
+                            "ModifyClusterDbRevisionResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -19997,39 +20232,44 @@ impl Redshift for RedshiftClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<ModifyClusterIamRolesError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(ModifyClusterIamRolesError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(ModifyClusterIamRolesError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = ModifyClusterIamRolesResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = ModifyClusterIamRolesResultDeserializer::deserialize(
-                        "ModifyClusterIamRolesResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(ModifyClusterIamRolesResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = ModifyClusterIamRolesResultDeserializer::deserialize(
+                            "ModifyClusterIamRolesResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -20051,39 +20291,44 @@ impl Redshift for RedshiftClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<ModifyClusterMaintenanceError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(ModifyClusterMaintenanceError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(ModifyClusterMaintenanceError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = ModifyClusterMaintenanceResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = ModifyClusterMaintenanceResultDeserializer::deserialize(
-                        "ModifyClusterMaintenanceResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(ModifyClusterMaintenanceResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = ModifyClusterMaintenanceResultDeserializer::deserialize(
+                            "ModifyClusterMaintenanceResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -20105,41 +20350,45 @@ impl Redshift for RedshiftClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e)
+                            as RusotoError<ModifyClusterParameterGroupError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| {
-                                Err(ModifyClusterParameterGroupError::from_response(response))
-                            },
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(ModifyClusterParameterGroupError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = ClusterParameterGroupNameMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = ClusterParameterGroupNameMessageDeserializer::deserialize(
-                        "ModifyClusterParameterGroupResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(ClusterParameterGroupNameMessage::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = ClusterParameterGroupNameMessageDeserializer::deserialize(
+                            "ModifyClusterParameterGroupResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -20161,39 +20410,44 @@ impl Redshift for RedshiftClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<ModifyClusterSnapshotError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(ModifyClusterSnapshotError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(ModifyClusterSnapshotError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = ModifyClusterSnapshotResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = ModifyClusterSnapshotResultDeserializer::deserialize(
-                        "ModifyClusterSnapshotResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(ModifyClusterSnapshotResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = ModifyClusterSnapshotResultDeserializer::deserialize(
+                            "ModifyClusterSnapshotResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -20215,18 +20469,19 @@ impl Redshift for RedshiftClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e)
+                            as RusotoError<ModifyClusterSnapshotScheduleError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| {
-                                Err(ModifyClusterSnapshotScheduleError::from_response(response))
-                            },
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(ModifyClusterSnapshotScheduleError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            futures::future::ready(::std::mem::drop(response)).boxed()
+            futures::future::ready(Ok(std::mem::drop(response))).boxed()
         })
     }
 
@@ -20248,39 +20503,44 @@ impl Redshift for RedshiftClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<ModifyClusterSubnetGroupError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(ModifyClusterSubnetGroupError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(ModifyClusterSubnetGroupError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = ModifyClusterSubnetGroupResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = ModifyClusterSubnetGroupResultDeserializer::deserialize(
-                        "ModifyClusterSubnetGroupResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(ModifyClusterSubnetGroupResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = ModifyClusterSubnetGroupResultDeserializer::deserialize(
+                            "ModifyClusterSubnetGroupResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -20302,39 +20562,44 @@ impl Redshift for RedshiftClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<ModifyEventSubscriptionError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(ModifyEventSubscriptionError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(ModifyEventSubscriptionError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = ModifyEventSubscriptionResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = ModifyEventSubscriptionResultDeserializer::deserialize(
-                        "ModifyEventSubscriptionResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(ModifyEventSubscriptionResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = ModifyEventSubscriptionResultDeserializer::deserialize(
+                            "ModifyEventSubscriptionResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -20357,43 +20622,47 @@ impl Redshift for RedshiftClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e)
+                            as RusotoError<ModifySnapshotCopyRetentionPeriodError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| {
-                                Err(ModifySnapshotCopyRetentionPeriodError::from_response(
-                                    response,
-                                ))
-                            },
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(ModifySnapshotCopyRetentionPeriodError::from_response(
+                                response,
+                            ))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = ModifySnapshotCopyRetentionPeriodResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = ModifySnapshotCopyRetentionPeriodResultDeserializer::deserialize(
-                        "ModifySnapshotCopyRetentionPeriodResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(ModifySnapshotCopyRetentionPeriodResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = ModifySnapshotCopyRetentionPeriodResultDeserializer::deserialize(
+                            "ModifySnapshotCopyRetentionPeriodResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -20415,39 +20684,44 @@ impl Redshift for RedshiftClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<ModifySnapshotScheduleError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(ModifySnapshotScheduleError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(ModifySnapshotScheduleError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = SnapshotSchedule::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = SnapshotScheduleDeserializer::deserialize(
-                        "ModifySnapshotScheduleResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(SnapshotSchedule::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = SnapshotScheduleDeserializer::deserialize(
+                            "ModifySnapshotScheduleResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -20469,41 +20743,45 @@ impl Redshift for RedshiftClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e)
+                            as RusotoError<PurchaseReservedNodeOfferingError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| {
-                                Err(PurchaseReservedNodeOfferingError::from_response(response))
-                            },
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(PurchaseReservedNodeOfferingError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = PurchaseReservedNodeOfferingResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = PurchaseReservedNodeOfferingResultDeserializer::deserialize(
-                        "PurchaseReservedNodeOfferingResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(PurchaseReservedNodeOfferingResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = PurchaseReservedNodeOfferingResultDeserializer::deserialize(
+                            "PurchaseReservedNodeOfferingResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -20525,39 +20803,42 @@ impl Redshift for RedshiftClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<RebootClusterError>)
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(RebootClusterError::from_response(response)),
-                        )
+                        try_response
+                            .map_err(|e| e.into())
+                            .and_then(|response| Err(RebootClusterError::from_response(response)))
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = RebootClusterResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = RebootClusterResultDeserializer::deserialize(
-                        "RebootClusterResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(RebootClusterResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = RebootClusterResultDeserializer::deserialize(
+                            "RebootClusterResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -20579,41 +20860,44 @@ impl Redshift for RedshiftClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<ResetClusterParameterGroupError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| {
-                                Err(ResetClusterParameterGroupError::from_response(response))
-                            },
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(ResetClusterParameterGroupError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = ClusterParameterGroupNameMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = ClusterParameterGroupNameMessageDeserializer::deserialize(
-                        "ResetClusterParameterGroupResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(ClusterParameterGroupNameMessage::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = ClusterParameterGroupNameMessageDeserializer::deserialize(
+                            "ResetClusterParameterGroupResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -20635,39 +20919,42 @@ impl Redshift for RedshiftClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<ResizeClusterError>)
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(ResizeClusterError::from_response(response)),
-                        )
+                        try_response
+                            .map_err(|e| e.into())
+                            .and_then(|response| Err(ResizeClusterError::from_response(response)))
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = ResizeClusterResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = ResizeClusterResultDeserializer::deserialize(
-                        "ResizeClusterResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(ResizeClusterResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = ResizeClusterResultDeserializer::deserialize(
+                            "ResizeClusterResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -20689,41 +20976,44 @@ impl Redshift for RedshiftClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<RestoreFromClusterSnapshotError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| {
-                                Err(RestoreFromClusterSnapshotError::from_response(response))
-                            },
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(RestoreFromClusterSnapshotError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = RestoreFromClusterSnapshotResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = RestoreFromClusterSnapshotResultDeserializer::deserialize(
-                        "RestoreFromClusterSnapshotResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(RestoreFromClusterSnapshotResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = RestoreFromClusterSnapshotResultDeserializer::deserialize(
+                            "RestoreFromClusterSnapshotResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -20746,43 +21036,47 @@ impl Redshift for RedshiftClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e)
+                            as RusotoError<RestoreTableFromClusterSnapshotError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| {
-                                Err(RestoreTableFromClusterSnapshotError::from_response(
-                                    response,
-                                ))
-                            },
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(RestoreTableFromClusterSnapshotError::from_response(
+                                response,
+                            ))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = RestoreTableFromClusterSnapshotResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = RestoreTableFromClusterSnapshotResultDeserializer::deserialize(
-                        "RestoreTableFromClusterSnapshotResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(RestoreTableFromClusterSnapshotResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = RestoreTableFromClusterSnapshotResultDeserializer::deserialize(
+                            "RestoreTableFromClusterSnapshotResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -20805,43 +21099,47 @@ impl Redshift for RedshiftClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e)
+                            as RusotoError<RevokeClusterSecurityGroupIngressError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| {
-                                Err(RevokeClusterSecurityGroupIngressError::from_response(
-                                    response,
-                                ))
-                            },
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(RevokeClusterSecurityGroupIngressError::from_response(
+                                response,
+                            ))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = RevokeClusterSecurityGroupIngressResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = RevokeClusterSecurityGroupIngressResultDeserializer::deserialize(
-                        "RevokeClusterSecurityGroupIngressResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(RevokeClusterSecurityGroupIngressResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = RevokeClusterSecurityGroupIngressResultDeserializer::deserialize(
+                            "RevokeClusterSecurityGroupIngressResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -20863,39 +21161,44 @@ impl Redshift for RedshiftClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<RevokeSnapshotAccessError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(RevokeSnapshotAccessError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(RevokeSnapshotAccessError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = RevokeSnapshotAccessResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = RevokeSnapshotAccessResultDeserializer::deserialize(
-                        "RevokeSnapshotAccessResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(RevokeSnapshotAccessResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = RevokeSnapshotAccessResultDeserializer::deserialize(
+                            "RevokeSnapshotAccessResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -20917,39 +21220,44 @@ impl Redshift for RedshiftClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<RotateEncryptionKeyError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(RotateEncryptionKeyError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(RotateEncryptionKeyError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = RotateEncryptionKeyResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = RotateEncryptionKeyResultDeserializer::deserialize(
-                        "RotateEncryptionKeyResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(RotateEncryptionKeyResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = RotateEncryptionKeyResultDeserializer::deserialize(
+                            "RotateEncryptionKeyResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 }

@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -523,11 +523,16 @@ impl MarketplaceMetering for MarketplaceMeteringClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| BatchMeterUsageError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<BatchMeterUsageResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<BatchMeterUsageError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<BatchMeterUsageResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -535,11 +540,10 @@ impl MarketplaceMetering for MarketplaceMeteringClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(BatchMeterUsageError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<BatchMeterUsageError>
+                            })
+                            .and_then(|response| Err(BatchMeterUsageError::from_response(response)))
                     })
                     .boxed()
             }
@@ -562,11 +566,16 @@ impl MarketplaceMetering for MarketplaceMeteringClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| MeterUsageError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<MeterUsageResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<MeterUsageError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<MeterUsageResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -574,11 +583,10 @@ impl MarketplaceMetering for MarketplaceMeteringClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(MeterUsageError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<MeterUsageError>
+                            })
+                            .and_then(|response| Err(MeterUsageError::from_response(response)))
                     })
                     .boxed()
             }
@@ -601,11 +609,16 @@ impl MarketplaceMetering for MarketplaceMeteringClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| RegisterUsageError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RegisterUsageResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<RegisterUsageError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<RegisterUsageResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -613,11 +626,10 @@ impl MarketplaceMetering for MarketplaceMeteringClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(RegisterUsageError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<RegisterUsageError>
+                            })
+                            .and_then(|response| Err(RegisterUsageError::from_response(response)))
                     })
                     .boxed()
             }
@@ -640,11 +652,16 @@ impl MarketplaceMetering for MarketplaceMeteringClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ResolveCustomerError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ResolveCustomerResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ResolveCustomerError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ResolveCustomerResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -652,11 +669,10 @@ impl MarketplaceMetering for MarketplaceMeteringClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ResolveCustomerError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ResolveCustomerError>
+                            })
+                            .and_then(|response| Err(ResolveCustomerError::from_response(response)))
                     })
                     .boxed()
             }

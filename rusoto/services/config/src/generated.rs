@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -5487,11 +5487,17 @@ impl ConfigService for ConfigServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| BatchGetAggregateResourceConfigError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<BatchGetAggregateResourceConfigResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<BatchGetAggregateResourceConfigError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<BatchGetAggregateResourceConfigResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5499,15 +5505,15 @@ impl ConfigService for ConfigServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(BatchGetAggregateResourceConfigError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<BatchGetAggregateResourceConfigError>
+                            })
+                            .and_then(|response| {
+                                Err(BatchGetAggregateResourceConfigError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -5530,11 +5536,17 @@ impl ConfigService for ConfigServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| BatchGetResourceConfigError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<BatchGetResourceConfigResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<BatchGetResourceConfigError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<BatchGetResourceConfigResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5542,13 +5554,13 @@ impl ConfigService for ConfigServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(BatchGetResourceConfigError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<BatchGetResourceConfigError>
+                            })
+                            .and_then(|response| {
+                                Err(BatchGetResourceConfigError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5572,21 +5584,19 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DeleteAggregationAuthorizationError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteAggregationAuthorizationError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteAggregationAuthorizationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5607,17 +5617,18 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteConfigRuleError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteConfigRuleError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteConfigRuleError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5641,19 +5652,19 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DeleteConfigurationAggregatorError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteConfigurationAggregatorError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteConfigurationAggregatorError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5677,19 +5688,19 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DeleteConfigurationRecorderError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteConfigurationRecorderError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteConfigurationRecorderError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5710,17 +5721,19 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteDeliveryChannelError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteDeliveryChannelError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteDeliveryChannelError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5746,11 +5759,17 @@ impl ConfigService for ConfigServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteEvaluationResultsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteEvaluationResultsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteEvaluationResultsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteEvaluationResultsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5758,13 +5777,13 @@ impl ConfigService for ConfigServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DeleteEvaluationResultsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteEvaluationResultsError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteEvaluationResultsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5788,21 +5807,21 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DeletePendingAggregationRequestError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeletePendingAggregationRequestError>
+                            })
+                            .and_then(|response| {
+                                Err(DeletePendingAggregationRequestError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -5829,11 +5848,17 @@ impl ConfigService for ConfigServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteRemediationConfigurationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteRemediationConfigurationResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteRemediationConfigurationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteRemediationConfigurationResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5841,15 +5866,13 @@ impl ConfigService for ConfigServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DeleteRemediationConfigurationError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteRemediationConfigurationError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteRemediationConfigurationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5873,19 +5896,19 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DeleteRetentionConfigurationError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteRetentionConfigurationError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteRetentionConfigurationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5908,11 +5931,17 @@ impl ConfigService for ConfigServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeliverConfigSnapshotError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeliverConfigSnapshotResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeliverConfigSnapshotError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeliverConfigSnapshotResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5920,11 +5949,13 @@ impl ConfigService for ConfigServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeliverConfigSnapshotError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeliverConfigSnapshotError>
+                            })
+                            .and_then(|response| {
+                                Err(DeliverConfigSnapshotError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5951,16 +5982,22 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
                         if response.status.is_success() {
-                            response.buffer().map(|try_response| {
-                try_response.and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<DescribeAggregateComplianceByConfigRulesResponse, _>()
-                })
-            }).boxed()
+                            response.buffer()
+                .map_err(|e| DescribeAggregateComplianceByConfigRulesError::from(e))
+                .map(|try_response| {
+                    try_response
+                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<DescribeAggregateComplianceByConfigRulesError>)
+                    .and_then(|response| {
+                        proto::json::ResponsePayload::new(&response).deserialize::<DescribeAggregateComplianceByConfigRulesResponse, _>()
+                    })
+                }).boxed()
                         } else {
                             response.buffer().map(|try_response| {
-                                try_response.map_or_else(|e| e, |response| {
-                                    Err(DescribeAggregateComplianceByConfigRulesError::from_response(response))
-                                }).boxed()
+                                try_response
+                                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<DescribeAggregateComplianceByConfigRulesError>)
+                                    .and_then(|response| {
+                                        Err(DescribeAggregateComplianceByConfigRulesError::from_response(response))
+                                    })
                             }).boxed()
                         }
                     })
@@ -5988,11 +6025,17 @@ impl ConfigService for ConfigServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeAggregationAuthorizationsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeAggregationAuthorizationsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeAggregationAuthorizationsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeAggregationAuthorizationsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6000,15 +6043,15 @@ impl ConfigService for ConfigServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeAggregationAuthorizationsError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeAggregationAuthorizationsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeAggregationAuthorizationsError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -6035,11 +6078,17 @@ impl ConfigService for ConfigServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeComplianceByConfigRuleError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeComplianceByConfigRuleResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeComplianceByConfigRuleError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeComplianceByConfigRuleResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6047,15 +6096,13 @@ impl ConfigService for ConfigServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeComplianceByConfigRuleError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeComplianceByConfigRuleError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeComplianceByConfigRuleError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6081,11 +6128,17 @@ impl ConfigService for ConfigServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeComplianceByResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeComplianceByResourceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeComplianceByResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeComplianceByResourceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6093,13 +6146,13 @@ impl ConfigService for ConfigServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeComplianceByResourceError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeComplianceByResourceError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeComplianceByResourceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6128,11 +6181,17 @@ impl ConfigService for ConfigServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeConfigRuleEvaluationStatusError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeConfigRuleEvaluationStatusResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeConfigRuleEvaluationStatusError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeConfigRuleEvaluationStatusResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6140,15 +6199,15 @@ impl ConfigService for ConfigServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeConfigRuleEvaluationStatusError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeConfigRuleEvaluationStatusError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeConfigRuleEvaluationStatusError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -6171,11 +6230,17 @@ impl ConfigService for ConfigServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeConfigRulesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeConfigRulesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeConfigRulesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeConfigRulesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6183,11 +6248,13 @@ impl ConfigService for ConfigServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeConfigRulesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeConfigRulesError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeConfigRulesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6214,16 +6281,22 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
                         if response.status.is_success() {
-                            response.buffer().map(|try_response| {
-                try_response.and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<DescribeConfigurationAggregatorSourcesStatusResponse, _>()
-                })
-            }).boxed()
+                            response.buffer()
+                .map_err(|e| DescribeConfigurationAggregatorSourcesStatusError::from(e))
+                .map(|try_response| {
+                    try_response
+                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<DescribeConfigurationAggregatorSourcesStatusError>)
+                    .and_then(|response| {
+                        proto::json::ResponsePayload::new(&response).deserialize::<DescribeConfigurationAggregatorSourcesStatusResponse, _>()
+                    })
+                }).boxed()
                         } else {
                             response.buffer().map(|try_response| {
-                                try_response.map_or_else(|e| e, |response| {
-                                    Err(DescribeConfigurationAggregatorSourcesStatusError::from_response(response))
-                                }).boxed()
+                                try_response
+                                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<DescribeConfigurationAggregatorSourcesStatusError>)
+                                    .and_then(|response| {
+                                        Err(DescribeConfigurationAggregatorSourcesStatusError::from_response(response))
+                                    })
                             }).boxed()
                         }
                     })
@@ -6249,11 +6322,17 @@ impl ConfigService for ConfigServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeConfigurationAggregatorsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeConfigurationAggregatorsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeConfigurationAggregatorsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeConfigurationAggregatorsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6261,15 +6340,15 @@ impl ConfigService for ConfigServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeConfigurationAggregatorsError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeConfigurationAggregatorsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeConfigurationAggregatorsError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -6298,11 +6377,17 @@ impl ConfigService for ConfigServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeConfigurationRecorderStatusError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeConfigurationRecorderStatusResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeConfigurationRecorderStatusError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeConfigurationRecorderStatusResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6310,15 +6395,15 @@ impl ConfigService for ConfigServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeConfigurationRecorderStatusError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeConfigurationRecorderStatusError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeConfigurationRecorderStatusError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -6345,11 +6430,17 @@ impl ConfigService for ConfigServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeConfigurationRecordersError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeConfigurationRecordersResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeConfigurationRecordersError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeConfigurationRecordersResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6357,15 +6448,13 @@ impl ConfigService for ConfigServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeConfigurationRecordersError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeConfigurationRecordersError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeConfigurationRecordersError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6392,11 +6481,17 @@ impl ConfigService for ConfigServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeDeliveryChannelStatusError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeDeliveryChannelStatusResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeDeliveryChannelStatusError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeDeliveryChannelStatusResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6404,13 +6499,13 @@ impl ConfigService for ConfigServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeDeliveryChannelStatusError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeDeliveryChannelStatusError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeDeliveryChannelStatusError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6436,11 +6531,17 @@ impl ConfigService for ConfigServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeDeliveryChannelsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeDeliveryChannelsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeDeliveryChannelsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeDeliveryChannelsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6448,13 +6549,13 @@ impl ConfigService for ConfigServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeDeliveryChannelsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeDeliveryChannelsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeDeliveryChannelsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6483,11 +6584,17 @@ impl ConfigService for ConfigServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribePendingAggregationRequestsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribePendingAggregationRequestsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribePendingAggregationRequestsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribePendingAggregationRequestsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6495,15 +6602,15 @@ impl ConfigService for ConfigServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribePendingAggregationRequestsError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribePendingAggregationRequestsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribePendingAggregationRequestsError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -6532,11 +6639,17 @@ impl ConfigService for ConfigServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeRemediationConfigurationsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeRemediationConfigurationsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeRemediationConfigurationsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeRemediationConfigurationsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6544,15 +6657,15 @@ impl ConfigService for ConfigServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeRemediationConfigurationsError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeRemediationConfigurationsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeRemediationConfigurationsError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -6581,11 +6694,17 @@ impl ConfigService for ConfigServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeRemediationExecutionStatusError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeRemediationExecutionStatusResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeRemediationExecutionStatusError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeRemediationExecutionStatusResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6593,15 +6712,15 @@ impl ConfigService for ConfigServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeRemediationExecutionStatusError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeRemediationExecutionStatusError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeRemediationExecutionStatusError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -6628,11 +6747,17 @@ impl ConfigService for ConfigServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeRetentionConfigurationsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeRetentionConfigurationsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeRetentionConfigurationsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeRetentionConfigurationsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6640,15 +6765,15 @@ impl ConfigService for ConfigServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeRetentionConfigurationsError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeRetentionConfigurationsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeRetentionConfigurationsError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -6675,16 +6800,22 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
                         if response.status.is_success() {
-                            response.buffer().map(|try_response| {
-                try_response.and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<GetAggregateComplianceDetailsByConfigRuleResponse, _>()
-                })
-            }).boxed()
+                            response.buffer()
+                .map_err(|e| GetAggregateComplianceDetailsByConfigRuleError::from(e))
+                .map(|try_response| {
+                    try_response
+                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<GetAggregateComplianceDetailsByConfigRuleError>)
+                    .and_then(|response| {
+                        proto::json::ResponsePayload::new(&response).deserialize::<GetAggregateComplianceDetailsByConfigRuleResponse, _>()
+                    })
+                }).boxed()
                         } else {
                             response.buffer().map(|try_response| {
-                                try_response.map_or_else(|e| e, |response| {
-                                    Err(GetAggregateComplianceDetailsByConfigRuleError::from_response(response))
-                                }).boxed()
+                                try_response
+                                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<GetAggregateComplianceDetailsByConfigRuleError>)
+                                    .and_then(|response| {
+                                        Err(GetAggregateComplianceDetailsByConfigRuleError::from_response(response))
+                                    })
                             }).boxed()
                         }
                     })
@@ -6710,16 +6841,22 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
                         if response.status.is_success() {
-                            response.buffer().map(|try_response| {
-                try_response.and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<GetAggregateConfigRuleComplianceSummaryResponse, _>()
-                })
-            }).boxed()
+                            response.buffer()
+                .map_err(|e| GetAggregateConfigRuleComplianceSummaryError::from(e))
+                .map(|try_response| {
+                    try_response
+                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<GetAggregateConfigRuleComplianceSummaryError>)
+                    .and_then(|response| {
+                        proto::json::ResponsePayload::new(&response).deserialize::<GetAggregateConfigRuleComplianceSummaryResponse, _>()
+                    })
+                }).boxed()
                         } else {
                             response.buffer().map(|try_response| {
-                                try_response.map_or_else(|e| e, |response| {
-                                    Err(GetAggregateConfigRuleComplianceSummaryError::from_response(response))
-                                }).boxed()
+                                try_response
+                                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<GetAggregateConfigRuleComplianceSummaryError>)
+                                    .and_then(|response| {
+                                        Err(GetAggregateConfigRuleComplianceSummaryError::from_response(response))
+                                    })
                             }).boxed()
                         }
                     })
@@ -6745,16 +6882,22 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
                         if response.status.is_success() {
-                            response.buffer().map(|try_response| {
-                try_response.and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<GetAggregateDiscoveredResourceCountsResponse, _>()
-                })
-            }).boxed()
+                            response.buffer()
+                .map_err(|e| GetAggregateDiscoveredResourceCountsError::from(e))
+                .map(|try_response| {
+                    try_response
+                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<GetAggregateDiscoveredResourceCountsError>)
+                    .and_then(|response| {
+                        proto::json::ResponsePayload::new(&response).deserialize::<GetAggregateDiscoveredResourceCountsResponse, _>()
+                    })
+                }).boxed()
                         } else {
                             response.buffer().map(|try_response| {
-                                try_response.map_or_else(|e| e, |response| {
-                                    Err(GetAggregateDiscoveredResourceCountsError::from_response(response))
-                                }).boxed()
+                                try_response
+                                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<GetAggregateDiscoveredResourceCountsError>)
+                                    .and_then(|response| {
+                                        Err(GetAggregateDiscoveredResourceCountsError::from_response(response))
+                                    })
                             }).boxed()
                         }
                     })
@@ -6779,11 +6922,17 @@ impl ConfigService for ConfigServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetAggregateResourceConfigError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetAggregateResourceConfigResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetAggregateResourceConfigError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetAggregateResourceConfigResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6791,13 +6940,13 @@ impl ConfigService for ConfigServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(GetAggregateResourceConfigError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetAggregateResourceConfigError>
+                            })
+                            .and_then(|response| {
+                                Err(GetAggregateResourceConfigError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6824,11 +6973,17 @@ impl ConfigService for ConfigServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetComplianceDetailsByConfigRuleError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetComplianceDetailsByConfigRuleResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetComplianceDetailsByConfigRuleError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetComplianceDetailsByConfigRuleResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6836,15 +6991,15 @@ impl ConfigService for ConfigServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(GetComplianceDetailsByConfigRuleError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetComplianceDetailsByConfigRuleError>
+                            })
+                            .and_then(|response| {
+                                Err(GetComplianceDetailsByConfigRuleError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -6871,11 +7026,17 @@ impl ConfigService for ConfigServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetComplianceDetailsByResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetComplianceDetailsByResourceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetComplianceDetailsByResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetComplianceDetailsByResourceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6883,15 +7044,13 @@ impl ConfigService for ConfigServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(GetComplianceDetailsByResourceError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetComplianceDetailsByResourceError>
+                            })
+                            .and_then(|response| {
+                                Err(GetComplianceDetailsByResourceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6916,11 +7075,17 @@ impl ConfigService for ConfigServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetComplianceSummaryByConfigRuleError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetComplianceSummaryByConfigRuleResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetComplianceSummaryByConfigRuleError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetComplianceSummaryByConfigRuleResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6928,15 +7093,15 @@ impl ConfigService for ConfigServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(GetComplianceSummaryByConfigRuleError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetComplianceSummaryByConfigRuleError>
+                            })
+                            .and_then(|response| {
+                                Err(GetComplianceSummaryByConfigRuleError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -6965,11 +7130,17 @@ impl ConfigService for ConfigServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetComplianceSummaryByResourceTypeError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetComplianceSummaryByResourceTypeResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetComplianceSummaryByResourceTypeError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetComplianceSummaryByResourceTypeResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6977,15 +7148,15 @@ impl ConfigService for ConfigServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(GetComplianceSummaryByResourceTypeError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetComplianceSummaryByResourceTypeError>
+                            })
+                            .and_then(|response| {
+                                Err(GetComplianceSummaryByResourceTypeError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -7011,11 +7182,17 @@ impl ConfigService for ConfigServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetDiscoveredResourceCountsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetDiscoveredResourceCountsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetDiscoveredResourceCountsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetDiscoveredResourceCountsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7023,13 +7200,13 @@ impl ConfigService for ConfigServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(GetDiscoveredResourceCountsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetDiscoveredResourceCountsError>
+                            })
+                            .and_then(|response| {
+                                Err(GetDiscoveredResourceCountsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7055,11 +7232,17 @@ impl ConfigService for ConfigServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetResourceConfigHistoryError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetResourceConfigHistoryResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetResourceConfigHistoryError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetResourceConfigHistoryResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7067,13 +7250,13 @@ impl ConfigService for ConfigServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(GetResourceConfigHistoryError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetResourceConfigHistoryError>
+                            })
+                            .and_then(|response| {
+                                Err(GetResourceConfigHistoryError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7100,11 +7283,17 @@ impl ConfigService for ConfigServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListAggregateDiscoveredResourcesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListAggregateDiscoveredResourcesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListAggregateDiscoveredResourcesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListAggregateDiscoveredResourcesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7112,15 +7301,15 @@ impl ConfigService for ConfigServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ListAggregateDiscoveredResourcesError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListAggregateDiscoveredResourcesError>
+                            })
+                            .and_then(|response| {
+                                Err(ListAggregateDiscoveredResourcesError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -7146,11 +7335,17 @@ impl ConfigService for ConfigServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListDiscoveredResourcesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListDiscoveredResourcesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListDiscoveredResourcesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListDiscoveredResourcesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7158,13 +7353,13 @@ impl ConfigService for ConfigServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ListDiscoveredResourcesError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListDiscoveredResourcesError>
+                            })
+                            .and_then(|response| {
+                                Err(ListDiscoveredResourcesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7187,11 +7382,17 @@ impl ConfigService for ConfigServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListTagsForResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListTagsForResourceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListTagsForResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListTagsForResourceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7199,11 +7400,13 @@ impl ConfigService for ConfigServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListTagsForResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListTagsForResourceError>
+                            })
+                            .and_then(|response| {
+                                Err(ListTagsForResourceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7229,11 +7432,17 @@ impl ConfigService for ConfigServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| PutAggregationAuthorizationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PutAggregationAuthorizationResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<PutAggregationAuthorizationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<PutAggregationAuthorizationResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7241,13 +7450,13 @@ impl ConfigService for ConfigServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(PutAggregationAuthorizationError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<PutAggregationAuthorizationError>
+                            })
+                            .and_then(|response| {
+                                Err(PutAggregationAuthorizationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7265,17 +7474,16 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(PutConfigRuleError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<PutConfigRuleError>
+                            })
+                            .and_then(|response| Err(PutConfigRuleError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7301,11 +7509,17 @@ impl ConfigService for ConfigServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| PutConfigurationAggregatorError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PutConfigurationAggregatorResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<PutConfigurationAggregatorError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<PutConfigurationAggregatorResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7313,13 +7527,13 @@ impl ConfigService for ConfigServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(PutConfigurationAggregatorError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<PutConfigurationAggregatorError>
+                            })
+                            .and_then(|response| {
+                                Err(PutConfigurationAggregatorError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7343,19 +7557,19 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(PutConfigurationRecorderError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<PutConfigurationRecorderError>
+                            })
+                            .and_then(|response| {
+                                Err(PutConfigurationRecorderError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7376,17 +7590,18 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(PutDeliveryChannelError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<PutDeliveryChannelError>
+                            })
+                            .and_then(|response| {
+                                Err(PutDeliveryChannelError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7409,11 +7624,16 @@ impl ConfigService for ConfigServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| PutEvaluationsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PutEvaluationsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<PutEvaluationsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<PutEvaluationsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7421,11 +7641,10 @@ impl ConfigService for ConfigServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(PutEvaluationsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<PutEvaluationsError>
+                            })
+                            .and_then(|response| Err(PutEvaluationsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7451,11 +7670,17 @@ impl ConfigService for ConfigServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| PutRemediationConfigurationsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PutRemediationConfigurationsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<PutRemediationConfigurationsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<PutRemediationConfigurationsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7463,13 +7688,13 @@ impl ConfigService for ConfigServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(PutRemediationConfigurationsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<PutRemediationConfigurationsError>
+                            })
+                            .and_then(|response| {
+                                Err(PutRemediationConfigurationsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7495,11 +7720,17 @@ impl ConfigService for ConfigServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| PutRetentionConfigurationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PutRetentionConfigurationResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<PutRetentionConfigurationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<PutRetentionConfigurationResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7507,13 +7738,13 @@ impl ConfigService for ConfigServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(PutRetentionConfigurationError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<PutRetentionConfigurationError>
+                            })
+                            .and_then(|response| {
+                                Err(PutRetentionConfigurationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7536,11 +7767,17 @@ impl ConfigService for ConfigServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| SelectResourceConfigError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<SelectResourceConfigResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<SelectResourceConfigError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<SelectResourceConfigResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7548,11 +7785,13 @@ impl ConfigService for ConfigServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(SelectResourceConfigError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<SelectResourceConfigError>
+                            })
+                            .and_then(|response| {
+                                Err(SelectResourceConfigError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7578,11 +7817,17 @@ impl ConfigService for ConfigServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StartConfigRulesEvaluationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StartConfigRulesEvaluationResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StartConfigRulesEvaluationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StartConfigRulesEvaluationResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7590,13 +7835,13 @@ impl ConfigService for ConfigServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(StartConfigRulesEvaluationError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StartConfigRulesEvaluationError>
+                            })
+                            .and_then(|response| {
+                                Err(StartConfigRulesEvaluationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7620,19 +7865,19 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(StartConfigurationRecorderError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StartConfigurationRecorderError>
+                            })
+                            .and_then(|response| {
+                                Err(StartConfigurationRecorderError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7658,11 +7903,17 @@ impl ConfigService for ConfigServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StartRemediationExecutionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StartRemediationExecutionResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StartRemediationExecutionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StartRemediationExecutionResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7670,13 +7921,13 @@ impl ConfigService for ConfigServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(StartRemediationExecutionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StartRemediationExecutionError>
+                            })
+                            .and_then(|response| {
+                                Err(StartRemediationExecutionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7700,19 +7951,19 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(StopConfigurationRecorderError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StopConfigurationRecorderError>
+                            })
+                            .and_then(|response| {
+                                Err(StopConfigurationRecorderError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7730,17 +7981,16 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(TagResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<TagResourceError>
+                            })
+                            .and_then(|response| Err(TagResourceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7758,17 +8008,16 @@ impl ConfigService for ConfigServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UntagResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UntagResourceError>
+                            })
+                            .and_then(|response| Err(UntagResourceError::from_response(response)))
                     })
                     .boxed()
             }

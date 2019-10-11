@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -1219,11 +1219,17 @@ impl Cloud9 for Cloud9Client {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateEnvironmentEC2Error::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateEnvironmentEC2Result, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateEnvironmentEC2Error>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateEnvironmentEC2Result, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1231,11 +1237,13 @@ impl Cloud9 for Cloud9Client {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateEnvironmentEC2Error::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateEnvironmentEC2Error>
+                            })
+                            .and_then(|response| {
+                                Err(CreateEnvironmentEC2Error::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1261,11 +1269,17 @@ impl Cloud9 for Cloud9Client {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateEnvironmentMembershipError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateEnvironmentMembershipResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateEnvironmentMembershipError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateEnvironmentMembershipResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1273,13 +1287,13 @@ impl Cloud9 for Cloud9Client {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(CreateEnvironmentMembershipError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateEnvironmentMembershipError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateEnvironmentMembershipError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1305,11 +1319,16 @@ impl Cloud9 for Cloud9Client {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteEnvironmentError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteEnvironmentResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteEnvironmentError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteEnvironmentResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1317,11 +1336,12 @@ impl Cloud9 for Cloud9Client {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteEnvironmentError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteEnvironmentError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteEnvironmentError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1347,11 +1367,17 @@ impl Cloud9 for Cloud9Client {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteEnvironmentMembershipError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteEnvironmentMembershipResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteEnvironmentMembershipError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteEnvironmentMembershipResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1359,13 +1385,13 @@ impl Cloud9 for Cloud9Client {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DeleteEnvironmentMembershipError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteEnvironmentMembershipError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteEnvironmentMembershipError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1392,11 +1418,17 @@ impl Cloud9 for Cloud9Client {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeEnvironmentMembershipsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeEnvironmentMembershipsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeEnvironmentMembershipsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeEnvironmentMembershipsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1404,15 +1436,13 @@ impl Cloud9 for Cloud9Client {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeEnvironmentMembershipsError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeEnvironmentMembershipsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeEnvironmentMembershipsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1438,11 +1468,17 @@ impl Cloud9 for Cloud9Client {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeEnvironmentStatusError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeEnvironmentStatusResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeEnvironmentStatusError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeEnvironmentStatusResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1450,13 +1486,13 @@ impl Cloud9 for Cloud9Client {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeEnvironmentStatusError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeEnvironmentStatusError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeEnvironmentStatusError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1482,11 +1518,17 @@ impl Cloud9 for Cloud9Client {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeEnvironmentsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeEnvironmentsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeEnvironmentsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeEnvironmentsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1494,11 +1536,13 @@ impl Cloud9 for Cloud9Client {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeEnvironmentsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeEnvironmentsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeEnvironmentsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1524,11 +1568,16 @@ impl Cloud9 for Cloud9Client {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListEnvironmentsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListEnvironmentsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListEnvironmentsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListEnvironmentsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1536,11 +1585,12 @@ impl Cloud9 for Cloud9Client {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListEnvironmentsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListEnvironmentsError>
+                            })
+                            .and_then(|response| {
+                                Err(ListEnvironmentsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1566,11 +1616,16 @@ impl Cloud9 for Cloud9Client {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateEnvironmentError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateEnvironmentResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateEnvironmentError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateEnvironmentResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1578,11 +1633,12 @@ impl Cloud9 for Cloud9Client {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateEnvironmentError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateEnvironmentError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateEnvironmentError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1608,11 +1664,17 @@ impl Cloud9 for Cloud9Client {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateEnvironmentMembershipError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateEnvironmentMembershipResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateEnvironmentMembershipError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateEnvironmentMembershipResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1620,13 +1682,13 @@ impl Cloud9 for Cloud9Client {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(UpdateEnvironmentMembershipError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateEnvironmentMembershipError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateEnvironmentMembershipError::from_response(response))
+                            })
                     })
                     .boxed()
             }

@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto::xml::error::*;
 use rusoto_core::proto::xml::util::{
@@ -25169,16 +25169,18 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<AddRoleToDBClusterError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(AddRoleToDBClusterError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(AddRoleToDBClusterError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            futures::future::ready(::std::mem::drop(response)).boxed()
+            futures::future::ready(Ok(std::mem::drop(response))).boxed()
         })
     }
 
@@ -25200,16 +25202,18 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<AddRoleToDBInstanceError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(AddRoleToDBInstanceError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(AddRoleToDBInstanceError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            futures::future::ready(::std::mem::drop(response)).boxed()
+            futures::future::ready(Ok(std::mem::drop(response))).boxed()
         })
     }
 
@@ -25232,43 +25236,47 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e)
+                            as RusotoError<AddSourceIdentifierToSubscriptionError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| {
-                                Err(AddSourceIdentifierToSubscriptionError::from_response(
-                                    response,
-                                ))
-                            },
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(AddSourceIdentifierToSubscriptionError::from_response(
+                                response,
+                            ))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = AddSourceIdentifierToSubscriptionResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = AddSourceIdentifierToSubscriptionResultDeserializer::deserialize(
-                        "AddSourceIdentifierToSubscriptionResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(AddSourceIdentifierToSubscriptionResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = AddSourceIdentifierToSubscriptionResultDeserializer::deserialize(
+                            "AddSourceIdentifierToSubscriptionResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -25290,16 +25298,18 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<AddTagsToResourceError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(AddTagsToResourceError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(AddTagsToResourceError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            futures::future::ready(::std::mem::drop(response)).boxed()
+            futures::future::ready(Ok(std::mem::drop(response))).boxed()
         })
     }
 
@@ -25321,41 +25331,45 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e)
+                            as RusotoError<ApplyPendingMaintenanceActionError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| {
-                                Err(ApplyPendingMaintenanceActionError::from_response(response))
-                            },
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(ApplyPendingMaintenanceActionError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = ApplyPendingMaintenanceActionResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = ApplyPendingMaintenanceActionResultDeserializer::deserialize(
-                        "ApplyPendingMaintenanceActionResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(ApplyPendingMaintenanceActionResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = ApplyPendingMaintenanceActionResultDeserializer::deserialize(
+                            "ApplyPendingMaintenanceActionResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -25378,43 +25392,47 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e)
+                            as RusotoError<AuthorizeDBSecurityGroupIngressError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| {
-                                Err(AuthorizeDBSecurityGroupIngressError::from_response(
-                                    response,
-                                ))
-                            },
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(AuthorizeDBSecurityGroupIngressError::from_response(
+                                response,
+                            ))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = AuthorizeDBSecurityGroupIngressResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = AuthorizeDBSecurityGroupIngressResultDeserializer::deserialize(
-                        "AuthorizeDBSecurityGroupIngressResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(AuthorizeDBSecurityGroupIngressResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = AuthorizeDBSecurityGroupIngressResultDeserializer::deserialize(
+                            "AuthorizeDBSecurityGroupIngressResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -25436,39 +25454,44 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<BacktrackDBClusterError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(BacktrackDBClusterError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(BacktrackDBClusterError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = DBClusterBacktrack::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DBClusterBacktrackDeserializer::deserialize(
-                        "BacktrackDBClusterResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(DBClusterBacktrack::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = DBClusterBacktrackDeserializer::deserialize(
+                            "BacktrackDBClusterResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -25490,41 +25513,45 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e)
+                            as RusotoError<CopyDBClusterParameterGroupError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| {
-                                Err(CopyDBClusterParameterGroupError::from_response(response))
-                            },
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(CopyDBClusterParameterGroupError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = CopyDBClusterParameterGroupResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = CopyDBClusterParameterGroupResultDeserializer::deserialize(
-                        "CopyDBClusterParameterGroupResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(CopyDBClusterParameterGroupResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = CopyDBClusterParameterGroupResultDeserializer::deserialize(
+                            "CopyDBClusterParameterGroupResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -25546,39 +25573,44 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<CopyDBClusterSnapshotError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(CopyDBClusterSnapshotError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(CopyDBClusterSnapshotError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = CopyDBClusterSnapshotResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = CopyDBClusterSnapshotResultDeserializer::deserialize(
-                        "CopyDBClusterSnapshotResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(CopyDBClusterSnapshotResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = CopyDBClusterSnapshotResultDeserializer::deserialize(
+                            "CopyDBClusterSnapshotResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -25600,39 +25632,44 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<CopyDBParameterGroupError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(CopyDBParameterGroupError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(CopyDBParameterGroupError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = CopyDBParameterGroupResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = CopyDBParameterGroupResultDeserializer::deserialize(
-                        "CopyDBParameterGroupResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(CopyDBParameterGroupResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = CopyDBParameterGroupResultDeserializer::deserialize(
+                            "CopyDBParameterGroupResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -25654,39 +25691,42 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<CopyDBSnapshotError>)
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(CopyDBSnapshotError::from_response(response)),
-                        )
+                        try_response
+                            .map_err(|e| e.into())
+                            .and_then(|response| Err(CopyDBSnapshotError::from_response(response)))
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = CopyDBSnapshotResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = CopyDBSnapshotResultDeserializer::deserialize(
-                        "CopyDBSnapshotResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(CopyDBSnapshotResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = CopyDBSnapshotResultDeserializer::deserialize(
+                            "CopyDBSnapshotResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -25708,39 +25748,42 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<CopyOptionGroupError>)
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(CopyOptionGroupError::from_response(response)),
-                        )
+                        try_response
+                            .map_err(|e| e.into())
+                            .and_then(|response| Err(CopyOptionGroupError::from_response(response)))
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = CopyOptionGroupResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = CopyOptionGroupResultDeserializer::deserialize(
-                        "CopyOptionGroupResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(CopyOptionGroupResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = CopyOptionGroupResultDeserializer::deserialize(
+                            "CopyOptionGroupResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -25762,39 +25805,42 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<CreateDBClusterError>)
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(CreateDBClusterError::from_response(response)),
-                        )
+                        try_response
+                            .map_err(|e| e.into())
+                            .and_then(|response| Err(CreateDBClusterError::from_response(response)))
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = CreateDBClusterResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = CreateDBClusterResultDeserializer::deserialize(
-                        "CreateDBClusterResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(CreateDBClusterResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = CreateDBClusterResultDeserializer::deserialize(
+                            "CreateDBClusterResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -25816,39 +25862,44 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<CreateDBClusterEndpointError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(CreateDBClusterEndpointError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(CreateDBClusterEndpointError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = DBClusterEndpoint::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DBClusterEndpointDeserializer::deserialize(
-                        "CreateDBClusterEndpointResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(DBClusterEndpoint::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = DBClusterEndpointDeserializer::deserialize(
+                            "CreateDBClusterEndpointResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -25870,41 +25921,45 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e)
+                            as RusotoError<CreateDBClusterParameterGroupError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| {
-                                Err(CreateDBClusterParameterGroupError::from_response(response))
-                            },
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(CreateDBClusterParameterGroupError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = CreateDBClusterParameterGroupResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = CreateDBClusterParameterGroupResultDeserializer::deserialize(
-                        "CreateDBClusterParameterGroupResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(CreateDBClusterParameterGroupResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = CreateDBClusterParameterGroupResultDeserializer::deserialize(
+                            "CreateDBClusterParameterGroupResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -25926,39 +25981,44 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<CreateDBClusterSnapshotError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(CreateDBClusterSnapshotError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(CreateDBClusterSnapshotError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = CreateDBClusterSnapshotResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = CreateDBClusterSnapshotResultDeserializer::deserialize(
-                        "CreateDBClusterSnapshotResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(CreateDBClusterSnapshotResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = CreateDBClusterSnapshotResultDeserializer::deserialize(
+                            "CreateDBClusterSnapshotResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -25980,39 +26040,42 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<CreateDBInstanceError>)
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(CreateDBInstanceError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(CreateDBInstanceError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = CreateDBInstanceResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = CreateDBInstanceResultDeserializer::deserialize(
-                        "CreateDBInstanceResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(CreateDBInstanceResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = CreateDBInstanceResultDeserializer::deserialize(
+                            "CreateDBInstanceResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -26034,41 +26097,45 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e)
+                            as RusotoError<CreateDBInstanceReadReplicaError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| {
-                                Err(CreateDBInstanceReadReplicaError::from_response(response))
-                            },
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(CreateDBInstanceReadReplicaError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = CreateDBInstanceReadReplicaResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = CreateDBInstanceReadReplicaResultDeserializer::deserialize(
-                        "CreateDBInstanceReadReplicaResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(CreateDBInstanceReadReplicaResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = CreateDBInstanceReadReplicaResultDeserializer::deserialize(
+                            "CreateDBInstanceReadReplicaResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -26090,39 +26157,44 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<CreateDBParameterGroupError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(CreateDBParameterGroupError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(CreateDBParameterGroupError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = CreateDBParameterGroupResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = CreateDBParameterGroupResultDeserializer::deserialize(
-                        "CreateDBParameterGroupResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(CreateDBParameterGroupResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = CreateDBParameterGroupResultDeserializer::deserialize(
+                            "CreateDBParameterGroupResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -26144,39 +26216,44 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<CreateDBSecurityGroupError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(CreateDBSecurityGroupError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(CreateDBSecurityGroupError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = CreateDBSecurityGroupResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = CreateDBSecurityGroupResultDeserializer::deserialize(
-                        "CreateDBSecurityGroupResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(CreateDBSecurityGroupResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = CreateDBSecurityGroupResultDeserializer::deserialize(
+                            "CreateDBSecurityGroupResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -26198,39 +26275,42 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<CreateDBSnapshotError>)
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(CreateDBSnapshotError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(CreateDBSnapshotError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = CreateDBSnapshotResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = CreateDBSnapshotResultDeserializer::deserialize(
-                        "CreateDBSnapshotResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(CreateDBSnapshotResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = CreateDBSnapshotResultDeserializer::deserialize(
+                            "CreateDBSnapshotResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -26252,39 +26332,44 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<CreateDBSubnetGroupError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(CreateDBSubnetGroupError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(CreateDBSubnetGroupError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = CreateDBSubnetGroupResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = CreateDBSubnetGroupResultDeserializer::deserialize(
-                        "CreateDBSubnetGroupResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(CreateDBSubnetGroupResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = CreateDBSubnetGroupResultDeserializer::deserialize(
+                            "CreateDBSubnetGroupResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -26306,39 +26391,44 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<CreateEventSubscriptionError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(CreateEventSubscriptionError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(CreateEventSubscriptionError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = CreateEventSubscriptionResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = CreateEventSubscriptionResultDeserializer::deserialize(
-                        "CreateEventSubscriptionResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(CreateEventSubscriptionResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = CreateEventSubscriptionResultDeserializer::deserialize(
+                            "CreateEventSubscriptionResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -26360,39 +26450,44 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<CreateGlobalClusterError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(CreateGlobalClusterError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(CreateGlobalClusterError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = CreateGlobalClusterResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = CreateGlobalClusterResultDeserializer::deserialize(
-                        "CreateGlobalClusterResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(CreateGlobalClusterResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = CreateGlobalClusterResultDeserializer::deserialize(
+                            "CreateGlobalClusterResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -26414,39 +26509,44 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<CreateOptionGroupError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(CreateOptionGroupError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(CreateOptionGroupError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = CreateOptionGroupResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = CreateOptionGroupResultDeserializer::deserialize(
-                        "CreateOptionGroupResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(CreateOptionGroupResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = CreateOptionGroupResultDeserializer::deserialize(
+                            "CreateOptionGroupResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -26468,39 +26568,42 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<DeleteDBClusterError>)
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(DeleteDBClusterError::from_response(response)),
-                        )
+                        try_response
+                            .map_err(|e| e.into())
+                            .and_then(|response| Err(DeleteDBClusterError::from_response(response)))
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = DeleteDBClusterResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DeleteDBClusterResultDeserializer::deserialize(
-                        "DeleteDBClusterResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(DeleteDBClusterResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = DeleteDBClusterResultDeserializer::deserialize(
+                            "DeleteDBClusterResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -26522,39 +26625,44 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<DeleteDBClusterEndpointError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(DeleteDBClusterEndpointError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DeleteDBClusterEndpointError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = DBClusterEndpoint::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DBClusterEndpointDeserializer::deserialize(
-                        "DeleteDBClusterEndpointResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(DBClusterEndpoint::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = DBClusterEndpointDeserializer::deserialize(
+                            "DeleteDBClusterEndpointResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -26576,18 +26684,19 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e)
+                            as RusotoError<DeleteDBClusterParameterGroupError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| {
-                                Err(DeleteDBClusterParameterGroupError::from_response(response))
-                            },
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DeleteDBClusterParameterGroupError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            futures::future::ready(::std::mem::drop(response)).boxed()
+            futures::future::ready(Ok(std::mem::drop(response))).boxed()
         })
     }
 
@@ -26609,39 +26718,44 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<DeleteDBClusterSnapshotError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(DeleteDBClusterSnapshotError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DeleteDBClusterSnapshotError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = DeleteDBClusterSnapshotResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DeleteDBClusterSnapshotResultDeserializer::deserialize(
-                        "DeleteDBClusterSnapshotResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(DeleteDBClusterSnapshotResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = DeleteDBClusterSnapshotResultDeserializer::deserialize(
+                            "DeleteDBClusterSnapshotResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -26663,39 +26777,42 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<DeleteDBInstanceError>)
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(DeleteDBInstanceError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DeleteDBInstanceError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = DeleteDBInstanceResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DeleteDBInstanceResultDeserializer::deserialize(
-                        "DeleteDBInstanceResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(DeleteDBInstanceResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = DeleteDBInstanceResultDeserializer::deserialize(
+                            "DeleteDBInstanceResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -26718,43 +26835,47 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e)
+                            as RusotoError<DeleteDBInstanceAutomatedBackupError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| {
-                                Err(DeleteDBInstanceAutomatedBackupError::from_response(
-                                    response,
-                                ))
-                            },
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DeleteDBInstanceAutomatedBackupError::from_response(
+                                response,
+                            ))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = DeleteDBInstanceAutomatedBackupResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DeleteDBInstanceAutomatedBackupResultDeserializer::deserialize(
-                        "DeleteDBInstanceAutomatedBackupResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(DeleteDBInstanceAutomatedBackupResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = DeleteDBInstanceAutomatedBackupResultDeserializer::deserialize(
+                            "DeleteDBInstanceAutomatedBackupResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -26776,16 +26897,18 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<DeleteDBParameterGroupError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(DeleteDBParameterGroupError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DeleteDBParameterGroupError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            futures::future::ready(::std::mem::drop(response)).boxed()
+            futures::future::ready(Ok(std::mem::drop(response))).boxed()
         })
     }
 
@@ -26807,16 +26930,18 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<DeleteDBSecurityGroupError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(DeleteDBSecurityGroupError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DeleteDBSecurityGroupError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            futures::future::ready(::std::mem::drop(response)).boxed()
+            futures::future::ready(Ok(std::mem::drop(response))).boxed()
         })
     }
 
@@ -26838,39 +26963,42 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<DeleteDBSnapshotError>)
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(DeleteDBSnapshotError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DeleteDBSnapshotError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = DeleteDBSnapshotResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DeleteDBSnapshotResultDeserializer::deserialize(
-                        "DeleteDBSnapshotResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(DeleteDBSnapshotResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = DeleteDBSnapshotResultDeserializer::deserialize(
+                            "DeleteDBSnapshotResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -26892,16 +27020,18 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<DeleteDBSubnetGroupError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(DeleteDBSubnetGroupError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DeleteDBSubnetGroupError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            futures::future::ready(::std::mem::drop(response)).boxed()
+            futures::future::ready(Ok(std::mem::drop(response))).boxed()
         })
     }
 
@@ -26923,39 +27053,44 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<DeleteEventSubscriptionError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(DeleteEventSubscriptionError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DeleteEventSubscriptionError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = DeleteEventSubscriptionResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DeleteEventSubscriptionResultDeserializer::deserialize(
-                        "DeleteEventSubscriptionResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(DeleteEventSubscriptionResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = DeleteEventSubscriptionResultDeserializer::deserialize(
+                            "DeleteEventSubscriptionResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -26977,39 +27112,44 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<DeleteGlobalClusterError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(DeleteGlobalClusterError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DeleteGlobalClusterError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = DeleteGlobalClusterResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DeleteGlobalClusterResultDeserializer::deserialize(
-                        "DeleteGlobalClusterResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(DeleteGlobalClusterResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = DeleteGlobalClusterResultDeserializer::deserialize(
+                            "DeleteGlobalClusterResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -27031,16 +27171,18 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<DeleteOptionGroupError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(DeleteOptionGroupError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DeleteOptionGroupError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            futures::future::ready(::std::mem::drop(response)).boxed()
+            futures::future::ready(Ok(std::mem::drop(response))).boxed()
         })
     }
 
@@ -27062,39 +27204,44 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<DescribeAccountAttributesError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(DescribeAccountAttributesError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DescribeAccountAttributesError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = AccountAttributesMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = AccountAttributesMessageDeserializer::deserialize(
-                        "DescribeAccountAttributesResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(AccountAttributesMessage::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = AccountAttributesMessageDeserializer::deserialize(
+                            "DescribeAccountAttributesResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -27116,39 +27263,44 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<DescribeCertificatesError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(DescribeCertificatesError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DescribeCertificatesError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = CertificateMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = CertificateMessageDeserializer::deserialize(
-                        "DescribeCertificatesResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(CertificateMessage::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = CertificateMessageDeserializer::deserialize(
+                            "DescribeCertificatesResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -27170,41 +27322,45 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e)
+                            as RusotoError<DescribeDBClusterBacktracksError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| {
-                                Err(DescribeDBClusterBacktracksError::from_response(response))
-                            },
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DescribeDBClusterBacktracksError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = DBClusterBacktrackMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DBClusterBacktrackMessageDeserializer::deserialize(
-                        "DescribeDBClusterBacktracksResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(DBClusterBacktrackMessage::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = DBClusterBacktrackMessageDeserializer::deserialize(
+                            "DescribeDBClusterBacktracksResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -27226,41 +27382,44 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<DescribeDBClusterEndpointsError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| {
-                                Err(DescribeDBClusterEndpointsError::from_response(response))
-                            },
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DescribeDBClusterEndpointsError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = DBClusterEndpointMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DBClusterEndpointMessageDeserializer::deserialize(
-                        "DescribeDBClusterEndpointsResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(DBClusterEndpointMessage::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = DBClusterEndpointMessageDeserializer::deserialize(
+                            "DescribeDBClusterEndpointsResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -27282,43 +27441,47 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e)
+                            as RusotoError<DescribeDBClusterParameterGroupsError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| {
-                                Err(DescribeDBClusterParameterGroupsError::from_response(
-                                    response,
-                                ))
-                            },
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DescribeDBClusterParameterGroupsError::from_response(
+                                response,
+                            ))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = DBClusterParameterGroupsMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DBClusterParameterGroupsMessageDeserializer::deserialize(
-                        "DescribeDBClusterParameterGroupsResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(DBClusterParameterGroupsMessage::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = DBClusterParameterGroupsMessageDeserializer::deserialize(
+                            "DescribeDBClusterParameterGroupsResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -27340,41 +27503,45 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e)
+                            as RusotoError<DescribeDBClusterParametersError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| {
-                                Err(DescribeDBClusterParametersError::from_response(response))
-                            },
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DescribeDBClusterParametersError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = DBClusterParameterGroupDetails::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DBClusterParameterGroupDetailsDeserializer::deserialize(
-                        "DescribeDBClusterParametersResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(DBClusterParameterGroupDetails::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = DBClusterParameterGroupDetailsDeserializer::deserialize(
+                            "DescribeDBClusterParametersResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -27399,43 +27566,47 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e)
+                            as RusotoError<DescribeDBClusterSnapshotAttributesError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| {
-                                Err(DescribeDBClusterSnapshotAttributesError::from_response(
-                                    response,
-                                ))
-                            },
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DescribeDBClusterSnapshotAttributesError::from_response(
+                                response,
+                            ))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = DescribeDBClusterSnapshotAttributesResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribeDBClusterSnapshotAttributesResultDeserializer::deserialize(
-                        "DescribeDBClusterSnapshotAttributesResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(DescribeDBClusterSnapshotAttributesResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = DescribeDBClusterSnapshotAttributesResultDeserializer::deserialize(
+                            "DescribeDBClusterSnapshotAttributesResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -27457,41 +27628,44 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<DescribeDBClusterSnapshotsError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| {
-                                Err(DescribeDBClusterSnapshotsError::from_response(response))
-                            },
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DescribeDBClusterSnapshotsError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = DBClusterSnapshotMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DBClusterSnapshotMessageDeserializer::deserialize(
-                        "DescribeDBClusterSnapshotsResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(DBClusterSnapshotMessage::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = DBClusterSnapshotMessageDeserializer::deserialize(
+                            "DescribeDBClusterSnapshotsResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -27513,39 +27687,44 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<DescribeDBClustersError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(DescribeDBClustersError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DescribeDBClustersError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = DBClusterMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DBClusterMessageDeserializer::deserialize(
-                        "DescribeDBClustersResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(DBClusterMessage::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = DBClusterMessageDeserializer::deserialize(
+                            "DescribeDBClustersResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -27567,39 +27746,44 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<DescribeDBEngineVersionsError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(DescribeDBEngineVersionsError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DescribeDBEngineVersionsError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = DBEngineVersionMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DBEngineVersionMessageDeserializer::deserialize(
-                        "DescribeDBEngineVersionsResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(DBEngineVersionMessage::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = DBEngineVersionMessageDeserializer::deserialize(
+                            "DescribeDBEngineVersionsResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -27622,43 +27806,47 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e)
+                            as RusotoError<DescribeDBInstanceAutomatedBackupsError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| {
-                                Err(DescribeDBInstanceAutomatedBackupsError::from_response(
-                                    response,
-                                ))
-                            },
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DescribeDBInstanceAutomatedBackupsError::from_response(
+                                response,
+                            ))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = DBInstanceAutomatedBackupMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DBInstanceAutomatedBackupMessageDeserializer::deserialize(
-                        "DescribeDBInstanceAutomatedBackupsResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(DBInstanceAutomatedBackupMessage::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = DBInstanceAutomatedBackupMessageDeserializer::deserialize(
+                            "DescribeDBInstanceAutomatedBackupsResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -27680,39 +27868,44 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<DescribeDBInstancesError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(DescribeDBInstancesError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DescribeDBInstancesError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = DBInstanceMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DBInstanceMessageDeserializer::deserialize(
-                        "DescribeDBInstancesResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(DBInstanceMessage::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = DBInstanceMessageDeserializer::deserialize(
+                            "DescribeDBInstancesResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -27734,39 +27927,44 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<DescribeDBLogFilesError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(DescribeDBLogFilesError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DescribeDBLogFilesError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = DescribeDBLogFilesResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribeDBLogFilesResponseDeserializer::deserialize(
-                        "DescribeDBLogFilesResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(DescribeDBLogFilesResponse::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = DescribeDBLogFilesResponseDeserializer::deserialize(
+                            "DescribeDBLogFilesResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -27788,39 +27986,44 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<DescribeDBParameterGroupsError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(DescribeDBParameterGroupsError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DescribeDBParameterGroupsError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = DBParameterGroupsMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DBParameterGroupsMessageDeserializer::deserialize(
-                        "DescribeDBParameterGroupsResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(DBParameterGroupsMessage::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = DBParameterGroupsMessageDeserializer::deserialize(
+                            "DescribeDBParameterGroupsResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -27842,39 +28045,44 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<DescribeDBParametersError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(DescribeDBParametersError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DescribeDBParametersError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = DBParameterGroupDetails::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DBParameterGroupDetailsDeserializer::deserialize(
-                        "DescribeDBParametersResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(DBParameterGroupDetails::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = DBParameterGroupDetailsDeserializer::deserialize(
+                            "DescribeDBParametersResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -27896,39 +28104,44 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<DescribeDBSecurityGroupsError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(DescribeDBSecurityGroupsError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DescribeDBSecurityGroupsError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = DBSecurityGroupMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DBSecurityGroupMessageDeserializer::deserialize(
-                        "DescribeDBSecurityGroupsResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(DBSecurityGroupMessage::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = DBSecurityGroupMessageDeserializer::deserialize(
+                            "DescribeDBSecurityGroupsResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -27950,41 +28163,45 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e)
+                            as RusotoError<DescribeDBSnapshotAttributesError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| {
-                                Err(DescribeDBSnapshotAttributesError::from_response(response))
-                            },
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DescribeDBSnapshotAttributesError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = DescribeDBSnapshotAttributesResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribeDBSnapshotAttributesResultDeserializer::deserialize(
-                        "DescribeDBSnapshotAttributesResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(DescribeDBSnapshotAttributesResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = DescribeDBSnapshotAttributesResultDeserializer::deserialize(
+                            "DescribeDBSnapshotAttributesResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -28006,39 +28223,44 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<DescribeDBSnapshotsError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(DescribeDBSnapshotsError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DescribeDBSnapshotsError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = DBSnapshotMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DBSnapshotMessageDeserializer::deserialize(
-                        "DescribeDBSnapshotsResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(DBSnapshotMessage::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = DBSnapshotMessageDeserializer::deserialize(
+                            "DescribeDBSnapshotsResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -28060,39 +28282,44 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<DescribeDBSubnetGroupsError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(DescribeDBSubnetGroupsError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DescribeDBSubnetGroupsError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = DBSubnetGroupMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DBSubnetGroupMessageDeserializer::deserialize(
-                        "DescribeDBSubnetGroupsResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(DBSubnetGroupMessage::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = DBSubnetGroupMessageDeserializer::deserialize(
+                            "DescribeDBSubnetGroupsResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -28117,43 +28344,48 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e)
+                            as RusotoError<DescribeEngineDefaultClusterParametersError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| {
-                                Err(DescribeEngineDefaultClusterParametersError::from_response(
-                                    response,
-                                ))
-                            },
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DescribeEngineDefaultClusterParametersError::from_response(
+                                response,
+                            ))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = DescribeEngineDefaultClusterParametersResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribeEngineDefaultClusterParametersResultDeserializer::deserialize(
-                        "DescribeEngineDefaultClusterParametersResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(DescribeEngineDefaultClusterParametersResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result =
+                            DescribeEngineDefaultClusterParametersResultDeserializer::deserialize(
+                                "DescribeEngineDefaultClusterParametersResult",
+                                &mut stack,
+                            );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -28176,43 +28408,47 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e)
+                            as RusotoError<DescribeEngineDefaultParametersError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| {
-                                Err(DescribeEngineDefaultParametersError::from_response(
-                                    response,
-                                ))
-                            },
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DescribeEngineDefaultParametersError::from_response(
+                                response,
+                            ))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = DescribeEngineDefaultParametersResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribeEngineDefaultParametersResultDeserializer::deserialize(
-                        "DescribeEngineDefaultParametersResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(DescribeEngineDefaultParametersResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = DescribeEngineDefaultParametersResultDeserializer::deserialize(
+                            "DescribeEngineDefaultParametersResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -28234,39 +28470,44 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<DescribeEventCategoriesError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(DescribeEventCategoriesError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DescribeEventCategoriesError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = EventCategoriesMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = EventCategoriesMessageDeserializer::deserialize(
-                        "DescribeEventCategoriesResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(EventCategoriesMessage::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = EventCategoriesMessageDeserializer::deserialize(
+                            "DescribeEventCategoriesResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -28288,41 +28529,44 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<DescribeEventSubscriptionsError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| {
-                                Err(DescribeEventSubscriptionsError::from_response(response))
-                            },
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DescribeEventSubscriptionsError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = EventSubscriptionsMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = EventSubscriptionsMessageDeserializer::deserialize(
-                        "DescribeEventSubscriptionsResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(EventSubscriptionsMessage::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = EventSubscriptionsMessageDeserializer::deserialize(
+                            "DescribeEventSubscriptionsResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -28344,37 +28588,42 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<DescribeEventsError>)
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(DescribeEventsError::from_response(response)),
-                        )
+                        try_response
+                            .map_err(|e| e.into())
+                            .and_then(|response| Err(DescribeEventsError::from_response(response)))
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = EventsMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result =
-                        EventsMessageDeserializer::deserialize("DescribeEventsResult", &mut stack)?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(EventsMessage::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = EventsMessageDeserializer::deserialize(
+                            "DescribeEventsResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -28396,39 +28645,44 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<DescribeGlobalClustersError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(DescribeGlobalClustersError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DescribeGlobalClustersError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = GlobalClustersMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = GlobalClustersMessageDeserializer::deserialize(
-                        "DescribeGlobalClustersResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(GlobalClustersMessage::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = GlobalClustersMessageDeserializer::deserialize(
+                            "DescribeGlobalClustersResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -28450,41 +28704,44 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<DescribeOptionGroupOptionsError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| {
-                                Err(DescribeOptionGroupOptionsError::from_response(response))
-                            },
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DescribeOptionGroupOptionsError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = OptionGroupOptionsMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = OptionGroupOptionsMessageDeserializer::deserialize(
-                        "DescribeOptionGroupOptionsResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(OptionGroupOptionsMessage::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = OptionGroupOptionsMessageDeserializer::deserialize(
+                            "DescribeOptionGroupOptionsResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -28506,39 +28763,44 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<DescribeOptionGroupsError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(DescribeOptionGroupsError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DescribeOptionGroupsError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = OptionGroups::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = OptionGroupsDeserializer::deserialize(
-                        "DescribeOptionGroupsResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(OptionGroups::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = OptionGroupsDeserializer::deserialize(
+                            "DescribeOptionGroupsResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -28561,43 +28823,47 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e)
+                            as RusotoError<DescribeOrderableDBInstanceOptionsError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| {
-                                Err(DescribeOrderableDBInstanceOptionsError::from_response(
-                                    response,
-                                ))
-                            },
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DescribeOrderableDBInstanceOptionsError::from_response(
+                                response,
+                            ))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = OrderableDBInstanceOptionsMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = OrderableDBInstanceOptionsMessageDeserializer::deserialize(
-                        "DescribeOrderableDBInstanceOptionsResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(OrderableDBInstanceOptionsMessage::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = OrderableDBInstanceOptionsMessageDeserializer::deserialize(
+                            "DescribeOrderableDBInstanceOptionsResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -28620,43 +28886,47 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e)
+                            as RusotoError<DescribePendingMaintenanceActionsError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| {
-                                Err(DescribePendingMaintenanceActionsError::from_response(
-                                    response,
-                                ))
-                            },
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DescribePendingMaintenanceActionsError::from_response(
+                                response,
+                            ))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = PendingMaintenanceActionsMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = PendingMaintenanceActionsMessageDeserializer::deserialize(
-                        "DescribePendingMaintenanceActionsResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(PendingMaintenanceActionsMessage::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = PendingMaintenanceActionsMessageDeserializer::deserialize(
+                            "DescribePendingMaintenanceActionsResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -28678,41 +28948,45 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e)
+                            as RusotoError<DescribeReservedDBInstancesError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| {
-                                Err(DescribeReservedDBInstancesError::from_response(response))
-                            },
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DescribeReservedDBInstancesError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = ReservedDBInstanceMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = ReservedDBInstanceMessageDeserializer::deserialize(
-                        "DescribeReservedDBInstancesResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(ReservedDBInstanceMessage::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = ReservedDBInstanceMessageDeserializer::deserialize(
+                            "DescribeReservedDBInstancesResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -28735,43 +29009,47 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e)
+                            as RusotoError<DescribeReservedDBInstancesOfferingsError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| {
-                                Err(DescribeReservedDBInstancesOfferingsError::from_response(
-                                    response,
-                                ))
-                            },
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DescribeReservedDBInstancesOfferingsError::from_response(
+                                response,
+                            ))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = ReservedDBInstancesOfferingMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = ReservedDBInstancesOfferingMessageDeserializer::deserialize(
-                        "DescribeReservedDBInstancesOfferingsResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(ReservedDBInstancesOfferingMessage::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = ReservedDBInstancesOfferingMessageDeserializer::deserialize(
+                            "DescribeReservedDBInstancesOfferingsResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -28793,39 +29071,44 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<DescribeSourceRegionsError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(DescribeSourceRegionsError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DescribeSourceRegionsError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = SourceRegionMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = SourceRegionMessageDeserializer::deserialize(
-                        "DescribeSourceRegionsResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(SourceRegionMessage::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = SourceRegionMessageDeserializer::deserialize(
+                            "DescribeSourceRegionsResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -28850,43 +29133,48 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e)
+                            as RusotoError<DescribeValidDBInstanceModificationsError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| {
-                                Err(DescribeValidDBInstanceModificationsError::from_response(
-                                    response,
-                                ))
-                            },
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DescribeValidDBInstanceModificationsError::from_response(
+                                response,
+                            ))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = DescribeValidDBInstanceModificationsResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DescribeValidDBInstanceModificationsResultDeserializer::deserialize(
-                        "DescribeValidDBInstanceModificationsResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(DescribeValidDBInstanceModificationsResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result =
+                            DescribeValidDBInstanceModificationsResultDeserializer::deserialize(
+                                "DescribeValidDBInstanceModificationsResult",
+                                &mut stack,
+                            );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -28908,39 +29196,44 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<DownloadDBLogFilePortionError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(DownloadDBLogFilePortionError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(DownloadDBLogFilePortionError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = DownloadDBLogFilePortionDetails::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DownloadDBLogFilePortionDetailsDeserializer::deserialize(
-                        "DownloadDBLogFilePortionResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(DownloadDBLogFilePortionDetails::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = DownloadDBLogFilePortionDetailsDeserializer::deserialize(
+                            "DownloadDBLogFilePortionResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -28962,39 +29255,44 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<FailoverDBClusterError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(FailoverDBClusterError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(FailoverDBClusterError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = FailoverDBClusterResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = FailoverDBClusterResultDeserializer::deserialize(
-                        "FailoverDBClusterResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(FailoverDBClusterResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = FailoverDBClusterResultDeserializer::deserialize(
+                            "FailoverDBClusterResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -29016,39 +29314,44 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<ListTagsForResourceError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(ListTagsForResourceError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(ListTagsForResourceError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = TagListMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = TagListMessageDeserializer::deserialize(
-                        "ListTagsForResourceResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(TagListMessage::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = TagListMessageDeserializer::deserialize(
+                            "ListTagsForResourceResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -29070,41 +29373,45 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e)
+                            as RusotoError<ModifyCurrentDBClusterCapacityError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| {
-                                Err(ModifyCurrentDBClusterCapacityError::from_response(response))
-                            },
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(ModifyCurrentDBClusterCapacityError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = DBClusterCapacityInfo::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DBClusterCapacityInfoDeserializer::deserialize(
-                        "ModifyCurrentDBClusterCapacityResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(DBClusterCapacityInfo::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = DBClusterCapacityInfoDeserializer::deserialize(
+                            "ModifyCurrentDBClusterCapacityResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -29126,39 +29433,42 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<ModifyDBClusterError>)
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(ModifyDBClusterError::from_response(response)),
-                        )
+                        try_response
+                            .map_err(|e| e.into())
+                            .and_then(|response| Err(ModifyDBClusterError::from_response(response)))
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = ModifyDBClusterResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = ModifyDBClusterResultDeserializer::deserialize(
-                        "ModifyDBClusterResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(ModifyDBClusterResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = ModifyDBClusterResultDeserializer::deserialize(
+                            "ModifyDBClusterResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -29180,39 +29490,44 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<ModifyDBClusterEndpointError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(ModifyDBClusterEndpointError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(ModifyDBClusterEndpointError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = DBClusterEndpoint::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DBClusterEndpointDeserializer::deserialize(
-                        "ModifyDBClusterEndpointResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(DBClusterEndpoint::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = DBClusterEndpointDeserializer::deserialize(
+                            "ModifyDBClusterEndpointResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -29234,41 +29549,45 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e)
+                            as RusotoError<ModifyDBClusterParameterGroupError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| {
-                                Err(ModifyDBClusterParameterGroupError::from_response(response))
-                            },
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(ModifyDBClusterParameterGroupError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = DBClusterParameterGroupNameMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DBClusterParameterGroupNameMessageDeserializer::deserialize(
-                        "ModifyDBClusterParameterGroupResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(DBClusterParameterGroupNameMessage::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = DBClusterParameterGroupNameMessageDeserializer::deserialize(
+                            "ModifyDBClusterParameterGroupResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -29291,43 +29610,47 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e)
+                            as RusotoError<ModifyDBClusterSnapshotAttributeError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| {
-                                Err(ModifyDBClusterSnapshotAttributeError::from_response(
-                                    response,
-                                ))
-                            },
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(ModifyDBClusterSnapshotAttributeError::from_response(
+                                response,
+                            ))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = ModifyDBClusterSnapshotAttributeResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = ModifyDBClusterSnapshotAttributeResultDeserializer::deserialize(
-                        "ModifyDBClusterSnapshotAttributeResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(ModifyDBClusterSnapshotAttributeResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = ModifyDBClusterSnapshotAttributeResultDeserializer::deserialize(
+                            "ModifyDBClusterSnapshotAttributeResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -29349,39 +29672,42 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<ModifyDBInstanceError>)
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(ModifyDBInstanceError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(ModifyDBInstanceError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = ModifyDBInstanceResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = ModifyDBInstanceResultDeserializer::deserialize(
-                        "ModifyDBInstanceResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(ModifyDBInstanceResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = ModifyDBInstanceResultDeserializer::deserialize(
+                            "ModifyDBInstanceResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -29403,39 +29729,44 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<ModifyDBParameterGroupError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(ModifyDBParameterGroupError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(ModifyDBParameterGroupError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = DBParameterGroupNameMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DBParameterGroupNameMessageDeserializer::deserialize(
-                        "ModifyDBParameterGroupResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(DBParameterGroupNameMessage::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = DBParameterGroupNameMessageDeserializer::deserialize(
+                            "ModifyDBParameterGroupResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -29457,39 +29788,42 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<ModifyDBSnapshotError>)
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(ModifyDBSnapshotError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(ModifyDBSnapshotError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = ModifyDBSnapshotResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = ModifyDBSnapshotResultDeserializer::deserialize(
-                        "ModifyDBSnapshotResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(ModifyDBSnapshotResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = ModifyDBSnapshotResultDeserializer::deserialize(
+                            "ModifyDBSnapshotResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -29511,39 +29845,44 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<ModifyDBSnapshotAttributeError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(ModifyDBSnapshotAttributeError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(ModifyDBSnapshotAttributeError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = ModifyDBSnapshotAttributeResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = ModifyDBSnapshotAttributeResultDeserializer::deserialize(
-                        "ModifyDBSnapshotAttributeResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(ModifyDBSnapshotAttributeResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = ModifyDBSnapshotAttributeResultDeserializer::deserialize(
+                            "ModifyDBSnapshotAttributeResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -29565,39 +29904,44 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<ModifyDBSubnetGroupError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(ModifyDBSubnetGroupError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(ModifyDBSubnetGroupError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = ModifyDBSubnetGroupResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = ModifyDBSubnetGroupResultDeserializer::deserialize(
-                        "ModifyDBSubnetGroupResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(ModifyDBSubnetGroupResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = ModifyDBSubnetGroupResultDeserializer::deserialize(
+                            "ModifyDBSubnetGroupResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -29619,39 +29963,44 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<ModifyEventSubscriptionError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(ModifyEventSubscriptionError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(ModifyEventSubscriptionError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = ModifyEventSubscriptionResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = ModifyEventSubscriptionResultDeserializer::deserialize(
-                        "ModifyEventSubscriptionResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(ModifyEventSubscriptionResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = ModifyEventSubscriptionResultDeserializer::deserialize(
+                            "ModifyEventSubscriptionResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -29673,39 +30022,44 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<ModifyGlobalClusterError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(ModifyGlobalClusterError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(ModifyGlobalClusterError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = ModifyGlobalClusterResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = ModifyGlobalClusterResultDeserializer::deserialize(
-                        "ModifyGlobalClusterResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(ModifyGlobalClusterResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = ModifyGlobalClusterResultDeserializer::deserialize(
+                            "ModifyGlobalClusterResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -29727,39 +30081,44 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<ModifyOptionGroupError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(ModifyOptionGroupError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(ModifyOptionGroupError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = ModifyOptionGroupResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = ModifyOptionGroupResultDeserializer::deserialize(
-                        "ModifyOptionGroupResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(ModifyOptionGroupResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = ModifyOptionGroupResultDeserializer::deserialize(
+                            "ModifyOptionGroupResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -29781,39 +30140,44 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<PromoteReadReplicaError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(PromoteReadReplicaError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(PromoteReadReplicaError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = PromoteReadReplicaResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = PromoteReadReplicaResultDeserializer::deserialize(
-                        "PromoteReadReplicaResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(PromoteReadReplicaResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = PromoteReadReplicaResultDeserializer::deserialize(
+                            "PromoteReadReplicaResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -29835,41 +30199,45 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e)
+                            as RusotoError<PromoteReadReplicaDBClusterError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| {
-                                Err(PromoteReadReplicaDBClusterError::from_response(response))
-                            },
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(PromoteReadReplicaDBClusterError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = PromoteReadReplicaDBClusterResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = PromoteReadReplicaDBClusterResultDeserializer::deserialize(
-                        "PromoteReadReplicaDBClusterResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(PromoteReadReplicaDBClusterResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = PromoteReadReplicaDBClusterResultDeserializer::deserialize(
+                            "PromoteReadReplicaDBClusterResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -29894,43 +30262,47 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e)
+                            as RusotoError<PurchaseReservedDBInstancesOfferingError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| {
-                                Err(PurchaseReservedDBInstancesOfferingError::from_response(
-                                    response,
-                                ))
-                            },
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(PurchaseReservedDBInstancesOfferingError::from_response(
+                                response,
+                            ))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = PurchaseReservedDBInstancesOfferingResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = PurchaseReservedDBInstancesOfferingResultDeserializer::deserialize(
-                        "PurchaseReservedDBInstancesOfferingResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(PurchaseReservedDBInstancesOfferingResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = PurchaseReservedDBInstancesOfferingResultDeserializer::deserialize(
+                            "PurchaseReservedDBInstancesOfferingResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -29952,39 +30324,42 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<RebootDBInstanceError>)
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(RebootDBInstanceError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(RebootDBInstanceError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = RebootDBInstanceResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = RebootDBInstanceResultDeserializer::deserialize(
-                        "RebootDBInstanceResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(RebootDBInstanceResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = RebootDBInstanceResultDeserializer::deserialize(
+                            "RebootDBInstanceResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -30006,39 +30381,44 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<RemoveFromGlobalClusterError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(RemoveFromGlobalClusterError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(RemoveFromGlobalClusterError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = RemoveFromGlobalClusterResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = RemoveFromGlobalClusterResultDeserializer::deserialize(
-                        "RemoveFromGlobalClusterResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(RemoveFromGlobalClusterResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = RemoveFromGlobalClusterResultDeserializer::deserialize(
+                            "RemoveFromGlobalClusterResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -30060,16 +30440,18 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<RemoveRoleFromDBClusterError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(RemoveRoleFromDBClusterError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(RemoveRoleFromDBClusterError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            futures::future::ready(::std::mem::drop(response)).boxed()
+            futures::future::ready(Ok(std::mem::drop(response))).boxed()
         })
     }
 
@@ -30091,16 +30473,18 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<RemoveRoleFromDBInstanceError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(RemoveRoleFromDBInstanceError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(RemoveRoleFromDBInstanceError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            futures::future::ready(::std::mem::drop(response)).boxed()
+            futures::future::ready(Ok(std::mem::drop(response))).boxed()
         })
     }
 
@@ -30125,43 +30509,48 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e)
+                            as RusotoError<RemoveSourceIdentifierFromSubscriptionError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| {
-                                Err(RemoveSourceIdentifierFromSubscriptionError::from_response(
-                                    response,
-                                ))
-                            },
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(RemoveSourceIdentifierFromSubscriptionError::from_response(
+                                response,
+                            ))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = RemoveSourceIdentifierFromSubscriptionResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = RemoveSourceIdentifierFromSubscriptionResultDeserializer::deserialize(
-                        "RemoveSourceIdentifierFromSubscriptionResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(RemoveSourceIdentifierFromSubscriptionResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result =
+                            RemoveSourceIdentifierFromSubscriptionResultDeserializer::deserialize(
+                                "RemoveSourceIdentifierFromSubscriptionResult",
+                                &mut stack,
+                            );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -30183,16 +30572,18 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<RemoveTagsFromResourceError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(RemoveTagsFromResourceError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(RemoveTagsFromResourceError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            futures::future::ready(::std::mem::drop(response)).boxed()
+            futures::future::ready(Ok(std::mem::drop(response))).boxed()
         })
     }
 
@@ -30214,41 +30605,45 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e)
+                            as RusotoError<ResetDBClusterParameterGroupError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| {
-                                Err(ResetDBClusterParameterGroupError::from_response(response))
-                            },
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(ResetDBClusterParameterGroupError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = DBClusterParameterGroupNameMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DBClusterParameterGroupNameMessageDeserializer::deserialize(
-                        "ResetDBClusterParameterGroupResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(DBClusterParameterGroupNameMessage::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = DBClusterParameterGroupNameMessageDeserializer::deserialize(
+                            "ResetDBClusterParameterGroupResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -30270,39 +30665,44 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<ResetDBParameterGroupError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(ResetDBParameterGroupError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(ResetDBParameterGroupError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = DBParameterGroupNameMessage::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = DBParameterGroupNameMessageDeserializer::deserialize(
-                        "ResetDBParameterGroupResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(DBParameterGroupNameMessage::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = DBParameterGroupNameMessageDeserializer::deserialize(
+                            "ResetDBParameterGroupResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -30324,39 +30724,44 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<RestoreDBClusterFromS3Error>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(RestoreDBClusterFromS3Error::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(RestoreDBClusterFromS3Error::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = RestoreDBClusterFromS3Result::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = RestoreDBClusterFromS3ResultDeserializer::deserialize(
-                        "RestoreDBClusterFromS3Result",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(RestoreDBClusterFromS3Result::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = RestoreDBClusterFromS3ResultDeserializer::deserialize(
+                            "RestoreDBClusterFromS3Result",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -30378,41 +30783,45 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e)
+                            as RusotoError<RestoreDBClusterFromSnapshotError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| {
-                                Err(RestoreDBClusterFromSnapshotError::from_response(response))
-                            },
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(RestoreDBClusterFromSnapshotError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = RestoreDBClusterFromSnapshotResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = RestoreDBClusterFromSnapshotResultDeserializer::deserialize(
-                        "RestoreDBClusterFromSnapshotResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(RestoreDBClusterFromSnapshotResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = RestoreDBClusterFromSnapshotResultDeserializer::deserialize(
+                            "RestoreDBClusterFromSnapshotResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -30434,41 +30843,45 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e)
+                            as RusotoError<RestoreDBClusterToPointInTimeError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| {
-                                Err(RestoreDBClusterToPointInTimeError::from_response(response))
-                            },
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(RestoreDBClusterToPointInTimeError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = RestoreDBClusterToPointInTimeResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = RestoreDBClusterToPointInTimeResultDeserializer::deserialize(
-                        "RestoreDBClusterToPointInTimeResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(RestoreDBClusterToPointInTimeResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = RestoreDBClusterToPointInTimeResultDeserializer::deserialize(
+                            "RestoreDBClusterToPointInTimeResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -30491,43 +30904,47 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e)
+                            as RusotoError<RestoreDBInstanceFromDBSnapshotError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| {
-                                Err(RestoreDBInstanceFromDBSnapshotError::from_response(
-                                    response,
-                                ))
-                            },
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(RestoreDBInstanceFromDBSnapshotError::from_response(
+                                response,
+                            ))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = RestoreDBInstanceFromDBSnapshotResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = RestoreDBInstanceFromDBSnapshotResultDeserializer::deserialize(
-                        "RestoreDBInstanceFromDBSnapshotResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(RestoreDBInstanceFromDBSnapshotResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = RestoreDBInstanceFromDBSnapshotResultDeserializer::deserialize(
+                            "RestoreDBInstanceFromDBSnapshotResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -30549,39 +30966,44 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<RestoreDBInstanceFromS3Error>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(RestoreDBInstanceFromS3Error::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(RestoreDBInstanceFromS3Error::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = RestoreDBInstanceFromS3Result::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = RestoreDBInstanceFromS3ResultDeserializer::deserialize(
-                        "RestoreDBInstanceFromS3Result",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(RestoreDBInstanceFromS3Result::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = RestoreDBInstanceFromS3ResultDeserializer::deserialize(
+                            "RestoreDBInstanceFromS3Result",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -30604,41 +31026,45 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e)
+                            as RusotoError<RestoreDBInstanceToPointInTimeError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| {
-                                Err(RestoreDBInstanceToPointInTimeError::from_response(response))
-                            },
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(RestoreDBInstanceToPointInTimeError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = RestoreDBInstanceToPointInTimeResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = RestoreDBInstanceToPointInTimeResultDeserializer::deserialize(
-                        "RestoreDBInstanceToPointInTimeResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(RestoreDBInstanceToPointInTimeResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = RestoreDBInstanceToPointInTimeResultDeserializer::deserialize(
+                            "RestoreDBInstanceToPointInTimeResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -30660,41 +31086,45 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e)
+                            as RusotoError<RevokeDBSecurityGroupIngressError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| {
-                                Err(RevokeDBSecurityGroupIngressError::from_response(response))
-                            },
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(RevokeDBSecurityGroupIngressError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = RevokeDBSecurityGroupIngressResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = RevokeDBSecurityGroupIngressResultDeserializer::deserialize(
-                        "RevokeDBSecurityGroupIngressResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(RevokeDBSecurityGroupIngressResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = RevokeDBSecurityGroupIngressResultDeserializer::deserialize(
+                            "RevokeDBSecurityGroupIngressResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -30716,39 +31146,44 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<StartActivityStreamError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(StartActivityStreamError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(StartActivityStreamError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = StartActivityStreamResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = StartActivityStreamResponseDeserializer::deserialize(
-                        "StartActivityStreamResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(StartActivityStreamResponse::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = StartActivityStreamResponseDeserializer::deserialize(
+                            "StartActivityStreamResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -30770,39 +31205,42 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<StartDBClusterError>)
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(StartDBClusterError::from_response(response)),
-                        )
+                        try_response
+                            .map_err(|e| e.into())
+                            .and_then(|response| Err(StartDBClusterError::from_response(response)))
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = StartDBClusterResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = StartDBClusterResultDeserializer::deserialize(
-                        "StartDBClusterResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(StartDBClusterResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = StartDBClusterResultDeserializer::deserialize(
+                            "StartDBClusterResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -30824,39 +31262,42 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<StartDBInstanceError>)
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(StartDBInstanceError::from_response(response)),
-                        )
+                        try_response
+                            .map_err(|e| e.into())
+                            .and_then(|response| Err(StartDBInstanceError::from_response(response)))
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = StartDBInstanceResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = StartDBInstanceResultDeserializer::deserialize(
-                        "StartDBInstanceResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(StartDBInstanceResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = StartDBInstanceResultDeserializer::deserialize(
+                            "StartDBInstanceResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -30878,39 +31319,44 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| {
+                        RusotoError::HttpDispatch(e) as RusotoError<StopActivityStreamError>
+                    })
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(StopActivityStreamError::from_response(response)),
-                        )
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            Err(StopActivityStreamError::from_response(response))
+                        })
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = StopActivityStreamResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = StopActivityStreamResponseDeserializer::deserialize(
-                        "StopActivityStreamResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(StopActivityStreamResponse::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = StopActivityStreamResponseDeserializer::deserialize(
+                            "StopActivityStreamResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -30932,39 +31378,42 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<StopDBClusterError>)
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(StopDBClusterError::from_response(response)),
-                        )
+                        try_response
+                            .map_err(|e| e.into())
+                            .and_then(|response| Err(StopDBClusterError::from_response(response)))
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = StopDBClusterResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = StopDBClusterResultDeserializer::deserialize(
-                        "StopDBClusterResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(StopDBClusterResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = StopDBClusterResultDeserializer::deserialize(
+                            "StopDBClusterResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -30986,39 +31435,42 @@ impl Rds for RdsClient {
             if !response.status.is_success() {
                 return response
                     .buffer()
+                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<StopDBInstanceError>)
                     .map(|try_response| {
-                        try_response.map_or_else(
-                            |e| e,
-                            |response| Err(StopDBInstanceError::from_response(response)),
-                        )
+                        try_response
+                            .map_err(|e| e.into())
+                            .and_then(|response| Err(StopDBInstanceError::from_response(response)))
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let result;
 
-                if response.body.is_empty() {
-                    result = StopDBInstanceResult::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    start_element(&actual_tag_name, &mut stack)?;
-                    result = StopDBInstanceResultDeserializer::deserialize(
-                        "StopDBInstanceResult",
-                        &mut stack,
-                    )?;
-                    skip_tree(&mut stack);
-                    end_element(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(StopDBInstanceResult::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        start_element(&actual_tag_name, &mut stack)?;
+                        result = StopDBInstanceResultDeserializer::deserialize(
+                            "StopDBInstanceResult",
+                            &mut stack,
+                        );
+                        skip_tree(&mut stack);
+                        end_element(&actual_tag_name, &mut stack)?;
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 }

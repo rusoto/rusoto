@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -8562,10 +8562,11 @@ impl CloudDirectory for CloudDirectoryClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| AddFacetToObjectError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AddFacetToObjectResponse, _>()?;
+                                .deserialize::<AddFacetToObjectResponse, _>();
 
                             result
                         })
@@ -8576,11 +8577,10 @@ impl CloudDirectory for CloudDirectoryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(AddFacetToObjectError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<AddFacetToObjectError>())
+                            .and_then(|response| {
+                                Err(AddFacetToObjectError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8605,10 +8605,11 @@ impl CloudDirectory for CloudDirectoryClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ApplySchemaError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ApplySchemaResponse, _>()?;
+                                .deserialize::<ApplySchemaResponse, _>();
 
                             result
                         })
@@ -8619,11 +8620,8 @@ impl CloudDirectory for CloudDirectoryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ApplySchemaError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ApplySchemaError>())
+                            .and_then(|response| Err(ApplySchemaError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8648,10 +8646,11 @@ impl CloudDirectory for CloudDirectoryClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| AttachObjectError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AttachObjectResponse, _>()?;
+                                .deserialize::<AttachObjectResponse, _>();
 
                             result
                         })
@@ -8662,11 +8661,8 @@ impl CloudDirectory for CloudDirectoryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(AttachObjectError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<AttachObjectError>())
+                            .and_then(|response| Err(AttachObjectError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8691,10 +8687,11 @@ impl CloudDirectory for CloudDirectoryClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| AttachPolicyError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AttachPolicyResponse, _>()?;
+                                .deserialize::<AttachPolicyResponse, _>();
 
                             result
                         })
@@ -8705,11 +8702,8 @@ impl CloudDirectory for CloudDirectoryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(AttachPolicyError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<AttachPolicyError>())
+                            .and_then(|response| Err(AttachPolicyError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8734,10 +8728,11 @@ impl CloudDirectory for CloudDirectoryClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| AttachToIndexError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AttachToIndexResponse, _>()?;
+                                .deserialize::<AttachToIndexResponse, _>();
 
                             result
                         })
@@ -8748,11 +8743,8 @@ impl CloudDirectory for CloudDirectoryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(AttachToIndexError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<AttachToIndexError>())
+                            .and_then(|response| Err(AttachToIndexError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8777,10 +8769,11 @@ impl CloudDirectory for CloudDirectoryClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| AttachTypedLinkError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AttachTypedLinkResponse, _>()?;
+                                .deserialize::<AttachTypedLinkResponse, _>();
 
                             result
                         })
@@ -8791,11 +8784,8 @@ impl CloudDirectory for CloudDirectoryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(AttachTypedLinkError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<AttachTypedLinkError>())
+                            .and_then(|response| Err(AttachTypedLinkError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8824,10 +8814,11 @@ impl CloudDirectory for CloudDirectoryClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| BatchReadError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<BatchReadResponse, _>()?;
+                                .deserialize::<BatchReadResponse, _>();
 
                             result
                         })
@@ -8838,11 +8829,8 @@ impl CloudDirectory for CloudDirectoryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(BatchReadError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<BatchReadError>())
+                            .and_then(|response| Err(BatchReadError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8867,10 +8855,11 @@ impl CloudDirectory for CloudDirectoryClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| BatchWriteError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<BatchWriteResponse, _>()?;
+                                .deserialize::<BatchWriteResponse, _>();
 
                             result
                         })
@@ -8881,11 +8870,8 @@ impl CloudDirectory for CloudDirectoryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(BatchWriteError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<BatchWriteError>())
+                            .and_then(|response| Err(BatchWriteError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8910,10 +8896,11 @@ impl CloudDirectory for CloudDirectoryClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| CreateDirectoryError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateDirectoryResponse, _>()?;
+                                .deserialize::<CreateDirectoryResponse, _>();
 
                             result
                         })
@@ -8924,11 +8911,8 @@ impl CloudDirectory for CloudDirectoryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateDirectoryError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateDirectoryError>())
+                            .and_then(|response| Err(CreateDirectoryError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8953,10 +8937,11 @@ impl CloudDirectory for CloudDirectoryClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| CreateFacetError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateFacetResponse, _>()?;
+                                .deserialize::<CreateFacetResponse, _>();
 
                             result
                         })
@@ -8967,11 +8952,8 @@ impl CloudDirectory for CloudDirectoryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateFacetError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateFacetError>())
+                            .and_then(|response| Err(CreateFacetError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8996,10 +8978,11 @@ impl CloudDirectory for CloudDirectoryClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| CreateIndexError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateIndexResponse, _>()?;
+                                .deserialize::<CreateIndexResponse, _>();
 
                             result
                         })
@@ -9010,11 +8993,8 @@ impl CloudDirectory for CloudDirectoryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateIndexError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateIndexError>())
+                            .and_then(|response| Err(CreateIndexError::from_response(response)))
                     })
                     .boxed()
             }
@@ -9039,10 +9019,11 @@ impl CloudDirectory for CloudDirectoryClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| CreateObjectError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateObjectResponse, _>()?;
+                                .deserialize::<CreateObjectResponse, _>();
 
                             result
                         })
@@ -9053,11 +9034,8 @@ impl CloudDirectory for CloudDirectoryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateObjectError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateObjectError>())
+                            .and_then(|response| Err(CreateObjectError::from_response(response)))
                     })
                     .boxed()
             }
@@ -9081,10 +9059,11 @@ impl CloudDirectory for CloudDirectoryClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| CreateSchemaError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateSchemaResponse, _>()?;
+                                .deserialize::<CreateSchemaResponse, _>();
 
                             result
                         })
@@ -9095,11 +9074,8 @@ impl CloudDirectory for CloudDirectoryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateSchemaError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateSchemaError>())
+                            .and_then(|response| Err(CreateSchemaError::from_response(response)))
                     })
                     .boxed()
             }
@@ -9124,10 +9100,11 @@ impl CloudDirectory for CloudDirectoryClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| CreateTypedLinkFacetError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateTypedLinkFacetResponse, _>()?;
+                                .deserialize::<CreateTypedLinkFacetResponse, _>();
 
                             result
                         })
@@ -9138,11 +9115,10 @@ impl CloudDirectory for CloudDirectoryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateTypedLinkFacetError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateTypedLinkFacetError>())
+                            .and_then(|response| {
+                                Err(CreateTypedLinkFacetError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9165,10 +9141,11 @@ impl CloudDirectory for CloudDirectoryClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteDirectoryError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteDirectoryResponse, _>()?;
+                                .deserialize::<DeleteDirectoryResponse, _>();
 
                             result
                         })
@@ -9179,11 +9156,8 @@ impl CloudDirectory for CloudDirectoryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteDirectoryError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteDirectoryError>())
+                            .and_then(|response| Err(DeleteDirectoryError::from_response(response)))
                     })
                     .boxed()
             }
@@ -9208,10 +9182,11 @@ impl CloudDirectory for CloudDirectoryClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteFacetError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteFacetResponse, _>()?;
+                                .deserialize::<DeleteFacetResponse, _>();
 
                             result
                         })
@@ -9222,11 +9197,8 @@ impl CloudDirectory for CloudDirectoryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteFacetError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteFacetError>())
+                            .and_then(|response| Err(DeleteFacetError::from_response(response)))
                     })
                     .boxed()
             }
@@ -9251,10 +9223,11 @@ impl CloudDirectory for CloudDirectoryClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteObjectError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteObjectResponse, _>()?;
+                                .deserialize::<DeleteObjectResponse, _>();
 
                             result
                         })
@@ -9265,11 +9238,8 @@ impl CloudDirectory for CloudDirectoryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteObjectError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteObjectError>())
+                            .and_then(|response| Err(DeleteObjectError::from_response(response)))
                     })
                     .boxed()
             }
@@ -9292,10 +9262,11 @@ impl CloudDirectory for CloudDirectoryClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteSchemaError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteSchemaResponse, _>()?;
+                                .deserialize::<DeleteSchemaResponse, _>();
 
                             result
                         })
@@ -9306,11 +9277,8 @@ impl CloudDirectory for CloudDirectoryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteSchemaError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteSchemaError>())
+                            .and_then(|response| Err(DeleteSchemaError::from_response(response)))
                     })
                     .boxed()
             }
@@ -9335,10 +9303,11 @@ impl CloudDirectory for CloudDirectoryClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteTypedLinkFacetError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteTypedLinkFacetResponse, _>()?;
+                                .deserialize::<DeleteTypedLinkFacetResponse, _>();
 
                             result
                         })
@@ -9349,11 +9318,10 @@ impl CloudDirectory for CloudDirectoryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteTypedLinkFacetError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteTypedLinkFacetError>())
+                            .and_then(|response| {
+                                Err(DeleteTypedLinkFacetError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9378,10 +9346,11 @@ impl CloudDirectory for CloudDirectoryClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| DetachFromIndexError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DetachFromIndexResponse, _>()?;
+                                .deserialize::<DetachFromIndexResponse, _>();
 
                             result
                         })
@@ -9392,11 +9361,8 @@ impl CloudDirectory for CloudDirectoryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DetachFromIndexError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DetachFromIndexError>())
+                            .and_then(|response| Err(DetachFromIndexError::from_response(response)))
                     })
                     .boxed()
             }
@@ -9421,10 +9387,11 @@ impl CloudDirectory for CloudDirectoryClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| DetachObjectError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DetachObjectResponse, _>()?;
+                                .deserialize::<DetachObjectResponse, _>();
 
                             result
                         })
@@ -9435,11 +9402,8 @@ impl CloudDirectory for CloudDirectoryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DetachObjectError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DetachObjectError>())
+                            .and_then(|response| Err(DetachObjectError::from_response(response)))
                     })
                     .boxed()
             }
@@ -9464,10 +9428,11 @@ impl CloudDirectory for CloudDirectoryClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| DetachPolicyError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DetachPolicyResponse, _>()?;
+                                .deserialize::<DetachPolicyResponse, _>();
 
                             result
                         })
@@ -9478,11 +9443,8 @@ impl CloudDirectory for CloudDirectoryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DetachPolicyError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DetachPolicyError>())
+                            .and_then(|response| Err(DetachPolicyError::from_response(response)))
                     })
                     .boxed()
             }
@@ -9507,8 +9469,9 @@ impl CloudDirectory for CloudDirectoryClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| DetachTypedLinkError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -9520,11 +9483,8 @@ impl CloudDirectory for CloudDirectoryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DetachTypedLinkError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DetachTypedLinkError>())
+                            .and_then(|response| Err(DetachTypedLinkError::from_response(response)))
                     })
                     .boxed()
             }
@@ -9547,10 +9507,11 @@ impl CloudDirectory for CloudDirectoryClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| DisableDirectoryError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DisableDirectoryResponse, _>()?;
+                                .deserialize::<DisableDirectoryResponse, _>();
 
                             result
                         })
@@ -9561,11 +9522,10 @@ impl CloudDirectory for CloudDirectoryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DisableDirectoryError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DisableDirectoryError>())
+                            .and_then(|response| {
+                                Err(DisableDirectoryError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9588,10 +9548,11 @@ impl CloudDirectory for CloudDirectoryClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| EnableDirectoryError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<EnableDirectoryResponse, _>()?;
+                                .deserialize::<EnableDirectoryResponse, _>();
 
                             result
                         })
@@ -9602,11 +9563,8 @@ impl CloudDirectory for CloudDirectoryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(EnableDirectoryError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<EnableDirectoryError>())
+                            .and_then(|response| Err(EnableDirectoryError::from_response(response)))
                     })
                     .boxed()
             }
@@ -9630,10 +9588,11 @@ impl CloudDirectory for CloudDirectoryClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetAppliedSchemaVersionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetAppliedSchemaVersionResponse, _>()?;
+                                .deserialize::<GetAppliedSchemaVersionResponse, _>();
 
                             result
                         })
@@ -9644,13 +9603,10 @@ impl CloudDirectory for CloudDirectoryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(GetAppliedSchemaVersionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetAppliedSchemaVersionError>())
+                            .and_then(|response| {
+                                Err(GetAppliedSchemaVersionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9673,10 +9629,11 @@ impl CloudDirectory for CloudDirectoryClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetDirectoryError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetDirectoryResponse, _>()?;
+                                .deserialize::<GetDirectoryResponse, _>();
 
                             result
                         })
@@ -9687,11 +9644,8 @@ impl CloudDirectory for CloudDirectoryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetDirectoryError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetDirectoryError>())
+                            .and_then(|response| Err(GetDirectoryError::from_response(response)))
                     })
                     .boxed()
             }
@@ -9713,10 +9667,11 @@ impl CloudDirectory for CloudDirectoryClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetFacetError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetFacetResponse, _>()?;
+                                .deserialize::<GetFacetResponse, _>();
 
                             result
                         })
@@ -9727,11 +9682,8 @@ impl CloudDirectory for CloudDirectoryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetFacetError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetFacetError>())
+                            .and_then(|response| Err(GetFacetError::from_response(response)))
                     })
                     .boxed()
             }
@@ -9756,10 +9708,11 @@ impl CloudDirectory for CloudDirectoryClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetLinkAttributesError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetLinkAttributesResponse, _>()?;
+                                .deserialize::<GetLinkAttributesResponse, _>();
 
                             result
                         })
@@ -9770,11 +9723,10 @@ impl CloudDirectory for CloudDirectoryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetLinkAttributesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetLinkAttributesError>())
+                            .and_then(|response| {
+                                Err(GetLinkAttributesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9803,10 +9755,11 @@ impl CloudDirectory for CloudDirectoryClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetObjectAttributesError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetObjectAttributesResponse, _>()?;
+                                .deserialize::<GetObjectAttributesResponse, _>();
 
                             result
                         })
@@ -9817,11 +9770,10 @@ impl CloudDirectory for CloudDirectoryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetObjectAttributesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetObjectAttributesError>())
+                            .and_then(|response| {
+                                Err(GetObjectAttributesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9850,10 +9802,11 @@ impl CloudDirectory for CloudDirectoryClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetObjectInformationError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetObjectInformationResponse, _>()?;
+                                .deserialize::<GetObjectInformationResponse, _>();
 
                             result
                         })
@@ -9864,11 +9817,10 @@ impl CloudDirectory for CloudDirectoryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetObjectInformationError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetObjectInformationError>())
+                            .and_then(|response| {
+                                Err(GetObjectInformationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9891,10 +9843,11 @@ impl CloudDirectory for CloudDirectoryClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetSchemaAsJsonError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetSchemaAsJsonResponse, _>()?;
+                                .deserialize::<GetSchemaAsJsonResponse, _>();
 
                             result
                         })
@@ -9905,11 +9858,8 @@ impl CloudDirectory for CloudDirectoryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetSchemaAsJsonError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetSchemaAsJsonError>())
+                            .and_then(|response| Err(GetSchemaAsJsonError::from_response(response)))
                     })
                     .boxed()
             }
@@ -9934,11 +9884,11 @@ impl CloudDirectory for CloudDirectoryClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetTypedLinkFacetInformationError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetTypedLinkFacetInformationResponse, _>(
-                            )?;
+                                .deserialize::<GetTypedLinkFacetInformationResponse, _>();
 
                             result
                         })
@@ -9949,13 +9899,10 @@ impl CloudDirectory for CloudDirectoryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(GetTypedLinkFacetInformationError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetTypedLinkFacetInformationError>())
+                            .and_then(|response| {
+                                Err(GetTypedLinkFacetInformationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9979,10 +9926,11 @@ impl CloudDirectory for CloudDirectoryClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListAppliedSchemaArnsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListAppliedSchemaArnsResponse, _>()?;
+                                .deserialize::<ListAppliedSchemaArnsResponse, _>();
 
                             result
                         })
@@ -9993,11 +9941,10 @@ impl CloudDirectory for CloudDirectoryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListAppliedSchemaArnsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListAppliedSchemaArnsError>())
+                            .and_then(|response| {
+                                Err(ListAppliedSchemaArnsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10026,10 +9973,11 @@ impl CloudDirectory for CloudDirectoryClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListAttachedIndicesError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListAttachedIndicesResponse, _>()?;
+                                .deserialize::<ListAttachedIndicesResponse, _>();
 
                             result
                         })
@@ -10040,11 +9988,10 @@ impl CloudDirectory for CloudDirectoryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListAttachedIndicesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListAttachedIndicesError>())
+                            .and_then(|response| {
+                                Err(ListAttachedIndicesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10068,10 +10015,11 @@ impl CloudDirectory for CloudDirectoryClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListDevelopmentSchemaArnsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListDevelopmentSchemaArnsResponse, _>()?;
+                                .deserialize::<ListDevelopmentSchemaArnsResponse, _>();
 
                             result
                         })
@@ -10082,13 +10030,10 @@ impl CloudDirectory for CloudDirectoryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(ListDevelopmentSchemaArnsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListDevelopmentSchemaArnsError>())
+                            .and_then(|response| {
+                                Err(ListDevelopmentSchemaArnsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10112,10 +10057,11 @@ impl CloudDirectory for CloudDirectoryClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListDirectoriesError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListDirectoriesResponse, _>()?;
+                                .deserialize::<ListDirectoriesResponse, _>();
 
                             result
                         })
@@ -10126,11 +10072,8 @@ impl CloudDirectory for CloudDirectoryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListDirectoriesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListDirectoriesError>())
+                            .and_then(|response| Err(ListDirectoriesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -10155,10 +10098,11 @@ impl CloudDirectory for CloudDirectoryClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListFacetAttributesError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListFacetAttributesResponse, _>()?;
+                                .deserialize::<ListFacetAttributesResponse, _>();
 
                             result
                         })
@@ -10169,11 +10113,10 @@ impl CloudDirectory for CloudDirectoryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListFacetAttributesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListFacetAttributesError>())
+                            .and_then(|response| {
+                                Err(ListFacetAttributesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10198,10 +10141,11 @@ impl CloudDirectory for CloudDirectoryClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListFacetNamesError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListFacetNamesResponse, _>()?;
+                                .deserialize::<ListFacetNamesResponse, _>();
 
                             result
                         })
@@ -10212,11 +10156,8 @@ impl CloudDirectory for CloudDirectoryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListFacetNamesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListFacetNamesError>())
+                            .and_then(|response| Err(ListFacetNamesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -10241,10 +10182,11 @@ impl CloudDirectory for CloudDirectoryClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListIncomingTypedLinksError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListIncomingTypedLinksResponse, _>()?;
+                                .deserialize::<ListIncomingTypedLinksResponse, _>();
 
                             result
                         })
@@ -10255,13 +10197,10 @@ impl CloudDirectory for CloudDirectoryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(ListIncomingTypedLinksError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListIncomingTypedLinksError>())
+                            .and_then(|response| {
+                                Err(ListIncomingTypedLinksError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10290,10 +10229,11 @@ impl CloudDirectory for CloudDirectoryClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListIndexError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListIndexResponse, _>()?;
+                                .deserialize::<ListIndexResponse, _>();
 
                             result
                         })
@@ -10304,11 +10244,8 @@ impl CloudDirectory for CloudDirectoryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListIndexError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListIndexError>())
+                            .and_then(|response| Err(ListIndexError::from_response(response)))
                     })
                     .boxed()
             }
@@ -10337,10 +10274,11 @@ impl CloudDirectory for CloudDirectoryClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListObjectAttributesError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListObjectAttributesResponse, _>()?;
+                                .deserialize::<ListObjectAttributesResponse, _>();
 
                             result
                         })
@@ -10351,11 +10289,10 @@ impl CloudDirectory for CloudDirectoryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListObjectAttributesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListObjectAttributesError>())
+                            .and_then(|response| {
+                                Err(ListObjectAttributesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10384,10 +10321,11 @@ impl CloudDirectory for CloudDirectoryClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListObjectChildrenError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListObjectChildrenResponse, _>()?;
+                                .deserialize::<ListObjectChildrenResponse, _>();
 
                             result
                         })
@@ -10398,11 +10336,10 @@ impl CloudDirectory for CloudDirectoryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListObjectChildrenError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListObjectChildrenError>())
+                            .and_then(|response| {
+                                Err(ListObjectChildrenError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10427,10 +10364,11 @@ impl CloudDirectory for CloudDirectoryClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListObjectParentPathsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListObjectParentPathsResponse, _>()?;
+                                .deserialize::<ListObjectParentPathsResponse, _>();
 
                             result
                         })
@@ -10441,11 +10379,10 @@ impl CloudDirectory for CloudDirectoryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListObjectParentPathsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListObjectParentPathsError>())
+                            .and_then(|response| {
+                                Err(ListObjectParentPathsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10474,10 +10411,11 @@ impl CloudDirectory for CloudDirectoryClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListObjectParentsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListObjectParentsResponse, _>()?;
+                                .deserialize::<ListObjectParentsResponse, _>();
 
                             result
                         })
@@ -10488,11 +10426,10 @@ impl CloudDirectory for CloudDirectoryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListObjectParentsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListObjectParentsError>())
+                            .and_then(|response| {
+                                Err(ListObjectParentsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10521,10 +10458,11 @@ impl CloudDirectory for CloudDirectoryClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListObjectPoliciesError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListObjectPoliciesResponse, _>()?;
+                                .deserialize::<ListObjectPoliciesResponse, _>();
 
                             result
                         })
@@ -10535,11 +10473,10 @@ impl CloudDirectory for CloudDirectoryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListObjectPoliciesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListObjectPoliciesError>())
+                            .and_then(|response| {
+                                Err(ListObjectPoliciesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10564,10 +10501,11 @@ impl CloudDirectory for CloudDirectoryClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListOutgoingTypedLinksError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListOutgoingTypedLinksResponse, _>()?;
+                                .deserialize::<ListOutgoingTypedLinksResponse, _>();
 
                             result
                         })
@@ -10578,13 +10516,10 @@ impl CloudDirectory for CloudDirectoryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(ListOutgoingTypedLinksError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListOutgoingTypedLinksError>())
+                            .and_then(|response| {
+                                Err(ListOutgoingTypedLinksError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10613,10 +10548,11 @@ impl CloudDirectory for CloudDirectoryClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListPolicyAttachmentsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListPolicyAttachmentsResponse, _>()?;
+                                .deserialize::<ListPolicyAttachmentsResponse, _>();
 
                             result
                         })
@@ -10627,11 +10563,10 @@ impl CloudDirectory for CloudDirectoryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListPolicyAttachmentsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListPolicyAttachmentsError>())
+                            .and_then(|response| {
+                                Err(ListPolicyAttachmentsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10655,10 +10590,11 @@ impl CloudDirectory for CloudDirectoryClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListPublishedSchemaArnsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListPublishedSchemaArnsResponse, _>()?;
+                                .deserialize::<ListPublishedSchemaArnsResponse, _>();
 
                             result
                         })
@@ -10669,13 +10605,10 @@ impl CloudDirectory for CloudDirectoryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(ListPublishedSchemaArnsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListPublishedSchemaArnsError>())
+                            .and_then(|response| {
+                                Err(ListPublishedSchemaArnsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10699,10 +10632,11 @@ impl CloudDirectory for CloudDirectoryClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListTagsForResourceError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListTagsForResourceResponse, _>()?;
+                                .deserialize::<ListTagsForResourceResponse, _>();
 
                             result
                         })
@@ -10713,11 +10647,10 @@ impl CloudDirectory for CloudDirectoryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListTagsForResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListTagsForResourceError>())
+                            .and_then(|response| {
+                                Err(ListTagsForResourceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10742,11 +10675,11 @@ impl CloudDirectory for CloudDirectoryClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListTypedLinkFacetAttributesError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListTypedLinkFacetAttributesResponse, _>(
-                            )?;
+                                .deserialize::<ListTypedLinkFacetAttributesResponse, _>();
 
                             result
                         })
@@ -10757,13 +10690,10 @@ impl CloudDirectory for CloudDirectoryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(ListTypedLinkFacetAttributesError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListTypedLinkFacetAttributesError>())
+                            .and_then(|response| {
+                                Err(ListTypedLinkFacetAttributesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10788,10 +10718,11 @@ impl CloudDirectory for CloudDirectoryClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListTypedLinkFacetNamesError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListTypedLinkFacetNamesResponse, _>()?;
+                                .deserialize::<ListTypedLinkFacetNamesResponse, _>();
 
                             result
                         })
@@ -10802,13 +10733,10 @@ impl CloudDirectory for CloudDirectoryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(ListTypedLinkFacetNamesError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListTypedLinkFacetNamesError>())
+                            .and_then(|response| {
+                                Err(ListTypedLinkFacetNamesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10833,10 +10761,11 @@ impl CloudDirectory for CloudDirectoryClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| LookupPolicyError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<LookupPolicyResponse, _>()?;
+                                .deserialize::<LookupPolicyResponse, _>();
 
                             result
                         })
@@ -10847,11 +10776,8 @@ impl CloudDirectory for CloudDirectoryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(LookupPolicyError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<LookupPolicyError>())
+                            .and_then(|response| Err(LookupPolicyError::from_response(response)))
                     })
                     .boxed()
             }
@@ -10876,10 +10802,11 @@ impl CloudDirectory for CloudDirectoryClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| PublishSchemaError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PublishSchemaResponse, _>()?;
+                                .deserialize::<PublishSchemaResponse, _>();
 
                             result
                         })
@@ -10890,11 +10817,8 @@ impl CloudDirectory for CloudDirectoryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(PublishSchemaError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<PublishSchemaError>())
+                            .and_then(|response| Err(PublishSchemaError::from_response(response)))
                     })
                     .boxed()
             }
@@ -10919,10 +10843,11 @@ impl CloudDirectory for CloudDirectoryClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| PutSchemaFromJsonError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PutSchemaFromJsonResponse, _>()?;
+                                .deserialize::<PutSchemaFromJsonResponse, _>();
 
                             result
                         })
@@ -10933,11 +10858,10 @@ impl CloudDirectory for CloudDirectoryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(PutSchemaFromJsonError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<PutSchemaFromJsonError>())
+                            .and_then(|response| {
+                                Err(PutSchemaFromJsonError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10962,10 +10886,11 @@ impl CloudDirectory for CloudDirectoryClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| RemoveFacetFromObjectError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RemoveFacetFromObjectResponse, _>()?;
+                                .deserialize::<RemoveFacetFromObjectResponse, _>();
 
                             result
                         })
@@ -10976,11 +10901,10 @@ impl CloudDirectory for CloudDirectoryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(RemoveFacetFromObjectError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<RemoveFacetFromObjectError>())
+                            .and_then(|response| {
+                                Err(RemoveFacetFromObjectError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -11004,10 +10928,11 @@ impl CloudDirectory for CloudDirectoryClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| TagResourceError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<TagResourceResponse, _>()?;
+                                .deserialize::<TagResourceResponse, _>();
 
                             result
                         })
@@ -11018,11 +10943,8 @@ impl CloudDirectory for CloudDirectoryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(TagResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<TagResourceError>())
+                            .and_then(|response| Err(TagResourceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -11046,10 +10968,11 @@ impl CloudDirectory for CloudDirectoryClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| UntagResourceError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UntagResourceResponse, _>()?;
+                                .deserialize::<UntagResourceResponse, _>();
 
                             result
                         })
@@ -11060,11 +10983,8 @@ impl CloudDirectory for CloudDirectoryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UntagResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UntagResourceError>())
+                            .and_then(|response| Err(UntagResourceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -11089,10 +11009,11 @@ impl CloudDirectory for CloudDirectoryClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| UpdateFacetError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateFacetResponse, _>()?;
+                                .deserialize::<UpdateFacetResponse, _>();
 
                             result
                         })
@@ -11103,11 +11024,8 @@ impl CloudDirectory for CloudDirectoryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateFacetError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateFacetError>())
+                            .and_then(|response| Err(UpdateFacetError::from_response(response)))
                     })
                     .boxed()
             }
@@ -11132,10 +11050,11 @@ impl CloudDirectory for CloudDirectoryClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| UpdateLinkAttributesError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateLinkAttributesResponse, _>()?;
+                                .deserialize::<UpdateLinkAttributesResponse, _>();
 
                             result
                         })
@@ -11146,11 +11065,10 @@ impl CloudDirectory for CloudDirectoryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateLinkAttributesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateLinkAttributesError>())
+                            .and_then(|response| {
+                                Err(UpdateLinkAttributesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -11175,10 +11093,11 @@ impl CloudDirectory for CloudDirectoryClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| UpdateObjectAttributesError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateObjectAttributesResponse, _>()?;
+                                .deserialize::<UpdateObjectAttributesResponse, _>();
 
                             result
                         })
@@ -11189,13 +11108,10 @@ impl CloudDirectory for CloudDirectoryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(UpdateObjectAttributesError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateObjectAttributesError>())
+                            .and_then(|response| {
+                                Err(UpdateObjectAttributesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -11220,10 +11136,11 @@ impl CloudDirectory for CloudDirectoryClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| UpdateSchemaError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateSchemaResponse, _>()?;
+                                .deserialize::<UpdateSchemaResponse, _>();
 
                             result
                         })
@@ -11234,11 +11151,8 @@ impl CloudDirectory for CloudDirectoryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateSchemaError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateSchemaError>())
+                            .and_then(|response| Err(UpdateSchemaError::from_response(response)))
                     })
                     .boxed()
             }
@@ -11263,10 +11177,11 @@ impl CloudDirectory for CloudDirectoryClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| UpdateTypedLinkFacetError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateTypedLinkFacetResponse, _>()?;
+                                .deserialize::<UpdateTypedLinkFacetResponse, _>();
 
                             result
                         })
@@ -11277,11 +11192,10 @@ impl CloudDirectory for CloudDirectoryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateTypedLinkFacetError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateTypedLinkFacetError>())
+                            .and_then(|response| {
+                                Err(UpdateTypedLinkFacetError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -11305,10 +11219,11 @@ impl CloudDirectory for CloudDirectoryClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| UpgradeAppliedSchemaError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpgradeAppliedSchemaResponse, _>()?;
+                                .deserialize::<UpgradeAppliedSchemaResponse, _>();
 
                             result
                         })
@@ -11319,11 +11234,10 @@ impl CloudDirectory for CloudDirectoryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpgradeAppliedSchemaError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpgradeAppliedSchemaError>())
+                            .and_then(|response| {
+                                Err(UpgradeAppliedSchemaError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -11347,10 +11261,11 @@ impl CloudDirectory for CloudDirectoryClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| UpgradePublishedSchemaError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpgradePublishedSchemaResponse, _>()?;
+                                .deserialize::<UpgradePublishedSchemaResponse, _>();
 
                             result
                         })
@@ -11361,13 +11276,10 @@ impl CloudDirectory for CloudDirectoryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(UpgradePublishedSchemaError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpgradePublishedSchemaError>())
+                            .and_then(|response| {
+                                Err(UpgradePublishedSchemaError::from_response(response))
+                            })
                     })
                     .boxed()
             }

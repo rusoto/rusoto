@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -530,11 +530,16 @@ impl ResourceGroupsTaggingApi for ResourceGroupsTaggingApiClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetResourcesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetResourcesOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetResourcesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetResourcesOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -542,11 +547,10 @@ impl ResourceGroupsTaggingApi for ResourceGroupsTaggingApiClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetResourcesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetResourcesError>
+                            })
+                            .and_then(|response| Err(GetResourcesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -572,11 +576,16 @@ impl ResourceGroupsTaggingApi for ResourceGroupsTaggingApiClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetTagKeysError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetTagKeysOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetTagKeysError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetTagKeysOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -584,11 +593,10 @@ impl ResourceGroupsTaggingApi for ResourceGroupsTaggingApiClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetTagKeysError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetTagKeysError>
+                            })
+                            .and_then(|response| Err(GetTagKeysError::from_response(response)))
                     })
                     .boxed()
             }
@@ -614,11 +622,16 @@ impl ResourceGroupsTaggingApi for ResourceGroupsTaggingApiClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetTagValuesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetTagValuesOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetTagValuesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetTagValuesOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -626,11 +639,10 @@ impl ResourceGroupsTaggingApi for ResourceGroupsTaggingApiClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetTagValuesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetTagValuesError>
+                            })
+                            .and_then(|response| Err(GetTagValuesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -656,11 +668,16 @@ impl ResourceGroupsTaggingApi for ResourceGroupsTaggingApiClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| TagResourcesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<TagResourcesOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<TagResourcesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<TagResourcesOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -668,11 +685,10 @@ impl ResourceGroupsTaggingApi for ResourceGroupsTaggingApiClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(TagResourcesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<TagResourcesError>
+                            })
+                            .and_then(|response| Err(TagResourcesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -698,11 +714,16 @@ impl ResourceGroupsTaggingApi for ResourceGroupsTaggingApiClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UntagResourcesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UntagResourcesOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UntagResourcesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UntagResourcesOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -710,11 +731,10 @@ impl ResourceGroupsTaggingApi for ResourceGroupsTaggingApiClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UntagResourcesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UntagResourcesError>
+                            })
+                            .and_then(|response| Err(UntagResourcesError::from_response(response)))
                     })
                     .boxed()
             }

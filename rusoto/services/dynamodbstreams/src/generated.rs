@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -636,11 +636,16 @@ impl DynamoDbStreams for DynamoDbStreamsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeStreamError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeStreamOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeStreamError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeStreamOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -648,11 +653,10 @@ impl DynamoDbStreams for DynamoDbStreamsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeStreamError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeStreamError>
+                            })
+                            .and_then(|response| Err(DescribeStreamError::from_response(response)))
                     })
                     .boxed()
             }
@@ -675,11 +679,16 @@ impl DynamoDbStreams for DynamoDbStreamsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetRecordsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetRecordsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetRecordsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetRecordsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -687,11 +696,10 @@ impl DynamoDbStreams for DynamoDbStreamsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetRecordsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetRecordsError>
+                            })
+                            .and_then(|response| Err(GetRecordsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -714,11 +722,16 @@ impl DynamoDbStreams for DynamoDbStreamsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetShardIteratorError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetShardIteratorOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetShardIteratorError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetShardIteratorOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -726,11 +739,12 @@ impl DynamoDbStreams for DynamoDbStreamsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetShardIteratorError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetShardIteratorError>
+                            })
+                            .and_then(|response| {
+                                Err(GetShardIteratorError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -753,11 +767,16 @@ impl DynamoDbStreams for DynamoDbStreamsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListStreamsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListStreamsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListStreamsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListStreamsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -765,11 +784,10 @@ impl DynamoDbStreams for DynamoDbStreamsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListStreamsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListStreamsError>
+                            })
+                            .and_then(|response| Err(ListStreamsError::from_response(response)))
                     })
                     .boxed()
             }

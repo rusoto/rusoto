@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -2207,11 +2207,16 @@ impl CodeBuild for CodeBuildClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| BatchDeleteBuildsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<BatchDeleteBuildsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<BatchDeleteBuildsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<BatchDeleteBuildsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2219,11 +2224,12 @@ impl CodeBuild for CodeBuildClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(BatchDeleteBuildsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<BatchDeleteBuildsError>
+                            })
+                            .and_then(|response| {
+                                Err(BatchDeleteBuildsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2246,11 +2252,16 @@ impl CodeBuild for CodeBuildClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| BatchGetBuildsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<BatchGetBuildsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<BatchGetBuildsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<BatchGetBuildsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2258,11 +2269,10 @@ impl CodeBuild for CodeBuildClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(BatchGetBuildsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<BatchGetBuildsError>
+                            })
+                            .and_then(|response| Err(BatchGetBuildsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2285,11 +2295,16 @@ impl CodeBuild for CodeBuildClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| BatchGetProjectsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<BatchGetProjectsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<BatchGetProjectsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<BatchGetProjectsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2297,11 +2312,12 @@ impl CodeBuild for CodeBuildClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(BatchGetProjectsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<BatchGetProjectsError>
+                            })
+                            .and_then(|response| {
+                                Err(BatchGetProjectsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2324,11 +2340,16 @@ impl CodeBuild for CodeBuildClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateProjectError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateProjectOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateProjectError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateProjectOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2336,11 +2357,10 @@ impl CodeBuild for CodeBuildClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateProjectError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateProjectError>
+                            })
+                            .and_then(|response| Err(CreateProjectError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2363,11 +2383,16 @@ impl CodeBuild for CodeBuildClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateWebhookError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateWebhookOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateWebhookError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateWebhookOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2375,11 +2400,10 @@ impl CodeBuild for CodeBuildClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateWebhookError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateWebhookError>
+                            })
+                            .and_then(|response| Err(CreateWebhookError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2402,11 +2426,16 @@ impl CodeBuild for CodeBuildClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteProjectError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteProjectOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteProjectError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteProjectOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2414,11 +2443,10 @@ impl CodeBuild for CodeBuildClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteProjectError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteProjectError>
+                            })
+                            .and_then(|response| Err(DeleteProjectError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2441,11 +2469,17 @@ impl CodeBuild for CodeBuildClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteSourceCredentialsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteSourceCredentialsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteSourceCredentialsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteSourceCredentialsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2453,13 +2487,13 @@ impl CodeBuild for CodeBuildClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DeleteSourceCredentialsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteSourceCredentialsError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteSourceCredentialsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2482,11 +2516,16 @@ impl CodeBuild for CodeBuildClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteWebhookError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteWebhookOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteWebhookError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteWebhookOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2494,11 +2533,10 @@ impl CodeBuild for CodeBuildClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteWebhookError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteWebhookError>
+                            })
+                            .and_then(|response| Err(DeleteWebhookError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2521,11 +2559,17 @@ impl CodeBuild for CodeBuildClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ImportSourceCredentialsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ImportSourceCredentialsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ImportSourceCredentialsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ImportSourceCredentialsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2533,13 +2577,13 @@ impl CodeBuild for CodeBuildClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ImportSourceCredentialsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ImportSourceCredentialsError>
+                            })
+                            .and_then(|response| {
+                                Err(ImportSourceCredentialsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2562,11 +2606,17 @@ impl CodeBuild for CodeBuildClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| InvalidateProjectCacheError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<InvalidateProjectCacheOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<InvalidateProjectCacheError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<InvalidateProjectCacheOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2574,13 +2624,13 @@ impl CodeBuild for CodeBuildClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(InvalidateProjectCacheError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<InvalidateProjectCacheError>
+                            })
+                            .and_then(|response| {
+                                Err(InvalidateProjectCacheError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2603,11 +2653,16 @@ impl CodeBuild for CodeBuildClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListBuildsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListBuildsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListBuildsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListBuildsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2615,11 +2670,10 @@ impl CodeBuild for CodeBuildClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListBuildsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListBuildsError>
+                            })
+                            .and_then(|response| Err(ListBuildsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2642,11 +2696,17 @@ impl CodeBuild for CodeBuildClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListBuildsForProjectError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListBuildsForProjectOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListBuildsForProjectError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListBuildsForProjectOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2654,11 +2714,13 @@ impl CodeBuild for CodeBuildClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListBuildsForProjectError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListBuildsForProjectError>
+                            })
+                            .and_then(|response| {
+                                Err(ListBuildsForProjectError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2682,11 +2744,17 @@ impl CodeBuild for CodeBuildClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListCuratedEnvironmentImagesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListCuratedEnvironmentImagesOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListCuratedEnvironmentImagesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListCuratedEnvironmentImagesOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2694,13 +2762,13 @@ impl CodeBuild for CodeBuildClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ListCuratedEnvironmentImagesError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListCuratedEnvironmentImagesError>
+                            })
+                            .and_then(|response| {
+                                Err(ListCuratedEnvironmentImagesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2723,11 +2791,16 @@ impl CodeBuild for CodeBuildClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListProjectsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListProjectsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListProjectsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListProjectsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2735,11 +2808,10 @@ impl CodeBuild for CodeBuildClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListProjectsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListProjectsError>
+                            })
+                            .and_then(|response| Err(ListProjectsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2760,11 +2832,17 @@ impl CodeBuild for CodeBuildClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListSourceCredentialsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListSourceCredentialsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListSourceCredentialsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListSourceCredentialsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2772,11 +2850,13 @@ impl CodeBuild for CodeBuildClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListSourceCredentialsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListSourceCredentialsError>
+                            })
+                            .and_then(|response| {
+                                Err(ListSourceCredentialsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2799,11 +2879,16 @@ impl CodeBuild for CodeBuildClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StartBuildError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StartBuildOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StartBuildError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StartBuildOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2811,11 +2896,10 @@ impl CodeBuild for CodeBuildClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(StartBuildError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StartBuildError>
+                            })
+                            .and_then(|response| Err(StartBuildError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2835,11 +2919,16 @@ impl CodeBuild for CodeBuildClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StopBuildError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StopBuildOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StopBuildError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StopBuildOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2847,11 +2936,10 @@ impl CodeBuild for CodeBuildClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(StopBuildError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StopBuildError>
+                            })
+                            .and_then(|response| Err(StopBuildError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2874,11 +2962,16 @@ impl CodeBuild for CodeBuildClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateProjectError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateProjectOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateProjectError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateProjectOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2886,11 +2979,10 @@ impl CodeBuild for CodeBuildClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateProjectError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateProjectError>
+                            })
+                            .and_then(|response| Err(UpdateProjectError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2913,11 +3005,16 @@ impl CodeBuild for CodeBuildClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateWebhookError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateWebhookOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateWebhookError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateWebhookOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2925,11 +3022,10 @@ impl CodeBuild for CodeBuildClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateWebhookError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateWebhookError>
+                            })
+                            .and_then(|response| Err(UpdateWebhookError::from_response(response)))
                     })
                     .boxed()
             }

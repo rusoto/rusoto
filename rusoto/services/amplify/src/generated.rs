@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
@@ -2209,10 +2209,11 @@ impl Amplify for AmplifyClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateAppError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateAppResult, _>()?;
+                                .deserialize::<CreateAppResult, _>();
 
                             result
                         })
@@ -2223,11 +2224,8 @@ impl Amplify for AmplifyClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateAppError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateAppError>())
+                            .and_then(|response| Err(CreateAppError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2251,10 +2249,11 @@ impl Amplify for AmplifyClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateBranchError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateBranchResult, _>()?;
+                                .deserialize::<CreateBranchResult, _>();
 
                             result
                         })
@@ -2265,11 +2264,8 @@ impl Amplify for AmplifyClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateBranchError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateBranchError>())
+                            .and_then(|response| Err(CreateBranchError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2293,10 +2289,11 @@ impl Amplify for AmplifyClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateDomainAssociationError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateDomainAssociationResult, _>()?;
+                                .deserialize::<CreateDomainAssociationResult, _>();
 
                             result
                         })
@@ -2307,13 +2304,10 @@ impl Amplify for AmplifyClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(CreateDomainAssociationError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateDomainAssociationError>())
+                            .and_then(|response| {
+                                Err(CreateDomainAssociationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2331,10 +2325,11 @@ impl Amplify for AmplifyClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteAppError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteAppResult, _>()?;
+                                .deserialize::<DeleteAppResult, _>();
 
                             result
                         })
@@ -2345,11 +2340,8 @@ impl Amplify for AmplifyClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteAppError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteAppError>())
+                            .and_then(|response| Err(DeleteAppError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2374,10 +2366,11 @@ impl Amplify for AmplifyClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteBranchError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteBranchResult, _>()?;
+                                .deserialize::<DeleteBranchResult, _>();
 
                             result
                         })
@@ -2388,11 +2381,8 @@ impl Amplify for AmplifyClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteBranchError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteBranchError>())
+                            .and_then(|response| Err(DeleteBranchError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2417,10 +2407,11 @@ impl Amplify for AmplifyClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteDomainAssociationError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteDomainAssociationResult, _>()?;
+                                .deserialize::<DeleteDomainAssociationResult, _>();
 
                             result
                         })
@@ -2431,13 +2422,10 @@ impl Amplify for AmplifyClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(DeleteDomainAssociationError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteDomainAssociationError>())
+                            .and_then(|response| {
+                                Err(DeleteDomainAssociationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2460,10 +2448,11 @@ impl Amplify for AmplifyClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteJobError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteJobResult, _>()?;
+                                .deserialize::<DeleteJobResult, _>();
 
                             result
                         })
@@ -2474,11 +2463,8 @@ impl Amplify for AmplifyClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteJobError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteJobError>())
+                            .and_then(|response| Err(DeleteJobError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2496,10 +2482,11 @@ impl Amplify for AmplifyClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetAppError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetAppResult, _>()?;
+                                .deserialize::<GetAppResult, _>();
 
                             result
                         })
@@ -2510,11 +2497,8 @@ impl Amplify for AmplifyClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetAppError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetAppError>())
+                            .and_then(|response| Err(GetAppError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2536,10 +2520,11 @@ impl Amplify for AmplifyClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetBranchError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetBranchResult, _>()?;
+                                .deserialize::<GetBranchResult, _>();
 
                             result
                         })
@@ -2550,11 +2535,8 @@ impl Amplify for AmplifyClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetBranchError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetBranchError>())
+                            .and_then(|response| Err(GetBranchError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2579,10 +2561,11 @@ impl Amplify for AmplifyClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetDomainAssociationError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetDomainAssociationResult, _>()?;
+                                .deserialize::<GetDomainAssociationResult, _>();
 
                             result
                         })
@@ -2593,11 +2576,10 @@ impl Amplify for AmplifyClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetDomainAssociationError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetDomainAssociationError>())
+                            .and_then(|response| {
+                                Err(GetDomainAssociationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2620,10 +2602,11 @@ impl Amplify for AmplifyClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetJobError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetJobResult, _>()?;
+                                .deserialize::<GetJobResult, _>();
 
                             result
                         })
@@ -2634,11 +2617,8 @@ impl Amplify for AmplifyClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetJobError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetJobError>())
+                            .and_then(|response| Err(GetJobError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2665,10 +2645,11 @@ impl Amplify for AmplifyClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListAppsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListAppsResult, _>()?;
+                                .deserialize::<ListAppsResult, _>();
 
                             result
                         })
@@ -2679,11 +2660,8 @@ impl Amplify for AmplifyClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListAppsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListAppsError>())
+                            .and_then(|response| Err(ListAppsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2713,10 +2691,11 @@ impl Amplify for AmplifyClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListBranchesError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListBranchesResult, _>()?;
+                                .deserialize::<ListBranchesResult, _>();
 
                             result
                         })
@@ -2727,11 +2706,8 @@ impl Amplify for AmplifyClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListBranchesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListBranchesError>())
+                            .and_then(|response| Err(ListBranchesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2761,10 +2737,11 @@ impl Amplify for AmplifyClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListDomainAssociationsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListDomainAssociationsResult, _>()?;
+                                .deserialize::<ListDomainAssociationsResult, _>();
 
                             result
                         })
@@ -2775,13 +2752,10 @@ impl Amplify for AmplifyClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(ListDomainAssociationsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListDomainAssociationsError>())
+                            .and_then(|response| {
+                                Err(ListDomainAssociationsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2812,10 +2786,11 @@ impl Amplify for AmplifyClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListJobsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListJobsResult, _>()?;
+                                .deserialize::<ListJobsResult, _>();
 
                             result
                         })
@@ -2826,11 +2801,8 @@ impl Amplify for AmplifyClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListJobsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListJobsError>())
+                            .and_then(|response| Err(ListJobsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2855,10 +2827,11 @@ impl Amplify for AmplifyClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StartJobError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StartJobResult, _>()?;
+                                .deserialize::<StartJobResult, _>();
 
                             result
                         })
@@ -2869,11 +2842,8 @@ impl Amplify for AmplifyClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(StartJobError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<StartJobError>())
+                            .and_then(|response| Err(StartJobError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2896,10 +2866,11 @@ impl Amplify for AmplifyClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StopJobError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StopJobResult, _>()?;
+                                .deserialize::<StopJobResult, _>();
 
                             result
                         })
@@ -2910,11 +2881,8 @@ impl Amplify for AmplifyClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(StopJobError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<StopJobError>())
+                            .and_then(|response| Err(StopJobError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2935,10 +2903,11 @@ impl Amplify for AmplifyClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateAppError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateAppResult, _>()?;
+                                .deserialize::<UpdateAppResult, _>();
 
                             result
                         })
@@ -2949,11 +2918,8 @@ impl Amplify for AmplifyClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateAppError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateAppError>())
+                            .and_then(|response| Err(UpdateAppError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2981,10 +2947,11 @@ impl Amplify for AmplifyClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateBranchError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateBranchResult, _>()?;
+                                .deserialize::<UpdateBranchResult, _>();
 
                             result
                         })
@@ -2995,11 +2962,8 @@ impl Amplify for AmplifyClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateBranchError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateBranchError>())
+                            .and_then(|response| Err(UpdateBranchError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3027,10 +2991,11 @@ impl Amplify for AmplifyClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateDomainAssociationError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateDomainAssociationResult, _>()?;
+                                .deserialize::<UpdateDomainAssociationResult, _>();
 
                             result
                         })
@@ -3041,13 +3006,10 @@ impl Amplify for AmplifyClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(UpdateDomainAssociationError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateDomainAssociationError>())
+                            .and_then(|response| {
+                                Err(UpdateDomainAssociationError::from_response(response))
+                            })
                     })
                     .boxed()
             }

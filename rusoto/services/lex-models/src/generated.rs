@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
@@ -4066,10 +4066,11 @@ impl LexModels for LexModelsClient {
             if response.status.as_u16() == 201 {
                 response
                     .buffer()
+                    .map_err(|e| CreateBotVersionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateBotVersionResponse, _>()?;
+                                .deserialize::<CreateBotVersionResponse, _>();
 
                             result
                         })
@@ -4080,11 +4081,10 @@ impl LexModels for LexModelsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateBotVersionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateBotVersionError>())
+                            .and_then(|response| {
+                                Err(CreateBotVersionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4109,10 +4109,11 @@ impl LexModels for LexModelsClient {
             if response.status.as_u16() == 201 {
                 response
                     .buffer()
+                    .map_err(|e| CreateIntentVersionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateIntentVersionResponse, _>()?;
+                                .deserialize::<CreateIntentVersionResponse, _>();
 
                             result
                         })
@@ -4123,11 +4124,10 @@ impl LexModels for LexModelsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateIntentVersionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateIntentVersionError>())
+                            .and_then(|response| {
+                                Err(CreateIntentVersionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4152,10 +4152,11 @@ impl LexModels for LexModelsClient {
             if response.status.as_u16() == 201 {
                 response
                     .buffer()
+                    .map_err(|e| CreateSlotTypeVersionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateSlotTypeVersionResponse, _>()?;
+                                .deserialize::<CreateSlotTypeVersionResponse, _>();
 
                             result
                         })
@@ -4166,11 +4167,10 @@ impl LexModels for LexModelsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateSlotTypeVersionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateSlotTypeVersionError>())
+                            .and_then(|response| {
+                                Err(CreateSlotTypeVersionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4190,8 +4190,9 @@ impl LexModels for LexModelsClient {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteBotError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -4203,11 +4204,8 @@ impl LexModels for LexModelsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteBotError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteBotError>())
+                            .and_then(|response| Err(DeleteBotError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4234,8 +4232,9 @@ impl LexModels for LexModelsClient {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteBotAliasError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -4247,11 +4246,8 @@ impl LexModels for LexModelsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteBotAliasError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteBotAliasError>())
+                            .and_then(|response| Err(DeleteBotAliasError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4279,8 +4275,9 @@ impl LexModels for LexModelsClient {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteBotChannelAssociationError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -4292,13 +4289,10 @@ impl LexModels for LexModelsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(DeleteBotChannelAssociationError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteBotChannelAssociationError>())
+                            .and_then(|response| {
+                                Err(DeleteBotChannelAssociationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4325,8 +4319,9 @@ impl LexModels for LexModelsClient {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteBotVersionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -4338,11 +4333,10 @@ impl LexModels for LexModelsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteBotVersionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteBotVersionError>())
+                            .and_then(|response| {
+                                Err(DeleteBotVersionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4362,8 +4356,9 @@ impl LexModels for LexModelsClient {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteIntentError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -4375,11 +4370,8 @@ impl LexModels for LexModelsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteIntentError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteIntentError>())
+                            .and_then(|response| Err(DeleteIntentError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4406,8 +4398,9 @@ impl LexModels for LexModelsClient {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteIntentVersionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -4419,11 +4412,10 @@ impl LexModels for LexModelsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteIntentVersionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteIntentVersionError>())
+                            .and_then(|response| {
+                                Err(DeleteIntentVersionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4446,8 +4438,9 @@ impl LexModels for LexModelsClient {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteSlotTypeError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -4459,11 +4452,8 @@ impl LexModels for LexModelsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteSlotTypeError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteSlotTypeError>())
+                            .and_then(|response| Err(DeleteSlotTypeError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4490,8 +4480,9 @@ impl LexModels for LexModelsClient {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteSlotTypeVersionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -4503,11 +4494,10 @@ impl LexModels for LexModelsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteSlotTypeVersionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteSlotTypeVersionError>())
+                            .and_then(|response| {
+                                Err(DeleteSlotTypeVersionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4534,8 +4524,9 @@ impl LexModels for LexModelsClient {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteUtterancesError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -4547,11 +4538,10 @@ impl LexModels for LexModelsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteUtterancesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteUtterancesError>())
+                            .and_then(|response| {
+                                Err(DeleteUtterancesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4575,10 +4565,11 @@ impl LexModels for LexModelsClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetBotError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetBotResponse, _>()?;
+                                .deserialize::<GetBotResponse, _>();
 
                             result
                         })
@@ -4589,11 +4580,8 @@ impl LexModels for LexModelsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetBotError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetBotError>())
+                            .and_then(|response| Err(GetBotError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4620,10 +4608,11 @@ impl LexModels for LexModelsClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetBotAliasError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetBotAliasResponse, _>()?;
+                                .deserialize::<GetBotAliasResponse, _>();
 
                             result
                         })
@@ -4634,11 +4623,8 @@ impl LexModels for LexModelsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetBotAliasError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetBotAliasError>())
+                            .and_then(|response| Err(GetBotAliasError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4673,10 +4659,11 @@ impl LexModels for LexModelsClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetBotAliasesError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetBotAliasesResponse, _>()?;
+                                .deserialize::<GetBotAliasesResponse, _>();
 
                             result
                         })
@@ -4687,11 +4674,8 @@ impl LexModels for LexModelsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetBotAliasesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetBotAliasesError>())
+                            .and_then(|response| Err(GetBotAliasesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4719,10 +4703,11 @@ impl LexModels for LexModelsClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetBotChannelAssociationError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetBotChannelAssociationResponse, _>()?;
+                                .deserialize::<GetBotChannelAssociationResponse, _>();
 
                             result
                         })
@@ -4733,13 +4718,10 @@ impl LexModels for LexModelsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(GetBotChannelAssociationError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetBotChannelAssociationError>())
+                            .and_then(|response| {
+                                Err(GetBotChannelAssociationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4778,10 +4760,11 @@ impl LexModels for LexModelsClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetBotChannelAssociationsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetBotChannelAssociationsResponse, _>()?;
+                                .deserialize::<GetBotChannelAssociationsResponse, _>();
 
                             result
                         })
@@ -4792,13 +4775,10 @@ impl LexModels for LexModelsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(GetBotChannelAssociationsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetBotChannelAssociationsError>())
+                            .and_then(|response| {
+                                Err(GetBotChannelAssociationsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4830,10 +4810,11 @@ impl LexModels for LexModelsClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetBotVersionsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetBotVersionsResponse, _>()?;
+                                .deserialize::<GetBotVersionsResponse, _>();
 
                             result
                         })
@@ -4844,11 +4825,8 @@ impl LexModels for LexModelsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetBotVersionsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetBotVersionsError>())
+                            .and_then(|response| Err(GetBotVersionsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4880,10 +4858,11 @@ impl LexModels for LexModelsClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetBotsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetBotsResponse, _>()?;
+                                .deserialize::<GetBotsResponse, _>();
 
                             result
                         })
@@ -4894,11 +4873,8 @@ impl LexModels for LexModelsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetBotsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetBotsError>())
+                            .and_then(|response| Err(GetBotsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4921,10 +4897,11 @@ impl LexModels for LexModelsClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetBuiltinIntentError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetBuiltinIntentResponse, _>()?;
+                                .deserialize::<GetBuiltinIntentResponse, _>();
 
                             result
                         })
@@ -4935,11 +4912,10 @@ impl LexModels for LexModelsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetBuiltinIntentError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetBuiltinIntentError>())
+                            .and_then(|response| {
+                                Err(GetBuiltinIntentError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4977,10 +4953,11 @@ impl LexModels for LexModelsClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetBuiltinIntentsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetBuiltinIntentsResponse, _>()?;
+                                .deserialize::<GetBuiltinIntentsResponse, _>();
 
                             result
                         })
@@ -4991,11 +4968,10 @@ impl LexModels for LexModelsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetBuiltinIntentsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetBuiltinIntentsError>())
+                            .and_then(|response| {
+                                Err(GetBuiltinIntentsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5033,10 +5009,11 @@ impl LexModels for LexModelsClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetBuiltinSlotTypesError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetBuiltinSlotTypesResponse, _>()?;
+                                .deserialize::<GetBuiltinSlotTypesResponse, _>();
 
                             result
                         })
@@ -5047,11 +5024,10 @@ impl LexModels for LexModelsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetBuiltinSlotTypesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetBuiltinSlotTypesError>())
+                            .and_then(|response| {
+                                Err(GetBuiltinSlotTypesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5081,10 +5057,11 @@ impl LexModels for LexModelsClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetExportError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetExportResponse, _>()?;
+                                .deserialize::<GetExportResponse, _>();
 
                             result
                         })
@@ -5095,11 +5072,8 @@ impl LexModels for LexModelsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetExportError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetExportError>())
+                            .and_then(|response| Err(GetExportError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5122,10 +5096,11 @@ impl LexModels for LexModelsClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetImportError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetImportResponse, _>()?;
+                                .deserialize::<GetImportResponse, _>();
 
                             result
                         })
@@ -5136,11 +5111,8 @@ impl LexModels for LexModelsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetImportError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetImportError>())
+                            .and_then(|response| Err(GetImportError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5167,10 +5139,11 @@ impl LexModels for LexModelsClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetIntentError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetIntentResponse, _>()?;
+                                .deserialize::<GetIntentResponse, _>();
 
                             result
                         })
@@ -5181,11 +5154,8 @@ impl LexModels for LexModelsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetIntentError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetIntentError>())
+                            .and_then(|response| Err(GetIntentError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5217,10 +5187,11 @@ impl LexModels for LexModelsClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetIntentVersionsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetIntentVersionsResponse, _>()?;
+                                .deserialize::<GetIntentVersionsResponse, _>();
 
                             result
                         })
@@ -5231,11 +5202,10 @@ impl LexModels for LexModelsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetIntentVersionsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetIntentVersionsError>())
+                            .and_then(|response| {
+                                Err(GetIntentVersionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5270,10 +5240,11 @@ impl LexModels for LexModelsClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetIntentsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetIntentsResponse, _>()?;
+                                .deserialize::<GetIntentsResponse, _>();
 
                             result
                         })
@@ -5284,11 +5255,8 @@ impl LexModels for LexModelsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetIntentsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetIntentsError>())
+                            .and_then(|response| Err(GetIntentsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5315,10 +5283,11 @@ impl LexModels for LexModelsClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetSlotTypeError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetSlotTypeResponse, _>()?;
+                                .deserialize::<GetSlotTypeResponse, _>();
 
                             result
                         })
@@ -5329,11 +5298,8 @@ impl LexModels for LexModelsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetSlotTypeError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetSlotTypeError>())
+                            .and_then(|response| Err(GetSlotTypeError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5365,10 +5331,11 @@ impl LexModels for LexModelsClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetSlotTypeVersionsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetSlotTypeVersionsResponse, _>()?;
+                                .deserialize::<GetSlotTypeVersionsResponse, _>();
 
                             result
                         })
@@ -5379,11 +5346,10 @@ impl LexModels for LexModelsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetSlotTypeVersionsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetSlotTypeVersionsError>())
+                            .and_then(|response| {
+                                Err(GetSlotTypeVersionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5418,10 +5384,11 @@ impl LexModels for LexModelsClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetSlotTypesError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetSlotTypesResponse, _>()?;
+                                .deserialize::<GetSlotTypesResponse, _>();
 
                             result
                         })
@@ -5432,11 +5399,8 @@ impl LexModels for LexModelsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetSlotTypesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetSlotTypesError>())
+                            .and_then(|response| Err(GetSlotTypesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5467,10 +5431,11 @@ impl LexModels for LexModelsClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetUtterancesViewError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetUtterancesViewResponse, _>()?;
+                                .deserialize::<GetUtterancesViewResponse, _>();
 
                             result
                         })
@@ -5481,11 +5446,10 @@ impl LexModels for LexModelsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetUtterancesViewError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetUtterancesViewError>())
+                            .and_then(|response| {
+                                Err(GetUtterancesViewError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5507,10 +5471,11 @@ impl LexModels for LexModelsClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| PutBotError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PutBotResponse, _>()?;
+                                .deserialize::<PutBotResponse, _>();
 
                             result
                         })
@@ -5521,11 +5486,8 @@ impl LexModels for LexModelsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(PutBotError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<PutBotError>())
+                            .and_then(|response| Err(PutBotError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5554,10 +5516,11 @@ impl LexModels for LexModelsClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| PutBotAliasError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PutBotAliasResponse, _>()?;
+                                .deserialize::<PutBotAliasResponse, _>();
 
                             result
                         })
@@ -5568,11 +5531,8 @@ impl LexModels for LexModelsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(PutBotAliasError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<PutBotAliasError>())
+                            .and_then(|response| Err(PutBotAliasError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5597,10 +5557,11 @@ impl LexModels for LexModelsClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| PutIntentError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PutIntentResponse, _>()?;
+                                .deserialize::<PutIntentResponse, _>();
 
                             result
                         })
@@ -5611,11 +5572,8 @@ impl LexModels for LexModelsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(PutIntentError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<PutIntentError>())
+                            .and_then(|response| Err(PutIntentError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5640,10 +5598,11 @@ impl LexModels for LexModelsClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| PutSlotTypeError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PutSlotTypeResponse, _>()?;
+                                .deserialize::<PutSlotTypeResponse, _>();
 
                             result
                         })
@@ -5654,11 +5613,8 @@ impl LexModels for LexModelsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(PutSlotTypeError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<PutSlotTypeError>())
+                            .and_then(|response| Err(PutSlotTypeError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5683,10 +5639,11 @@ impl LexModels for LexModelsClient {
             if response.status.as_u16() == 201 {
                 response
                     .buffer()
+                    .map_err(|e| StartImportError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StartImportResponse, _>()?;
+                                .deserialize::<StartImportResponse, _>();
 
                             result
                         })
@@ -5697,11 +5654,8 @@ impl LexModels for LexModelsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(StartImportError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<StartImportError>())
+                            .and_then(|response| Err(StartImportError::from_response(response)))
                     })
                     .boxed()
             }

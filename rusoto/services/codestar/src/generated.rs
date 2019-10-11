@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -1676,11 +1676,17 @@ impl CodeStar for CodeStarClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AssociateTeamMemberError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AssociateTeamMemberResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AssociateTeamMemberError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AssociateTeamMemberResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1688,11 +1694,13 @@ impl CodeStar for CodeStarClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(AssociateTeamMemberError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AssociateTeamMemberError>
+                            })
+                            .and_then(|response| {
+                                Err(AssociateTeamMemberError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1715,11 +1723,16 @@ impl CodeStar for CodeStarClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateProjectError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateProjectResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateProjectError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateProjectResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1727,11 +1740,10 @@ impl CodeStar for CodeStarClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateProjectError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateProjectError>
+                            })
+                            .and_then(|response| Err(CreateProjectError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1754,11 +1766,16 @@ impl CodeStar for CodeStarClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateUserProfileError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateUserProfileResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateUserProfileError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateUserProfileResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1766,11 +1783,12 @@ impl CodeStar for CodeStarClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateUserProfileError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateUserProfileError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateUserProfileError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1793,11 +1811,16 @@ impl CodeStar for CodeStarClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteProjectError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteProjectResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteProjectError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteProjectResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1805,11 +1828,10 @@ impl CodeStar for CodeStarClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteProjectError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteProjectError>
+                            })
+                            .and_then(|response| Err(DeleteProjectError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1832,11 +1854,16 @@ impl CodeStar for CodeStarClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteUserProfileError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteUserProfileResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteUserProfileError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteUserProfileResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1844,11 +1871,12 @@ impl CodeStar for CodeStarClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteUserProfileError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteUserProfileError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteUserProfileError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1871,11 +1899,16 @@ impl CodeStar for CodeStarClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeProjectError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeProjectResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeProjectError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeProjectResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1883,11 +1916,10 @@ impl CodeStar for CodeStarClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeProjectError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeProjectError>
+                            })
+                            .and_then(|response| Err(DescribeProjectError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1910,11 +1942,17 @@ impl CodeStar for CodeStarClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeUserProfileError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeUserProfileResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeUserProfileError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeUserProfileResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1922,11 +1960,13 @@ impl CodeStar for CodeStarClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeUserProfileError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeUserProfileError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeUserProfileError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1949,11 +1989,17 @@ impl CodeStar for CodeStarClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DisassociateTeamMemberError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DisassociateTeamMemberResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DisassociateTeamMemberError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DisassociateTeamMemberResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1961,13 +2007,13 @@ impl CodeStar for CodeStarClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DisassociateTeamMemberError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DisassociateTeamMemberError>
+                            })
+                            .and_then(|response| {
+                                Err(DisassociateTeamMemberError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1990,11 +2036,16 @@ impl CodeStar for CodeStarClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListProjectsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListProjectsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListProjectsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListProjectsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2002,11 +2053,10 @@ impl CodeStar for CodeStarClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListProjectsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListProjectsError>
+                            })
+                            .and_then(|response| Err(ListProjectsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2029,11 +2079,16 @@ impl CodeStar for CodeStarClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListResourcesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListResourcesResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListResourcesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListResourcesResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2041,11 +2096,10 @@ impl CodeStar for CodeStarClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListResourcesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListResourcesError>
+                            })
+                            .and_then(|response| Err(ListResourcesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2068,11 +2122,16 @@ impl CodeStar for CodeStarClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListTagsForProjectError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListTagsForProjectResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListTagsForProjectError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListTagsForProjectResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2080,11 +2139,12 @@ impl CodeStar for CodeStarClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListTagsForProjectError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListTagsForProjectError>
+                            })
+                            .and_then(|response| {
+                                Err(ListTagsForProjectError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2107,11 +2167,16 @@ impl CodeStar for CodeStarClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListTeamMembersError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListTeamMembersResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListTeamMembersError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListTeamMembersResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2119,11 +2184,10 @@ impl CodeStar for CodeStarClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListTeamMembersError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListTeamMembersError>
+                            })
+                            .and_then(|response| Err(ListTeamMembersError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2146,11 +2210,16 @@ impl CodeStar for CodeStarClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListUserProfilesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListUserProfilesResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListUserProfilesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListUserProfilesResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2158,11 +2227,12 @@ impl CodeStar for CodeStarClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListUserProfilesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListUserProfilesError>
+                            })
+                            .and_then(|response| {
+                                Err(ListUserProfilesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2185,11 +2255,16 @@ impl CodeStar for CodeStarClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| TagProjectError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<TagProjectResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<TagProjectError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<TagProjectResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2197,11 +2272,10 @@ impl CodeStar for CodeStarClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(TagProjectError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<TagProjectError>
+                            })
+                            .and_then(|response| Err(TagProjectError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2224,11 +2298,16 @@ impl CodeStar for CodeStarClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UntagProjectError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UntagProjectResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UntagProjectError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UntagProjectResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2236,11 +2315,10 @@ impl CodeStar for CodeStarClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UntagProjectError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UntagProjectError>
+                            })
+                            .and_then(|response| Err(UntagProjectError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2263,11 +2341,16 @@ impl CodeStar for CodeStarClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateProjectError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateProjectResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateProjectError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateProjectResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2275,11 +2358,10 @@ impl CodeStar for CodeStarClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateProjectError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateProjectError>
+                            })
+                            .and_then(|response| Err(UpdateProjectError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2302,11 +2384,16 @@ impl CodeStar for CodeStarClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateTeamMemberError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateTeamMemberResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateTeamMemberError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateTeamMemberResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2314,11 +2401,12 @@ impl CodeStar for CodeStarClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateTeamMemberError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateTeamMemberError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateTeamMemberError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2341,11 +2429,16 @@ impl CodeStar for CodeStarClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateUserProfileError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateUserProfileResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateUserProfileError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateUserProfileResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2353,11 +2446,12 @@ impl CodeStar for CodeStarClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateUserProfileError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateUserProfileError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateUserProfileError::from_response(response))
+                            })
                     })
                     .boxed()
             }

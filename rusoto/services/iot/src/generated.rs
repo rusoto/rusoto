@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
@@ -18066,8 +18066,9 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AcceptCertificateTransferError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -18079,13 +18080,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(AcceptCertificateTransferError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<AcceptCertificateTransferError>())
+                            .and_then(|response| {
+                                Err(AcceptCertificateTransferError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -18110,10 +18108,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AddThingToBillingGroupError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AddThingToBillingGroupResponse, _>()?;
+                                .deserialize::<AddThingToBillingGroupResponse, _>();
 
                             result
                         })
@@ -18124,13 +18123,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(AddThingToBillingGroupError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<AddThingToBillingGroupError>())
+                            .and_then(|response| {
+                                Err(AddThingToBillingGroupError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -18155,10 +18151,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AddThingToThingGroupError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AddThingToThingGroupResponse, _>()?;
+                                .deserialize::<AddThingToThingGroupResponse, _>();
 
                             result
                         })
@@ -18169,11 +18166,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(AddThingToThingGroupError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<AddThingToThingGroupError>())
+                            .and_then(|response| {
+                                Err(AddThingToThingGroupError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -18198,10 +18194,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AssociateTargetsWithJobError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AssociateTargetsWithJobResponse, _>()?;
+                                .deserialize::<AssociateTargetsWithJobResponse, _>();
 
                             result
                         })
@@ -18212,13 +18209,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(AssociateTargetsWithJobError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<AssociateTargetsWithJobError>())
+                            .and_then(|response| {
+                                Err(AssociateTargetsWithJobError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -18243,8 +18237,9 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AttachPolicyError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -18256,11 +18251,8 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(AttachPolicyError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<AttachPolicyError>())
+                            .and_then(|response| Err(AttachPolicyError::from_response(response)))
                     })
                     .boxed()
             }
@@ -18288,8 +18280,9 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AttachPrincipalPolicyError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -18301,11 +18294,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(AttachPrincipalPolicyError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<AttachPrincipalPolicyError>())
+                            .and_then(|response| {
+                                Err(AttachPrincipalPolicyError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -18338,10 +18330,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AttachSecurityProfileError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AttachSecurityProfileResponse, _>()?;
+                                .deserialize::<AttachSecurityProfileResponse, _>();
 
                             result
                         })
@@ -18352,11 +18345,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(AttachSecurityProfileError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<AttachSecurityProfileError>())
+                            .and_then(|response| {
+                                Err(AttachSecurityProfileError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -18384,10 +18376,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AttachThingPrincipalError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AttachThingPrincipalResponse, _>()?;
+                                .deserialize::<AttachThingPrincipalResponse, _>();
 
                             result
                         })
@@ -18398,11 +18391,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(AttachThingPrincipalError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<AttachThingPrincipalError>())
+                            .and_then(|response| {
+                                Err(AttachThingPrincipalError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -18425,10 +18417,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CancelAuditTaskError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CancelAuditTaskResponse, _>()?;
+                                .deserialize::<CancelAuditTaskResponse, _>();
 
                             result
                         })
@@ -18439,11 +18432,8 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CancelAuditTaskError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CancelAuditTaskError>())
+                            .and_then(|response| Err(CancelAuditTaskError::from_response(response)))
                     })
                     .boxed()
             }
@@ -18469,8 +18459,9 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CancelCertificateTransferError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -18482,13 +18473,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(CancelCertificateTransferError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CancelCertificateTransferError>())
+                            .and_then(|response| {
+                                Err(CancelCertificateTransferError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -18519,10 +18507,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CancelJobError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CancelJobResponse, _>()?;
+                                .deserialize::<CancelJobResponse, _>();
 
                             result
                         })
@@ -18533,11 +18522,8 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CancelJobError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CancelJobError>())
+                            .and_then(|response| Err(CancelJobError::from_response(response)))
                     })
                     .boxed()
             }
@@ -18572,8 +18558,9 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CancelJobExecutionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -18585,11 +18572,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CancelJobExecutionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CancelJobExecutionError>())
+                            .and_then(|response| {
+                                Err(CancelJobExecutionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -18611,10 +18597,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ClearDefaultAuthorizerError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ClearDefaultAuthorizerResponse, _>()?;
+                                .deserialize::<ClearDefaultAuthorizerResponse, _>();
 
                             result
                         })
@@ -18625,13 +18612,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(ClearDefaultAuthorizerError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ClearDefaultAuthorizerError>())
+                            .and_then(|response| {
+                                Err(ClearDefaultAuthorizerError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -18659,10 +18643,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateAuthorizerError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateAuthorizerResponse, _>()?;
+                                .deserialize::<CreateAuthorizerResponse, _>();
 
                             result
                         })
@@ -18673,11 +18658,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateAuthorizerError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateAuthorizerError>())
+                            .and_then(|response| {
+                                Err(CreateAuthorizerError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -18705,10 +18689,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateBillingGroupError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateBillingGroupResponse, _>()?;
+                                .deserialize::<CreateBillingGroupResponse, _>();
 
                             result
                         })
@@ -18719,11 +18704,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateBillingGroupError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateBillingGroupError>())
+                            .and_then(|response| {
+                                Err(CreateBillingGroupError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -18754,10 +18738,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateCertificateFromCsrError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateCertificateFromCsrResponse, _>()?;
+                                .deserialize::<CreateCertificateFromCsrResponse, _>();
 
                             result
                         })
@@ -18768,13 +18753,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(CreateCertificateFromCsrError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateCertificateFromCsrError>())
+                            .and_then(|response| {
+                                Err(CreateCertificateFromCsrError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -18802,10 +18784,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateDynamicThingGroupError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateDynamicThingGroupResponse, _>()?;
+                                .deserialize::<CreateDynamicThingGroupResponse, _>();
 
                             result
                         })
@@ -18816,13 +18799,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(CreateDynamicThingGroupError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateDynamicThingGroupError>())
+                            .and_then(|response| {
+                                Err(CreateDynamicThingGroupError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -18847,10 +18827,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateJobError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateJobResponse, _>()?;
+                                .deserialize::<CreateJobResponse, _>();
 
                             result
                         })
@@ -18861,11 +18842,8 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateJobError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateJobError>())
+                            .and_then(|response| Err(CreateJobError::from_response(response)))
                     })
                     .boxed()
             }
@@ -18894,10 +18872,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateKeysAndCertificateError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateKeysAndCertificateResponse, _>()?;
+                                .deserialize::<CreateKeysAndCertificateResponse, _>();
 
                             result
                         })
@@ -18908,13 +18887,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(CreateKeysAndCertificateError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateKeysAndCertificateError>())
+                            .and_then(|response| {
+                                Err(CreateKeysAndCertificateError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -18942,10 +18918,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateOTAUpdateError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateOTAUpdateResponse, _>()?;
+                                .deserialize::<CreateOTAUpdateResponse, _>();
 
                             result
                         })
@@ -18956,11 +18933,8 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateOTAUpdateError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateOTAUpdateError>())
+                            .and_then(|response| Err(CreateOTAUpdateError::from_response(response)))
                     })
                     .boxed()
             }
@@ -18985,10 +18959,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreatePolicyError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreatePolicyResponse, _>()?;
+                                .deserialize::<CreatePolicyResponse, _>();
 
                             result
                         })
@@ -18999,11 +18974,8 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreatePolicyError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreatePolicyError>())
+                            .and_then(|response| Err(CreatePolicyError::from_response(response)))
                     })
                     .boxed()
             }
@@ -19037,10 +19009,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreatePolicyVersionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreatePolicyVersionResponse, _>()?;
+                                .deserialize::<CreatePolicyVersionResponse, _>();
 
                             result
                         })
@@ -19051,11 +19024,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreatePolicyVersionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreatePolicyVersionError>())
+                            .and_then(|response| {
+                                Err(CreatePolicyVersionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -19080,10 +19052,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateRoleAliasError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateRoleAliasResponse, _>()?;
+                                .deserialize::<CreateRoleAliasResponse, _>();
 
                             result
                         })
@@ -19094,11 +19067,8 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateRoleAliasError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateRoleAliasError>())
+                            .and_then(|response| Err(CreateRoleAliasError::from_response(response)))
                     })
                     .boxed()
             }
@@ -19126,10 +19096,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateScheduledAuditError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateScheduledAuditResponse, _>()?;
+                                .deserialize::<CreateScheduledAuditResponse, _>();
 
                             result
                         })
@@ -19140,11 +19111,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateScheduledAuditError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateScheduledAuditError>())
+                            .and_then(|response| {
+                                Err(CreateScheduledAuditError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -19172,10 +19142,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateSecurityProfileError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateSecurityProfileResponse, _>()?;
+                                .deserialize::<CreateSecurityProfileResponse, _>();
 
                             result
                         })
@@ -19186,11 +19157,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateSecurityProfileError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateSecurityProfileError>())
+                            .and_then(|response| {
+                                Err(CreateSecurityProfileError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -19215,10 +19185,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateStreamError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateStreamResponse, _>()?;
+                                .deserialize::<CreateStreamResponse, _>();
 
                             result
                         })
@@ -19229,11 +19200,8 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateStreamError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateStreamError>())
+                            .and_then(|response| Err(CreateStreamError::from_response(response)))
                     })
                     .boxed()
             }
@@ -19258,10 +19226,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateThingError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateThingResponse, _>()?;
+                                .deserialize::<CreateThingResponse, _>();
 
                             result
                         })
@@ -19272,11 +19241,8 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateThingError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateThingError>())
+                            .and_then(|response| Err(CreateThingError::from_response(response)))
                     })
                     .boxed()
             }
@@ -19304,10 +19270,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateThingGroupError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateThingGroupResponse, _>()?;
+                                .deserialize::<CreateThingGroupResponse, _>();
 
                             result
                         })
@@ -19318,11 +19285,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateThingGroupError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateThingGroupError>())
+                            .and_then(|response| {
+                                Err(CreateThingGroupError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -19350,10 +19316,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateThingTypeError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateThingTypeResponse, _>()?;
+                                .deserialize::<CreateThingTypeResponse, _>();
 
                             result
                         })
@@ -19364,11 +19331,8 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateThingTypeError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateThingTypeError>())
+                            .and_then(|response| Err(CreateThingTypeError::from_response(response)))
                     })
                     .boxed()
             }
@@ -19397,8 +19361,9 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateTopicRuleError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -19410,11 +19375,8 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateTopicRuleError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateTopicRuleError>())
+                            .and_then(|response| Err(CreateTopicRuleError::from_response(response)))
                     })
                     .boxed()
             }
@@ -19444,11 +19406,12 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteAccountAuditConfigurationError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
                                 .deserialize::<DeleteAccountAuditConfigurationResponse, _>(
-                            )?;
+                            );
 
                             result
                         })
@@ -19459,15 +19422,12 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(DeleteAccountAuditConfigurationError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteAccountAuditConfigurationError>())
+                            .and_then(|response| {
+                                Err(DeleteAccountAuditConfigurationError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -19493,10 +19453,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteAuthorizerError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteAuthorizerResponse, _>()?;
+                                .deserialize::<DeleteAuthorizerResponse, _>();
 
                             result
                         })
@@ -19507,11 +19468,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteAuthorizerError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteAuthorizerError>())
+                            .and_then(|response| {
+                                Err(DeleteAuthorizerError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -19543,10 +19503,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteBillingGroupError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteBillingGroupResponse, _>()?;
+                                .deserialize::<DeleteBillingGroupResponse, _>();
 
                             result
                         })
@@ -19557,11 +19518,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteBillingGroupError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteBillingGroupError>())
+                            .and_then(|response| {
+                                Err(DeleteBillingGroupError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -19587,10 +19547,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteCACertificateError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteCACertificateResponse, _>()?;
+                                .deserialize::<DeleteCACertificateResponse, _>();
 
                             result
                         })
@@ -19601,11 +19562,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteCACertificateError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteCACertificateError>())
+                            .and_then(|response| {
+                                Err(DeleteCACertificateError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -19637,8 +19597,9 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteCertificateError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -19650,11 +19611,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteCertificateError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteCertificateError>())
+                            .and_then(|response| {
+                                Err(DeleteCertificateError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -19686,10 +19646,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteDynamicThingGroupError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteDynamicThingGroupResponse, _>()?;
+                                .deserialize::<DeleteDynamicThingGroupResponse, _>();
 
                             result
                         })
@@ -19700,13 +19661,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(DeleteDynamicThingGroupError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteDynamicThingGroupError>())
+                            .and_then(|response| {
+                                Err(DeleteDynamicThingGroupError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -19732,8 +19690,9 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteJobError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -19745,11 +19704,8 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteJobError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteJobError>())
+                            .and_then(|response| Err(DeleteJobError::from_response(response)))
                     })
                     .boxed()
             }
@@ -19783,8 +19739,9 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteJobExecutionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -19796,11 +19753,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteJobExecutionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteJobExecutionError>())
+                            .and_then(|response| {
+                                Err(DeleteJobExecutionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -19835,10 +19791,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteOTAUpdateError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteOTAUpdateResponse, _>()?;
+                                .deserialize::<DeleteOTAUpdateResponse, _>();
 
                             result
                         })
@@ -19849,11 +19806,8 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteOTAUpdateError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteOTAUpdateError>())
+                            .and_then(|response| Err(DeleteOTAUpdateError::from_response(response)))
                     })
                     .boxed()
             }
@@ -19873,8 +19827,9 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeletePolicyError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -19886,11 +19841,8 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeletePolicyError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeletePolicyError>())
+                            .and_then(|response| Err(DeletePolicyError::from_response(response)))
                     })
                     .boxed()
             }
@@ -19917,8 +19869,9 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeletePolicyVersionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -19930,11 +19883,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeletePolicyVersionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeletePolicyVersionError>())
+                            .and_then(|response| {
+                                Err(DeletePolicyVersionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -19956,10 +19908,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteRegistrationCodeError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteRegistrationCodeResponse, _>()?;
+                                .deserialize::<DeleteRegistrationCodeResponse, _>();
 
                             result
                         })
@@ -19970,13 +19923,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(DeleteRegistrationCodeError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteRegistrationCodeError>())
+                            .and_then(|response| {
+                                Err(DeleteRegistrationCodeError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -19999,10 +19949,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteRoleAliasError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteRoleAliasResponse, _>()?;
+                                .deserialize::<DeleteRoleAliasResponse, _>();
 
                             result
                         })
@@ -20013,11 +19964,8 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteRoleAliasError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteRoleAliasError>())
+                            .and_then(|response| Err(DeleteRoleAliasError::from_response(response)))
                     })
                     .boxed()
             }
@@ -20043,10 +19991,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteScheduledAuditError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteScheduledAuditResponse, _>()?;
+                                .deserialize::<DeleteScheduledAuditResponse, _>();
 
                             result
                         })
@@ -20057,11 +20006,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteScheduledAuditError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteScheduledAuditError>())
+                            .and_then(|response| {
+                                Err(DeleteScheduledAuditError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -20093,10 +20041,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteSecurityProfileError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteSecurityProfileResponse, _>()?;
+                                .deserialize::<DeleteSecurityProfileResponse, _>();
 
                             result
                         })
@@ -20107,11 +20056,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteSecurityProfileError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteSecurityProfileError>())
+                            .and_then(|response| {
+                                Err(DeleteSecurityProfileError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -20134,10 +20082,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteStreamError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteStreamResponse, _>()?;
+                                .deserialize::<DeleteStreamResponse, _>();
 
                             result
                         })
@@ -20148,11 +20097,8 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteStreamError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteStreamError>())
+                            .and_then(|response| Err(DeleteStreamError::from_response(response)))
                     })
                     .boxed()
             }
@@ -20181,10 +20127,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteThingError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteThingResponse, _>()?;
+                                .deserialize::<DeleteThingResponse, _>();
 
                             result
                         })
@@ -20195,11 +20142,8 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteThingError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteThingError>())
+                            .and_then(|response| Err(DeleteThingError::from_response(response)))
                     })
                     .boxed()
             }
@@ -20231,10 +20175,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteThingGroupError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteThingGroupResponse, _>()?;
+                                .deserialize::<DeleteThingGroupResponse, _>();
 
                             result
                         })
@@ -20245,11 +20190,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteThingGroupError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteThingGroupError>())
+                            .and_then(|response| {
+                                Err(DeleteThingGroupError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -20275,10 +20219,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteThingTypeError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteThingTypeResponse, _>()?;
+                                .deserialize::<DeleteThingTypeResponse, _>();
 
                             result
                         })
@@ -20289,11 +20234,8 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteThingTypeError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteThingTypeError>())
+                            .and_then(|response| Err(DeleteThingTypeError::from_response(response)))
                     })
                     .boxed()
             }
@@ -20316,8 +20258,9 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteTopicRuleError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -20329,11 +20272,8 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteTopicRuleError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteTopicRuleError>())
+                            .and_then(|response| Err(DeleteTopicRuleError::from_response(response)))
                     })
                     .boxed()
             }
@@ -20361,8 +20301,9 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteV2LoggingLevelError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -20374,11 +20315,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteV2LoggingLevelError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteV2LoggingLevelError>())
+                            .and_then(|response| {
+                                Err(DeleteV2LoggingLevelError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -20406,10 +20346,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeprecateThingTypeError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeprecateThingTypeResponse, _>()?;
+                                .deserialize::<DeprecateThingTypeResponse, _>();
 
                             result
                         })
@@ -20420,11 +20361,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeprecateThingTypeError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeprecateThingTypeError>())
+                            .and_then(|response| {
+                                Err(DeprecateThingTypeError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -20449,11 +20389,12 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeAccountAuditConfigurationError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
                                 .deserialize::<DescribeAccountAuditConfigurationResponse, _>(
-                            )?;
+                            );
 
                             result
                         })
@@ -20464,15 +20405,12 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(DescribeAccountAuditConfigurationError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeAccountAuditConfigurationError>())
+                            .and_then(|response| {
+                                Err(DescribeAccountAuditConfigurationError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -20495,10 +20433,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeAuditTaskError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeAuditTaskResponse, _>()?;
+                                .deserialize::<DescribeAuditTaskResponse, _>();
 
                             result
                         })
@@ -20509,11 +20448,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DescribeAuditTaskError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeAuditTaskError>())
+                            .and_then(|response| {
+                                Err(DescribeAuditTaskError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -20539,10 +20477,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeAuthorizerError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeAuthorizerResponse, _>()?;
+                                .deserialize::<DescribeAuthorizerResponse, _>();
 
                             result
                         })
@@ -20553,11 +20492,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DescribeAuthorizerError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeAuthorizerError>())
+                            .and_then(|response| {
+                                Err(DescribeAuthorizerError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -20583,10 +20521,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeBillingGroupError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeBillingGroupResponse, _>()?;
+                                .deserialize::<DescribeBillingGroupResponse, _>();
 
                             result
                         })
@@ -20597,11 +20536,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DescribeBillingGroupError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeBillingGroupError>())
+                            .and_then(|response| {
+                                Err(DescribeBillingGroupError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -20627,10 +20565,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeCACertificateError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeCACertificateResponse, _>()?;
+                                .deserialize::<DescribeCACertificateResponse, _>();
 
                             result
                         })
@@ -20641,11 +20580,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DescribeCACertificateError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeCACertificateError>())
+                            .and_then(|response| {
+                                Err(DescribeCACertificateError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -20671,10 +20609,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeCertificateError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeCertificateResponse, _>()?;
+                                .deserialize::<DescribeCertificateResponse, _>();
 
                             result
                         })
@@ -20685,11 +20624,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DescribeCertificateError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeCertificateError>())
+                            .and_then(|response| {
+                                Err(DescribeCertificateError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -20711,10 +20649,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeDefaultAuthorizerError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeDefaultAuthorizerResponse, _>()?;
+                                .deserialize::<DescribeDefaultAuthorizerResponse, _>();
 
                             result
                         })
@@ -20725,13 +20664,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(DescribeDefaultAuthorizerError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeDefaultAuthorizerError>())
+                            .and_then(|response| {
+                                Err(DescribeDefaultAuthorizerError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -20760,10 +20696,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeEndpointError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeEndpointResponse, _>()?;
+                                .deserialize::<DescribeEndpointResponse, _>();
 
                             result
                         })
@@ -20774,11 +20711,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DescribeEndpointError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeEndpointError>())
+                            .and_then(|response| {
+                                Err(DescribeEndpointError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -20800,10 +20736,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeEventConfigurationsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeEventConfigurationsResponse, _>()?;
+                                .deserialize::<DescribeEventConfigurationsResponse, _>();
 
                             result
                         })
@@ -20814,13 +20751,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(DescribeEventConfigurationsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeEventConfigurationsError>())
+                            .and_then(|response| {
+                                Err(DescribeEventConfigurationsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -20843,10 +20777,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeIndexError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeIndexResponse, _>()?;
+                                .deserialize::<DescribeIndexResponse, _>();
 
                             result
                         })
@@ -20857,11 +20792,8 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DescribeIndexError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeIndexError>())
+                            .and_then(|response| Err(DescribeIndexError::from_response(response)))
                     })
                     .boxed()
             }
@@ -20884,10 +20816,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeJobError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeJobResponse, _>()?;
+                                .deserialize::<DescribeJobResponse, _>();
 
                             result
                         })
@@ -20898,11 +20831,8 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DescribeJobError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeJobError>())
+                            .and_then(|response| Err(DescribeJobError::from_response(response)))
                     })
                     .boxed()
             }
@@ -20935,10 +20865,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeJobExecutionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeJobExecutionResponse, _>()?;
+                                .deserialize::<DescribeJobExecutionResponse, _>();
 
                             result
                         })
@@ -20949,11 +20880,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DescribeJobExecutionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeJobExecutionError>())
+                            .and_then(|response| {
+                                Err(DescribeJobExecutionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -20976,10 +20906,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeRoleAliasError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeRoleAliasResponse, _>()?;
+                                .deserialize::<DescribeRoleAliasResponse, _>();
 
                             result
                         })
@@ -20990,11 +20921,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DescribeRoleAliasError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeRoleAliasError>())
+                            .and_then(|response| {
+                                Err(DescribeRoleAliasError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -21020,10 +20950,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeScheduledAuditError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeScheduledAuditResponse, _>()?;
+                                .deserialize::<DescribeScheduledAuditResponse, _>();
 
                             result
                         })
@@ -21034,13 +20965,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(DescribeScheduledAuditError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeScheduledAuditError>())
+                            .and_then(|response| {
+                                Err(DescribeScheduledAuditError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -21066,10 +20994,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeSecurityProfileError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeSecurityProfileResponse, _>()?;
+                                .deserialize::<DescribeSecurityProfileResponse, _>();
 
                             result
                         })
@@ -21080,13 +21009,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(DescribeSecurityProfileError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeSecurityProfileError>())
+                            .and_then(|response| {
+                                Err(DescribeSecurityProfileError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -21109,10 +21035,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeStreamError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeStreamResponse, _>()?;
+                                .deserialize::<DescribeStreamResponse, _>();
 
                             result
                         })
@@ -21123,11 +21050,8 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DescribeStreamError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeStreamError>())
+                            .and_then(|response| Err(DescribeStreamError::from_response(response)))
                     })
                     .boxed()
             }
@@ -21150,10 +21074,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeThingError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeThingResponse, _>()?;
+                                .deserialize::<DescribeThingResponse, _>();
 
                             result
                         })
@@ -21164,11 +21089,8 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DescribeThingError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeThingError>())
+                            .and_then(|response| Err(DescribeThingError::from_response(response)))
                     })
                     .boxed()
             }
@@ -21194,10 +21116,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeThingGroupError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeThingGroupResponse, _>()?;
+                                .deserialize::<DescribeThingGroupResponse, _>();
 
                             result
                         })
@@ -21208,11 +21131,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DescribeThingGroupError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeThingGroupError>())
+                            .and_then(|response| {
+                                Err(DescribeThingGroupError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -21239,11 +21161,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeThingRegistrationTaskError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeThingRegistrationTaskResponse, _>(
-                            )?;
+                                .deserialize::<DescribeThingRegistrationTaskResponse, _>();
 
                             result
                         })
@@ -21254,13 +21176,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(DescribeThingRegistrationTaskError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeThingRegistrationTaskError>())
+                            .and_then(|response| {
+                                Err(DescribeThingRegistrationTaskError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -21286,10 +21205,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeThingTypeError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeThingTypeResponse, _>()?;
+                                .deserialize::<DescribeThingTypeResponse, _>();
 
                             result
                         })
@@ -21300,11 +21220,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DescribeThingTypeError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeThingTypeError>())
+                            .and_then(|response| {
+                                Err(DescribeThingTypeError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -21329,8 +21248,9 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DetachPolicyError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -21342,11 +21262,8 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DetachPolicyError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DetachPolicyError>())
+                            .and_then(|response| Err(DetachPolicyError::from_response(response)))
                     })
                     .boxed()
             }
@@ -21374,8 +21291,9 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DetachPrincipalPolicyError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -21387,11 +21305,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DetachPrincipalPolicyError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DetachPrincipalPolicyError>())
+                            .and_then(|response| {
+                                Err(DetachPrincipalPolicyError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -21424,10 +21341,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DetachSecurityProfileError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DetachSecurityProfileResponse, _>()?;
+                                .deserialize::<DetachSecurityProfileResponse, _>();
 
                             result
                         })
@@ -21438,11 +21356,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DetachSecurityProfileError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DetachSecurityProfileError>())
+                            .and_then(|response| {
+                                Err(DetachSecurityProfileError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -21470,10 +21387,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DetachThingPrincipalError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DetachThingPrincipalResponse, _>()?;
+                                .deserialize::<DetachThingPrincipalResponse, _>();
 
                             result
                         })
@@ -21484,11 +21402,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DetachThingPrincipalError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DetachThingPrincipalError>())
+                            .and_then(|response| {
+                                Err(DetachThingPrincipalError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -21511,8 +21428,9 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DisableTopicRuleError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -21524,11 +21442,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DisableTopicRuleError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DisableTopicRuleError>())
+                            .and_then(|response| {
+                                Err(DisableTopicRuleError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -21551,8 +21468,9 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| EnableTopicRuleError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -21564,11 +21482,8 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(EnableTopicRuleError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<EnableTopicRuleError>())
+                            .and_then(|response| Err(EnableTopicRuleError::from_response(response)))
                     })
                     .boxed()
             }
@@ -21599,10 +21514,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetEffectivePoliciesError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetEffectivePoliciesResponse, _>()?;
+                                .deserialize::<GetEffectivePoliciesResponse, _>();
 
                             result
                         })
@@ -21613,11 +21529,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetEffectivePoliciesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetEffectivePoliciesError>())
+                            .and_then(|response| {
+                                Err(GetEffectivePoliciesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -21639,10 +21554,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetIndexingConfigurationError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetIndexingConfigurationResponse, _>()?;
+                                .deserialize::<GetIndexingConfigurationResponse, _>();
 
                             result
                         })
@@ -21653,13 +21569,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(GetIndexingConfigurationError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetIndexingConfigurationError>())
+                            .and_then(|response| {
+                                Err(GetIndexingConfigurationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -21682,10 +21595,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetJobDocumentError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetJobDocumentResponse, _>()?;
+                                .deserialize::<GetJobDocumentResponse, _>();
 
                             result
                         })
@@ -21696,11 +21610,8 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetJobDocumentError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetJobDocumentError>())
+                            .and_then(|response| Err(GetJobDocumentError::from_response(response)))
                     })
                     .boxed()
             }
@@ -21722,10 +21633,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetLoggingOptionsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetLoggingOptionsResponse, _>()?;
+                                .deserialize::<GetLoggingOptionsResponse, _>();
 
                             result
                         })
@@ -21736,11 +21648,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetLoggingOptionsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetLoggingOptionsError>())
+                            .and_then(|response| {
+                                Err(GetLoggingOptionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -21766,10 +21677,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetOTAUpdateError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetOTAUpdateResponse, _>()?;
+                                .deserialize::<GetOTAUpdateResponse, _>();
 
                             result
                         })
@@ -21780,11 +21692,8 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetOTAUpdateError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetOTAUpdateError>())
+                            .and_then(|response| Err(GetOTAUpdateError::from_response(response)))
                     })
                     .boxed()
             }
@@ -21807,10 +21716,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetPolicyError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetPolicyResponse, _>()?;
+                                .deserialize::<GetPolicyResponse, _>();
 
                             result
                         })
@@ -21821,11 +21731,8 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetPolicyError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetPolicyError>())
+                            .and_then(|response| Err(GetPolicyError::from_response(response)))
                     })
                     .boxed()
             }
@@ -21852,10 +21759,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetPolicyVersionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetPolicyVersionResponse, _>()?;
+                                .deserialize::<GetPolicyVersionResponse, _>();
 
                             result
                         })
@@ -21866,11 +21774,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetPolicyVersionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetPolicyVersionError>())
+                            .and_then(|response| {
+                                Err(GetPolicyVersionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -21892,10 +21799,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetRegistrationCodeError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetRegistrationCodeResponse, _>()?;
+                                .deserialize::<GetRegistrationCodeResponse, _>();
 
                             result
                         })
@@ -21906,11 +21814,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetRegistrationCodeError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetRegistrationCodeError>())
+                            .and_then(|response| {
+                                Err(GetRegistrationCodeError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -21935,10 +21842,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetStatisticsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetStatisticsResponse, _>()?;
+                                .deserialize::<GetStatisticsResponse, _>();
 
                             result
                         })
@@ -21949,11 +21857,8 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetStatisticsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetStatisticsError>())
+                            .and_then(|response| Err(GetStatisticsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -21976,10 +21881,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetTopicRuleError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetTopicRuleResponse, _>()?;
+                                .deserialize::<GetTopicRuleResponse, _>();
 
                             result
                         })
@@ -21990,11 +21896,8 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetTopicRuleError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetTopicRuleError>())
+                            .and_then(|response| Err(GetTopicRuleError::from_response(response)))
                     })
                     .boxed()
             }
@@ -22016,10 +21919,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetV2LoggingOptionsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetV2LoggingOptionsResponse, _>()?;
+                                .deserialize::<GetV2LoggingOptionsResponse, _>();
 
                             result
                         })
@@ -22030,11 +21934,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetV2LoggingOptionsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetV2LoggingOptionsError>())
+                            .and_then(|response| {
+                                Err(GetV2LoggingOptionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -22072,10 +21975,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListActiveViolationsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListActiveViolationsResponse, _>()?;
+                                .deserialize::<ListActiveViolationsResponse, _>();
 
                             result
                         })
@@ -22086,11 +21990,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListActiveViolationsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListActiveViolationsError>())
+                            .and_then(|response| {
+                                Err(ListActiveViolationsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -22125,10 +22028,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListAttachedPoliciesError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListAttachedPoliciesResponse, _>()?;
+                                .deserialize::<ListAttachedPoliciesResponse, _>();
 
                             result
                         })
@@ -22139,11 +22043,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListAttachedPoliciesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListAttachedPoliciesError>())
+                            .and_then(|response| {
+                                Err(ListAttachedPoliciesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -22168,10 +22071,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListAuditFindingsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListAuditFindingsResponse, _>()?;
+                                .deserialize::<ListAuditFindingsResponse, _>();
 
                             result
                         })
@@ -22182,11 +22086,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListAuditFindingsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListAuditFindingsError>())
+                            .and_then(|response| {
+                                Err(ListAuditFindingsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -22226,10 +22129,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListAuditTasksError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListAuditTasksResponse, _>()?;
+                                .deserialize::<ListAuditTasksResponse, _>();
 
                             result
                         })
@@ -22240,11 +22144,8 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListAuditTasksError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListAuditTasksError>())
+                            .and_then(|response| Err(ListAuditTasksError::from_response(response)))
                     })
                     .boxed()
             }
@@ -22282,10 +22183,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListAuthorizersError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListAuthorizersResponse, _>()?;
+                                .deserialize::<ListAuthorizersResponse, _>();
 
                             result
                         })
@@ -22296,11 +22198,8 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListAuthorizersError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListAuthorizersError>())
+                            .and_then(|response| Err(ListAuthorizersError::from_response(response)))
                     })
                     .boxed()
             }
@@ -22335,10 +22234,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListBillingGroupsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListBillingGroupsResponse, _>()?;
+                                .deserialize::<ListBillingGroupsResponse, _>();
 
                             result
                         })
@@ -22349,11 +22249,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListBillingGroupsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListBillingGroupsError>())
+                            .and_then(|response| {
+                                Err(ListBillingGroupsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -22388,10 +22287,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListCACertificatesError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListCACertificatesResponse, _>()?;
+                                .deserialize::<ListCACertificatesResponse, _>();
 
                             result
                         })
@@ -22402,11 +22302,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListCACertificatesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListCACertificatesError>())
+                            .and_then(|response| {
+                                Err(ListCACertificatesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -22441,10 +22340,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListCertificatesError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListCertificatesResponse, _>()?;
+                                .deserialize::<ListCertificatesResponse, _>();
 
                             result
                         })
@@ -22455,11 +22355,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListCertificatesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListCertificatesError>())
+                            .and_then(|response| {
+                                Err(ListCertificatesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -22497,10 +22396,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListCertificatesByCAError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListCertificatesByCAResponse, _>()?;
+                                .deserialize::<ListCertificatesByCAResponse, _>();
 
                             result
                         })
@@ -22511,11 +22411,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListCertificatesByCAError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListCertificatesByCAError>())
+                            .and_then(|response| {
+                                Err(ListCertificatesByCAError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -22547,10 +22446,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListIndicesError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListIndicesResponse, _>()?;
+                                .deserialize::<ListIndicesResponse, _>();
 
                             result
                         })
@@ -22561,11 +22461,8 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListIndicesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListIndicesError>())
+                            .and_then(|response| Err(ListIndicesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -22600,10 +22497,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListJobExecutionsForJobError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListJobExecutionsForJobResponse, _>()?;
+                                .deserialize::<ListJobExecutionsForJobResponse, _>();
 
                             result
                         })
@@ -22614,13 +22512,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(ListJobExecutionsForJobError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListJobExecutionsForJobError>())
+                            .and_then(|response| {
+                                Err(ListJobExecutionsForJobError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -22655,10 +22550,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListJobExecutionsForThingError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListJobExecutionsForThingResponse, _>()?;
+                                .deserialize::<ListJobExecutionsForThingResponse, _>();
 
                             result
                         })
@@ -22669,13 +22565,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(ListJobExecutionsForThingError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListJobExecutionsForThingError>())
+                            .and_then(|response| {
+                                Err(ListJobExecutionsForThingError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -22716,10 +22609,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListJobsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListJobsResponse, _>()?;
+                                .deserialize::<ListJobsResponse, _>();
 
                             result
                         })
@@ -22730,11 +22624,8 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListJobsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListJobsError>())
+                            .and_then(|response| Err(ListJobsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -22769,10 +22660,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListOTAUpdatesError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListOTAUpdatesResponse, _>()?;
+                                .deserialize::<ListOTAUpdatesResponse, _>();
 
                             result
                         })
@@ -22783,11 +22675,8 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListOTAUpdatesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListOTAUpdatesError>())
+                            .and_then(|response| Err(ListOTAUpdatesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -22822,10 +22711,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListOutgoingCertificatesError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListOutgoingCertificatesResponse, _>()?;
+                                .deserialize::<ListOutgoingCertificatesResponse, _>();
 
                             result
                         })
@@ -22836,13 +22726,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(ListOutgoingCertificatesError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListOutgoingCertificatesError>())
+                            .and_then(|response| {
+                                Err(ListOutgoingCertificatesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -22877,10 +22764,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListPoliciesError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListPoliciesResponse, _>()?;
+                                .deserialize::<ListPoliciesResponse, _>();
 
                             result
                         })
@@ -22891,11 +22779,8 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListPoliciesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListPoliciesError>())
+                            .and_then(|response| Err(ListPoliciesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -22931,10 +22816,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListPolicyPrincipalsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListPolicyPrincipalsResponse, _>()?;
+                                .deserialize::<ListPolicyPrincipalsResponse, _>();
 
                             result
                         })
@@ -22945,11 +22831,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListPolicyPrincipalsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListPolicyPrincipalsError>())
+                            .and_then(|response| {
+                                Err(ListPolicyPrincipalsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -22975,10 +22860,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListPolicyVersionsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListPolicyVersionsResponse, _>()?;
+                                .deserialize::<ListPolicyVersionsResponse, _>();
 
                             result
                         })
@@ -22989,11 +22875,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListPolicyVersionsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListPolicyVersionsError>())
+                            .and_then(|response| {
+                                Err(ListPolicyVersionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -23029,10 +22914,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListPrincipalPoliciesError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListPrincipalPoliciesResponse, _>()?;
+                                .deserialize::<ListPrincipalPoliciesResponse, _>();
 
                             result
                         })
@@ -23043,11 +22929,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListPrincipalPoliciesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListPrincipalPoliciesError>())
+                            .and_then(|response| {
+                                Err(ListPrincipalPoliciesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -23080,10 +22965,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListPrincipalThingsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListPrincipalThingsResponse, _>()?;
+                                .deserialize::<ListPrincipalThingsResponse, _>();
 
                             result
                         })
@@ -23094,11 +22980,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListPrincipalThingsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListPrincipalThingsError>())
+                            .and_then(|response| {
+                                Err(ListPrincipalThingsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -23133,10 +23018,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListRoleAliasesError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListRoleAliasesResponse, _>()?;
+                                .deserialize::<ListRoleAliasesResponse, _>();
 
                             result
                         })
@@ -23147,11 +23033,8 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListRoleAliasesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListRoleAliasesError>())
+                            .and_then(|response| Err(ListRoleAliasesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -23183,10 +23066,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListScheduledAuditsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListScheduledAuditsResponse, _>()?;
+                                .deserialize::<ListScheduledAuditsResponse, _>();
 
                             result
                         })
@@ -23197,11 +23081,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListScheduledAuditsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListScheduledAuditsError>())
+                            .and_then(|response| {
+                                Err(ListScheduledAuditsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -23233,10 +23116,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListSecurityProfilesError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListSecurityProfilesResponse, _>()?;
+                                .deserialize::<ListSecurityProfilesResponse, _>();
 
                             result
                         })
@@ -23247,11 +23131,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListSecurityProfilesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListSecurityProfilesError>())
+                            .and_then(|response| {
+                                Err(ListSecurityProfilesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -23291,11 +23174,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListSecurityProfilesForTargetError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListSecurityProfilesForTargetResponse, _>(
-                            )?;
+                                .deserialize::<ListSecurityProfilesForTargetResponse, _>();
 
                             result
                         })
@@ -23306,13 +23189,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(ListSecurityProfilesForTargetError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListSecurityProfilesForTargetError>())
+                            .and_then(|response| {
+                                Err(ListSecurityProfilesForTargetError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -23347,10 +23227,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListStreamsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListStreamsResponse, _>()?;
+                                .deserialize::<ListStreamsResponse, _>();
 
                             result
                         })
@@ -23361,11 +23242,8 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListStreamsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListStreamsError>())
+                            .and_then(|response| Err(ListStreamsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -23395,10 +23273,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListTagsForResourceError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListTagsForResourceResponse, _>()?;
+                                .deserialize::<ListTagsForResourceResponse, _>();
 
                             result
                         })
@@ -23409,11 +23288,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListTagsForResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListTagsForResourceError>())
+                            .and_then(|response| {
+                                Err(ListTagsForResourceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -23448,10 +23326,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListTargetsForPolicyError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListTargetsForPolicyResponse, _>()?;
+                                .deserialize::<ListTargetsForPolicyResponse, _>();
 
                             result
                         })
@@ -23462,11 +23341,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListTargetsForPolicyError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListTargetsForPolicyError>())
+                            .and_then(|response| {
+                                Err(ListTargetsForPolicyError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -23502,11 +23380,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListTargetsForSecurityProfileError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListTargetsForSecurityProfileResponse, _>(
-                            )?;
+                                .deserialize::<ListTargetsForSecurityProfileResponse, _>();
 
                             result
                         })
@@ -23517,13 +23395,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(ListTargetsForSecurityProfileError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListTargetsForSecurityProfileError>())
+                            .and_then(|response| {
+                                Err(ListTargetsForSecurityProfileError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -23564,10 +23439,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListThingGroupsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListThingGroupsResponse, _>()?;
+                                .deserialize::<ListThingGroupsResponse, _>();
 
                             result
                         })
@@ -23578,11 +23454,8 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListThingGroupsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListThingGroupsError>())
+                            .and_then(|response| Err(ListThingGroupsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -23617,10 +23490,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListThingGroupsForThingError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListThingGroupsForThingResponse, _>()?;
+                                .deserialize::<ListThingGroupsForThingResponse, _>();
 
                             result
                         })
@@ -23631,13 +23505,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(ListThingGroupsForThingError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListThingGroupsForThingError>())
+                            .and_then(|response| {
+                                Err(ListThingGroupsForThingError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -23663,10 +23534,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListThingPrincipalsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListThingPrincipalsResponse, _>()?;
+                                .deserialize::<ListThingPrincipalsResponse, _>();
 
                             result
                         })
@@ -23677,11 +23549,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListThingPrincipalsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListThingPrincipalsError>())
+                            .and_then(|response| {
+                                Err(ListThingPrincipalsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -23718,11 +23589,12 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListThingRegistrationTaskReportsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
                                 .deserialize::<ListThingRegistrationTaskReportsResponse, _>(
-                            )?;
+                            );
 
                             result
                         })
@@ -23733,15 +23605,12 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(ListThingRegistrationTaskReportsError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListThingRegistrationTaskReportsError>())
+                            .and_then(|response| {
+                                Err(ListThingRegistrationTaskReportsError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -23776,10 +23645,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListThingRegistrationTasksError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListThingRegistrationTasksResponse, _>()?;
+                                .deserialize::<ListThingRegistrationTasksResponse, _>();
 
                             result
                         })
@@ -23790,13 +23660,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(ListThingRegistrationTasksError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListThingRegistrationTasksError>())
+                            .and_then(|response| {
+                                Err(ListThingRegistrationTasksError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -23831,10 +23698,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListThingTypesError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListThingTypesResponse, _>()?;
+                                .deserialize::<ListThingTypesResponse, _>();
 
                             result
                         })
@@ -23845,11 +23713,8 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListThingTypesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListThingTypesError>())
+                            .and_then(|response| Err(ListThingTypesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -23890,10 +23755,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListThingsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListThingsResponse, _>()?;
+                                .deserialize::<ListThingsResponse, _>();
 
                             result
                         })
@@ -23904,11 +23770,8 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListThingsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListThingsError>())
+                            .and_then(|response| Err(ListThingsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -23943,10 +23806,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListThingsInBillingGroupError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListThingsInBillingGroupResponse, _>()?;
+                                .deserialize::<ListThingsInBillingGroupResponse, _>();
 
                             result
                         })
@@ -23957,13 +23821,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(ListThingsInBillingGroupError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListThingsInBillingGroupError>())
+                            .and_then(|response| {
+                                Err(ListThingsInBillingGroupError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -24001,10 +23862,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListThingsInThingGroupError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListThingsInThingGroupResponse, _>()?;
+                                .deserialize::<ListThingsInThingGroupResponse, _>();
 
                             result
                         })
@@ -24015,13 +23877,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(ListThingsInThingGroupError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListThingsInThingGroupError>())
+                            .and_then(|response| {
+                                Err(ListThingsInThingGroupError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -24059,10 +23918,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListTopicRulesError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListTopicRulesResponse, _>()?;
+                                .deserialize::<ListTopicRulesResponse, _>();
 
                             result
                         })
@@ -24073,11 +23933,8 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListTopicRulesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListTopicRulesError>())
+                            .and_then(|response| Err(ListTopicRulesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -24112,10 +23969,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListV2LoggingLevelsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListV2LoggingLevelsResponse, _>()?;
+                                .deserialize::<ListV2LoggingLevelsResponse, _>();
 
                             result
                         })
@@ -24126,11 +23984,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListV2LoggingLevelsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListV2LoggingLevelsError>())
+                            .and_then(|response| {
+                                Err(ListV2LoggingLevelsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -24170,10 +24027,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListViolationEventsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListViolationEventsResponse, _>()?;
+                                .deserialize::<ListViolationEventsResponse, _>();
 
                             result
                         })
@@ -24184,11 +24042,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListViolationEventsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListViolationEventsError>())
+                            .and_then(|response| {
+                                Err(ListViolationEventsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -24222,10 +24079,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| RegisterCACertificateError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RegisterCACertificateResponse, _>()?;
+                                .deserialize::<RegisterCACertificateResponse, _>();
 
                             result
                         })
@@ -24236,11 +24094,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(RegisterCACertificateError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<RegisterCACertificateError>())
+                            .and_then(|response| {
+                                Err(RegisterCACertificateError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -24265,10 +24122,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| RegisterCertificateError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RegisterCertificateResponse, _>()?;
+                                .deserialize::<RegisterCertificateResponse, _>();
 
                             result
                         })
@@ -24279,11 +24137,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(RegisterCertificateError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<RegisterCertificateError>())
+                            .and_then(|response| {
+                                Err(RegisterCertificateError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -24308,10 +24165,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| RegisterThingError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RegisterThingResponse, _>()?;
+                                .deserialize::<RegisterThingResponse, _>();
 
                             result
                         })
@@ -24322,11 +24180,8 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(RegisterThingError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<RegisterThingError>())
+                            .and_then(|response| Err(RegisterThingError::from_response(response)))
                     })
                     .boxed()
             }
@@ -24354,8 +24209,9 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| RejectCertificateTransferError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -24367,13 +24223,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(RejectCertificateTransferError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<RejectCertificateTransferError>())
+                            .and_then(|response| {
+                                Err(RejectCertificateTransferError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -24398,10 +24251,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| RemoveThingFromBillingGroupError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RemoveThingFromBillingGroupResponse, _>()?;
+                                .deserialize::<RemoveThingFromBillingGroupResponse, _>();
 
                             result
                         })
@@ -24412,13 +24266,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(RemoveThingFromBillingGroupError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<RemoveThingFromBillingGroupError>())
+                            .and_then(|response| {
+                                Err(RemoveThingFromBillingGroupError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -24443,10 +24294,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| RemoveThingFromThingGroupError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RemoveThingFromThingGroupResponse, _>()?;
+                                .deserialize::<RemoveThingFromThingGroupResponse, _>();
 
                             result
                         })
@@ -24457,13 +24309,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(RemoveThingFromThingGroupError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<RemoveThingFromThingGroupError>())
+                            .and_then(|response| {
+                                Err(RemoveThingFromThingGroupError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -24488,8 +24337,9 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ReplaceTopicRuleError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -24501,11 +24351,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ReplaceTopicRuleError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ReplaceTopicRuleError>())
+                            .and_then(|response| {
+                                Err(ReplaceTopicRuleError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -24530,10 +24379,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| SearchIndexError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<SearchIndexResponse, _>()?;
+                                .deserialize::<SearchIndexResponse, _>();
 
                             result
                         })
@@ -24544,11 +24394,8 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(SearchIndexError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<SearchIndexError>())
+                            .and_then(|response| Err(SearchIndexError::from_response(response)))
                     })
                     .boxed()
             }
@@ -24573,10 +24420,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| SetDefaultAuthorizerError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<SetDefaultAuthorizerResponse, _>()?;
+                                .deserialize::<SetDefaultAuthorizerResponse, _>();
 
                             result
                         })
@@ -24587,11 +24435,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(SetDefaultAuthorizerError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<SetDefaultAuthorizerError>())
+                            .and_then(|response| {
+                                Err(SetDefaultAuthorizerError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -24618,8 +24465,9 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| SetDefaultPolicyVersionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -24631,13 +24479,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(SetDefaultPolicyVersionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<SetDefaultPolicyVersionError>())
+                            .and_then(|response| {
+                                Err(SetDefaultPolicyVersionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -24662,8 +24507,9 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| SetLoggingOptionsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -24675,11 +24521,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(SetLoggingOptionsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<SetLoggingOptionsError>())
+                            .and_then(|response| {
+                                Err(SetLoggingOptionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -24704,8 +24549,9 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| SetV2LoggingLevelError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -24717,11 +24563,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(SetV2LoggingLevelError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<SetV2LoggingLevelError>())
+                            .and_then(|response| {
+                                Err(SetV2LoggingLevelError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -24746,8 +24591,9 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| SetV2LoggingOptionsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -24759,11 +24605,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(SetV2LoggingOptionsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<SetV2LoggingOptionsError>())
+                            .and_then(|response| {
+                                Err(SetV2LoggingOptionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -24788,10 +24633,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StartOnDemandAuditTaskError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StartOnDemandAuditTaskResponse, _>()?;
+                                .deserialize::<StartOnDemandAuditTaskResponse, _>();
 
                             result
                         })
@@ -24802,13 +24648,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(StartOnDemandAuditTaskError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<StartOnDemandAuditTaskError>())
+                            .and_then(|response| {
+                                Err(StartOnDemandAuditTaskError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -24833,10 +24676,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StartThingRegistrationTaskError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StartThingRegistrationTaskResponse, _>()?;
+                                .deserialize::<StartThingRegistrationTaskResponse, _>();
 
                             result
                         })
@@ -24847,13 +24691,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(StartThingRegistrationTaskError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<StartThingRegistrationTaskError>())
+                            .and_then(|response| {
+                                Err(StartThingRegistrationTaskError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -24879,10 +24720,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StopThingRegistrationTaskError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StopThingRegistrationTaskResponse, _>()?;
+                                .deserialize::<StopThingRegistrationTaskResponse, _>();
 
                             result
                         })
@@ -24893,13 +24735,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(StopThingRegistrationTaskError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<StopThingRegistrationTaskError>())
+                            .and_then(|response| {
+                                Err(StopThingRegistrationTaskError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -24924,10 +24763,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| TagResourceError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<TagResourceResponse, _>()?;
+                                .deserialize::<TagResourceResponse, _>();
 
                             result
                         })
@@ -24938,11 +24778,8 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(TagResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<TagResourceError>())
+                            .and_then(|response| Err(TagResourceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -24973,10 +24810,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| TestAuthorizationError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<TestAuthorizationResponse, _>()?;
+                                .deserialize::<TestAuthorizationResponse, _>();
 
                             result
                         })
@@ -24987,11 +24825,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(TestAuthorizationError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<TestAuthorizationError>())
+                            .and_then(|response| {
+                                Err(TestAuthorizationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -25019,10 +24856,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| TestInvokeAuthorizerError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<TestInvokeAuthorizerResponse, _>()?;
+                                .deserialize::<TestInvokeAuthorizerResponse, _>();
 
                             result
                         })
@@ -25033,11 +24871,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(TestInvokeAuthorizerError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<TestInvokeAuthorizerError>())
+                            .and_then(|response| {
+                                Err(TestInvokeAuthorizerError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -25069,10 +24906,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| TransferCertificateError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<TransferCertificateResponse, _>()?;
+                                .deserialize::<TransferCertificateResponse, _>();
 
                             result
                         })
@@ -25083,11 +24921,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(TransferCertificateError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<TransferCertificateError>())
+                            .and_then(|response| {
+                                Err(TransferCertificateError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -25112,10 +24949,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UntagResourceError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UntagResourceResponse, _>()?;
+                                .deserialize::<UntagResourceResponse, _>();
 
                             result
                         })
@@ -25126,11 +24964,8 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UntagResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UntagResourceError>())
+                            .and_then(|response| Err(UntagResourceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -25156,11 +24991,12 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateAccountAuditConfigurationError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
                                 .deserialize::<UpdateAccountAuditConfigurationResponse, _>(
-                            )?;
+                            );
 
                             result
                         })
@@ -25171,15 +25007,12 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(UpdateAccountAuditConfigurationError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateAccountAuditConfigurationError>())
+                            .and_then(|response| {
+                                Err(UpdateAccountAuditConfigurationError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -25207,10 +25040,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateAuthorizerError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateAuthorizerResponse, _>()?;
+                                .deserialize::<UpdateAuthorizerResponse, _>();
 
                             result
                         })
@@ -25221,11 +25055,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateAuthorizerError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateAuthorizerError>())
+                            .and_then(|response| {
+                                Err(UpdateAuthorizerError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -25253,10 +25086,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateBillingGroupError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateBillingGroupResponse, _>()?;
+                                .deserialize::<UpdateBillingGroupResponse, _>();
 
                             result
                         })
@@ -25267,11 +25101,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateBillingGroupError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateBillingGroupError>())
+                            .and_then(|response| {
+                                Err(UpdateBillingGroupError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -25308,8 +25141,9 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateCACertificateError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -25321,11 +25155,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateCACertificateError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateCACertificateError>())
+                            .and_then(|response| {
+                                Err(UpdateCACertificateError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -25355,8 +25188,9 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateCertificateError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -25368,11 +25202,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateCertificateError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateCertificateError>())
+                            .and_then(|response| {
+                                Err(UpdateCertificateError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -25400,10 +25233,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateDynamicThingGroupError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateDynamicThingGroupResponse, _>()?;
+                                .deserialize::<UpdateDynamicThingGroupResponse, _>();
 
                             result
                         })
@@ -25414,13 +25248,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(UpdateDynamicThingGroupError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateDynamicThingGroupError>())
+                            .and_then(|response| {
+                                Err(UpdateDynamicThingGroupError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -25445,10 +25276,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateEventConfigurationsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateEventConfigurationsResponse, _>()?;
+                                .deserialize::<UpdateEventConfigurationsResponse, _>();
 
                             result
                         })
@@ -25459,13 +25291,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(UpdateEventConfigurationsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateEventConfigurationsError>())
+                            .and_then(|response| {
+                                Err(UpdateEventConfigurationsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -25490,10 +25319,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateIndexingConfigurationError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateIndexingConfigurationResponse, _>()?;
+                                .deserialize::<UpdateIndexingConfigurationResponse, _>();
 
                             result
                         })
@@ -25504,13 +25334,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(UpdateIndexingConfigurationError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateIndexingConfigurationError>())
+                            .and_then(|response| {
+                                Err(UpdateIndexingConfigurationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -25532,8 +25359,9 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateJobError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -25545,11 +25373,8 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateJobError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateJobError>())
+                            .and_then(|response| Err(UpdateJobError::from_response(response)))
                     })
                     .boxed()
             }
@@ -25574,10 +25399,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateRoleAliasError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateRoleAliasResponse, _>()?;
+                                .deserialize::<UpdateRoleAliasResponse, _>();
 
                             result
                         })
@@ -25588,11 +25414,8 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateRoleAliasError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateRoleAliasError>())
+                            .and_then(|response| Err(UpdateRoleAliasError::from_response(response)))
                     })
                     .boxed()
             }
@@ -25620,10 +25443,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateScheduledAuditError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateScheduledAuditResponse, _>()?;
+                                .deserialize::<UpdateScheduledAuditResponse, _>();
 
                             result
                         })
@@ -25634,11 +25458,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateScheduledAuditError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateScheduledAuditError>())
+                            .and_then(|response| {
+                                Err(UpdateScheduledAuditError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -25672,10 +25495,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateSecurityProfileError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateSecurityProfileResponse, _>()?;
+                                .deserialize::<UpdateSecurityProfileResponse, _>();
 
                             result
                         })
@@ -25686,11 +25510,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateSecurityProfileError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateSecurityProfileError>())
+                            .and_then(|response| {
+                                Err(UpdateSecurityProfileError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -25715,10 +25538,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateStreamError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateStreamResponse, _>()?;
+                                .deserialize::<UpdateStreamResponse, _>();
 
                             result
                         })
@@ -25729,11 +25553,8 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateStreamError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateStreamError>())
+                            .and_then(|response| Err(UpdateStreamError::from_response(response)))
                     })
                     .boxed()
             }
@@ -25758,10 +25579,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateThingError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateThingResponse, _>()?;
+                                .deserialize::<UpdateThingResponse, _>();
 
                             result
                         })
@@ -25772,11 +25594,8 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateThingError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateThingError>())
+                            .and_then(|response| Err(UpdateThingError::from_response(response)))
                     })
                     .boxed()
             }
@@ -25804,10 +25623,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateThingGroupError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateThingGroupResponse, _>()?;
+                                .deserialize::<UpdateThingGroupResponse, _>();
 
                             result
                         })
@@ -25818,11 +25638,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateThingGroupError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateThingGroupError>())
+                            .and_then(|response| {
+                                Err(UpdateThingGroupError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -25847,10 +25666,11 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateThingGroupsForThingError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateThingGroupsForThingResponse, _>()?;
+                                .deserialize::<UpdateThingGroupsForThingResponse, _>();
 
                             result
                         })
@@ -25861,13 +25681,10 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(UpdateThingGroupsForThingError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateThingGroupsForThingError>())
+                            .and_then(|response| {
+                                Err(UpdateThingGroupsForThingError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -25893,11 +25710,12 @@ impl Iot for IotClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ValidateSecurityProfileBehaviorsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
                                 .deserialize::<ValidateSecurityProfileBehaviorsResponse, _>(
-                            )?;
+                            );
 
                             result
                         })
@@ -25908,15 +25726,12 @@ impl Iot for IotClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(ValidateSecurityProfileBehaviorsError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ValidateSecurityProfileBehaviorsError>())
+                            .and_then(|response| {
+                                Err(ValidateSecurityProfileBehaviorsError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }

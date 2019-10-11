@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -2806,17 +2806,16 @@ impl Kinesis for KinesisClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(AddTagsToStreamError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<AddTagsToStreamError>
+                            })
+                            .and_then(|response| Err(AddTagsToStreamError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2834,17 +2833,16 @@ impl Kinesis for KinesisClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateStreamError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateStreamError>
+                            })
+                            .and_then(|response| Err(CreateStreamError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2868,19 +2866,19 @@ impl Kinesis for KinesisClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DecreaseStreamRetentionPeriodError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DecreaseStreamRetentionPeriodError>
+                            })
+                            .and_then(|response| {
+                                Err(DecreaseStreamRetentionPeriodError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2898,17 +2896,16 @@ impl Kinesis for KinesisClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteStreamError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteStreamError>
+                            })
+                            .and_then(|response| Err(DeleteStreamError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2929,19 +2926,19 @@ impl Kinesis for KinesisClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DeregisterStreamConsumerError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeregisterStreamConsumerError>
+                            })
+                            .and_then(|response| {
+                                Err(DeregisterStreamConsumerError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2960,11 +2957,16 @@ impl Kinesis for KinesisClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeLimitsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeLimitsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeLimitsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeLimitsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2972,11 +2974,10 @@ impl Kinesis for KinesisClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeLimitsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeLimitsError>
+                            })
+                            .and_then(|response| Err(DescribeLimitsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2999,11 +3000,16 @@ impl Kinesis for KinesisClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeStreamError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeStreamOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeStreamError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeStreamOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3011,11 +3017,10 @@ impl Kinesis for KinesisClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeStreamError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeStreamError>
+                            })
+                            .and_then(|response| Err(DescribeStreamError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3038,11 +3043,17 @@ impl Kinesis for KinesisClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeStreamConsumerError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeStreamConsumerOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeStreamConsumerError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeStreamConsumerOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3050,13 +3061,13 @@ impl Kinesis for KinesisClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeStreamConsumerError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeStreamConsumerError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeStreamConsumerError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3079,11 +3090,17 @@ impl Kinesis for KinesisClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeStreamSummaryError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeStreamSummaryOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeStreamSummaryError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeStreamSummaryOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3091,11 +3108,13 @@ impl Kinesis for KinesisClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeStreamSummaryError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeStreamSummaryError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeStreamSummaryError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3118,11 +3137,17 @@ impl Kinesis for KinesisClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DisableEnhancedMonitoringError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<EnhancedMonitoringOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DisableEnhancedMonitoringError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<EnhancedMonitoringOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3130,13 +3155,13 @@ impl Kinesis for KinesisClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DisableEnhancedMonitoringError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DisableEnhancedMonitoringError>
+                            })
+                            .and_then(|response| {
+                                Err(DisableEnhancedMonitoringError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3159,11 +3184,17 @@ impl Kinesis for KinesisClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| EnableEnhancedMonitoringError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<EnhancedMonitoringOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<EnableEnhancedMonitoringError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<EnhancedMonitoringOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3171,13 +3202,13 @@ impl Kinesis for KinesisClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(EnableEnhancedMonitoringError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<EnableEnhancedMonitoringError>
+                            })
+                            .and_then(|response| {
+                                Err(EnableEnhancedMonitoringError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3200,11 +3231,16 @@ impl Kinesis for KinesisClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetRecordsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetRecordsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetRecordsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetRecordsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3212,11 +3248,10 @@ impl Kinesis for KinesisClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetRecordsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetRecordsError>
+                            })
+                            .and_then(|response| Err(GetRecordsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3239,11 +3274,16 @@ impl Kinesis for KinesisClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetShardIteratorError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetShardIteratorOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetShardIteratorError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetShardIteratorOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3251,11 +3291,12 @@ impl Kinesis for KinesisClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetShardIteratorError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetShardIteratorError>
+                            })
+                            .and_then(|response| {
+                                Err(GetShardIteratorError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3279,19 +3320,19 @@ impl Kinesis for KinesisClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(IncreaseStreamRetentionPeriodError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<IncreaseStreamRetentionPeriodError>
+                            })
+                            .and_then(|response| {
+                                Err(IncreaseStreamRetentionPeriodError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3314,11 +3355,16 @@ impl Kinesis for KinesisClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListShardsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListShardsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListShardsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListShardsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3326,11 +3372,10 @@ impl Kinesis for KinesisClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListShardsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListShardsError>
+                            })
+                            .and_then(|response| Err(ListShardsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3353,11 +3398,17 @@ impl Kinesis for KinesisClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListStreamConsumersError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListStreamConsumersOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListStreamConsumersError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListStreamConsumersOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3365,11 +3416,13 @@ impl Kinesis for KinesisClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListStreamConsumersError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListStreamConsumersError>
+                            })
+                            .and_then(|response| {
+                                Err(ListStreamConsumersError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3392,11 +3445,16 @@ impl Kinesis for KinesisClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListStreamsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListStreamsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListStreamsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListStreamsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3404,11 +3462,10 @@ impl Kinesis for KinesisClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListStreamsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListStreamsError>
+                            })
+                            .and_then(|response| Err(ListStreamsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3431,11 +3488,16 @@ impl Kinesis for KinesisClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListTagsForStreamError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListTagsForStreamOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListTagsForStreamError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListTagsForStreamOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3443,11 +3505,12 @@ impl Kinesis for KinesisClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListTagsForStreamError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListTagsForStreamError>
+                            })
+                            .and_then(|response| {
+                                Err(ListTagsForStreamError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3465,17 +3528,16 @@ impl Kinesis for KinesisClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(MergeShardsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<MergeShardsError>
+                            })
+                            .and_then(|response| Err(MergeShardsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3495,11 +3557,16 @@ impl Kinesis for KinesisClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| PutRecordError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PutRecordOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<PutRecordError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<PutRecordOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3507,11 +3574,10 @@ impl Kinesis for KinesisClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(PutRecordError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<PutRecordError>
+                            })
+                            .and_then(|response| Err(PutRecordError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3534,11 +3600,16 @@ impl Kinesis for KinesisClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| PutRecordsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PutRecordsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<PutRecordsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<PutRecordsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3546,11 +3617,10 @@ impl Kinesis for KinesisClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(PutRecordsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<PutRecordsError>
+                            })
+                            .and_then(|response| Err(PutRecordsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3573,11 +3643,17 @@ impl Kinesis for KinesisClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| RegisterStreamConsumerError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RegisterStreamConsumerOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<RegisterStreamConsumerError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<RegisterStreamConsumerOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3585,13 +3661,13 @@ impl Kinesis for KinesisClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(RegisterStreamConsumerError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<RegisterStreamConsumerError>
+                            })
+                            .and_then(|response| {
+                                Err(RegisterStreamConsumerError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3612,17 +3688,19 @@ impl Kinesis for KinesisClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(RemoveTagsFromStreamError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<RemoveTagsFromStreamError>
+                            })
+                            .and_then(|response| {
+                                Err(RemoveTagsFromStreamError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3640,17 +3718,16 @@ impl Kinesis for KinesisClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(SplitShardError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<SplitShardError>
+                            })
+                            .and_then(|response| Err(SplitShardError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3671,17 +3748,19 @@ impl Kinesis for KinesisClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(StartStreamEncryptionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StartStreamEncryptionError>
+                            })
+                            .and_then(|response| {
+                                Err(StartStreamEncryptionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3702,17 +3781,19 @@ impl Kinesis for KinesisClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(StopStreamEncryptionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StopStreamEncryptionError>
+                            })
+                            .and_then(|response| {
+                                Err(StopStreamEncryptionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3735,11 +3816,16 @@ impl Kinesis for KinesisClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| SubscribeToShardError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<SubscribeToShardOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<SubscribeToShardError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<SubscribeToShardOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3747,11 +3833,12 @@ impl Kinesis for KinesisClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(SubscribeToShardError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<SubscribeToShardError>
+                            })
+                            .and_then(|response| {
+                                Err(SubscribeToShardError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3774,11 +3861,16 @@ impl Kinesis for KinesisClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateShardCountError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateShardCountOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateShardCountError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateShardCountOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3786,11 +3878,12 @@ impl Kinesis for KinesisClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateShardCountError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateShardCountError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateShardCountError::from_response(response))
+                            })
                     })
                     .boxed()
             }

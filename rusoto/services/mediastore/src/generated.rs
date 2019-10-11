@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -1164,11 +1164,16 @@ impl MediaStore for MediaStoreClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateContainerError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateContainerOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateContainerError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateContainerOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1176,11 +1181,10 @@ impl MediaStore for MediaStoreClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateContainerError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateContainerError>
+                            })
+                            .and_then(|response| Err(CreateContainerError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1203,11 +1207,16 @@ impl MediaStore for MediaStoreClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteContainerError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteContainerOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteContainerError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteContainerOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1215,11 +1224,10 @@ impl MediaStore for MediaStoreClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteContainerError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteContainerError>
+                            })
+                            .and_then(|response| Err(DeleteContainerError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1242,11 +1250,17 @@ impl MediaStore for MediaStoreClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteContainerPolicyError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteContainerPolicyOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteContainerPolicyError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteContainerPolicyOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1254,11 +1268,13 @@ impl MediaStore for MediaStoreClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteContainerPolicyError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteContainerPolicyError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteContainerPolicyError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1281,11 +1297,16 @@ impl MediaStore for MediaStoreClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteCorsPolicyError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteCorsPolicyOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteCorsPolicyError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteCorsPolicyOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1293,11 +1314,12 @@ impl MediaStore for MediaStoreClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteCorsPolicyError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteCorsPolicyError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteCorsPolicyError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1320,11 +1342,17 @@ impl MediaStore for MediaStoreClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteLifecyclePolicyError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteLifecyclePolicyOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteLifecyclePolicyError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteLifecyclePolicyOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1332,11 +1360,13 @@ impl MediaStore for MediaStoreClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteLifecyclePolicyError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteLifecyclePolicyError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteLifecyclePolicyError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1359,11 +1389,16 @@ impl MediaStore for MediaStoreClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeContainerError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeContainerOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeContainerError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeContainerOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1371,11 +1406,12 @@ impl MediaStore for MediaStoreClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeContainerError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeContainerError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeContainerError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1398,11 +1434,16 @@ impl MediaStore for MediaStoreClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetContainerPolicyError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetContainerPolicyOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetContainerPolicyError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetContainerPolicyOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1410,11 +1451,12 @@ impl MediaStore for MediaStoreClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetContainerPolicyError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetContainerPolicyError>
+                            })
+                            .and_then(|response| {
+                                Err(GetContainerPolicyError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1437,11 +1479,16 @@ impl MediaStore for MediaStoreClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetCorsPolicyError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetCorsPolicyOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetCorsPolicyError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetCorsPolicyOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1449,11 +1496,10 @@ impl MediaStore for MediaStoreClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetCorsPolicyError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetCorsPolicyError>
+                            })
+                            .and_then(|response| Err(GetCorsPolicyError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1476,11 +1522,16 @@ impl MediaStore for MediaStoreClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetLifecyclePolicyError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetLifecyclePolicyOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetLifecyclePolicyError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetLifecyclePolicyOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1488,11 +1539,12 @@ impl MediaStore for MediaStoreClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetLifecyclePolicyError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetLifecyclePolicyError>
+                            })
+                            .and_then(|response| {
+                                Err(GetLifecyclePolicyError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1515,11 +1567,16 @@ impl MediaStore for MediaStoreClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListContainersError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListContainersOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListContainersError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListContainersOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1527,11 +1584,10 @@ impl MediaStore for MediaStoreClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListContainersError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListContainersError>
+                            })
+                            .and_then(|response| Err(ListContainersError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1554,11 +1610,16 @@ impl MediaStore for MediaStoreClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| PutContainerPolicyError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PutContainerPolicyOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<PutContainerPolicyError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<PutContainerPolicyOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1566,11 +1627,12 @@ impl MediaStore for MediaStoreClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(PutContainerPolicyError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<PutContainerPolicyError>
+                            })
+                            .and_then(|response| {
+                                Err(PutContainerPolicyError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1593,11 +1655,16 @@ impl MediaStore for MediaStoreClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| PutCorsPolicyError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PutCorsPolicyOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<PutCorsPolicyError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<PutCorsPolicyOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1605,11 +1672,10 @@ impl MediaStore for MediaStoreClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(PutCorsPolicyError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<PutCorsPolicyError>
+                            })
+                            .and_then(|response| Err(PutCorsPolicyError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1632,11 +1698,16 @@ impl MediaStore for MediaStoreClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| PutLifecyclePolicyError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PutLifecyclePolicyOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<PutLifecyclePolicyError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<PutLifecyclePolicyOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1644,11 +1715,12 @@ impl MediaStore for MediaStoreClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(PutLifecyclePolicyError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<PutLifecyclePolicyError>
+                            })
+                            .and_then(|response| {
+                                Err(PutLifecyclePolicyError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1671,11 +1743,16 @@ impl MediaStore for MediaStoreClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StartAccessLoggingError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StartAccessLoggingOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StartAccessLoggingError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StartAccessLoggingOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1683,11 +1760,12 @@ impl MediaStore for MediaStoreClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(StartAccessLoggingError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StartAccessLoggingError>
+                            })
+                            .and_then(|response| {
+                                Err(StartAccessLoggingError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1710,11 +1788,16 @@ impl MediaStore for MediaStoreClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StopAccessLoggingError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StopAccessLoggingOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StopAccessLoggingError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StopAccessLoggingOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1722,11 +1805,12 @@ impl MediaStore for MediaStoreClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(StopAccessLoggingError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StopAccessLoggingError>
+                            })
+                            .and_then(|response| {
+                                Err(StopAccessLoggingError::from_response(response))
+                            })
                     })
                     .boxed()
             }

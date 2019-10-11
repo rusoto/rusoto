@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
@@ -1414,10 +1414,11 @@ impl Efs for EfsClient {
             if response.status.as_u16() == 201 {
                 response
                     .buffer()
+                    .map_err(|e| CreateFileSystemError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<FileSystemDescription, _>()?;
+                                .deserialize::<FileSystemDescription, _>();
 
                             result
                         })
@@ -1428,11 +1429,10 @@ impl Efs for EfsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateFileSystemError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateFileSystemError>())
+                            .and_then(|response| {
+                                Err(CreateFileSystemError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1457,10 +1457,11 @@ impl Efs for EfsClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| CreateMountTargetError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<MountTargetDescription, _>()?;
+                                .deserialize::<MountTargetDescription, _>();
 
                             result
                         })
@@ -1471,11 +1472,10 @@ impl Efs for EfsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateMountTargetError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateMountTargetError>())
+                            .and_then(|response| {
+                                Err(CreateMountTargetError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1500,8 +1500,9 @@ impl Efs for EfsClient {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| CreateTagsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -1513,11 +1514,8 @@ impl Efs for EfsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateTagsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateTagsError>())
+                            .and_then(|response| Err(CreateTagsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1542,8 +1540,9 @@ impl Efs for EfsClient {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteFileSystemError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -1555,11 +1554,10 @@ impl Efs for EfsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteFileSystemError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteFileSystemError>())
+                            .and_then(|response| {
+                                Err(DeleteFileSystemError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1584,8 +1582,9 @@ impl Efs for EfsClient {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteMountTargetError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -1597,11 +1596,10 @@ impl Efs for EfsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteMountTargetError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteMountTargetError>())
+                            .and_then(|response| {
+                                Err(DeleteMountTargetError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1626,8 +1624,9 @@ impl Efs for EfsClient {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteTagsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -1639,11 +1638,8 @@ impl Efs for EfsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteTagsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteTagsError>())
+                            .and_then(|response| Err(DeleteTagsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1680,10 +1676,11 @@ impl Efs for EfsClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| DescribeFileSystemsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeFileSystemsResponse, _>()?;
+                                .deserialize::<DescribeFileSystemsResponse, _>();
 
                             result
                         })
@@ -1694,11 +1691,10 @@ impl Efs for EfsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DescribeFileSystemsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeFileSystemsError>())
+                            .and_then(|response| {
+                                Err(DescribeFileSystemsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1723,10 +1719,11 @@ impl Efs for EfsClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| DescribeLifecycleConfigurationError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<LifecycleConfigurationDescription, _>()?;
+                                .deserialize::<LifecycleConfigurationDescription, _>();
 
                             result
                         })
@@ -1737,15 +1734,10 @@ impl Efs for EfsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(DescribeLifecycleConfigurationError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeLifecycleConfigurationError>())
+                            .and_then(|response| {
+                                Err(DescribeLifecycleConfigurationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1773,11 +1765,12 @@ impl Efs for EfsClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| DescribeMountTargetSecurityGroupsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
                                 .deserialize::<DescribeMountTargetSecurityGroupsResponse, _>(
-                            )?;
+                            );
 
                             result
                         })
@@ -1788,15 +1781,12 @@ impl Efs for EfsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(DescribeMountTargetSecurityGroupsError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeMountTargetSecurityGroupsError>())
+                            .and_then(|response| {
+                                Err(DescribeMountTargetSecurityGroupsError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -1833,10 +1823,11 @@ impl Efs for EfsClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| DescribeMountTargetsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeMountTargetsResponse, _>()?;
+                                .deserialize::<DescribeMountTargetsResponse, _>();
 
                             result
                         })
@@ -1847,11 +1838,10 @@ impl Efs for EfsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DescribeMountTargetsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeMountTargetsError>())
+                            .and_then(|response| {
+                                Err(DescribeMountTargetsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1885,10 +1875,11 @@ impl Efs for EfsClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| DescribeTagsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeTagsResponse, _>()?;
+                                .deserialize::<DescribeTagsResponse, _>();
 
                             result
                         })
@@ -1899,11 +1890,8 @@ impl Efs for EfsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DescribeTagsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeTagsError>())
+                            .and_then(|response| Err(DescribeTagsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1931,8 +1919,9 @@ impl Efs for EfsClient {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| ModifyMountTargetSecurityGroupsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -1944,15 +1933,12 @@ impl Efs for EfsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(ModifyMountTargetSecurityGroupsError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ModifyMountTargetSecurityGroupsError>())
+                            .and_then(|response| {
+                                Err(ModifyMountTargetSecurityGroupsError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -1980,10 +1966,11 @@ impl Efs for EfsClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| PutLifecycleConfigurationError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<LifecycleConfigurationDescription, _>()?;
+                                .deserialize::<LifecycleConfigurationDescription, _>();
 
                             result
                         })
@@ -1994,13 +1981,10 @@ impl Efs for EfsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(PutLifecycleConfigurationError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<PutLifecycleConfigurationError>())
+                            .and_then(|response| {
+                                Err(PutLifecycleConfigurationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2028,10 +2012,11 @@ impl Efs for EfsClient {
             if response.status.as_u16() == 202 {
                 response
                     .buffer()
+                    .map_err(|e| UpdateFileSystemError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<FileSystemDescription, _>()?;
+                                .deserialize::<FileSystemDescription, _>();
 
                             result
                         })
@@ -2042,11 +2027,10 @@ impl Efs for EfsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateFileSystemError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateFileSystemError>())
+                            .and_then(|response| {
+                                Err(UpdateFileSystemError::from_response(response))
+                            })
                     })
                     .boxed()
             }

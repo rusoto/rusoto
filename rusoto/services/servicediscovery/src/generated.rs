@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -2031,11 +2031,17 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateHttpNamespaceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateHttpNamespaceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateHttpNamespaceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateHttpNamespaceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2043,11 +2049,13 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateHttpNamespaceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateHttpNamespaceError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateHttpNamespaceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2073,11 +2081,17 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreatePrivateDnsNamespaceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreatePrivateDnsNamespaceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreatePrivateDnsNamespaceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreatePrivateDnsNamespaceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2085,13 +2099,13 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(CreatePrivateDnsNamespaceError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreatePrivateDnsNamespaceError>
+                            })
+                            .and_then(|response| {
+                                Err(CreatePrivateDnsNamespaceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2117,11 +2131,17 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreatePublicDnsNamespaceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreatePublicDnsNamespaceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreatePublicDnsNamespaceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreatePublicDnsNamespaceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2129,13 +2149,13 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(CreatePublicDnsNamespaceError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreatePublicDnsNamespaceError>
+                            })
+                            .and_then(|response| {
+                                Err(CreatePublicDnsNamespaceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2158,11 +2178,16 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateServiceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateServiceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateServiceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateServiceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2170,11 +2195,10 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateServiceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateServiceError>
+                            })
+                            .and_then(|response| Err(CreateServiceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2200,11 +2224,16 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteNamespaceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteNamespaceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteNamespaceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteNamespaceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2212,11 +2241,10 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteNamespaceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteNamespaceError>
+                            })
+                            .and_then(|response| Err(DeleteNamespaceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2239,11 +2267,16 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteServiceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteServiceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteServiceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteServiceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2251,11 +2284,10 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteServiceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteServiceError>
+                            })
+                            .and_then(|response| Err(DeleteServiceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2281,11 +2313,16 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeregisterInstanceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeregisterInstanceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeregisterInstanceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeregisterInstanceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2293,11 +2330,12 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeregisterInstanceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeregisterInstanceError>
+                            })
+                            .and_then(|response| {
+                                Err(DeregisterInstanceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2323,11 +2361,16 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DiscoverInstancesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DiscoverInstancesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DiscoverInstancesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DiscoverInstancesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2335,11 +2378,12 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DiscoverInstancesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DiscoverInstancesError>
+                            })
+                            .and_then(|response| {
+                                Err(DiscoverInstancesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2362,11 +2406,16 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetInstanceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetInstanceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetInstanceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetInstanceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2374,11 +2423,10 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetInstanceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetInstanceError>
+                            })
+                            .and_then(|response| Err(GetInstanceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2404,11 +2452,17 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetInstancesHealthStatusError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetInstancesHealthStatusResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetInstancesHealthStatusError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetInstancesHealthStatusResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2416,13 +2470,13 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(GetInstancesHealthStatusError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetInstancesHealthStatusError>
+                            })
+                            .and_then(|response| {
+                                Err(GetInstancesHealthStatusError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2445,11 +2499,16 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetNamespaceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetNamespaceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetNamespaceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetNamespaceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2457,11 +2516,10 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetNamespaceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetNamespaceError>
+                            })
+                            .and_then(|response| Err(GetNamespaceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2484,11 +2542,16 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetOperationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetOperationResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetOperationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetOperationResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2496,11 +2559,10 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetOperationError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetOperationError>
+                            })
+                            .and_then(|response| Err(GetOperationError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2523,11 +2585,16 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetServiceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetServiceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetServiceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetServiceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2535,11 +2602,10 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetServiceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetServiceError>
+                            })
+                            .and_then(|response| Err(GetServiceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2562,11 +2628,16 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListInstancesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListInstancesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListInstancesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListInstancesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2574,11 +2645,10 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListInstancesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListInstancesError>
+                            })
+                            .and_then(|response| Err(ListInstancesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2601,11 +2671,16 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListNamespacesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListNamespacesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListNamespacesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListNamespacesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2613,11 +2688,10 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListNamespacesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListNamespacesError>
+                            })
+                            .and_then(|response| Err(ListNamespacesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2640,11 +2714,16 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListOperationsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListOperationsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListOperationsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListOperationsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2652,11 +2731,10 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListOperationsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListOperationsError>
+                            })
+                            .and_then(|response| Err(ListOperationsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2679,11 +2757,16 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListServicesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListServicesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListServicesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListServicesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2691,11 +2774,10 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListServicesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListServicesError>
+                            })
+                            .and_then(|response| Err(ListServicesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2721,11 +2803,16 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| RegisterInstanceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RegisterInstanceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<RegisterInstanceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<RegisterInstanceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2733,11 +2820,12 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(RegisterInstanceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<RegisterInstanceError>
+                            })
+                            .and_then(|response| {
+                                Err(RegisterInstanceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2761,21 +2849,21 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(UpdateInstanceCustomHealthStatusError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateInstanceCustomHealthStatusError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateInstanceCustomHealthStatusError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -2798,11 +2886,16 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateServiceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateServiceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateServiceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateServiceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2810,11 +2903,10 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateServiceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateServiceError>
+                            })
+                            .and_then(|response| Err(UpdateServiceError::from_response(response)))
                     })
                     .boxed()
             }

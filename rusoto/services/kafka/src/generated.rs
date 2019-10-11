@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
@@ -2459,10 +2459,11 @@ impl Kafka for KafkaClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| CreateClusterError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateClusterResponse, _>()?;
+                                .deserialize::<CreateClusterResponse, _>();
 
                             result
                         })
@@ -2473,11 +2474,8 @@ impl Kafka for KafkaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateClusterError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateClusterError>())
+                            .and_then(|response| Err(CreateClusterError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2502,10 +2500,11 @@ impl Kafka for KafkaClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| CreateConfigurationError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateConfigurationResponse, _>()?;
+                                .deserialize::<CreateConfigurationResponse, _>();
 
                             result
                         })
@@ -2516,11 +2515,10 @@ impl Kafka for KafkaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateConfigurationError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateConfigurationError>())
+                            .and_then(|response| {
+                                Err(CreateConfigurationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2551,10 +2549,11 @@ impl Kafka for KafkaClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteClusterError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteClusterResponse, _>()?;
+                                .deserialize::<DeleteClusterResponse, _>();
 
                             result
                         })
@@ -2565,11 +2564,8 @@ impl Kafka for KafkaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteClusterError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteClusterError>())
+                            .and_then(|response| Err(DeleteClusterError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2594,10 +2590,11 @@ impl Kafka for KafkaClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| DescribeClusterError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeClusterResponse, _>()?;
+                                .deserialize::<DescribeClusterResponse, _>();
 
                             result
                         })
@@ -2608,11 +2605,8 @@ impl Kafka for KafkaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DescribeClusterError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeClusterError>())
+                            .and_then(|response| Err(DescribeClusterError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2637,10 +2631,11 @@ impl Kafka for KafkaClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| DescribeClusterOperationError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeClusterOperationResponse, _>()?;
+                                .deserialize::<DescribeClusterOperationResponse, _>();
 
                             result
                         })
@@ -2651,13 +2646,10 @@ impl Kafka for KafkaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(DescribeClusterOperationError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeClusterOperationError>())
+                            .and_then(|response| {
+                                Err(DescribeClusterOperationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2679,10 +2671,11 @@ impl Kafka for KafkaClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| DescribeConfigurationError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeConfigurationResponse, _>()?;
+                                .deserialize::<DescribeConfigurationResponse, _>();
 
                             result
                         })
@@ -2693,11 +2686,10 @@ impl Kafka for KafkaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DescribeConfigurationError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeConfigurationError>())
+                            .and_then(|response| {
+                                Err(DescribeConfigurationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2724,11 +2716,11 @@ impl Kafka for KafkaClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| DescribeConfigurationRevisionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeConfigurationRevisionResponse, _>(
-                            )?;
+                                .deserialize::<DescribeConfigurationRevisionResponse, _>();
 
                             result
                         })
@@ -2739,13 +2731,10 @@ impl Kafka for KafkaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(DescribeConfigurationRevisionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeConfigurationRevisionError>())
+                            .and_then(|response| {
+                                Err(DescribeConfigurationRevisionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2770,10 +2759,11 @@ impl Kafka for KafkaClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetBootstrapBrokersError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetBootstrapBrokersResponse, _>()?;
+                                .deserialize::<GetBootstrapBrokersResponse, _>();
 
                             result
                         })
@@ -2784,11 +2774,10 @@ impl Kafka for KafkaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetBootstrapBrokersError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetBootstrapBrokersError>())
+                            .and_then(|response| {
+                                Err(GetBootstrapBrokersError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2822,10 +2811,11 @@ impl Kafka for KafkaClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListClusterOperationsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListClusterOperationsResponse, _>()?;
+                                .deserialize::<ListClusterOperationsResponse, _>();
 
                             result
                         })
@@ -2836,11 +2826,10 @@ impl Kafka for KafkaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListClusterOperationsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListClusterOperationsError>())
+                            .and_then(|response| {
+                                Err(ListClusterOperationsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2874,10 +2863,11 @@ impl Kafka for KafkaClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListClustersError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListClustersResponse, _>()?;
+                                .deserialize::<ListClustersResponse, _>();
 
                             result
                         })
@@ -2888,11 +2878,8 @@ impl Kafka for KafkaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListClustersError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListClustersError>())
+                            .and_then(|response| Err(ListClustersError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2923,10 +2910,11 @@ impl Kafka for KafkaClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListConfigurationRevisionsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListConfigurationRevisionsResponse, _>()?;
+                                .deserialize::<ListConfigurationRevisionsResponse, _>();
 
                             result
                         })
@@ -2937,13 +2925,10 @@ impl Kafka for KafkaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(ListConfigurationRevisionsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListConfigurationRevisionsError>())
+                            .and_then(|response| {
+                                Err(ListConfigurationRevisionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2974,10 +2959,11 @@ impl Kafka for KafkaClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListConfigurationsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListConfigurationsResponse, _>()?;
+                                .deserialize::<ListConfigurationsResponse, _>();
 
                             result
                         })
@@ -2988,11 +2974,10 @@ impl Kafka for KafkaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListConfigurationsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListConfigurationsError>())
+                            .and_then(|response| {
+                                Err(ListConfigurationsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3026,10 +3011,11 @@ impl Kafka for KafkaClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListNodesError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListNodesResponse, _>()?;
+                                .deserialize::<ListNodesResponse, _>();
 
                             result
                         })
@@ -3040,11 +3026,8 @@ impl Kafka for KafkaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListNodesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListNodesError>())
+                            .and_then(|response| Err(ListNodesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3066,10 +3049,11 @@ impl Kafka for KafkaClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListTagsForResourceError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListTagsForResourceResponse, _>()?;
+                                .deserialize::<ListTagsForResourceResponse, _>();
 
                             result
                         })
@@ -3080,11 +3064,10 @@ impl Kafka for KafkaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListTagsForResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListTagsForResourceError>())
+                            .and_then(|response| {
+                                Err(ListTagsForResourceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3106,8 +3089,9 @@ impl Kafka for KafkaClient {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| TagResourceError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -3119,11 +3103,8 @@ impl Kafka for KafkaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(TagResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<TagResourceError>())
+                            .and_then(|response| Err(TagResourceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3148,8 +3129,9 @@ impl Kafka for KafkaClient {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| UntagResourceError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -3161,11 +3143,8 @@ impl Kafka for KafkaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UntagResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UntagResourceError>())
+                            .and_then(|response| Err(UntagResourceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3193,10 +3172,11 @@ impl Kafka for KafkaClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| UpdateBrokerStorageError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateBrokerStorageResponse, _>()?;
+                                .deserialize::<UpdateBrokerStorageResponse, _>();
 
                             result
                         })
@@ -3207,11 +3187,10 @@ impl Kafka for KafkaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateBrokerStorageError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateBrokerStorageError>())
+                            .and_then(|response| {
+                                Err(UpdateBrokerStorageError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3239,10 +3218,11 @@ impl Kafka for KafkaClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| UpdateClusterConfigurationError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateClusterConfigurationResponse, _>()?;
+                                .deserialize::<UpdateClusterConfigurationResponse, _>();
 
                             result
                         })
@@ -3253,13 +3233,10 @@ impl Kafka for KafkaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(UpdateClusterConfigurationError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateClusterConfigurationError>())
+                            .and_then(|response| {
+                                Err(UpdateClusterConfigurationError::from_response(response))
+                            })
                     })
                     .boxed()
             }

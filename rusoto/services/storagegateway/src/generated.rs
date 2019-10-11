@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -6357,11 +6357,16 @@ impl StorageGateway for StorageGatewayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ActivateGatewayError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ActivateGatewayOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ActivateGatewayError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ActivateGatewayOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6369,11 +6374,10 @@ impl StorageGateway for StorageGatewayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ActivateGatewayError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ActivateGatewayError>
+                            })
+                            .and_then(|response| Err(ActivateGatewayError::from_response(response)))
                     })
                     .boxed()
             }
@@ -6393,11 +6397,14 @@ impl StorageGateway for StorageGatewayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AddCacheError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AddCacheOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<AddCacheError>)
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AddCacheOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6405,11 +6412,8 @@ impl StorageGateway for StorageGatewayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(AddCacheError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<AddCacheError>)
+                            .and_then(|response| Err(AddCacheError::from_response(response)))
                     })
                     .boxed()
             }
@@ -6432,11 +6436,16 @@ impl StorageGateway for StorageGatewayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AddTagsToResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AddTagsToResourceOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<AddTagsToResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AddTagsToResourceOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6444,11 +6453,12 @@ impl StorageGateway for StorageGatewayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(AddTagsToResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<AddTagsToResourceError>
+                            })
+                            .and_then(|response| {
+                                Err(AddTagsToResourceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6471,11 +6481,16 @@ impl StorageGateway for StorageGatewayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AddUploadBufferError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AddUploadBufferOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<AddUploadBufferError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AddUploadBufferOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6483,11 +6498,10 @@ impl StorageGateway for StorageGatewayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(AddUploadBufferError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<AddUploadBufferError>
+                            })
+                            .and_then(|response| Err(AddUploadBufferError::from_response(response)))
                     })
                     .boxed()
             }
@@ -6510,11 +6524,16 @@ impl StorageGateway for StorageGatewayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AddWorkingStorageError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AddWorkingStorageOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<AddWorkingStorageError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AddWorkingStorageOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6522,11 +6541,12 @@ impl StorageGateway for StorageGatewayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(AddWorkingStorageError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<AddWorkingStorageError>
+                            })
+                            .and_then(|response| {
+                                Err(AddWorkingStorageError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6549,11 +6569,16 @@ impl StorageGateway for StorageGatewayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AssignTapePoolError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AssignTapePoolOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<AssignTapePoolError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AssignTapePoolOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6561,11 +6586,10 @@ impl StorageGateway for StorageGatewayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(AssignTapePoolError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<AssignTapePoolError>
+                            })
+                            .and_then(|response| Err(AssignTapePoolError::from_response(response)))
                     })
                     .boxed()
             }
@@ -6588,11 +6612,16 @@ impl StorageGateway for StorageGatewayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AttachVolumeError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AttachVolumeOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<AttachVolumeError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AttachVolumeOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6600,11 +6629,10 @@ impl StorageGateway for StorageGatewayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(AttachVolumeError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<AttachVolumeError>
+                            })
+                            .and_then(|response| Err(AttachVolumeError::from_response(response)))
                     })
                     .boxed()
             }
@@ -6627,11 +6655,16 @@ impl StorageGateway for StorageGatewayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CancelArchivalError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CancelArchivalOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CancelArchivalError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CancelArchivalOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6639,11 +6672,10 @@ impl StorageGateway for StorageGatewayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CancelArchivalError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CancelArchivalError>
+                            })
+                            .and_then(|response| Err(CancelArchivalError::from_response(response)))
                     })
                     .boxed()
             }
@@ -6666,11 +6698,16 @@ impl StorageGateway for StorageGatewayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CancelRetrievalError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CancelRetrievalOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CancelRetrievalError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CancelRetrievalOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6678,11 +6715,10 @@ impl StorageGateway for StorageGatewayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CancelRetrievalError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CancelRetrievalError>
+                            })
+                            .and_then(|response| Err(CancelRetrievalError::from_response(response)))
                     })
                     .boxed()
             }
@@ -6708,11 +6744,17 @@ impl StorageGateway for StorageGatewayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateCachediSCSIVolumeError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateCachediSCSIVolumeOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateCachediSCSIVolumeError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateCachediSCSIVolumeOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6720,13 +6762,13 @@ impl StorageGateway for StorageGatewayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(CreateCachediSCSIVolumeError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateCachediSCSIVolumeError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateCachediSCSIVolumeError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6749,11 +6791,16 @@ impl StorageGateway for StorageGatewayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateNFSFileShareError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateNFSFileShareOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateNFSFileShareError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateNFSFileShareOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6761,11 +6808,12 @@ impl StorageGateway for StorageGatewayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateNFSFileShareError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateNFSFileShareError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateNFSFileShareError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6788,11 +6836,16 @@ impl StorageGateway for StorageGatewayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateSMBFileShareError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateSMBFileShareOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateSMBFileShareError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateSMBFileShareOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6800,11 +6853,12 @@ impl StorageGateway for StorageGatewayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateSMBFileShareError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateSMBFileShareError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateSMBFileShareError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6827,11 +6881,16 @@ impl StorageGateway for StorageGatewayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateSnapshotError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateSnapshotOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateSnapshotError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateSnapshotOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6839,11 +6898,10 @@ impl StorageGateway for StorageGatewayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateSnapshotError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateSnapshotError>
+                            })
+                            .and_then(|response| Err(CreateSnapshotError::from_response(response)))
                     })
                     .boxed()
             }
@@ -6872,11 +6930,17 @@ impl StorageGateway for StorageGatewayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateSnapshotFromVolumeRecoveryPointError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateSnapshotFromVolumeRecoveryPointOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateSnapshotFromVolumeRecoveryPointError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateSnapshotFromVolumeRecoveryPointOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6884,15 +6948,15 @@ impl StorageGateway for StorageGatewayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(CreateSnapshotFromVolumeRecoveryPointError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateSnapshotFromVolumeRecoveryPointError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateSnapshotFromVolumeRecoveryPointError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -6918,11 +6982,17 @@ impl StorageGateway for StorageGatewayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateStorediSCSIVolumeError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateStorediSCSIVolumeOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateStorediSCSIVolumeError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateStorediSCSIVolumeOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6930,13 +7000,13 @@ impl StorageGateway for StorageGatewayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(CreateStorediSCSIVolumeError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateStorediSCSIVolumeError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateStorediSCSIVolumeError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6962,11 +7032,17 @@ impl StorageGateway for StorageGatewayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateTapeWithBarcodeError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateTapeWithBarcodeOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateTapeWithBarcodeError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateTapeWithBarcodeOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6974,11 +7050,13 @@ impl StorageGateway for StorageGatewayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateTapeWithBarcodeError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateTapeWithBarcodeError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateTapeWithBarcodeError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7001,11 +7079,16 @@ impl StorageGateway for StorageGatewayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateTapesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateTapesOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateTapesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateTapesOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7013,11 +7096,10 @@ impl StorageGateway for StorageGatewayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateTapesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateTapesError>
+                            })
+                            .and_then(|response| Err(CreateTapesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7043,11 +7125,17 @@ impl StorageGateway for StorageGatewayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteBandwidthRateLimitError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteBandwidthRateLimitOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteBandwidthRateLimitError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteBandwidthRateLimitOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7055,13 +7143,13 @@ impl StorageGateway for StorageGatewayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DeleteBandwidthRateLimitError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteBandwidthRateLimitError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteBandwidthRateLimitError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7087,11 +7175,17 @@ impl StorageGateway for StorageGatewayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteChapCredentialsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteChapCredentialsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteChapCredentialsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteChapCredentialsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7099,11 +7193,13 @@ impl StorageGateway for StorageGatewayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteChapCredentialsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteChapCredentialsError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteChapCredentialsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7126,11 +7222,16 @@ impl StorageGateway for StorageGatewayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteFileShareError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteFileShareOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteFileShareError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteFileShareOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7138,11 +7239,10 @@ impl StorageGateway for StorageGatewayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteFileShareError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteFileShareError>
+                            })
+                            .and_then(|response| Err(DeleteFileShareError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7165,11 +7265,16 @@ impl StorageGateway for StorageGatewayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteGatewayError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteGatewayOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteGatewayError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteGatewayOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7177,11 +7282,10 @@ impl StorageGateway for StorageGatewayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteGatewayError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteGatewayError>
+                            })
+                            .and_then(|response| Err(DeleteGatewayError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7207,11 +7311,17 @@ impl StorageGateway for StorageGatewayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteSnapshotScheduleError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteSnapshotScheduleOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteSnapshotScheduleError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteSnapshotScheduleOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7219,13 +7329,13 @@ impl StorageGateway for StorageGatewayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DeleteSnapshotScheduleError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteSnapshotScheduleError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteSnapshotScheduleError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7248,11 +7358,16 @@ impl StorageGateway for StorageGatewayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteTapeError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteTapeOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteTapeError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteTapeOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7260,11 +7375,10 @@ impl StorageGateway for StorageGatewayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteTapeError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteTapeError>
+                            })
+                            .and_then(|response| Err(DeleteTapeError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7287,11 +7401,16 @@ impl StorageGateway for StorageGatewayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteTapeArchiveError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteTapeArchiveOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteTapeArchiveError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteTapeArchiveOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7299,11 +7418,12 @@ impl StorageGateway for StorageGatewayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteTapeArchiveError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteTapeArchiveError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteTapeArchiveError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7326,11 +7446,16 @@ impl StorageGateway for StorageGatewayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteVolumeError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteVolumeOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteVolumeError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteVolumeOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7338,11 +7463,10 @@ impl StorageGateway for StorageGatewayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteVolumeError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteVolumeError>
+                            })
+                            .and_then(|response| Err(DeleteVolumeError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7368,11 +7492,17 @@ impl StorageGateway for StorageGatewayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeBandwidthRateLimitError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeBandwidthRateLimitOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeBandwidthRateLimitError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeBandwidthRateLimitOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7380,13 +7510,13 @@ impl StorageGateway for StorageGatewayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeBandwidthRateLimitError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeBandwidthRateLimitError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeBandwidthRateLimitError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7409,11 +7539,16 @@ impl StorageGateway for StorageGatewayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeCacheError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeCacheOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeCacheError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeCacheOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7421,11 +7556,10 @@ impl StorageGateway for StorageGatewayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeCacheError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeCacheError>
+                            })
+                            .and_then(|response| Err(DescribeCacheError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7451,11 +7585,17 @@ impl StorageGateway for StorageGatewayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeCachediSCSIVolumesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeCachediSCSIVolumesOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeCachediSCSIVolumesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeCachediSCSIVolumesOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7463,13 +7603,13 @@ impl StorageGateway for StorageGatewayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeCachediSCSIVolumesError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeCachediSCSIVolumesError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeCachediSCSIVolumesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7495,11 +7635,17 @@ impl StorageGateway for StorageGatewayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeChapCredentialsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeChapCredentialsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeChapCredentialsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeChapCredentialsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7507,13 +7653,13 @@ impl StorageGateway for StorageGatewayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeChapCredentialsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeChapCredentialsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeChapCredentialsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7539,11 +7685,17 @@ impl StorageGateway for StorageGatewayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeGatewayInformationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeGatewayInformationOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeGatewayInformationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeGatewayInformationOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7551,13 +7703,13 @@ impl StorageGateway for StorageGatewayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeGatewayInformationError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeGatewayInformationError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeGatewayInformationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7583,11 +7735,17 @@ impl StorageGateway for StorageGatewayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeMaintenanceStartTimeError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeMaintenanceStartTimeOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeMaintenanceStartTimeError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeMaintenanceStartTimeOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7595,13 +7753,13 @@ impl StorageGateway for StorageGatewayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeMaintenanceStartTimeError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeMaintenanceStartTimeError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeMaintenanceStartTimeError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7627,11 +7785,17 @@ impl StorageGateway for StorageGatewayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeNFSFileSharesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeNFSFileSharesOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeNFSFileSharesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeNFSFileSharesOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7639,11 +7803,13 @@ impl StorageGateway for StorageGatewayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeNFSFileSharesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeNFSFileSharesError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeNFSFileSharesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7669,11 +7835,17 @@ impl StorageGateway for StorageGatewayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeSMBFileSharesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeSMBFileSharesOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeSMBFileSharesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeSMBFileSharesOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7681,11 +7853,13 @@ impl StorageGateway for StorageGatewayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeSMBFileSharesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeSMBFileSharesError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeSMBFileSharesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7711,11 +7885,17 @@ impl StorageGateway for StorageGatewayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeSMBSettingsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeSMBSettingsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeSMBSettingsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeSMBSettingsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7723,11 +7903,13 @@ impl StorageGateway for StorageGatewayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeSMBSettingsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeSMBSettingsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeSMBSettingsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7753,11 +7935,17 @@ impl StorageGateway for StorageGatewayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeSnapshotScheduleError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeSnapshotScheduleOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeSnapshotScheduleError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeSnapshotScheduleOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7765,13 +7953,13 @@ impl StorageGateway for StorageGatewayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeSnapshotScheduleError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeSnapshotScheduleError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeSnapshotScheduleError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7797,11 +7985,17 @@ impl StorageGateway for StorageGatewayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeStorediSCSIVolumesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeStorediSCSIVolumesOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeStorediSCSIVolumesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeStorediSCSIVolumesOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7809,13 +8003,13 @@ impl StorageGateway for StorageGatewayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeStorediSCSIVolumesError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeStorediSCSIVolumesError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeStorediSCSIVolumesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7841,11 +8035,17 @@ impl StorageGateway for StorageGatewayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeTapeArchivesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeTapeArchivesOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeTapeArchivesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeTapeArchivesOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7853,11 +8053,13 @@ impl StorageGateway for StorageGatewayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeTapeArchivesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeTapeArchivesError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeTapeArchivesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7883,11 +8085,17 @@ impl StorageGateway for StorageGatewayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeTapeRecoveryPointsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeTapeRecoveryPointsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeTapeRecoveryPointsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeTapeRecoveryPointsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7895,13 +8103,13 @@ impl StorageGateway for StorageGatewayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeTapeRecoveryPointsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeTapeRecoveryPointsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeTapeRecoveryPointsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7924,11 +8132,16 @@ impl StorageGateway for StorageGatewayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeTapesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeTapesOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeTapesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeTapesOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7936,11 +8149,10 @@ impl StorageGateway for StorageGatewayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeTapesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeTapesError>
+                            })
+                            .and_then(|response| Err(DescribeTapesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7966,11 +8178,17 @@ impl StorageGateway for StorageGatewayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeUploadBufferError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeUploadBufferOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeUploadBufferError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeUploadBufferOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7978,11 +8196,13 @@ impl StorageGateway for StorageGatewayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeUploadBufferError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeUploadBufferError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeUploadBufferError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8005,11 +8225,16 @@ impl StorageGateway for StorageGatewayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeVTLDevicesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeVTLDevicesOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeVTLDevicesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeVTLDevicesOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8017,11 +8242,12 @@ impl StorageGateway for StorageGatewayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeVTLDevicesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeVTLDevicesError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeVTLDevicesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8047,11 +8273,17 @@ impl StorageGateway for StorageGatewayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeWorkingStorageError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeWorkingStorageOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeWorkingStorageError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeWorkingStorageOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8059,13 +8291,13 @@ impl StorageGateway for StorageGatewayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeWorkingStorageError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeWorkingStorageError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeWorkingStorageError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8088,11 +8320,16 @@ impl StorageGateway for StorageGatewayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DetachVolumeError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DetachVolumeOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DetachVolumeError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DetachVolumeOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8100,11 +8337,10 @@ impl StorageGateway for StorageGatewayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DetachVolumeError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DetachVolumeError>
+                            })
+                            .and_then(|response| Err(DetachVolumeError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8127,11 +8363,16 @@ impl StorageGateway for StorageGatewayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DisableGatewayError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DisableGatewayOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DisableGatewayError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DisableGatewayOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8139,11 +8380,10 @@ impl StorageGateway for StorageGatewayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DisableGatewayError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DisableGatewayError>
+                            })
+                            .and_then(|response| Err(DisableGatewayError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8166,11 +8406,16 @@ impl StorageGateway for StorageGatewayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| JoinDomainError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<JoinDomainOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<JoinDomainError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<JoinDomainOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8178,11 +8423,10 @@ impl StorageGateway for StorageGatewayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(JoinDomainError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<JoinDomainError>
+                            })
+                            .and_then(|response| Err(JoinDomainError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8205,11 +8449,16 @@ impl StorageGateway for StorageGatewayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListFileSharesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListFileSharesOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListFileSharesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListFileSharesOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8217,11 +8466,10 @@ impl StorageGateway for StorageGatewayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListFileSharesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListFileSharesError>
+                            })
+                            .and_then(|response| Err(ListFileSharesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8244,11 +8492,16 @@ impl StorageGateway for StorageGatewayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListGatewaysError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListGatewaysOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListGatewaysError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListGatewaysOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8256,11 +8509,10 @@ impl StorageGateway for StorageGatewayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListGatewaysError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListGatewaysError>
+                            })
+                            .and_then(|response| Err(ListGatewaysError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8283,11 +8535,16 @@ impl StorageGateway for StorageGatewayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListLocalDisksError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListLocalDisksOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListLocalDisksError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListLocalDisksOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8295,11 +8552,10 @@ impl StorageGateway for StorageGatewayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListLocalDisksError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListLocalDisksError>
+                            })
+                            .and_then(|response| Err(ListLocalDisksError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8325,11 +8581,17 @@ impl StorageGateway for StorageGatewayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListTagsForResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListTagsForResourceOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListTagsForResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListTagsForResourceOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8337,11 +8599,13 @@ impl StorageGateway for StorageGatewayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListTagsForResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListTagsForResourceError>
+                            })
+                            .and_then(|response| {
+                                Err(ListTagsForResourceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8361,11 +8625,16 @@ impl StorageGateway for StorageGatewayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListTapesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListTapesOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListTapesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListTapesOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8373,11 +8642,10 @@ impl StorageGateway for StorageGatewayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListTapesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListTapesError>
+                            })
+                            .and_then(|response| Err(ListTapesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8403,11 +8671,17 @@ impl StorageGateway for StorageGatewayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListVolumeInitiatorsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListVolumeInitiatorsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListVolumeInitiatorsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListVolumeInitiatorsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8415,11 +8689,13 @@ impl StorageGateway for StorageGatewayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListVolumeInitiatorsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListVolumeInitiatorsError>
+                            })
+                            .and_then(|response| {
+                                Err(ListVolumeInitiatorsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8445,11 +8721,17 @@ impl StorageGateway for StorageGatewayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListVolumeRecoveryPointsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListVolumeRecoveryPointsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListVolumeRecoveryPointsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListVolumeRecoveryPointsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8457,13 +8739,13 @@ impl StorageGateway for StorageGatewayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ListVolumeRecoveryPointsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListVolumeRecoveryPointsError>
+                            })
+                            .and_then(|response| {
+                                Err(ListVolumeRecoveryPointsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8486,11 +8768,16 @@ impl StorageGateway for StorageGatewayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListVolumesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListVolumesOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListVolumesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListVolumesOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8498,11 +8785,10 @@ impl StorageGateway for StorageGatewayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListVolumesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListVolumesError>
+                            })
+                            .and_then(|response| Err(ListVolumesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8525,11 +8811,16 @@ impl StorageGateway for StorageGatewayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| NotifyWhenUploadedError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<NotifyWhenUploadedOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<NotifyWhenUploadedError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<NotifyWhenUploadedOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8537,11 +8828,12 @@ impl StorageGateway for StorageGatewayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(NotifyWhenUploadedError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<NotifyWhenUploadedError>
+                            })
+                            .and_then(|response| {
+                                Err(NotifyWhenUploadedError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8564,11 +8856,16 @@ impl StorageGateway for StorageGatewayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| RefreshCacheError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RefreshCacheOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<RefreshCacheError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<RefreshCacheOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8576,11 +8873,10 @@ impl StorageGateway for StorageGatewayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(RefreshCacheError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<RefreshCacheError>
+                            })
+                            .and_then(|response| Err(RefreshCacheError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8606,11 +8902,17 @@ impl StorageGateway for StorageGatewayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| RemoveTagsFromResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RemoveTagsFromResourceOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<RemoveTagsFromResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<RemoveTagsFromResourceOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8618,13 +8920,13 @@ impl StorageGateway for StorageGatewayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(RemoveTagsFromResourceError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<RemoveTagsFromResourceError>
+                            })
+                            .and_then(|response| {
+                                Err(RemoveTagsFromResourceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8647,11 +8949,16 @@ impl StorageGateway for StorageGatewayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ResetCacheError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ResetCacheOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ResetCacheError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ResetCacheOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8659,11 +8966,10 @@ impl StorageGateway for StorageGatewayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ResetCacheError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ResetCacheError>
+                            })
+                            .and_then(|response| Err(ResetCacheError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8689,11 +8995,17 @@ impl StorageGateway for StorageGatewayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| RetrieveTapeArchiveError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RetrieveTapeArchiveOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<RetrieveTapeArchiveError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<RetrieveTapeArchiveOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8701,11 +9013,13 @@ impl StorageGateway for StorageGatewayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(RetrieveTapeArchiveError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<RetrieveTapeArchiveError>
+                            })
+                            .and_then(|response| {
+                                Err(RetrieveTapeArchiveError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8731,11 +9045,17 @@ impl StorageGateway for StorageGatewayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| RetrieveTapeRecoveryPointError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RetrieveTapeRecoveryPointOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<RetrieveTapeRecoveryPointError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<RetrieveTapeRecoveryPointOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8743,13 +9063,13 @@ impl StorageGateway for StorageGatewayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(RetrieveTapeRecoveryPointError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<RetrieveTapeRecoveryPointError>
+                            })
+                            .and_then(|response| {
+                                Err(RetrieveTapeRecoveryPointError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8775,11 +9095,17 @@ impl StorageGateway for StorageGatewayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| SetLocalConsolePasswordError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<SetLocalConsolePasswordOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<SetLocalConsolePasswordError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<SetLocalConsolePasswordOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8787,13 +9113,13 @@ impl StorageGateway for StorageGatewayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(SetLocalConsolePasswordError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<SetLocalConsolePasswordError>
+                            })
+                            .and_then(|response| {
+                                Err(SetLocalConsolePasswordError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8819,11 +9145,17 @@ impl StorageGateway for StorageGatewayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| SetSMBGuestPasswordError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<SetSMBGuestPasswordOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<SetSMBGuestPasswordError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<SetSMBGuestPasswordOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8831,11 +9163,13 @@ impl StorageGateway for StorageGatewayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(SetSMBGuestPasswordError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<SetSMBGuestPasswordError>
+                            })
+                            .and_then(|response| {
+                                Err(SetSMBGuestPasswordError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8858,11 +9192,16 @@ impl StorageGateway for StorageGatewayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ShutdownGatewayError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ShutdownGatewayOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ShutdownGatewayError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ShutdownGatewayOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8870,11 +9209,10 @@ impl StorageGateway for StorageGatewayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ShutdownGatewayError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ShutdownGatewayError>
+                            })
+                            .and_then(|response| Err(ShutdownGatewayError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8897,11 +9235,16 @@ impl StorageGateway for StorageGatewayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StartGatewayError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StartGatewayOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StartGatewayError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StartGatewayOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8909,11 +9252,10 @@ impl StorageGateway for StorageGatewayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(StartGatewayError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StartGatewayError>
+                            })
+                            .and_then(|response| Err(StartGatewayError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8939,11 +9281,17 @@ impl StorageGateway for StorageGatewayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateBandwidthRateLimitError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateBandwidthRateLimitOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateBandwidthRateLimitError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateBandwidthRateLimitOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8951,13 +9299,13 @@ impl StorageGateway for StorageGatewayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(UpdateBandwidthRateLimitError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateBandwidthRateLimitError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateBandwidthRateLimitError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8983,11 +9331,17 @@ impl StorageGateway for StorageGatewayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateChapCredentialsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateChapCredentialsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateChapCredentialsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateChapCredentialsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8995,11 +9349,13 @@ impl StorageGateway for StorageGatewayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateChapCredentialsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateChapCredentialsError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateChapCredentialsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9025,11 +9381,17 @@ impl StorageGateway for StorageGatewayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateGatewayInformationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateGatewayInformationOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateGatewayInformationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateGatewayInformationOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9037,13 +9399,13 @@ impl StorageGateway for StorageGatewayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(UpdateGatewayInformationError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateGatewayInformationError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateGatewayInformationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9069,11 +9431,17 @@ impl StorageGateway for StorageGatewayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateGatewaySoftwareNowError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateGatewaySoftwareNowOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateGatewaySoftwareNowError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateGatewaySoftwareNowOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9081,13 +9449,13 @@ impl StorageGateway for StorageGatewayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(UpdateGatewaySoftwareNowError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateGatewaySoftwareNowError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateGatewaySoftwareNowError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9113,11 +9481,17 @@ impl StorageGateway for StorageGatewayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateMaintenanceStartTimeError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateMaintenanceStartTimeOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateMaintenanceStartTimeError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateMaintenanceStartTimeOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9125,13 +9499,13 @@ impl StorageGateway for StorageGatewayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(UpdateMaintenanceStartTimeError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateMaintenanceStartTimeError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateMaintenanceStartTimeError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9154,11 +9528,16 @@ impl StorageGateway for StorageGatewayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateNFSFileShareError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateNFSFileShareOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateNFSFileShareError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateNFSFileShareOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9166,11 +9545,12 @@ impl StorageGateway for StorageGatewayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateNFSFileShareError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateNFSFileShareError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateNFSFileShareError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9193,11 +9573,16 @@ impl StorageGateway for StorageGatewayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateSMBFileShareError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateSMBFileShareOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateSMBFileShareError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateSMBFileShareOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9205,11 +9590,12 @@ impl StorageGateway for StorageGatewayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateSMBFileShareError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateSMBFileShareError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateSMBFileShareError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9235,11 +9621,17 @@ impl StorageGateway for StorageGatewayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateSMBSecurityStrategyError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateSMBSecurityStrategyOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateSMBSecurityStrategyError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateSMBSecurityStrategyOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9247,13 +9639,13 @@ impl StorageGateway for StorageGatewayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(UpdateSMBSecurityStrategyError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateSMBSecurityStrategyError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateSMBSecurityStrategyError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9279,11 +9671,17 @@ impl StorageGateway for StorageGatewayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateSnapshotScheduleError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateSnapshotScheduleOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateSnapshotScheduleError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateSnapshotScheduleOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9291,13 +9689,13 @@ impl StorageGateway for StorageGatewayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(UpdateSnapshotScheduleError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateSnapshotScheduleError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateSnapshotScheduleError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9323,11 +9721,17 @@ impl StorageGateway for StorageGatewayClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateVTLDeviceTypeError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateVTLDeviceTypeOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateVTLDeviceTypeError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateVTLDeviceTypeOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9335,11 +9739,13 @@ impl StorageGateway for StorageGatewayClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateVTLDeviceTypeError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateVTLDeviceTypeError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateVTLDeviceTypeError::from_response(response))
+                            })
                     })
                     .boxed()
             }

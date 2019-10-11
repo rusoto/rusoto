@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
@@ -4052,10 +4052,11 @@ impl Lambda for LambdaClient {
             if response.status.as_u16() == 201 {
                 response
                     .buffer()
+                    .map_err(|e| AddLayerVersionPermissionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AddLayerVersionPermissionResponse, _>()?;
+                                .deserialize::<AddLayerVersionPermissionResponse, _>();
 
                             result
                         })
@@ -4066,13 +4067,10 @@ impl Lambda for LambdaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(AddLayerVersionPermissionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<AddLayerVersionPermissionError>())
+                            .and_then(|response| {
+                                Err(AddLayerVersionPermissionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4105,10 +4103,11 @@ impl Lambda for LambdaClient {
             if response.status.as_u16() == 201 {
                 response
                     .buffer()
+                    .map_err(|e| AddPermissionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AddPermissionResponse, _>()?;
+                                .deserialize::<AddPermissionResponse, _>();
 
                             result
                         })
@@ -4119,11 +4118,8 @@ impl Lambda for LambdaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(AddPermissionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<AddPermissionError>())
+                            .and_then(|response| Err(AddPermissionError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4150,10 +4146,11 @@ impl Lambda for LambdaClient {
             if response.status.as_u16() == 201 {
                 response
                     .buffer()
+                    .map_err(|e| CreateAliasError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AliasConfiguration, _>()?;
+                                .deserialize::<AliasConfiguration, _>();
 
                             result
                         })
@@ -4164,11 +4161,8 @@ impl Lambda for LambdaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateAliasError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateAliasError>())
+                            .and_then(|response| Err(CreateAliasError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4192,10 +4186,11 @@ impl Lambda for LambdaClient {
             if response.status.as_u16() == 202 {
                 response
                     .buffer()
+                    .map_err(|e| CreateEventSourceMappingError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<EventSourceMappingConfiguration, _>()?;
+                                .deserialize::<EventSourceMappingConfiguration, _>();
 
                             result
                         })
@@ -4206,13 +4201,10 @@ impl Lambda for LambdaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(CreateEventSourceMappingError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateEventSourceMappingError>())
+                            .and_then(|response| {
+                                Err(CreateEventSourceMappingError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4236,10 +4228,11 @@ impl Lambda for LambdaClient {
             if response.status.as_u16() == 201 {
                 response
                     .buffer()
+                    .map_err(|e| CreateFunctionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<FunctionConfiguration, _>()?;
+                                .deserialize::<FunctionConfiguration, _>();
 
                             result
                         })
@@ -4250,11 +4243,8 @@ impl Lambda for LambdaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateFunctionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateFunctionError>())
+                            .and_then(|response| Err(CreateFunctionError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4276,8 +4266,9 @@ impl Lambda for LambdaClient {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteAliasError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -4289,11 +4280,8 @@ impl Lambda for LambdaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteAliasError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteAliasError>())
+                            .and_then(|response| Err(DeleteAliasError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4317,10 +4305,11 @@ impl Lambda for LambdaClient {
             if response.status.as_u16() == 202 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteEventSourceMappingError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<EventSourceMappingConfiguration, _>()?;
+                                .deserialize::<EventSourceMappingConfiguration, _>();
 
                             result
                         })
@@ -4331,13 +4320,10 @@ impl Lambda for LambdaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(DeleteEventSourceMappingError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteEventSourceMappingError>())
+                            .and_then(|response| {
+                                Err(DeleteEventSourceMappingError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4367,8 +4353,9 @@ impl Lambda for LambdaClient {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteFunctionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -4380,11 +4367,8 @@ impl Lambda for LambdaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteFunctionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteFunctionError>())
+                            .and_then(|response| Err(DeleteFunctionError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4408,8 +4392,9 @@ impl Lambda for LambdaClient {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteFunctionConcurrencyError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -4421,13 +4406,10 @@ impl Lambda for LambdaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(DeleteFunctionConcurrencyError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteFunctionConcurrencyError>())
+                            .and_then(|response| {
+                                Err(DeleteFunctionConcurrencyError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4452,8 +4434,9 @@ impl Lambda for LambdaClient {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteLayerVersionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -4465,11 +4448,10 @@ impl Lambda for LambdaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteLayerVersionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteLayerVersionError>())
+                            .and_then(|response| {
+                                Err(DeleteLayerVersionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4489,10 +4471,11 @@ impl Lambda for LambdaClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetAccountSettingsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetAccountSettingsResponse, _>()?;
+                                .deserialize::<GetAccountSettingsResponse, _>();
 
                             result
                         })
@@ -4503,11 +4486,10 @@ impl Lambda for LambdaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetAccountSettingsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetAccountSettingsError>())
+                            .and_then(|response| {
+                                Err(GetAccountSettingsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4529,10 +4511,11 @@ impl Lambda for LambdaClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetAliasError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AliasConfiguration, _>()?;
+                                .deserialize::<AliasConfiguration, _>();
 
                             result
                         })
@@ -4543,11 +4526,8 @@ impl Lambda for LambdaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetAliasError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetAliasError>())
+                            .and_then(|response| Err(GetAliasError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4571,10 +4551,11 @@ impl Lambda for LambdaClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetEventSourceMappingError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<EventSourceMappingConfiguration, _>()?;
+                                .deserialize::<EventSourceMappingConfiguration, _>();
 
                             result
                         })
@@ -4585,11 +4566,10 @@ impl Lambda for LambdaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetEventSourceMappingError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetEventSourceMappingError>())
+                            .and_then(|response| {
+                                Err(GetEventSourceMappingError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4619,10 +4599,11 @@ impl Lambda for LambdaClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetFunctionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetFunctionResponse, _>()?;
+                                .deserialize::<GetFunctionResponse, _>();
 
                             result
                         })
@@ -4633,11 +4614,8 @@ impl Lambda for LambdaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetFunctionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetFunctionError>())
+                            .and_then(|response| Err(GetFunctionError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4667,10 +4645,11 @@ impl Lambda for LambdaClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetFunctionConfigurationError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<FunctionConfiguration, _>()?;
+                                .deserialize::<FunctionConfiguration, _>();
 
                             result
                         })
@@ -4681,13 +4660,10 @@ impl Lambda for LambdaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(GetFunctionConfigurationError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetFunctionConfigurationError>())
+                            .and_then(|response| {
+                                Err(GetFunctionConfigurationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4712,10 +4688,11 @@ impl Lambda for LambdaClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetLayerVersionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetLayerVersionResponse, _>()?;
+                                .deserialize::<GetLayerVersionResponse, _>();
 
                             result
                         })
@@ -4726,11 +4703,8 @@ impl Lambda for LambdaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetLayerVersionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetLayerVersionError>())
+                            .and_then(|response| Err(GetLayerVersionError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4756,10 +4730,11 @@ impl Lambda for LambdaClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetLayerVersionByArnError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetLayerVersionResponse, _>()?;
+                                .deserialize::<GetLayerVersionResponse, _>();
 
                             result
                         })
@@ -4770,11 +4745,10 @@ impl Lambda for LambdaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetLayerVersionByArnError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetLayerVersionByArnError>())
+                            .and_then(|response| {
+                                Err(GetLayerVersionByArnError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4799,10 +4773,11 @@ impl Lambda for LambdaClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetLayerVersionPolicyError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetLayerVersionPolicyResponse, _>()?;
+                                .deserialize::<GetLayerVersionPolicyResponse, _>();
 
                             result
                         })
@@ -4813,11 +4788,10 @@ impl Lambda for LambdaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetLayerVersionPolicyError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetLayerVersionPolicyError>())
+                            .and_then(|response| {
+                                Err(GetLayerVersionPolicyError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4847,10 +4821,11 @@ impl Lambda for LambdaClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetPolicyError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetPolicyResponse, _>()?;
+                                .deserialize::<GetPolicyResponse, _>();
 
                             result
                         })
@@ -4861,11 +4836,8 @@ impl Lambda for LambdaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetPolicyError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetPolicyError>())
+                            .and_then(|response| Err(GetPolicyError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4910,8 +4882,9 @@ impl Lambda for LambdaClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| InvokeError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let mut result = InvocationResponse::default();
                             result.payload = Some(response.body);
 
@@ -4941,11 +4914,8 @@ impl Lambda for LambdaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(InvokeError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<InvokeError>())
+                            .and_then(|response| Err(InvokeError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4972,10 +4942,11 @@ impl Lambda for LambdaClient {
             if response.status.as_u16() == 202 {
                 response
                     .buffer()
+                    .map_err(|e| InvokeAsyncError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let mut result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<InvokeAsyncResponse, _>()?;
+                                .deserialize::<InvokeAsyncResponse, _>();
 
                             result.status = Some(response.status.as_u16() as i64);
                             result
@@ -4987,11 +4958,8 @@ impl Lambda for LambdaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(InvokeAsyncError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<InvokeAsyncError>())
+                            .and_then(|response| Err(InvokeAsyncError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5027,10 +4995,11 @@ impl Lambda for LambdaClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListAliasesError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListAliasesResponse, _>()?;
+                                .deserialize::<ListAliasesResponse, _>();
 
                             result
                         })
@@ -5041,11 +5010,8 @@ impl Lambda for LambdaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListAliasesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListAliasesError>())
+                            .and_then(|response| Err(ListAliasesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5081,10 +5047,11 @@ impl Lambda for LambdaClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListEventSourceMappingsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListEventSourceMappingsResponse, _>()?;
+                                .deserialize::<ListEventSourceMappingsResponse, _>();
 
                             result
                         })
@@ -5095,13 +5062,10 @@ impl Lambda for LambdaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(ListEventSourceMappingsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListEventSourceMappingsError>())
+                            .and_then(|response| {
+                                Err(ListEventSourceMappingsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5137,10 +5101,11 @@ impl Lambda for LambdaClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListFunctionsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListFunctionsResponse, _>()?;
+                                .deserialize::<ListFunctionsResponse, _>();
 
                             result
                         })
@@ -5151,11 +5116,8 @@ impl Lambda for LambdaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListFunctionsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListFunctionsError>())
+                            .and_then(|response| Err(ListFunctionsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5191,10 +5153,11 @@ impl Lambda for LambdaClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListLayerVersionsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListLayerVersionsResponse, _>()?;
+                                .deserialize::<ListLayerVersionsResponse, _>();
 
                             result
                         })
@@ -5205,11 +5168,10 @@ impl Lambda for LambdaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListLayerVersionsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListLayerVersionsError>())
+                            .and_then(|response| {
+                                Err(ListLayerVersionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5242,10 +5204,11 @@ impl Lambda for LambdaClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListLayersError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListLayersResponse, _>()?;
+                                .deserialize::<ListLayersResponse, _>();
 
                             result
                         })
@@ -5256,11 +5219,8 @@ impl Lambda for LambdaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListLayersError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListLayersError>())
+                            .and_then(|response| Err(ListLayersError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5278,10 +5238,11 @@ impl Lambda for LambdaClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListTagsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListTagsResponse, _>()?;
+                                .deserialize::<ListTagsResponse, _>();
 
                             result
                         })
@@ -5292,11 +5253,8 @@ impl Lambda for LambdaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListTagsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListTagsError>())
+                            .and_then(|response| Err(ListTagsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5329,10 +5287,11 @@ impl Lambda for LambdaClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListVersionsByFunctionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListVersionsByFunctionResponse, _>()?;
+                                .deserialize::<ListVersionsByFunctionResponse, _>();
 
                             result
                         })
@@ -5343,13 +5302,10 @@ impl Lambda for LambdaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(ListVersionsByFunctionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListVersionsByFunctionError>())
+                            .and_then(|response| {
+                                Err(ListVersionsByFunctionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5376,10 +5332,11 @@ impl Lambda for LambdaClient {
             if response.status.as_u16() == 201 {
                 response
                     .buffer()
+                    .map_err(|e| PublishLayerVersionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PublishLayerVersionResponse, _>()?;
+                                .deserialize::<PublishLayerVersionResponse, _>();
 
                             result
                         })
@@ -5390,11 +5347,10 @@ impl Lambda for LambdaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(PublishLayerVersionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<PublishLayerVersionError>())
+                            .and_then(|response| {
+                                Err(PublishLayerVersionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5421,10 +5377,11 @@ impl Lambda for LambdaClient {
             if response.status.as_u16() == 201 {
                 response
                     .buffer()
+                    .map_err(|e| PublishVersionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<FunctionConfiguration, _>()?;
+                                .deserialize::<FunctionConfiguration, _>();
 
                             result
                         })
@@ -5435,11 +5392,8 @@ impl Lambda for LambdaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(PublishVersionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<PublishVersionError>())
+                            .and_then(|response| Err(PublishVersionError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5466,10 +5420,11 @@ impl Lambda for LambdaClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| PutFunctionConcurrencyError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<Concurrency, _>()?;
+                                .deserialize::<Concurrency, _>();
 
                             result
                         })
@@ -5480,13 +5435,10 @@ impl Lambda for LambdaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(PutFunctionConcurrencyError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<PutFunctionConcurrencyError>())
+                            .and_then(|response| {
+                                Err(PutFunctionConcurrencyError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5518,8 +5470,9 @@ impl Lambda for LambdaClient {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| RemoveLayerVersionPermissionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -5531,13 +5484,10 @@ impl Lambda for LambdaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(RemoveLayerVersionPermissionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<RemoveLayerVersionPermissionError>())
+                            .and_then(|response| {
+                                Err(RemoveLayerVersionPermissionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5571,8 +5521,9 @@ impl Lambda for LambdaClient {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| RemovePermissionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -5584,11 +5535,10 @@ impl Lambda for LambdaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(RemovePermissionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<RemovePermissionError>())
+                            .and_then(|response| {
+                                Err(RemovePermissionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5609,8 +5559,9 @@ impl Lambda for LambdaClient {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| TagResourceError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -5622,11 +5573,8 @@ impl Lambda for LambdaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(TagResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<TagResourceError>())
+                            .and_then(|response| Err(TagResourceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5650,8 +5598,9 @@ impl Lambda for LambdaClient {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| UntagResourceError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -5663,11 +5612,8 @@ impl Lambda for LambdaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UntagResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UntagResourceError>())
+                            .and_then(|response| Err(UntagResourceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5695,10 +5641,11 @@ impl Lambda for LambdaClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| UpdateAliasError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AliasConfiguration, _>()?;
+                                .deserialize::<AliasConfiguration, _>();
 
                             result
                         })
@@ -5709,11 +5656,8 @@ impl Lambda for LambdaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateAliasError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateAliasError>())
+                            .and_then(|response| Err(UpdateAliasError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5740,10 +5684,11 @@ impl Lambda for LambdaClient {
             if response.status.as_u16() == 202 {
                 response
                     .buffer()
+                    .map_err(|e| UpdateEventSourceMappingError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<EventSourceMappingConfiguration, _>()?;
+                                .deserialize::<EventSourceMappingConfiguration, _>();
 
                             result
                         })
@@ -5754,13 +5699,10 @@ impl Lambda for LambdaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(UpdateEventSourceMappingError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateEventSourceMappingError>())
+                            .and_then(|response| {
+                                Err(UpdateEventSourceMappingError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5787,10 +5729,11 @@ impl Lambda for LambdaClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| UpdateFunctionCodeError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<FunctionConfiguration, _>()?;
+                                .deserialize::<FunctionConfiguration, _>();
 
                             result
                         })
@@ -5801,11 +5744,10 @@ impl Lambda for LambdaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateFunctionCodeError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateFunctionCodeError>())
+                            .and_then(|response| {
+                                Err(UpdateFunctionCodeError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5832,10 +5774,11 @@ impl Lambda for LambdaClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| UpdateFunctionConfigurationError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<FunctionConfiguration, _>()?;
+                                .deserialize::<FunctionConfiguration, _>();
 
                             result
                         })
@@ -5846,13 +5789,10 @@ impl Lambda for LambdaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(UpdateFunctionConfigurationError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateFunctionConfigurationError>())
+                            .and_then(|response| {
+                                Err(UpdateFunctionConfigurationError::from_response(response))
+                            })
                     })
                     .boxed()
             }

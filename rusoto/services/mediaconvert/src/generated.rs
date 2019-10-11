@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
@@ -5836,10 +5836,11 @@ impl MediaConvert for MediaConvertClient {
             if response.status.as_u16() == 201 {
                 response
                     .buffer()
+                    .map_err(|e| AssociateCertificateError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AssociateCertificateResponse, _>()?;
+                                .deserialize::<AssociateCertificateResponse, _>();
 
                             result
                         })
@@ -5850,11 +5851,10 @@ impl MediaConvert for MediaConvertClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(AssociateCertificateError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<AssociateCertificateError>())
+                            .and_then(|response| {
+                                Err(AssociateCertificateError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5875,10 +5875,11 @@ impl MediaConvert for MediaConvertClient {
             if response.status.as_u16() == 202 {
                 response
                     .buffer()
+                    .map_err(|e| CancelJobError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CancelJobResponse, _>()?;
+                                .deserialize::<CancelJobResponse, _>();
 
                             result
                         })
@@ -5889,11 +5890,8 @@ impl MediaConvert for MediaConvertClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CancelJobError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CancelJobError>())
+                            .and_then(|response| Err(CancelJobError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5917,10 +5915,11 @@ impl MediaConvert for MediaConvertClient {
             if response.status.as_u16() == 201 {
                 response
                     .buffer()
+                    .map_err(|e| CreateJobError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateJobResponse, _>()?;
+                                .deserialize::<CreateJobResponse, _>();
 
                             result
                         })
@@ -5931,11 +5930,8 @@ impl MediaConvert for MediaConvertClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateJobError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateJobError>())
+                            .and_then(|response| Err(CreateJobError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5959,10 +5955,11 @@ impl MediaConvert for MediaConvertClient {
             if response.status.as_u16() == 201 {
                 response
                     .buffer()
+                    .map_err(|e| CreateJobTemplateError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateJobTemplateResponse, _>()?;
+                                .deserialize::<CreateJobTemplateResponse, _>();
 
                             result
                         })
@@ -5973,11 +5970,10 @@ impl MediaConvert for MediaConvertClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateJobTemplateError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateJobTemplateError>())
+                            .and_then(|response| {
+                                Err(CreateJobTemplateError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6001,10 +5997,11 @@ impl MediaConvert for MediaConvertClient {
             if response.status.as_u16() == 201 {
                 response
                     .buffer()
+                    .map_err(|e| CreatePresetError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreatePresetResponse, _>()?;
+                                .deserialize::<CreatePresetResponse, _>();
 
                             result
                         })
@@ -6015,11 +6012,8 @@ impl MediaConvert for MediaConvertClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreatePresetError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreatePresetError>())
+                            .and_then(|response| Err(CreatePresetError::from_response(response)))
                     })
                     .boxed()
             }
@@ -6043,10 +6037,11 @@ impl MediaConvert for MediaConvertClient {
             if response.status.as_u16() == 201 {
                 response
                     .buffer()
+                    .map_err(|e| CreateQueueError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateQueueResponse, _>()?;
+                                .deserialize::<CreateQueueResponse, _>();
 
                             result
                         })
@@ -6057,11 +6052,8 @@ impl MediaConvert for MediaConvertClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateQueueError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateQueueError>())
+                            .and_then(|response| Err(CreateQueueError::from_response(response)))
                     })
                     .boxed()
             }
@@ -6082,10 +6074,11 @@ impl MediaConvert for MediaConvertClient {
             if response.status.as_u16() == 202 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteJobTemplateError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteJobTemplateResponse, _>()?;
+                                .deserialize::<DeleteJobTemplateResponse, _>();
 
                             result
                         })
@@ -6096,11 +6089,10 @@ impl MediaConvert for MediaConvertClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteJobTemplateError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteJobTemplateError>())
+                            .and_then(|response| {
+                                Err(DeleteJobTemplateError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6121,10 +6113,11 @@ impl MediaConvert for MediaConvertClient {
             if response.status.as_u16() == 202 {
                 response
                     .buffer()
+                    .map_err(|e| DeletePresetError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeletePresetResponse, _>()?;
+                                .deserialize::<DeletePresetResponse, _>();
 
                             result
                         })
@@ -6135,11 +6128,8 @@ impl MediaConvert for MediaConvertClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeletePresetError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeletePresetError>())
+                            .and_then(|response| Err(DeletePresetError::from_response(response)))
                     })
                     .boxed()
             }
@@ -6160,10 +6150,11 @@ impl MediaConvert for MediaConvertClient {
             if response.status.as_u16() == 202 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteQueueError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteQueueResponse, _>()?;
+                                .deserialize::<DeleteQueueResponse, _>();
 
                             result
                         })
@@ -6174,11 +6165,8 @@ impl MediaConvert for MediaConvertClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteQueueError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteQueueError>())
+                            .and_then(|response| Err(DeleteQueueError::from_response(response)))
                     })
                     .boxed()
             }
@@ -6202,10 +6190,11 @@ impl MediaConvert for MediaConvertClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| DescribeEndpointsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeEndpointsResponse, _>()?;
+                                .deserialize::<DescribeEndpointsResponse, _>();
 
                             result
                         })
@@ -6216,11 +6205,10 @@ impl MediaConvert for MediaConvertClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DescribeEndpointsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeEndpointsError>())
+                            .and_then(|response| {
+                                Err(DescribeEndpointsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6241,10 +6229,11 @@ impl MediaConvert for MediaConvertClient {
             if response.status.as_u16() == 202 {
                 response
                     .buffer()
+                    .map_err(|e| DisassociateCertificateError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DisassociateCertificateResponse, _>()?;
+                                .deserialize::<DisassociateCertificateResponse, _>();
 
                             result
                         })
@@ -6255,13 +6244,10 @@ impl MediaConvert for MediaConvertClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(DisassociateCertificateError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DisassociateCertificateError>())
+                            .and_then(|response| {
+                                Err(DisassociateCertificateError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6279,10 +6265,11 @@ impl MediaConvert for MediaConvertClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetJobError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetJobResponse, _>()?;
+                                .deserialize::<GetJobResponse, _>();
 
                             result
                         })
@@ -6293,11 +6280,8 @@ impl MediaConvert for MediaConvertClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetJobError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetJobError>())
+                            .and_then(|response| Err(GetJobError::from_response(response)))
                     })
                     .boxed()
             }
@@ -6318,10 +6302,11 @@ impl MediaConvert for MediaConvertClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetJobTemplateError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetJobTemplateResponse, _>()?;
+                                .deserialize::<GetJobTemplateResponse, _>();
 
                             result
                         })
@@ -6332,11 +6317,8 @@ impl MediaConvert for MediaConvertClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetJobTemplateError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetJobTemplateError>())
+                            .and_then(|response| Err(GetJobTemplateError::from_response(response)))
                     })
                     .boxed()
             }
@@ -6357,10 +6339,11 @@ impl MediaConvert for MediaConvertClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetPresetError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetPresetResponse, _>()?;
+                                .deserialize::<GetPresetResponse, _>();
 
                             result
                         })
@@ -6371,11 +6354,8 @@ impl MediaConvert for MediaConvertClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetPresetError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetPresetError>())
+                            .and_then(|response| Err(GetPresetError::from_response(response)))
                     })
                     .boxed()
             }
@@ -6393,10 +6373,11 @@ impl MediaConvert for MediaConvertClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetQueueError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetQueueResponse, _>()?;
+                                .deserialize::<GetQueueResponse, _>();
 
                             result
                         })
@@ -6407,11 +6388,8 @@ impl MediaConvert for MediaConvertClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetQueueError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetQueueError>())
+                            .and_then(|response| Err(GetQueueError::from_response(response)))
                     })
                     .boxed()
             }
@@ -6450,10 +6428,11 @@ impl MediaConvert for MediaConvertClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListJobTemplatesError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListJobTemplatesResponse, _>()?;
+                                .deserialize::<ListJobTemplatesResponse, _>();
 
                             result
                         })
@@ -6464,11 +6443,10 @@ impl MediaConvert for MediaConvertClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListJobTemplatesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListJobTemplatesError>())
+                            .and_then(|response| {
+                                Err(ListJobTemplatesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6504,10 +6482,11 @@ impl MediaConvert for MediaConvertClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListJobsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListJobsResponse, _>()?;
+                                .deserialize::<ListJobsResponse, _>();
 
                             result
                         })
@@ -6518,11 +6497,8 @@ impl MediaConvert for MediaConvertClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListJobsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListJobsError>())
+                            .and_then(|response| Err(ListJobsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -6561,10 +6537,11 @@ impl MediaConvert for MediaConvertClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListPresetsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListPresetsResponse, _>()?;
+                                .deserialize::<ListPresetsResponse, _>();
 
                             result
                         })
@@ -6575,11 +6552,8 @@ impl MediaConvert for MediaConvertClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListPresetsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListPresetsError>())
+                            .and_then(|response| Err(ListPresetsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -6615,10 +6589,11 @@ impl MediaConvert for MediaConvertClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListQueuesError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListQueuesResponse, _>()?;
+                                .deserialize::<ListQueuesResponse, _>();
 
                             result
                         })
@@ -6629,11 +6604,8 @@ impl MediaConvert for MediaConvertClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListQueuesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListQueuesError>())
+                            .and_then(|response| Err(ListQueuesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -6654,10 +6626,11 @@ impl MediaConvert for MediaConvertClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListTagsForResourceError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListTagsForResourceResponse, _>()?;
+                                .deserialize::<ListTagsForResourceResponse, _>();
 
                             result
                         })
@@ -6668,11 +6641,10 @@ impl MediaConvert for MediaConvertClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListTagsForResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListTagsForResourceError>())
+                            .and_then(|response| {
+                                Err(ListTagsForResourceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6696,10 +6668,11 @@ impl MediaConvert for MediaConvertClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| TagResourceError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<TagResourceResponse, _>()?;
+                                .deserialize::<TagResourceResponse, _>();
 
                             result
                         })
@@ -6710,11 +6683,8 @@ impl MediaConvert for MediaConvertClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(TagResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<TagResourceError>())
+                            .and_then(|response| Err(TagResourceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -6738,10 +6708,11 @@ impl MediaConvert for MediaConvertClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| UntagResourceError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UntagResourceResponse, _>()?;
+                                .deserialize::<UntagResourceResponse, _>();
 
                             result
                         })
@@ -6752,11 +6723,8 @@ impl MediaConvert for MediaConvertClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UntagResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UntagResourceError>())
+                            .and_then(|response| Err(UntagResourceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -6780,10 +6748,11 @@ impl MediaConvert for MediaConvertClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| UpdateJobTemplateError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateJobTemplateResponse, _>()?;
+                                .deserialize::<UpdateJobTemplateResponse, _>();
 
                             result
                         })
@@ -6794,11 +6763,10 @@ impl MediaConvert for MediaConvertClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateJobTemplateError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateJobTemplateError>())
+                            .and_then(|response| {
+                                Err(UpdateJobTemplateError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6822,10 +6790,11 @@ impl MediaConvert for MediaConvertClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| UpdatePresetError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdatePresetResponse, _>()?;
+                                .deserialize::<UpdatePresetResponse, _>();
 
                             result
                         })
@@ -6836,11 +6805,8 @@ impl MediaConvert for MediaConvertClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdatePresetError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdatePresetError>())
+                            .and_then(|response| Err(UpdatePresetError::from_response(response)))
                     })
                     .boxed()
             }
@@ -6864,10 +6830,11 @@ impl MediaConvert for MediaConvertClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| UpdateQueueError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateQueueResponse, _>()?;
+                                .deserialize::<UpdateQueueResponse, _>();
 
                             result
                         })
@@ -6878,11 +6845,8 @@ impl MediaConvert for MediaConvertClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateQueueError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateQueueError>())
+                            .and_then(|response| Err(UpdateQueueError::from_response(response)))
                     })
                     .boxed()
             }

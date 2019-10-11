@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -7206,11 +7206,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ApproveSkillError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ApproveSkillResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ApproveSkillError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ApproveSkillResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7218,11 +7223,10 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ApproveSkillError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ApproveSkillError>
+                            })
+                            .and_then(|response| Err(ApproveSkillError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7249,11 +7253,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AssociateContactWithAddressBookError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AssociateContactWithAddressBookResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AssociateContactWithAddressBookError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AssociateContactWithAddressBookResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7261,15 +7271,15 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(AssociateContactWithAddressBookError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AssociateContactWithAddressBookError>
+                            })
+                            .and_then(|response| {
+                                Err(AssociateContactWithAddressBookError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -7298,11 +7308,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AssociateDeviceWithNetworkProfileError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AssociateDeviceWithNetworkProfileResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AssociateDeviceWithNetworkProfileError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AssociateDeviceWithNetworkProfileResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7310,15 +7326,15 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(AssociateDeviceWithNetworkProfileError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AssociateDeviceWithNetworkProfileError>
+                            })
+                            .and_then(|response| {
+                                Err(AssociateDeviceWithNetworkProfileError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -7341,11 +7357,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AssociateDeviceWithRoomError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AssociateDeviceWithRoomResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AssociateDeviceWithRoomError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AssociateDeviceWithRoomResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7353,13 +7375,13 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(AssociateDeviceWithRoomError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AssociateDeviceWithRoomError>
+                            })
+                            .and_then(|response| {
+                                Err(AssociateDeviceWithRoomError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7385,11 +7407,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AssociateSkillGroupWithRoomError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AssociateSkillGroupWithRoomResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AssociateSkillGroupWithRoomError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AssociateSkillGroupWithRoomResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7397,13 +7425,13 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(AssociateSkillGroupWithRoomError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AssociateSkillGroupWithRoomError>
+                            })
+                            .and_then(|response| {
+                                Err(AssociateSkillGroupWithRoomError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7429,11 +7457,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AssociateSkillWithSkillGroupError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AssociateSkillWithSkillGroupResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AssociateSkillWithSkillGroupError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AssociateSkillWithSkillGroupResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7441,13 +7475,13 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(AssociateSkillWithSkillGroupError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AssociateSkillWithSkillGroupError>
+                            })
+                            .and_then(|response| {
+                                Err(AssociateSkillWithSkillGroupError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7470,11 +7504,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AssociateSkillWithUsersError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AssociateSkillWithUsersResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AssociateSkillWithUsersError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AssociateSkillWithUsersResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7482,13 +7522,13 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(AssociateSkillWithUsersError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AssociateSkillWithUsersError>
+                            })
+                            .and_then(|response| {
+                                Err(AssociateSkillWithUsersError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7511,11 +7551,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateAddressBookError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateAddressBookResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateAddressBookError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateAddressBookResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7523,11 +7568,12 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateAddressBookError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateAddressBookError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateAddressBookError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7553,11 +7599,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateBusinessReportScheduleError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateBusinessReportScheduleResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateBusinessReportScheduleError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateBusinessReportScheduleResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7565,13 +7617,13 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(CreateBusinessReportScheduleError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateBusinessReportScheduleError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateBusinessReportScheduleError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7594,11 +7646,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateConferenceProviderError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateConferenceProviderResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateConferenceProviderError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateConferenceProviderResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7606,13 +7664,13 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(CreateConferenceProviderError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateConferenceProviderError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateConferenceProviderError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7635,11 +7693,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateContactError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateContactResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateContactError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateContactResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7647,11 +7710,10 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateContactError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateContactError>
+                            })
+                            .and_then(|response| Err(CreateContactError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7674,11 +7736,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateGatewayGroupError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateGatewayGroupResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateGatewayGroupError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateGatewayGroupResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7686,11 +7753,12 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateGatewayGroupError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateGatewayGroupError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateGatewayGroupError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7713,11 +7781,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateNetworkProfileError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateNetworkProfileResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateNetworkProfileError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateNetworkProfileResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7725,11 +7799,13 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateNetworkProfileError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateNetworkProfileError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateNetworkProfileError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7752,11 +7828,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateProfileError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateProfileResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateProfileError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateProfileResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7764,11 +7845,10 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateProfileError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateProfileError>
+                            })
+                            .and_then(|response| Err(CreateProfileError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7791,11 +7871,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateRoomError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateRoomResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateRoomError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateRoomResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7803,11 +7888,10 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateRoomError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateRoomError>
+                            })
+                            .and_then(|response| Err(CreateRoomError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7830,11 +7914,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateSkillGroupError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateSkillGroupResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateSkillGroupError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateSkillGroupResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7842,11 +7931,12 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateSkillGroupError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateSkillGroupError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateSkillGroupError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7869,11 +7959,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateUserError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateUserResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateUserError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateUserResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7881,11 +7976,10 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateUserError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateUserError>
+                            })
+                            .and_then(|response| Err(CreateUserError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7908,11 +8002,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteAddressBookError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteAddressBookResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteAddressBookError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteAddressBookResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7920,11 +8019,12 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteAddressBookError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteAddressBookError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteAddressBookError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7950,11 +8050,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteBusinessReportScheduleError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteBusinessReportScheduleResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteBusinessReportScheduleError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteBusinessReportScheduleResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7962,13 +8068,13 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DeleteBusinessReportScheduleError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteBusinessReportScheduleError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteBusinessReportScheduleError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7991,11 +8097,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteConferenceProviderError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteConferenceProviderResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteConferenceProviderError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteConferenceProviderResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8003,13 +8115,13 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DeleteConferenceProviderError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteConferenceProviderError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteConferenceProviderError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8032,11 +8144,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteContactError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteContactResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteContactError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteContactResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8044,11 +8161,10 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteContactError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteContactError>
+                            })
+                            .and_then(|response| Err(DeleteContactError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8071,11 +8187,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteDeviceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteDeviceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteDeviceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteDeviceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8083,11 +8204,10 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteDeviceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteDeviceError>
+                            })
+                            .and_then(|response| Err(DeleteDeviceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8110,11 +8230,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteDeviceUsageDataError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteDeviceUsageDataResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteDeviceUsageDataError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteDeviceUsageDataResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8122,11 +8248,13 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteDeviceUsageDataError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteDeviceUsageDataError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteDeviceUsageDataError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8149,11 +8277,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteGatewayGroupError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteGatewayGroupResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteGatewayGroupError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteGatewayGroupResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8161,11 +8294,12 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteGatewayGroupError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteGatewayGroupError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteGatewayGroupError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8188,11 +8322,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteNetworkProfileError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteNetworkProfileResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteNetworkProfileError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteNetworkProfileResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8200,11 +8340,13 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteNetworkProfileError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteNetworkProfileError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteNetworkProfileError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8227,11 +8369,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteProfileError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteProfileResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteProfileError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteProfileResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8239,11 +8386,10 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteProfileError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteProfileError>
+                            })
+                            .and_then(|response| Err(DeleteProfileError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8266,11 +8412,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteRoomError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteRoomResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteRoomError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteRoomResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8278,11 +8429,10 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteRoomError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteRoomError>
+                            })
+                            .and_then(|response| Err(DeleteRoomError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8305,11 +8455,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteRoomSkillParameterError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteRoomSkillParameterResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteRoomSkillParameterError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteRoomSkillParameterResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8317,13 +8473,13 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DeleteRoomSkillParameterError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteRoomSkillParameterError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteRoomSkillParameterError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8346,11 +8502,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteSkillAuthorizationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteSkillAuthorizationResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteSkillAuthorizationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteSkillAuthorizationResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8358,13 +8520,13 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DeleteSkillAuthorizationError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteSkillAuthorizationError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteSkillAuthorizationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8387,11 +8549,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteSkillGroupError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteSkillGroupResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteSkillGroupError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteSkillGroupResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8399,11 +8566,12 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteSkillGroupError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteSkillGroupError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteSkillGroupError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8426,11 +8594,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteUserError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteUserResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteUserError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteUserResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8438,11 +8611,10 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteUserError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteUserError>
+                            })
+                            .and_then(|response| Err(DeleteUserError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8471,11 +8643,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DisassociateContactFromAddressBookError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DisassociateContactFromAddressBookResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DisassociateContactFromAddressBookError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DisassociateContactFromAddressBookResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8483,15 +8661,15 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DisassociateContactFromAddressBookError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DisassociateContactFromAddressBookError>
+                            })
+                            .and_then(|response| {
+                                Err(DisassociateContactFromAddressBookError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -8517,11 +8695,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DisassociateDeviceFromRoomError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DisassociateDeviceFromRoomResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DisassociateDeviceFromRoomError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DisassociateDeviceFromRoomResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8529,13 +8713,13 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DisassociateDeviceFromRoomError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DisassociateDeviceFromRoomError>
+                            })
+                            .and_then(|response| {
+                                Err(DisassociateDeviceFromRoomError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8562,11 +8746,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DisassociateSkillFromSkillGroupError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DisassociateSkillFromSkillGroupResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DisassociateSkillFromSkillGroupError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DisassociateSkillFromSkillGroupResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8574,15 +8764,15 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DisassociateSkillFromSkillGroupError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DisassociateSkillFromSkillGroupError>
+                            })
+                            .and_then(|response| {
+                                Err(DisassociateSkillFromSkillGroupError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -8608,11 +8798,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DisassociateSkillFromUsersError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DisassociateSkillFromUsersResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DisassociateSkillFromUsersError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DisassociateSkillFromUsersResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8620,13 +8816,13 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DisassociateSkillFromUsersError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DisassociateSkillFromUsersError>
+                            })
+                            .and_then(|response| {
+                                Err(DisassociateSkillFromUsersError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8653,11 +8849,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DisassociateSkillGroupFromRoomError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DisassociateSkillGroupFromRoomResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DisassociateSkillGroupFromRoomError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DisassociateSkillGroupFromRoomResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8665,15 +8867,13 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DisassociateSkillGroupFromRoomError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DisassociateSkillGroupFromRoomError>
+                            })
+                            .and_then(|response| {
+                                Err(DisassociateSkillGroupFromRoomError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8696,11 +8896,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ForgetSmartHomeAppliancesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ForgetSmartHomeAppliancesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ForgetSmartHomeAppliancesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ForgetSmartHomeAppliancesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8708,13 +8914,13 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ForgetSmartHomeAppliancesError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ForgetSmartHomeAppliancesError>
+                            })
+                            .and_then(|response| {
+                                Err(ForgetSmartHomeAppliancesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8737,11 +8943,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetAddressBookError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetAddressBookResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetAddressBookError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetAddressBookResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8749,11 +8960,10 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetAddressBookError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetAddressBookError>
+                            })
+                            .and_then(|response| Err(GetAddressBookError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8774,11 +8984,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetConferencePreferenceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetConferencePreferenceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetConferencePreferenceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetConferencePreferenceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8786,13 +9002,13 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(GetConferencePreferenceError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetConferencePreferenceError>
+                            })
+                            .and_then(|response| {
+                                Err(GetConferencePreferenceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8815,11 +9031,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetConferenceProviderError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetConferenceProviderResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetConferenceProviderError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetConferenceProviderResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8827,11 +9049,13 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetConferenceProviderError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetConferenceProviderError>
+                            })
+                            .and_then(|response| {
+                                Err(GetConferenceProviderError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8854,11 +9078,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetContactError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetContactResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetContactError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetContactResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8866,11 +9095,10 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetContactError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetContactError>
+                            })
+                            .and_then(|response| Err(GetContactError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8893,11 +9121,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetDeviceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetDeviceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetDeviceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetDeviceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8905,11 +9138,10 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetDeviceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetDeviceError>
+                            })
+                            .and_then(|response| Err(GetDeviceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8932,11 +9164,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetGatewayError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetGatewayResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetGatewayError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetGatewayResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8944,11 +9181,10 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetGatewayError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetGatewayError>
+                            })
+                            .and_then(|response| Err(GetGatewayError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8971,11 +9207,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetGatewayGroupError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetGatewayGroupResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetGatewayGroupError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetGatewayGroupResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8983,11 +9224,10 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetGatewayGroupError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetGatewayGroupError>
+                            })
+                            .and_then(|response| Err(GetGatewayGroupError::from_response(response)))
                     })
                     .boxed()
             }
@@ -9011,11 +9251,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetInvitationConfigurationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetInvitationConfigurationResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetInvitationConfigurationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetInvitationConfigurationResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9023,13 +9269,13 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(GetInvitationConfigurationError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetInvitationConfigurationError>
+                            })
+                            .and_then(|response| {
+                                Err(GetInvitationConfigurationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9052,11 +9298,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetNetworkProfileError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetNetworkProfileResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetNetworkProfileError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetNetworkProfileResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9064,11 +9315,12 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetNetworkProfileError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetNetworkProfileError>
+                            })
+                            .and_then(|response| {
+                                Err(GetNetworkProfileError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9091,11 +9343,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetProfileError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetProfileResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetProfileError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetProfileResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9103,11 +9360,10 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetProfileError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetProfileError>
+                            })
+                            .and_then(|response| Err(GetProfileError::from_response(response)))
                     })
                     .boxed()
             }
@@ -9127,11 +9383,14 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetRoomError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetRoomResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<GetRoomError>)
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetRoomResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9139,11 +9398,8 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetRoomError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<GetRoomError>)
+                            .and_then(|response| Err(GetRoomError::from_response(response)))
                     })
                     .boxed()
             }
@@ -9166,11 +9422,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetRoomSkillParameterError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetRoomSkillParameterResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetRoomSkillParameterError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetRoomSkillParameterResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9178,11 +9440,13 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetRoomSkillParameterError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetRoomSkillParameterError>
+                            })
+                            .and_then(|response| {
+                                Err(GetRoomSkillParameterError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9205,11 +9469,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetSkillGroupError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetSkillGroupResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetSkillGroupError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetSkillGroupResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9217,11 +9486,10 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetSkillGroupError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetSkillGroupError>
+                            })
+                            .and_then(|response| Err(GetSkillGroupError::from_response(response)))
                     })
                     .boxed()
             }
@@ -9247,11 +9515,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListBusinessReportSchedulesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListBusinessReportSchedulesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListBusinessReportSchedulesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListBusinessReportSchedulesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9259,13 +9533,13 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ListBusinessReportSchedulesError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListBusinessReportSchedulesError>
+                            })
+                            .and_then(|response| {
+                                Err(ListBusinessReportSchedulesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9288,11 +9562,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListConferenceProvidersError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListConferenceProvidersResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListConferenceProvidersError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListConferenceProvidersResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9300,13 +9580,13 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ListConferenceProvidersError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListConferenceProvidersError>
+                            })
+                            .and_then(|response| {
+                                Err(ListConferenceProvidersError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9329,11 +9609,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListDeviceEventsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListDeviceEventsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListDeviceEventsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListDeviceEventsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9341,11 +9626,12 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListDeviceEventsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListDeviceEventsError>
+                            })
+                            .and_then(|response| {
+                                Err(ListDeviceEventsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9368,11 +9654,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListGatewayGroupsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListGatewayGroupsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListGatewayGroupsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListGatewayGroupsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9380,11 +9671,12 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListGatewayGroupsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListGatewayGroupsError>
+                            })
+                            .and_then(|response| {
+                                Err(ListGatewayGroupsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9407,11 +9699,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListGatewaysError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListGatewaysResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListGatewaysError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListGatewaysResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9419,11 +9716,10 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListGatewaysError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListGatewaysError>
+                            })
+                            .and_then(|response| Err(ListGatewaysError::from_response(response)))
                     })
                     .boxed()
             }
@@ -9446,11 +9742,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListSkillsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListSkillsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListSkillsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListSkillsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9458,11 +9759,10 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListSkillsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListSkillsError>
+                            })
+                            .and_then(|response| Err(ListSkillsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -9485,11 +9785,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListSkillsStoreCategoriesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListSkillsStoreCategoriesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListSkillsStoreCategoriesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListSkillsStoreCategoriesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9497,13 +9803,13 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ListSkillsStoreCategoriesError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListSkillsStoreCategoriesError>
+                            })
+                            .and_then(|response| {
+                                Err(ListSkillsStoreCategoriesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9530,11 +9836,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListSkillsStoreSkillsByCategoryError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListSkillsStoreSkillsByCategoryResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListSkillsStoreSkillsByCategoryError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListSkillsStoreSkillsByCategoryResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9542,15 +9854,15 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ListSkillsStoreSkillsByCategoryError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListSkillsStoreSkillsByCategoryError>
+                            })
+                            .and_then(|response| {
+                                Err(ListSkillsStoreSkillsByCategoryError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -9573,11 +9885,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListSmartHomeAppliancesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListSmartHomeAppliancesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListSmartHomeAppliancesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListSmartHomeAppliancesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9585,13 +9903,13 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ListSmartHomeAppliancesError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListSmartHomeAppliancesError>
+                            })
+                            .and_then(|response| {
+                                Err(ListSmartHomeAppliancesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9611,11 +9929,14 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListTagsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListTagsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<ListTagsError>)
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListTagsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9623,11 +9944,8 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListTagsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<ListTagsError>)
+                            .and_then(|response| Err(ListTagsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -9650,11 +9968,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| PutConferencePreferenceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PutConferencePreferenceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<PutConferencePreferenceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<PutConferencePreferenceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9662,13 +9986,13 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(PutConferencePreferenceError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<PutConferencePreferenceError>
+                            })
+                            .and_then(|response| {
+                                Err(PutConferencePreferenceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9694,11 +10018,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| PutInvitationConfigurationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PutInvitationConfigurationResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<PutInvitationConfigurationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<PutInvitationConfigurationResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9706,13 +10036,13 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(PutInvitationConfigurationError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<PutInvitationConfigurationError>
+                            })
+                            .and_then(|response| {
+                                Err(PutInvitationConfigurationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9735,11 +10065,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| PutRoomSkillParameterError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PutRoomSkillParameterResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<PutRoomSkillParameterError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<PutRoomSkillParameterResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9747,11 +10083,13 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(PutRoomSkillParameterError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<PutRoomSkillParameterError>
+                            })
+                            .and_then(|response| {
+                                Err(PutRoomSkillParameterError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9774,11 +10112,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| PutSkillAuthorizationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PutSkillAuthorizationResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<PutSkillAuthorizationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<PutSkillAuthorizationResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9786,11 +10130,13 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(PutSkillAuthorizationError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<PutSkillAuthorizationError>
+                            })
+                            .and_then(|response| {
+                                Err(PutSkillAuthorizationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9813,11 +10159,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| RegisterAVSDeviceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RegisterAVSDeviceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<RegisterAVSDeviceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<RegisterAVSDeviceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9825,11 +10176,12 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(RegisterAVSDeviceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<RegisterAVSDeviceError>
+                            })
+                            .and_then(|response| {
+                                Err(RegisterAVSDeviceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9852,11 +10204,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| RejectSkillError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RejectSkillResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<RejectSkillError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<RejectSkillResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9864,11 +10221,10 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(RejectSkillError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<RejectSkillError>
+                            })
+                            .and_then(|response| Err(RejectSkillError::from_response(response)))
                     })
                     .boxed()
             }
@@ -9891,11 +10247,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ResolveRoomError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ResolveRoomResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ResolveRoomError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ResolveRoomResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9903,11 +10264,10 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ResolveRoomError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ResolveRoomError>
+                            })
+                            .and_then(|response| Err(ResolveRoomError::from_response(response)))
                     })
                     .boxed()
             }
@@ -9930,11 +10290,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| RevokeInvitationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RevokeInvitationResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<RevokeInvitationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<RevokeInvitationResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9942,11 +10307,12 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(RevokeInvitationError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<RevokeInvitationError>
+                            })
+                            .and_then(|response| {
+                                Err(RevokeInvitationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9969,11 +10335,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| SearchAddressBooksError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<SearchAddressBooksResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<SearchAddressBooksError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<SearchAddressBooksResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9981,11 +10352,12 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(SearchAddressBooksError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<SearchAddressBooksError>
+                            })
+                            .and_then(|response| {
+                                Err(SearchAddressBooksError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10008,11 +10380,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| SearchContactsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<SearchContactsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<SearchContactsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<SearchContactsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10020,11 +10397,10 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(SearchContactsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<SearchContactsError>
+                            })
+                            .and_then(|response| Err(SearchContactsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -10047,11 +10423,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| SearchDevicesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<SearchDevicesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<SearchDevicesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<SearchDevicesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10059,11 +10440,10 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(SearchDevicesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<SearchDevicesError>
+                            })
+                            .and_then(|response| Err(SearchDevicesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -10086,11 +10466,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| SearchNetworkProfilesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<SearchNetworkProfilesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<SearchNetworkProfilesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<SearchNetworkProfilesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10098,11 +10484,13 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(SearchNetworkProfilesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<SearchNetworkProfilesError>
+                            })
+                            .and_then(|response| {
+                                Err(SearchNetworkProfilesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10125,11 +10513,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| SearchProfilesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<SearchProfilesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<SearchProfilesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<SearchProfilesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10137,11 +10530,10 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(SearchProfilesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<SearchProfilesError>
+                            })
+                            .and_then(|response| Err(SearchProfilesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -10164,11 +10556,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| SearchRoomsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<SearchRoomsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<SearchRoomsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<SearchRoomsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10176,11 +10573,10 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(SearchRoomsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<SearchRoomsError>
+                            })
+                            .and_then(|response| Err(SearchRoomsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -10203,11 +10599,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| SearchSkillGroupsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<SearchSkillGroupsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<SearchSkillGroupsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<SearchSkillGroupsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10215,11 +10616,12 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(SearchSkillGroupsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<SearchSkillGroupsError>
+                            })
+                            .and_then(|response| {
+                                Err(SearchSkillGroupsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10242,11 +10644,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| SearchUsersError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<SearchUsersResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<SearchUsersError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<SearchUsersResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10254,11 +10661,10 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(SearchUsersError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<SearchUsersError>
+                            })
+                            .and_then(|response| Err(SearchUsersError::from_response(response)))
                     })
                     .boxed()
             }
@@ -10281,11 +10687,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| SendAnnouncementError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<SendAnnouncementResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<SendAnnouncementError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<SendAnnouncementResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10293,11 +10704,12 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(SendAnnouncementError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<SendAnnouncementError>
+                            })
+                            .and_then(|response| {
+                                Err(SendAnnouncementError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10320,11 +10732,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| SendInvitationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<SendInvitationResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<SendInvitationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<SendInvitationResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10332,11 +10749,10 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(SendInvitationError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<SendInvitationError>
+                            })
+                            .and_then(|response| Err(SendInvitationError::from_response(response)))
                     })
                     .boxed()
             }
@@ -10359,11 +10775,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StartDeviceSyncError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StartDeviceSyncResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StartDeviceSyncError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StartDeviceSyncResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10371,11 +10792,10 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(StartDeviceSyncError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StartDeviceSyncError>
+                            })
+                            .and_then(|response| Err(StartDeviceSyncError::from_response(response)))
                     })
                     .boxed()
             }
@@ -10402,11 +10822,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StartSmartHomeApplianceDiscoveryError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StartSmartHomeApplianceDiscoveryResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StartSmartHomeApplianceDiscoveryError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StartSmartHomeApplianceDiscoveryResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10414,15 +10840,15 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(StartSmartHomeApplianceDiscoveryError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StartSmartHomeApplianceDiscoveryError>
+                            })
+                            .and_then(|response| {
+                                Err(StartSmartHomeApplianceDiscoveryError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -10445,11 +10871,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| TagResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<TagResourceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<TagResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<TagResourceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10457,11 +10888,10 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(TagResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<TagResourceError>
+                            })
+                            .and_then(|response| Err(TagResourceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -10484,11 +10914,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UntagResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UntagResourceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UntagResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UntagResourceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10496,11 +10931,10 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UntagResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UntagResourceError>
+                            })
+                            .and_then(|response| Err(UntagResourceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -10523,11 +10957,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateAddressBookError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateAddressBookResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateAddressBookError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateAddressBookResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10535,11 +10974,12 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateAddressBookError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateAddressBookError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateAddressBookError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10565,11 +11005,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateBusinessReportScheduleError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateBusinessReportScheduleResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateBusinessReportScheduleError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateBusinessReportScheduleResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10577,13 +11023,13 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(UpdateBusinessReportScheduleError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateBusinessReportScheduleError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateBusinessReportScheduleError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10606,11 +11052,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateConferenceProviderError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateConferenceProviderResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateConferenceProviderError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateConferenceProviderResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10618,13 +11070,13 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(UpdateConferenceProviderError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateConferenceProviderError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateConferenceProviderError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10647,11 +11099,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateContactError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateContactResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateContactError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateContactResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10659,11 +11116,10 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateContactError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateContactError>
+                            })
+                            .and_then(|response| Err(UpdateContactError::from_response(response)))
                     })
                     .boxed()
             }
@@ -10686,11 +11142,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateDeviceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateDeviceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateDeviceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateDeviceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10698,11 +11159,10 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateDeviceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateDeviceError>
+                            })
+                            .and_then(|response| Err(UpdateDeviceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -10725,11 +11185,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateGatewayError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateGatewayResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateGatewayError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateGatewayResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10737,11 +11202,10 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateGatewayError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateGatewayError>
+                            })
+                            .and_then(|response| Err(UpdateGatewayError::from_response(response)))
                     })
                     .boxed()
             }
@@ -10764,11 +11228,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateGatewayGroupError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateGatewayGroupResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateGatewayGroupError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateGatewayGroupResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10776,11 +11245,12 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateGatewayGroupError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateGatewayGroupError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateGatewayGroupError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10803,11 +11273,17 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateNetworkProfileError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateNetworkProfileResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateNetworkProfileError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateNetworkProfileResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10815,11 +11291,13 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateNetworkProfileError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateNetworkProfileError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateNetworkProfileError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10842,11 +11320,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateProfileError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateProfileResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateProfileError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateProfileResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10854,11 +11337,10 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateProfileError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateProfileError>
+                            })
+                            .and_then(|response| Err(UpdateProfileError::from_response(response)))
                     })
                     .boxed()
             }
@@ -10881,11 +11363,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateRoomError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateRoomResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateRoomError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateRoomResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10893,11 +11380,10 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateRoomError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateRoomError>
+                            })
+                            .and_then(|response| Err(UpdateRoomError::from_response(response)))
                     })
                     .boxed()
             }
@@ -10920,11 +11406,16 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateSkillGroupError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateSkillGroupResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateSkillGroupError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateSkillGroupResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10932,11 +11423,12 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateSkillGroupError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateSkillGroupError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateSkillGroupError::from_response(response))
+                            })
                     })
                     .boxed()
             }

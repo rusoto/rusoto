@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -991,11 +991,16 @@ impl Transcribe for TranscribeClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateVocabularyError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateVocabularyResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateVocabularyError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateVocabularyResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1003,11 +1008,12 @@ impl Transcribe for TranscribeClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateVocabularyError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateVocabularyError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateVocabularyError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1028,19 +1034,19 @@ impl Transcribe for TranscribeClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DeleteTranscriptionJobError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteTranscriptionJobError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteTranscriptionJobError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1061,17 +1067,18 @@ impl Transcribe for TranscribeClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteVocabularyError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteVocabularyError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteVocabularyError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1094,11 +1101,17 @@ impl Transcribe for TranscribeClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetTranscriptionJobError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetTranscriptionJobResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetTranscriptionJobError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetTranscriptionJobResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1106,11 +1119,13 @@ impl Transcribe for TranscribeClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetTranscriptionJobError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetTranscriptionJobError>
+                            })
+                            .and_then(|response| {
+                                Err(GetTranscriptionJobError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1133,11 +1148,16 @@ impl Transcribe for TranscribeClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetVocabularyError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetVocabularyResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetVocabularyError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetVocabularyResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1145,11 +1165,10 @@ impl Transcribe for TranscribeClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetVocabularyError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetVocabularyError>
+                            })
+                            .and_then(|response| Err(GetVocabularyError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1172,11 +1191,17 @@ impl Transcribe for TranscribeClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListTranscriptionJobsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListTranscriptionJobsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListTranscriptionJobsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListTranscriptionJobsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1184,11 +1209,13 @@ impl Transcribe for TranscribeClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListTranscriptionJobsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListTranscriptionJobsError>
+                            })
+                            .and_then(|response| {
+                                Err(ListTranscriptionJobsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1211,11 +1238,16 @@ impl Transcribe for TranscribeClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListVocabulariesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListVocabulariesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListVocabulariesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListVocabulariesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1223,11 +1255,12 @@ impl Transcribe for TranscribeClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListVocabulariesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListVocabulariesError>
+                            })
+                            .and_then(|response| {
+                                Err(ListVocabulariesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1250,11 +1283,17 @@ impl Transcribe for TranscribeClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StartTranscriptionJobError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StartTranscriptionJobResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StartTranscriptionJobError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StartTranscriptionJobResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1262,11 +1301,13 @@ impl Transcribe for TranscribeClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(StartTranscriptionJobError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StartTranscriptionJobError>
+                            })
+                            .and_then(|response| {
+                                Err(StartTranscriptionJobError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1289,11 +1330,16 @@ impl Transcribe for TranscribeClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateVocabularyError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateVocabularyResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateVocabularyError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateVocabularyResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1301,11 +1347,12 @@ impl Transcribe for TranscribeClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateVocabularyError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateVocabularyError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateVocabularyError::from_response(response))
+                            })
                     })
                     .boxed()
             }

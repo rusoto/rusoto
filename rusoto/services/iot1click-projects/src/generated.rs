@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
@@ -1370,11 +1370,11 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AssociateDeviceWithPlacementError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AssociateDeviceWithPlacementResponse, _>(
-                            )?;
+                                .deserialize::<AssociateDeviceWithPlacementResponse, _>();
 
                             result
                         })
@@ -1385,13 +1385,10 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(AssociateDeviceWithPlacementError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<AssociateDeviceWithPlacementError>())
+                            .and_then(|response| {
+                                Err(AssociateDeviceWithPlacementError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1419,10 +1416,11 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreatePlacementError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreatePlacementResponse, _>()?;
+                                .deserialize::<CreatePlacementResponse, _>();
 
                             result
                         })
@@ -1433,11 +1431,8 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreatePlacementError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreatePlacementError>())
+                            .and_then(|response| Err(CreatePlacementError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1462,10 +1457,11 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateProjectError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateProjectResponse, _>()?;
+                                .deserialize::<CreateProjectResponse, _>();
 
                             result
                         })
@@ -1476,11 +1472,8 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateProjectError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateProjectError>())
+                            .and_then(|response| Err(CreateProjectError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1507,10 +1500,11 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeletePlacementError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeletePlacementResponse, _>()?;
+                                .deserialize::<DeletePlacementResponse, _>();
 
                             result
                         })
@@ -1521,11 +1515,8 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeletePlacementError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeletePlacementError>())
+                            .and_then(|response| Err(DeletePlacementError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1551,10 +1542,11 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteProjectError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteProjectResponse, _>()?;
+                                .deserialize::<DeleteProjectResponse, _>();
 
                             result
                         })
@@ -1565,11 +1557,8 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteProjectError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteProjectError>())
+                            .and_then(|response| Err(DeleteProjectError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1596,10 +1585,11 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribePlacementError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribePlacementResponse, _>()?;
+                                .deserialize::<DescribePlacementResponse, _>();
 
                             result
                         })
@@ -1610,11 +1600,10 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DescribePlacementError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribePlacementError>())
+                            .and_then(|response| {
+                                Err(DescribePlacementError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1640,10 +1629,11 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeProjectError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeProjectResponse, _>()?;
+                                .deserialize::<DescribeProjectResponse, _>();
 
                             result
                         })
@@ -1654,11 +1644,8 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DescribeProjectError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeProjectError>())
+                            .and_then(|response| Err(DescribeProjectError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1687,11 +1674,12 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DisassociateDeviceFromPlacementError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
                                 .deserialize::<DisassociateDeviceFromPlacementResponse, _>(
-                            )?;
+                            );
 
                             result
                         })
@@ -1702,15 +1690,12 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(DisassociateDeviceFromPlacementError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DisassociateDeviceFromPlacementError>())
+                            .and_then(|response| {
+                                Err(DisassociateDeviceFromPlacementError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -1737,10 +1722,11 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetDevicesInPlacementError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetDevicesInPlacementResponse, _>()?;
+                                .deserialize::<GetDevicesInPlacementResponse, _>();
 
                             result
                         })
@@ -1751,11 +1737,10 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetDevicesInPlacementError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetDevicesInPlacementError>())
+                            .and_then(|response| {
+                                Err(GetDevicesInPlacementError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1790,10 +1775,11 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListPlacementsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListPlacementsResponse, _>()?;
+                                .deserialize::<ListPlacementsResponse, _>();
 
                             result
                         })
@@ -1804,11 +1790,8 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListPlacementsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListPlacementsError>())
+                            .and_then(|response| Err(ListPlacementsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1840,10 +1823,11 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListProjectsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListProjectsResponse, _>()?;
+                                .deserialize::<ListProjectsResponse, _>();
 
                             result
                         })
@@ -1854,11 +1838,8 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListProjectsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListProjectsError>())
+                            .and_then(|response| Err(ListProjectsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1881,10 +1862,11 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListTagsForResourceError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListTagsForResourceResponse, _>()?;
+                                .deserialize::<ListTagsForResourceResponse, _>();
 
                             result
                         })
@@ -1895,11 +1877,10 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListTagsForResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListTagsForResourceError>())
+                            .and_then(|response| {
+                                Err(ListTagsForResourceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1924,10 +1905,11 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| TagResourceError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<TagResourceResponse, _>()?;
+                                .deserialize::<TagResourceResponse, _>();
 
                             result
                         })
@@ -1938,11 +1920,8 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(TagResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<TagResourceError>())
+                            .and_then(|response| Err(TagResourceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1971,10 +1950,11 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UntagResourceError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UntagResourceResponse, _>()?;
+                                .deserialize::<UntagResourceResponse, _>();
 
                             result
                         })
@@ -1985,11 +1965,8 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UntagResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UntagResourceError>())
+                            .and_then(|response| Err(UntagResourceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2018,10 +1995,11 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdatePlacementError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdatePlacementResponse, _>()?;
+                                .deserialize::<UpdatePlacementResponse, _>();
 
                             result
                         })
@@ -2032,11 +2010,8 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdatePlacementError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdatePlacementError>())
+                            .and_then(|response| Err(UpdatePlacementError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2064,10 +2039,11 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateProjectError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateProjectResponse, _>()?;
+                                .deserialize::<UpdateProjectResponse, _>();
 
                             result
                         })
@@ -2078,11 +2054,8 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateProjectError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateProjectError>())
+                            .and_then(|response| Err(UpdateProjectError::from_response(response)))
                     })
                     .boxed()
             }

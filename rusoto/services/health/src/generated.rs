@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -771,11 +771,17 @@ impl AWSHealth for AWSHealthClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeAffectedEntitiesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeAffectedEntitiesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeAffectedEntitiesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeAffectedEntitiesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -783,13 +789,13 @@ impl AWSHealth for AWSHealthClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeAffectedEntitiesError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeAffectedEntitiesError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeAffectedEntitiesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -815,11 +821,17 @@ impl AWSHealth for AWSHealthClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeEntityAggregatesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeEntityAggregatesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeEntityAggregatesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeEntityAggregatesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -827,13 +839,13 @@ impl AWSHealth for AWSHealthClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeEntityAggregatesError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeEntityAggregatesError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeEntityAggregatesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -856,11 +868,17 @@ impl AWSHealth for AWSHealthClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeEventAggregatesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeEventAggregatesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeEventAggregatesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeEventAggregatesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -868,13 +886,13 @@ impl AWSHealth for AWSHealthClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeEventAggregatesError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeEventAggregatesError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeEventAggregatesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -897,11 +915,17 @@ impl AWSHealth for AWSHealthClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeEventDetailsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeEventDetailsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeEventDetailsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeEventDetailsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -909,11 +933,13 @@ impl AWSHealth for AWSHealthClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeEventDetailsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeEventDetailsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeEventDetailsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -936,11 +962,16 @@ impl AWSHealth for AWSHealthClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeEventTypesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeEventTypesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeEventTypesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeEventTypesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -948,11 +979,12 @@ impl AWSHealth for AWSHealthClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeEventTypesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeEventTypesError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeEventTypesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -975,11 +1007,16 @@ impl AWSHealth for AWSHealthClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeEventsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeEventsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeEventsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeEventsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -987,11 +1024,10 @@ impl AWSHealth for AWSHealthClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeEventsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeEventsError>
+                            })
+                            .and_then(|response| Err(DescribeEventsError::from_response(response)))
                     })
                     .boxed()
             }

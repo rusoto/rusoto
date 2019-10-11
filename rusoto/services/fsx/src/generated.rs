@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -1511,11 +1511,16 @@ impl Fsx for FsxClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateBackupError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateBackupResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateBackupError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateBackupResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1523,11 +1528,10 @@ impl Fsx for FsxClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateBackupError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateBackupError>
+                            })
+                            .and_then(|response| Err(CreateBackupError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1553,11 +1557,16 @@ impl Fsx for FsxClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateFileSystemError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateFileSystemResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateFileSystemError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateFileSystemResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1565,11 +1574,12 @@ impl Fsx for FsxClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateFileSystemError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateFileSystemError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateFileSystemError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1595,11 +1605,17 @@ impl Fsx for FsxClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateFileSystemFromBackupError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateFileSystemFromBackupResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateFileSystemFromBackupError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateFileSystemFromBackupResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1607,13 +1623,13 @@ impl Fsx for FsxClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(CreateFileSystemFromBackupError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateFileSystemFromBackupError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateFileSystemFromBackupError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1636,11 +1652,16 @@ impl Fsx for FsxClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteBackupError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteBackupResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteBackupError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteBackupResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1648,11 +1669,10 @@ impl Fsx for FsxClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteBackupError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteBackupError>
+                            })
+                            .and_then(|response| Err(DeleteBackupError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1678,11 +1698,16 @@ impl Fsx for FsxClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteFileSystemError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteFileSystemResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteFileSystemError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteFileSystemResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1690,11 +1715,12 @@ impl Fsx for FsxClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteFileSystemError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteFileSystemError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteFileSystemError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1720,11 +1746,16 @@ impl Fsx for FsxClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeBackupsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeBackupsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeBackupsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeBackupsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1732,11 +1763,10 @@ impl Fsx for FsxClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeBackupsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeBackupsError>
+                            })
+                            .and_then(|response| Err(DescribeBackupsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1762,11 +1792,17 @@ impl Fsx for FsxClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeFileSystemsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeFileSystemsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeFileSystemsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeFileSystemsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1774,11 +1810,13 @@ impl Fsx for FsxClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeFileSystemsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeFileSystemsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeFileSystemsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1804,11 +1842,17 @@ impl Fsx for FsxClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListTagsForResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListTagsForResourceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListTagsForResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListTagsForResourceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1816,11 +1860,13 @@ impl Fsx for FsxClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListTagsForResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListTagsForResourceError>
+                            })
+                            .and_then(|response| {
+                                Err(ListTagsForResourceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1843,11 +1889,16 @@ impl Fsx for FsxClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| TagResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<TagResourceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<TagResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<TagResourceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1855,11 +1906,10 @@ impl Fsx for FsxClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(TagResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<TagResourceError>
+                            })
+                            .and_then(|response| Err(TagResourceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1882,11 +1932,16 @@ impl Fsx for FsxClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UntagResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UntagResourceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UntagResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UntagResourceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1894,11 +1949,10 @@ impl Fsx for FsxClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UntagResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UntagResourceError>
+                            })
+                            .and_then(|response| Err(UntagResourceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1924,11 +1978,16 @@ impl Fsx for FsxClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateFileSystemError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateFileSystemResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateFileSystemError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateFileSystemResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1936,11 +1995,12 @@ impl Fsx for FsxClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateFileSystemError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateFileSystemError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateFileSystemError::from_response(response))
+                            })
                     })
                     .boxed()
             }

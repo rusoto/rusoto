@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -1468,11 +1468,17 @@ impl AWSSupport for AWSSupportClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AddAttachmentsToSetError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AddAttachmentsToSetResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AddAttachmentsToSetError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AddAttachmentsToSetResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1480,11 +1486,13 @@ impl AWSSupport for AWSSupportClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(AddAttachmentsToSetError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AddAttachmentsToSetError>
+                            })
+                            .and_then(|response| {
+                                Err(AddAttachmentsToSetError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1507,11 +1515,17 @@ impl AWSSupport for AWSSupportClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AddCommunicationToCaseError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AddCommunicationToCaseResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AddCommunicationToCaseError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AddCommunicationToCaseResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1519,13 +1533,13 @@ impl AWSSupport for AWSSupportClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(AddCommunicationToCaseError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AddCommunicationToCaseError>
+                            })
+                            .and_then(|response| {
+                                Err(AddCommunicationToCaseError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1548,11 +1562,16 @@ impl AWSSupport for AWSSupportClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateCaseError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateCaseResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateCaseError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateCaseResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1560,11 +1579,10 @@ impl AWSSupport for AWSSupportClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateCaseError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateCaseError>
+                            })
+                            .and_then(|response| Err(CreateCaseError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1587,11 +1605,16 @@ impl AWSSupport for AWSSupportClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeAttachmentError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeAttachmentResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeAttachmentError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeAttachmentResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1599,11 +1622,12 @@ impl AWSSupport for AWSSupportClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeAttachmentError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeAttachmentError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeAttachmentError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1626,11 +1650,16 @@ impl AWSSupport for AWSSupportClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeCasesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeCasesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeCasesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeCasesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1638,11 +1667,10 @@ impl AWSSupport for AWSSupportClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeCasesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeCasesError>
+                            })
+                            .and_then(|response| Err(DescribeCasesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1665,11 +1693,17 @@ impl AWSSupport for AWSSupportClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeCommunicationsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeCommunicationsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeCommunicationsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeCommunicationsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1677,13 +1711,13 @@ impl AWSSupport for AWSSupportClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeCommunicationsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeCommunicationsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeCommunicationsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1706,11 +1740,16 @@ impl AWSSupport for AWSSupportClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeServicesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeServicesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeServicesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeServicesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1718,11 +1757,12 @@ impl AWSSupport for AWSSupportClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeServicesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeServicesError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeServicesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1745,11 +1785,17 @@ impl AWSSupport for AWSSupportClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeSeverityLevelsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeSeverityLevelsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeSeverityLevelsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeSeverityLevelsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1757,13 +1803,13 @@ impl AWSSupport for AWSSupportClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeSeverityLevelsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeSeverityLevelsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeSeverityLevelsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1790,16 +1836,22 @@ impl AWSSupport for AWSSupportClient {
 
         self.client.sign_and_dispatch(request, |response| {
                         if response.status.is_success() {
-                            response.buffer().map(|try_response| {
-                try_response.and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<DescribeTrustedAdvisorCheckRefreshStatusesResponse, _>()
-                })
-            }).boxed()
+                            response.buffer()
+                .map_err(|e| DescribeTrustedAdvisorCheckRefreshStatusesError::from(e))
+                .map(|try_response| {
+                    try_response
+                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<DescribeTrustedAdvisorCheckRefreshStatusesError>)
+                    .and_then(|response| {
+                        proto::json::ResponsePayload::new(&response).deserialize::<DescribeTrustedAdvisorCheckRefreshStatusesResponse, _>()
+                    })
+                }).boxed()
                         } else {
                             response.buffer().map(|try_response| {
-                                try_response.map_or_else(|e| e, |response| {
-                                    Err(DescribeTrustedAdvisorCheckRefreshStatusesError::from_response(response))
-                                }).boxed()
+                                try_response
+                                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<DescribeTrustedAdvisorCheckRefreshStatusesError>)
+                                    .and_then(|response| {
+                                        Err(DescribeTrustedAdvisorCheckRefreshStatusesError::from_response(response))
+                                    })
                             }).boxed()
                         }
                     })
@@ -1827,11 +1879,17 @@ impl AWSSupport for AWSSupportClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeTrustedAdvisorCheckResultError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeTrustedAdvisorCheckResultResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeTrustedAdvisorCheckResultError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeTrustedAdvisorCheckResultResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1839,15 +1897,15 @@ impl AWSSupport for AWSSupportClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeTrustedAdvisorCheckResultError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeTrustedAdvisorCheckResultError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeTrustedAdvisorCheckResultError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -1874,16 +1932,22 @@ impl AWSSupport for AWSSupportClient {
 
         self.client.sign_and_dispatch(request, |response| {
                         if response.status.is_success() {
-                            response.buffer().map(|try_response| {
-                try_response.and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<DescribeTrustedAdvisorCheckSummariesResponse, _>()
-                })
-            }).boxed()
+                            response.buffer()
+                .map_err(|e| DescribeTrustedAdvisorCheckSummariesError::from(e))
+                .map(|try_response| {
+                    try_response
+                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<DescribeTrustedAdvisorCheckSummariesError>)
+                    .and_then(|response| {
+                        proto::json::ResponsePayload::new(&response).deserialize::<DescribeTrustedAdvisorCheckSummariesResponse, _>()
+                    })
+                }).boxed()
                         } else {
                             response.buffer().map(|try_response| {
-                                try_response.map_or_else(|e| e, |response| {
-                                    Err(DescribeTrustedAdvisorCheckSummariesError::from_response(response))
-                                }).boxed()
+                                try_response
+                                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<DescribeTrustedAdvisorCheckSummariesError>)
+                                    .and_then(|response| {
+                                        Err(DescribeTrustedAdvisorCheckSummariesError::from_response(response))
+                                    })
                             }).boxed()
                         }
                     })
@@ -1908,11 +1972,17 @@ impl AWSSupport for AWSSupportClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeTrustedAdvisorChecksError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeTrustedAdvisorChecksResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeTrustedAdvisorChecksError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeTrustedAdvisorChecksResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1920,13 +1990,13 @@ impl AWSSupport for AWSSupportClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeTrustedAdvisorChecksError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeTrustedAdvisorChecksError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeTrustedAdvisorChecksError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1952,11 +2022,17 @@ impl AWSSupport for AWSSupportClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| RefreshTrustedAdvisorCheckError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RefreshTrustedAdvisorCheckResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<RefreshTrustedAdvisorCheckError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<RefreshTrustedAdvisorCheckResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1964,13 +2040,13 @@ impl AWSSupport for AWSSupportClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(RefreshTrustedAdvisorCheckError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<RefreshTrustedAdvisorCheckError>
+                            })
+                            .and_then(|response| {
+                                Err(RefreshTrustedAdvisorCheckError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1993,11 +2069,16 @@ impl AWSSupport for AWSSupportClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ResolveCaseError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ResolveCaseResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ResolveCaseError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ResolveCaseResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2005,11 +2086,10 @@ impl AWSSupport for AWSSupportClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ResolveCaseError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ResolveCaseError>
+                            })
+                            .and_then(|response| Err(ResolveCaseError::from_response(response)))
                     })
                     .boxed()
             }

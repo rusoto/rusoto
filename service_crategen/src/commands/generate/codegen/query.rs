@@ -44,11 +44,15 @@ impl GenerateProtocol for QueryGenerator {
 
                     self.client.sign_and_dispatch(request, |response| {{
                         if !response.status.is_success() {{
-                            return response.buffer().map(|try_response| {{
-                                try_response.map_or_else(|e| e, |response| {{
-                                    Err({error_type}::from_response(response))
-                                }})
-                            }}).boxed();
+                            return response.buffer()
+                                .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<{error_type}>)
+                                .map(|try_response| {{
+                                    try_response
+                                        .map_err(|e| e.into())
+                                        .and_then(|response| {{
+                                            Err({error_type}::from_response(response))
+                                        }})
+                                }}).boxed();
                         }}
 
                         {parse_payload}
@@ -73,7 +77,7 @@ impl GenerateProtocol for QueryGenerator {
 
     fn generate_prelude(&self, writer: &mut FileWriter, _service: &Service<'_>) -> IoResult {
         writeln!(writer,
-                 "use futures::FutureExt;
+                 "use futures::{{FutureExt, TryFutureExt}};
             use std::str::FromStr;
             use xml::EventReader;
             use xml::reader::ParserConfig;

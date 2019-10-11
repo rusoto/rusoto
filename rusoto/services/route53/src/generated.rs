@@ -11906,34 +11906,36 @@ impl Route53 for Route53Client {
             if !response.status.is_success() {
                 return response
                     .buffer()
-                    .from_err()
                     .and_then(|response| {
                         Err(AssociateVPCWithHostedZoneError::from_response(response))
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let mut result;
 
-                if response.body.is_empty() {
-                    result = AssociateVPCWithHostedZoneResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = AssociateVPCWithHostedZoneResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(AssociateVPCWithHostedZoneResponse::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        result = AssociateVPCWithHostedZoneResponseDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack,
+                        );
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -11966,34 +11968,36 @@ impl Route53 for Route53Client {
             if !response.status.is_success() {
                 return response
                     .buffer()
-                    .from_err()
                     .and_then(|response| {
                         Err(ChangeResourceRecordSetsError::from_response(response))
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let mut result;
 
-                if response.body.is_empty() {
-                    result = ChangeResourceRecordSetsResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = ChangeResourceRecordSetsResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(ChangeResourceRecordSetsResponse::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        result = ChangeResourceRecordSetsResponseDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack,
+                        );
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -12026,32 +12030,34 @@ impl Route53 for Route53Client {
             if !response.status.is_success() {
                 return response
                     .buffer()
-                    .from_err()
                     .and_then(|response| Err(ChangeTagsForResourceError::from_response(response)))
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let mut result;
 
-                if response.body.is_empty() {
-                    result = ChangeTagsForResourceResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = ChangeTagsForResourceResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(ChangeTagsForResourceResponse::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        result = ChangeTagsForResourceResponseDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack,
+                        );
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -12078,33 +12084,35 @@ impl Route53 for Route53Client {
             if !response.status.is_success() {
                 return response
                     .buffer()
-                    .from_err()
                     .and_then(|response| Err(CreateHealthCheckError::from_response(response)))
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let mut result;
 
-                if response.body.is_empty() {
-                    result = CreateHealthCheckResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = CreateHealthCheckResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                let value = response.headers.get("Location").unwrap().to_owned();
-                result.location = value; // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(CreateHealthCheckResponse::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        result = CreateHealthCheckResponseDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack,
+                        );
+                    }
+                    let value = response.headers.get("Location").unwrap().to_owned();
+                    result.location = value; // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -12131,33 +12139,35 @@ impl Route53 for Route53Client {
             if !response.status.is_success() {
                 return response
                     .buffer()
-                    .from_err()
                     .and_then(|response| Err(CreateHostedZoneError::from_response(response)))
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let mut result;
 
-                if response.body.is_empty() {
-                    result = CreateHostedZoneResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = CreateHostedZoneResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                let value = response.headers.get("Location").unwrap().to_owned();
-                result.location = value; // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(CreateHostedZoneResponse::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        result = CreateHostedZoneResponseDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack,
+                        );
+                    }
+                    let value = response.headers.get("Location").unwrap().to_owned();
+                    result.location = value; // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -12184,35 +12194,37 @@ impl Route53 for Route53Client {
             if !response.status.is_success() {
                 return response
                     .buffer()
-                    .from_err()
                     .and_then(|response| {
                         Err(CreateQueryLoggingConfigError::from_response(response))
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let mut result;
 
-                if response.body.is_empty() {
-                    result = CreateQueryLoggingConfigResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = CreateQueryLoggingConfigResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                let value = response.headers.get("Location").unwrap().to_owned();
-                result.location = value; // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(CreateQueryLoggingConfigResponse::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        result = CreateQueryLoggingConfigResponseDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack,
+                        );
+                    }
+                    let value = response.headers.get("Location").unwrap().to_owned();
+                    result.location = value; // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -12239,35 +12251,37 @@ impl Route53 for Route53Client {
             if !response.status.is_success() {
                 return response
                     .buffer()
-                    .from_err()
                     .and_then(|response| {
                         Err(CreateReusableDelegationSetError::from_response(response))
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let mut result;
 
-                if response.body.is_empty() {
-                    result = CreateReusableDelegationSetResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = CreateReusableDelegationSetResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                let value = response.headers.get("Location").unwrap().to_owned();
-                result.location = value; // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(CreateReusableDelegationSetResponse::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        result = CreateReusableDelegationSetResponseDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack,
+                        );
+                    }
+                    let value = response.headers.get("Location").unwrap().to_owned();
+                    result.location = value; // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -12294,33 +12308,35 @@ impl Route53 for Route53Client {
             if !response.status.is_success() {
                 return response
                     .buffer()
-                    .from_err()
                     .and_then(|response| Err(CreateTrafficPolicyError::from_response(response)))
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let mut result;
 
-                if response.body.is_empty() {
-                    result = CreateTrafficPolicyResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = CreateTrafficPolicyResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                let value = response.headers.get("Location").unwrap().to_owned();
-                result.location = value; // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(CreateTrafficPolicyResponse::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        result = CreateTrafficPolicyResponseDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack,
+                        );
+                    }
+                    let value = response.headers.get("Location").unwrap().to_owned();
+                    result.location = value; // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -12347,35 +12363,37 @@ impl Route53 for Route53Client {
             if !response.status.is_success() {
                 return response
                     .buffer()
-                    .from_err()
                     .and_then(|response| {
                         Err(CreateTrafficPolicyInstanceError::from_response(response))
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let mut result;
 
-                if response.body.is_empty() {
-                    result = CreateTrafficPolicyInstanceResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = CreateTrafficPolicyInstanceResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                let value = response.headers.get("Location").unwrap().to_owned();
-                result.location = value; // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(CreateTrafficPolicyInstanceResponse::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        result = CreateTrafficPolicyInstanceResponseDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack,
+                        );
+                    }
+                    let value = response.headers.get("Location").unwrap().to_owned();
+                    result.location = value; // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -12404,35 +12422,37 @@ impl Route53 for Route53Client {
             if !response.status.is_success() {
                 return response
                     .buffer()
-                    .from_err()
                     .and_then(|response| {
                         Err(CreateTrafficPolicyVersionError::from_response(response))
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let mut result;
 
-                if response.body.is_empty() {
-                    result = CreateTrafficPolicyVersionResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = CreateTrafficPolicyVersionResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                let value = response.headers.get("Location").unwrap().to_owned();
-                result.location = value; // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(CreateTrafficPolicyVersionResponse::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        result = CreateTrafficPolicyVersionResponseDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack,
+                        );
+                    }
+                    let value = response.headers.get("Location").unwrap().to_owned();
+                    result.location = value; // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -12467,7 +12487,6 @@ impl Route53 for Route53Client {
             if !response.status.is_success() {
                 return response
                     .buffer()
-                    .from_err()
                     .and_then(|response| {
                         Err(CreateVPCAssociationAuthorizationError::from_response(
                             response,
@@ -12476,27 +12495,30 @@ impl Route53 for Route53Client {
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let mut result;
 
-                if response.body.is_empty() {
-                    result = CreateVPCAssociationAuthorizationResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = CreateVPCAssociationAuthorizationResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(CreateVPCAssociationAuthorizationResponse::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        result = CreateVPCAssociationAuthorizationResponseDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack,
+                        );
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -12519,32 +12541,34 @@ impl Route53 for Route53Client {
             if !response.status.is_success() {
                 return response
                     .buffer()
-                    .from_err()
                     .and_then(|response| Err(DeleteHealthCheckError::from_response(response)))
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let mut result;
 
-                if response.body.is_empty() {
-                    result = DeleteHealthCheckResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = DeleteHealthCheckResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(DeleteHealthCheckResponse::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        result = DeleteHealthCheckResponseDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack,
+                        );
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -12564,32 +12588,34 @@ impl Route53 for Route53Client {
             if !response.status.is_success() {
                 return response
                     .buffer()
-                    .from_err()
                     .and_then(|response| Err(DeleteHostedZoneError::from_response(response)))
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let mut result;
 
-                if response.body.is_empty() {
-                    result = DeleteHostedZoneResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = DeleteHostedZoneResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(DeleteHostedZoneResponse::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        result = DeleteHostedZoneResponseDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack,
+                        );
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -12609,34 +12635,36 @@ impl Route53 for Route53Client {
             if !response.status.is_success() {
                 return response
                     .buffer()
-                    .from_err()
                     .and_then(|response| {
                         Err(DeleteQueryLoggingConfigError::from_response(response))
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let mut result;
 
-                if response.body.is_empty() {
-                    result = DeleteQueryLoggingConfigResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = DeleteQueryLoggingConfigResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(DeleteQueryLoggingConfigResponse::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        result = DeleteQueryLoggingConfigResponseDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack,
+                        );
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -12656,34 +12684,36 @@ impl Route53 for Route53Client {
             if !response.status.is_success() {
                 return response
                     .buffer()
-                    .from_err()
                     .and_then(|response| {
                         Err(DeleteReusableDelegationSetError::from_response(response))
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let mut result;
 
-                if response.body.is_empty() {
-                    result = DeleteReusableDelegationSetResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = DeleteReusableDelegationSetResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(DeleteReusableDelegationSetResponse::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        result = DeleteReusableDelegationSetResponseDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack,
+                        );
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -12707,32 +12737,34 @@ impl Route53 for Route53Client {
             if !response.status.is_success() {
                 return response
                     .buffer()
-                    .from_err()
                     .and_then(|response| Err(DeleteTrafficPolicyError::from_response(response)))
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let mut result;
 
-                if response.body.is_empty() {
-                    result = DeleteTrafficPolicyResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = DeleteTrafficPolicyResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(DeleteTrafficPolicyResponse::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        result = DeleteTrafficPolicyResponseDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack,
+                        );
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -12752,34 +12784,36 @@ impl Route53 for Route53Client {
             if !response.status.is_success() {
                 return response
                     .buffer()
-                    .from_err()
                     .and_then(|response| {
                         Err(DeleteTrafficPolicyInstanceError::from_response(response))
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let mut result;
 
-                if response.body.is_empty() {
-                    result = DeleteTrafficPolicyInstanceResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = DeleteTrafficPolicyInstanceResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(DeleteTrafficPolicyInstanceResponse::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        result = DeleteTrafficPolicyInstanceResponseDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack,
+                        );
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -12814,7 +12848,6 @@ impl Route53 for Route53Client {
             if !response.status.is_success() {
                 return response
                     .buffer()
-                    .from_err()
                     .and_then(|response| {
                         Err(DeleteVPCAssociationAuthorizationError::from_response(
                             response,
@@ -12823,27 +12856,30 @@ impl Route53 for Route53Client {
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let mut result;
 
-                if response.body.is_empty() {
-                    result = DeleteVPCAssociationAuthorizationResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = DeleteVPCAssociationAuthorizationResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(DeleteVPCAssociationAuthorizationResponse::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        result = DeleteVPCAssociationAuthorizationResponseDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack,
+                        );
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -12876,34 +12912,36 @@ impl Route53 for Route53Client {
             if !response.status.is_success() {
                 return response
                     .buffer()
-                    .from_err()
                     .and_then(|response| {
                         Err(DisassociateVPCFromHostedZoneError::from_response(response))
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let mut result;
 
-                if response.body.is_empty() {
-                    result = DisassociateVPCFromHostedZoneResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = DisassociateVPCFromHostedZoneResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(DisassociateVPCFromHostedZoneResponse::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        result = DisassociateVPCFromHostedZoneResponseDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack,
+                        );
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -12923,32 +12961,34 @@ impl Route53 for Route53Client {
             if !response.status.is_success() {
                 return response
                     .buffer()
-                    .from_err()
                     .and_then(|response| Err(GetAccountLimitError::from_response(response)))
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let mut result;
 
-                if response.body.is_empty() {
-                    result = GetAccountLimitResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = GetAccountLimitResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(GetAccountLimitResponse::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        result = GetAccountLimitResponseDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack,
+                        );
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -12968,30 +13008,34 @@ impl Route53 for Route53Client {
             if !response.status.is_success() {
                 return response
                     .buffer()
-                    .from_err()
                     .and_then(|response| Err(GetChangeError::from_response(response)))
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let mut result;
 
-                if response.body.is_empty() {
-                    result = GetChangeResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result =
-                        GetChangeResponseDeserializer::deserialize(&actual_tag_name, &mut stack)?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(GetChangeResponse::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        result = GetChangeResponseDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack,
+                        );
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -13009,32 +13053,34 @@ impl Route53 for Route53Client {
             if !response.status.is_success() {
                 return response
                     .buffer()
-                    .from_err()
                     .and_then(|response| Err(GetCheckerIpRangesError::from_response(response)))
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let mut result;
 
-                if response.body.is_empty() {
-                    result = GetCheckerIpRangesResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = GetCheckerIpRangesResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(GetCheckerIpRangesResponse::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        result = GetCheckerIpRangesResponseDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack,
+                        );
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -13064,32 +13110,34 @@ impl Route53 for Route53Client {
             if !response.status.is_success() {
                 return response
                     .buffer()
-                    .from_err()
                     .and_then(|response| Err(GetGeoLocationError::from_response(response)))
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let mut result;
 
-                if response.body.is_empty() {
-                    result = GetGeoLocationResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = GetGeoLocationResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(GetGeoLocationResponse::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        result = GetGeoLocationResponseDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack,
+                        );
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -13112,32 +13160,34 @@ impl Route53 for Route53Client {
             if !response.status.is_success() {
                 return response
                     .buffer()
-                    .from_err()
                     .and_then(|response| Err(GetHealthCheckError::from_response(response)))
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let mut result;
 
-                if response.body.is_empty() {
-                    result = GetHealthCheckResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = GetHealthCheckResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(GetHealthCheckResponse::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        result = GetHealthCheckResponseDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack,
+                        );
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -13155,32 +13205,34 @@ impl Route53 for Route53Client {
             if !response.status.is_success() {
                 return response
                     .buffer()
-                    .from_err()
                     .and_then(|response| Err(GetHealthCheckCountError::from_response(response)))
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let mut result;
 
-                if response.body.is_empty() {
-                    result = GetHealthCheckCountResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = GetHealthCheckCountResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(GetHealthCheckCountResponse::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        result = GetHealthCheckCountResponseDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack,
+                        );
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -13204,7 +13256,6 @@ impl Route53 for Route53Client {
             if !response.status.is_success() {
                 return response
                     .buffer()
-                    .from_err()
                     .and_then(|response| {
                         Err(GetHealthCheckLastFailureReasonError::from_response(
                             response,
@@ -13213,27 +13264,30 @@ impl Route53 for Route53Client {
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let mut result;
 
-                if response.body.is_empty() {
-                    result = GetHealthCheckLastFailureReasonResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = GetHealthCheckLastFailureReasonResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(GetHealthCheckLastFailureReasonResponse::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        result = GetHealthCheckLastFailureReasonResponseDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack,
+                        );
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -13256,32 +13310,34 @@ impl Route53 for Route53Client {
             if !response.status.is_success() {
                 return response
                     .buffer()
-                    .from_err()
                     .and_then(|response| Err(GetHealthCheckStatusError::from_response(response)))
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let mut result;
 
-                if response.body.is_empty() {
-                    result = GetHealthCheckStatusResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = GetHealthCheckStatusResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(GetHealthCheckStatusResponse::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        result = GetHealthCheckStatusResponseDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack,
+                        );
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -13301,32 +13357,34 @@ impl Route53 for Route53Client {
             if !response.status.is_success() {
                 return response
                     .buffer()
-                    .from_err()
                     .and_then(|response| Err(GetHostedZoneError::from_response(response)))
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let mut result;
 
-                if response.body.is_empty() {
-                    result = GetHostedZoneResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = GetHostedZoneResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(GetHostedZoneResponse::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        result = GetHostedZoneResponseDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack,
+                        );
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -13344,32 +13402,34 @@ impl Route53 for Route53Client {
             if !response.status.is_success() {
                 return response
                     .buffer()
-                    .from_err()
                     .and_then(|response| Err(GetHostedZoneCountError::from_response(response)))
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let mut result;
 
-                if response.body.is_empty() {
-                    result = GetHostedZoneCountResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = GetHostedZoneCountResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(GetHostedZoneCountResponse::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        result = GetHostedZoneCountResponseDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack,
+                        );
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -13387,32 +13447,34 @@ impl Route53 for Route53Client {
             if !response.status.is_success() {
                 return response
                     .buffer()
-                    .from_err()
                     .and_then(|response| Err(GetHostedZoneLimitError::from_response(response)))
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let mut result;
 
-                if response.body.is_empty() {
-                    result = GetHostedZoneLimitResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = GetHostedZoneLimitResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(GetHostedZoneLimitResponse::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        result = GetHostedZoneLimitResponseDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack,
+                        );
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -13432,32 +13494,34 @@ impl Route53 for Route53Client {
             if !response.status.is_success() {
                 return response
                     .buffer()
-                    .from_err()
                     .and_then(|response| Err(GetQueryLoggingConfigError::from_response(response)))
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let mut result;
 
-                if response.body.is_empty() {
-                    result = GetQueryLoggingConfigResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = GetQueryLoggingConfigResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(GetQueryLoggingConfigResponse::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        result = GetQueryLoggingConfigResponseDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack,
+                        );
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -13477,34 +13541,36 @@ impl Route53 for Route53Client {
             if !response.status.is_success() {
                 return response
                     .buffer()
-                    .from_err()
                     .and_then(|response| {
                         Err(GetReusableDelegationSetError::from_response(response))
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let mut result;
 
-                if response.body.is_empty() {
-                    result = GetReusableDelegationSetResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = GetReusableDelegationSetResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(GetReusableDelegationSetResponse::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        result = GetReusableDelegationSetResponseDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack,
+                        );
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -13523,34 +13589,36 @@ impl Route53 for Route53Client {
             if !response.status.is_success() {
                 return response
                     .buffer()
-                    .from_err()
                     .and_then(|response| {
                         Err(GetReusableDelegationSetLimitError::from_response(response))
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let mut result;
 
-                if response.body.is_empty() {
-                    result = GetReusableDelegationSetLimitResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = GetReusableDelegationSetLimitResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(GetReusableDelegationSetLimitResponse::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        result = GetReusableDelegationSetLimitResponseDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack,
+                        );
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -13574,32 +13642,34 @@ impl Route53 for Route53Client {
             if !response.status.is_success() {
                 return response
                     .buffer()
-                    .from_err()
                     .and_then(|response| Err(GetTrafficPolicyError::from_response(response)))
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let mut result;
 
-                if response.body.is_empty() {
-                    result = GetTrafficPolicyResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = GetTrafficPolicyResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(GetTrafficPolicyResponse::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        result = GetTrafficPolicyResponseDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack,
+                        );
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -13619,34 +13689,36 @@ impl Route53 for Route53Client {
             if !response.status.is_success() {
                 return response
                     .buffer()
-                    .from_err()
                     .and_then(|response| {
                         Err(GetTrafficPolicyInstanceError::from_response(response))
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let mut result;
 
-                if response.body.is_empty() {
-                    result = GetTrafficPolicyInstanceResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = GetTrafficPolicyInstanceResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(GetTrafficPolicyInstanceResponse::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        result = GetTrafficPolicyInstanceResponseDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack,
+                        );
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -13665,34 +13737,36 @@ impl Route53 for Route53Client {
             if !response.status.is_success() {
                 return response
                     .buffer()
-                    .from_err()
                     .and_then(|response| {
                         Err(GetTrafficPolicyInstanceCountError::from_response(response))
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let mut result;
 
-                if response.body.is_empty() {
-                    result = GetTrafficPolicyInstanceCountResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = GetTrafficPolicyInstanceCountResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(GetTrafficPolicyInstanceCountResponse::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        result = GetTrafficPolicyInstanceCountResponseDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack,
+                        );
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -13725,32 +13799,34 @@ impl Route53 for Route53Client {
             if !response.status.is_success() {
                 return response
                     .buffer()
-                    .from_err()
                     .and_then(|response| Err(ListGeoLocationsError::from_response(response)))
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let mut result;
 
-                if response.body.is_empty() {
-                    result = ListGeoLocationsResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = ListGeoLocationsResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(ListGeoLocationsResponse::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        result = ListGeoLocationsResponseDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack,
+                        );
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -13777,32 +13853,34 @@ impl Route53 for Route53Client {
             if !response.status.is_success() {
                 return response
                     .buffer()
-                    .from_err()
                     .and_then(|response| Err(ListHealthChecksError::from_response(response)))
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let mut result;
 
-                if response.body.is_empty() {
-                    result = ListHealthChecksResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = ListHealthChecksResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(ListHealthChecksResponse::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        result = ListHealthChecksResponseDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack,
+                        );
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -13832,32 +13910,34 @@ impl Route53 for Route53Client {
             if !response.status.is_success() {
                 return response
                     .buffer()
-                    .from_err()
                     .and_then(|response| Err(ListHostedZonesError::from_response(response)))
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let mut result;
 
-                if response.body.is_empty() {
-                    result = ListHostedZonesResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = ListHostedZonesResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(ListHostedZonesResponse::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        result = ListHostedZonesResponseDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack,
+                        );
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -13887,32 +13967,34 @@ impl Route53 for Route53Client {
             if !response.status.is_success() {
                 return response
                     .buffer()
-                    .from_err()
                     .and_then(|response| Err(ListHostedZonesByNameError::from_response(response)))
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let mut result;
 
-                if response.body.is_empty() {
-                    result = ListHostedZonesByNameResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = ListHostedZonesByNameResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(ListHostedZonesByNameResponse::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        result = ListHostedZonesByNameResponseDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack,
+                        );
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -13942,32 +14024,34 @@ impl Route53 for Route53Client {
             if !response.status.is_success() {
                 return response
                     .buffer()
-                    .from_err()
                     .and_then(|response| Err(ListQueryLoggingConfigsError::from_response(response)))
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let mut result;
 
-                if response.body.is_empty() {
-                    result = ListQueryLoggingConfigsResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = ListQueryLoggingConfigsResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(ListQueryLoggingConfigsResponse::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        result = ListQueryLoggingConfigsResponseDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack,
+                        );
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -14005,32 +14089,34 @@ impl Route53 for Route53Client {
             if !response.status.is_success() {
                 return response
                     .buffer()
-                    .from_err()
                     .and_then(|response| Err(ListResourceRecordSetsError::from_response(response)))
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let mut result;
 
-                if response.body.is_empty() {
-                    result = ListResourceRecordSetsResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = ListResourceRecordSetsResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(ListResourceRecordSetsResponse::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        result = ListResourceRecordSetsResponseDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack,
+                        );
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -14057,34 +14143,36 @@ impl Route53 for Route53Client {
             if !response.status.is_success() {
                 return response
                     .buffer()
-                    .from_err()
                     .and_then(|response| {
                         Err(ListReusableDelegationSetsError::from_response(response))
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let mut result;
 
-                if response.body.is_empty() {
-                    result = ListReusableDelegationSetsResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = ListReusableDelegationSetsResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(ListReusableDelegationSetsResponse::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        result = ListReusableDelegationSetsResponseDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack,
+                        );
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -14108,32 +14196,34 @@ impl Route53 for Route53Client {
             if !response.status.is_success() {
                 return response
                     .buffer()
-                    .from_err()
                     .and_then(|response| Err(ListTagsForResourceError::from_response(response)))
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let mut result;
 
-                if response.body.is_empty() {
-                    result = ListTagsForResourceResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = ListTagsForResourceResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(ListTagsForResourceResponse::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        result = ListTagsForResourceResponseDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack,
+                        );
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -14165,32 +14255,34 @@ impl Route53 for Route53Client {
             if !response.status.is_success() {
                 return response
                     .buffer()
-                    .from_err()
                     .and_then(|response| Err(ListTagsForResourcesError::from_response(response)))
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let mut result;
 
-                if response.body.is_empty() {
-                    result = ListTagsForResourcesResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = ListTagsForResourcesResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(ListTagsForResourcesResponse::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        result = ListTagsForResourcesResponseDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack,
+                        );
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -14217,32 +14309,34 @@ impl Route53 for Route53Client {
             if !response.status.is_success() {
                 return response
                     .buffer()
-                    .from_err()
                     .and_then(|response| Err(ListTrafficPoliciesError::from_response(response)))
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let mut result;
 
-                if response.body.is_empty() {
-                    result = ListTrafficPoliciesResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = ListTrafficPoliciesResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(ListTrafficPoliciesResponse::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        result = ListTrafficPoliciesResponseDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack,
+                        );
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -14275,34 +14369,36 @@ impl Route53 for Route53Client {
             if !response.status.is_success() {
                 return response
                     .buffer()
-                    .from_err()
                     .and_then(|response| {
                         Err(ListTrafficPolicyInstancesError::from_response(response))
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let mut result;
 
-                if response.body.is_empty() {
-                    result = ListTrafficPolicyInstancesResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = ListTrafficPolicyInstancesResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(ListTrafficPolicyInstancesResponse::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        result = ListTrafficPolicyInstancesResponseDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack,
+                        );
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -14336,7 +14432,6 @@ impl Route53 for Route53Client {
             if !response.status.is_success() {
                 return response
                     .buffer()
-                    .from_err()
                     .and_then(|response| {
                         Err(ListTrafficPolicyInstancesByHostedZoneError::from_response(
                             response,
@@ -14345,28 +14440,31 @@ impl Route53 for Route53Client {
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let mut result;
 
-                if response.body.is_empty() {
-                    result = ListTrafficPolicyInstancesByHostedZoneResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result =
-                        ListTrafficPolicyInstancesByHostedZoneResponseDeserializer::deserialize(
-                            &actual_tag_name,
-                            &mut stack,
-                        )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(ListTrafficPolicyInstancesByHostedZoneResponse::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        result =
+                            ListTrafficPolicyInstancesByHostedZoneResponseDeserializer::deserialize(
+                                &actual_tag_name,
+                                &mut stack,
+                            );
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -14404,7 +14502,6 @@ impl Route53 for Route53Client {
             if !response.status.is_success() {
                 return response
                     .buffer()
-                    .from_err()
                     .and_then(|response| {
                         Err(ListTrafficPolicyInstancesByPolicyError::from_response(
                             response,
@@ -14413,27 +14510,31 @@ impl Route53 for Route53Client {
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let mut result;
 
-                if response.body.is_empty() {
-                    result = ListTrafficPolicyInstancesByPolicyResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = ListTrafficPolicyInstancesByPolicyResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(ListTrafficPolicyInstancesByPolicyResponse::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        result =
+                            ListTrafficPolicyInstancesByPolicyResponseDeserializer::deserialize(
+                                &actual_tag_name,
+                                &mut stack,
+                            );
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -14462,34 +14563,36 @@ impl Route53 for Route53Client {
             if !response.status.is_success() {
                 return response
                     .buffer()
-                    .from_err()
                     .and_then(|response| {
                         Err(ListTrafficPolicyVersionsError::from_response(response))
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let mut result;
 
-                if response.body.is_empty() {
-                    result = ListTrafficPolicyVersionsResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = ListTrafficPolicyVersionsResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(ListTrafficPolicyVersionsResponse::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        result = ListTrafficPolicyVersionsResponseDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack,
+                        );
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -14522,7 +14625,6 @@ impl Route53 for Route53Client {
             if !response.status.is_success() {
                 return response
                     .buffer()
-                    .from_err()
                     .and_then(|response| {
                         Err(ListVPCAssociationAuthorizationsError::from_response(
                             response,
@@ -14531,27 +14633,30 @@ impl Route53 for Route53Client {
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let mut result;
 
-                if response.body.is_empty() {
-                    result = ListVPCAssociationAuthorizationsResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = ListVPCAssociationAuthorizationsResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(ListVPCAssociationAuthorizationsResponse::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        result = ListVPCAssociationAuthorizationsResponseDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack,
+                        );
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -14584,32 +14689,34 @@ impl Route53 for Route53Client {
             if !response.status.is_success() {
                 return response
                     .buffer()
-                    .from_err()
                     .and_then(|response| Err(TestDNSAnswerError::from_response(response)))
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let mut result;
 
-                if response.body.is_empty() {
-                    result = TestDNSAnswerResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = TestDNSAnswerResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(TestDNSAnswerResponse::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        result = TestDNSAnswerResponseDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack,
+                        );
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -14641,32 +14748,34 @@ impl Route53 for Route53Client {
             if !response.status.is_success() {
                 return response
                     .buffer()
-                    .from_err()
                     .and_then(|response| Err(UpdateHealthCheckError::from_response(response)))
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let mut result;
 
-                if response.body.is_empty() {
-                    result = UpdateHealthCheckResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = UpdateHealthCheckResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(UpdateHealthCheckResponse::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        result = UpdateHealthCheckResponseDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack,
+                        );
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -14695,32 +14804,34 @@ impl Route53 for Route53Client {
             if !response.status.is_success() {
                 return response
                     .buffer()
-                    .from_err()
                     .and_then(|response| Err(UpdateHostedZoneCommentError::from_response(response)))
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let mut result;
 
-                if response.body.is_empty() {
-                    result = UpdateHostedZoneCommentResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = UpdateHostedZoneCommentResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(UpdateHostedZoneCommentResponse::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        result = UpdateHostedZoneCommentResponseDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack,
+                        );
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -14753,34 +14864,36 @@ impl Route53 for Route53Client {
             if !response.status.is_success() {
                 return response
                     .buffer()
-                    .from_err()
                     .and_then(|response| {
                         Err(UpdateTrafficPolicyCommentError::from_response(response))
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let mut result;
 
-                if response.body.is_empty() {
-                    result = UpdateTrafficPolicyCommentResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = UpdateTrafficPolicyCommentResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(UpdateTrafficPolicyCommentResponse::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        result = UpdateTrafficPolicyCommentResponseDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack,
+                        );
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 
@@ -14809,34 +14922,36 @@ impl Route53 for Route53Client {
             if !response.status.is_success() {
                 return response
                     .buffer()
-                    .from_err()
                     .and_then(|response| {
                         Err(UpdateTrafficPolicyInstanceError::from_response(response))
                     })
                     .boxed();
             }
 
-            Box::new(response.buffer().from_err().and_then(move |response| {
-                let mut result;
+            response
+                .buffer()
+                .and_then(move |xml_response| {
+                    let mut result;
 
-                if response.body.is_empty() {
-                    result = UpdateTrafficPolicyInstanceResponse::default();
-                } else {
-                    let reader = EventReader::new_with_config(
-                        response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
-                    );
-                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
-                    let _start_document = stack.next();
-                    let actual_tag_name = peek_at_name(&mut stack)?;
-                    result = UpdateTrafficPolicyInstanceResponseDeserializer::deserialize(
-                        &actual_tag_name,
-                        &mut stack,
-                    )?;
-                }
-                // parse non-payload
-                Ok(result)
-            }))
+                    if xml_response.body.is_empty() {
+                        result = Ok(UpdateTrafficPolicyInstanceResponse::default());
+                    } else {
+                        let reader = EventReader::new_with_config(
+                            xml_response.body.as_ref(),
+                            ParserConfig::new().trim_whitespace(true),
+                        );
+                        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                        let _start_document = stack.next();
+                        let actual_tag_name = peek_at_name(&mut stack)?;
+                        result = UpdateTrafficPolicyInstanceResponseDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack,
+                        );
+                    }
+                    // parse non-payload
+                    futures::future::ready(Ok(result))
+                })
+                .boxed()
         })
     }
 }
@@ -14862,5 +14977,4 @@ mod protocol_tests {
         let result = client.get_hosted_zone(request).sync();
         assert!(!result.is_ok(), "parse error: {:?}", result);
     }
-
 }

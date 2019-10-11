@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -7802,11 +7802,17 @@ impl ServiceCatalog for ServiceCatalogClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AcceptPortfolioShareError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AcceptPortfolioShareOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AcceptPortfolioShareError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AcceptPortfolioShareOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7814,11 +7820,13 @@ impl ServiceCatalog for ServiceCatalogClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(AcceptPortfolioShareError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AcceptPortfolioShareError>
+                            })
+                            .and_then(|response| {
+                                Err(AcceptPortfolioShareError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7844,11 +7852,17 @@ impl ServiceCatalog for ServiceCatalogClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AssociateBudgetWithResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AssociateBudgetWithResourceOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AssociateBudgetWithResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AssociateBudgetWithResourceOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7856,13 +7870,13 @@ impl ServiceCatalog for ServiceCatalogClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(AssociateBudgetWithResourceError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AssociateBudgetWithResourceError>
+                            })
+                            .and_then(|response| {
+                                Err(AssociateBudgetWithResourceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7889,11 +7903,17 @@ impl ServiceCatalog for ServiceCatalogClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AssociatePrincipalWithPortfolioError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AssociatePrincipalWithPortfolioOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AssociatePrincipalWithPortfolioError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AssociatePrincipalWithPortfolioOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7901,15 +7921,15 @@ impl ServiceCatalog for ServiceCatalogClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(AssociatePrincipalWithPortfolioError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AssociatePrincipalWithPortfolioError>
+                            })
+                            .and_then(|response| {
+                                Err(AssociatePrincipalWithPortfolioError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -7935,11 +7955,17 @@ impl ServiceCatalog for ServiceCatalogClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AssociateProductWithPortfolioError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AssociateProductWithPortfolioOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AssociateProductWithPortfolioError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AssociateProductWithPortfolioOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7947,13 +7973,13 @@ impl ServiceCatalog for ServiceCatalogClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(AssociateProductWithPortfolioError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AssociateProductWithPortfolioError>
+                            })
+                            .and_then(|response| {
+                                Err(AssociateProductWithPortfolioError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7980,16 +8006,22 @@ impl ServiceCatalog for ServiceCatalogClient {
 
         self.client.sign_and_dispatch(request, |response| {
                         if response.status.is_success() {
-                            response.buffer().map(|try_response| {
-                try_response.and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<AssociateServiceActionWithProvisioningArtifactOutput, _>()
-                })
-            }).boxed()
+                            response.buffer()
+                .map_err(|e| AssociateServiceActionWithProvisioningArtifactError::from(e))
+                .map(|try_response| {
+                    try_response
+                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<AssociateServiceActionWithProvisioningArtifactError>)
+                    .and_then(|response| {
+                        proto::json::ResponsePayload::new(&response).deserialize::<AssociateServiceActionWithProvisioningArtifactOutput, _>()
+                    })
+                }).boxed()
                         } else {
                             response.buffer().map(|try_response| {
-                                try_response.map_or_else(|e| e, |response| {
-                                    Err(AssociateServiceActionWithProvisioningArtifactError::from_response(response))
-                                }).boxed()
+                                try_response
+                                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<AssociateServiceActionWithProvisioningArtifactError>)
+                                    .and_then(|response| {
+                                        Err(AssociateServiceActionWithProvisioningArtifactError::from_response(response))
+                                    })
                             }).boxed()
                         }
                     })
@@ -8015,11 +8047,17 @@ impl ServiceCatalog for ServiceCatalogClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AssociateTagOptionWithResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AssociateTagOptionWithResourceOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AssociateTagOptionWithResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AssociateTagOptionWithResourceOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8027,15 +8065,13 @@ impl ServiceCatalog for ServiceCatalogClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(AssociateTagOptionWithResourceError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AssociateTagOptionWithResourceError>
+                            })
+                            .and_then(|response| {
+                                Err(AssociateTagOptionWithResourceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8062,16 +8098,22 @@ impl ServiceCatalog for ServiceCatalogClient {
 
         self.client.sign_and_dispatch(request, |response| {
                         if response.status.is_success() {
-                            response.buffer().map(|try_response| {
-                try_response.and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<BatchAssociateServiceActionWithProvisioningArtifactOutput, _>()
-                })
-            }).boxed()
+                            response.buffer()
+                .map_err(|e| BatchAssociateServiceActionWithProvisioningArtifactError::from(e))
+                .map(|try_response| {
+                    try_response
+                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<BatchAssociateServiceActionWithProvisioningArtifactError>)
+                    .and_then(|response| {
+                        proto::json::ResponsePayload::new(&response).deserialize::<BatchAssociateServiceActionWithProvisioningArtifactOutput, _>()
+                    })
+                }).boxed()
                         } else {
                             response.buffer().map(|try_response| {
-                                try_response.map_or_else(|e| e, |response| {
-                                    Err(BatchAssociateServiceActionWithProvisioningArtifactError::from_response(response))
-                                }).boxed()
+                                try_response
+                                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<BatchAssociateServiceActionWithProvisioningArtifactError>)
+                                    .and_then(|response| {
+                                        Err(BatchAssociateServiceActionWithProvisioningArtifactError::from_response(response))
+                                    })
                             }).boxed()
                         }
                     })
@@ -8097,16 +8139,22 @@ impl ServiceCatalog for ServiceCatalogClient {
 
         self.client.sign_and_dispatch(request, |response| {
                         if response.status.is_success() {
-                            response.buffer().map(|try_response| {
-                try_response.and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<BatchDisassociateServiceActionFromProvisioningArtifactOutput, _>()
-                })
-            }).boxed()
+                            response.buffer()
+                .map_err(|e| BatchDisassociateServiceActionFromProvisioningArtifactError::from(e))
+                .map(|try_response| {
+                    try_response
+                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<BatchDisassociateServiceActionFromProvisioningArtifactError>)
+                    .and_then(|response| {
+                        proto::json::ResponsePayload::new(&response).deserialize::<BatchDisassociateServiceActionFromProvisioningArtifactOutput, _>()
+                    })
+                }).boxed()
                         } else {
                             response.buffer().map(|try_response| {
-                                try_response.map_or_else(|e| e, |response| {
-                                    Err(BatchDisassociateServiceActionFromProvisioningArtifactError::from_response(response))
-                                }).boxed()
+                                try_response
+                                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<BatchDisassociateServiceActionFromProvisioningArtifactError>)
+                                    .and_then(|response| {
+                                        Err(BatchDisassociateServiceActionFromProvisioningArtifactError::from_response(response))
+                                    })
                             }).boxed()
                         }
                     })
@@ -8128,11 +8176,16 @@ impl ServiceCatalog for ServiceCatalogClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CopyProductError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CopyProductOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CopyProductError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CopyProductOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8140,11 +8193,10 @@ impl ServiceCatalog for ServiceCatalogClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CopyProductError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CopyProductError>
+                            })
+                            .and_then(|response| Err(CopyProductError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8170,11 +8222,16 @@ impl ServiceCatalog for ServiceCatalogClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateConstraintError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateConstraintOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateConstraintError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateConstraintOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8182,11 +8239,12 @@ impl ServiceCatalog for ServiceCatalogClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateConstraintError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateConstraintError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateConstraintError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8212,11 +8270,16 @@ impl ServiceCatalog for ServiceCatalogClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreatePortfolioError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreatePortfolioOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreatePortfolioError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreatePortfolioOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8224,11 +8287,10 @@ impl ServiceCatalog for ServiceCatalogClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreatePortfolioError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreatePortfolioError>
+                            })
+                            .and_then(|response| Err(CreatePortfolioError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8254,11 +8316,17 @@ impl ServiceCatalog for ServiceCatalogClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreatePortfolioShareError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreatePortfolioShareOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreatePortfolioShareError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreatePortfolioShareOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8266,11 +8334,13 @@ impl ServiceCatalog for ServiceCatalogClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreatePortfolioShareError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreatePortfolioShareError>
+                            })
+                            .and_then(|response| {
+                                Err(CreatePortfolioShareError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8293,11 +8363,16 @@ impl ServiceCatalog for ServiceCatalogClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateProductError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateProductOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateProductError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateProductOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8305,11 +8380,10 @@ impl ServiceCatalog for ServiceCatalogClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateProductError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateProductError>
+                            })
+                            .and_then(|response| Err(CreateProductError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8335,11 +8409,17 @@ impl ServiceCatalog for ServiceCatalogClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateProvisionedProductPlanError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateProvisionedProductPlanOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateProvisionedProductPlanError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateProvisionedProductPlanOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8347,13 +8427,13 @@ impl ServiceCatalog for ServiceCatalogClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(CreateProvisionedProductPlanError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateProvisionedProductPlanError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateProvisionedProductPlanError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8379,11 +8459,17 @@ impl ServiceCatalog for ServiceCatalogClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateProvisioningArtifactError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateProvisioningArtifactOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateProvisioningArtifactError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateProvisioningArtifactOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8391,13 +8477,13 @@ impl ServiceCatalog for ServiceCatalogClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(CreateProvisioningArtifactError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateProvisioningArtifactError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateProvisioningArtifactError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8423,11 +8509,17 @@ impl ServiceCatalog for ServiceCatalogClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateServiceActionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateServiceActionOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateServiceActionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateServiceActionOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8435,11 +8527,13 @@ impl ServiceCatalog for ServiceCatalogClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateServiceActionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateServiceActionError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateServiceActionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8465,11 +8559,16 @@ impl ServiceCatalog for ServiceCatalogClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateTagOptionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateTagOptionOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateTagOptionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateTagOptionOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8477,11 +8576,10 @@ impl ServiceCatalog for ServiceCatalogClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateTagOptionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateTagOptionError>
+                            })
+                            .and_then(|response| Err(CreateTagOptionError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8507,11 +8605,16 @@ impl ServiceCatalog for ServiceCatalogClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteConstraintError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteConstraintOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteConstraintError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteConstraintOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8519,11 +8622,12 @@ impl ServiceCatalog for ServiceCatalogClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteConstraintError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteConstraintError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteConstraintError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8549,11 +8653,16 @@ impl ServiceCatalog for ServiceCatalogClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeletePortfolioError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeletePortfolioOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeletePortfolioError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeletePortfolioOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8561,11 +8670,10 @@ impl ServiceCatalog for ServiceCatalogClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeletePortfolioError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeletePortfolioError>
+                            })
+                            .and_then(|response| Err(DeletePortfolioError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8591,11 +8699,17 @@ impl ServiceCatalog for ServiceCatalogClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeletePortfolioShareError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeletePortfolioShareOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeletePortfolioShareError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeletePortfolioShareOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8603,11 +8717,13 @@ impl ServiceCatalog for ServiceCatalogClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeletePortfolioShareError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeletePortfolioShareError>
+                            })
+                            .and_then(|response| {
+                                Err(DeletePortfolioShareError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8630,11 +8746,16 @@ impl ServiceCatalog for ServiceCatalogClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteProductError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteProductOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteProductError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteProductOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8642,11 +8763,10 @@ impl ServiceCatalog for ServiceCatalogClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteProductError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteProductError>
+                            })
+                            .and_then(|response| Err(DeleteProductError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8672,11 +8792,17 @@ impl ServiceCatalog for ServiceCatalogClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteProvisionedProductPlanError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteProvisionedProductPlanOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteProvisionedProductPlanError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteProvisionedProductPlanOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8684,13 +8810,13 @@ impl ServiceCatalog for ServiceCatalogClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DeleteProvisionedProductPlanError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteProvisionedProductPlanError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteProvisionedProductPlanError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8716,11 +8842,17 @@ impl ServiceCatalog for ServiceCatalogClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteProvisioningArtifactError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteProvisioningArtifactOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteProvisioningArtifactError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteProvisioningArtifactOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8728,13 +8860,13 @@ impl ServiceCatalog for ServiceCatalogClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DeleteProvisioningArtifactError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteProvisioningArtifactError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteProvisioningArtifactError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8760,11 +8892,17 @@ impl ServiceCatalog for ServiceCatalogClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteServiceActionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteServiceActionOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteServiceActionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteServiceActionOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8772,11 +8910,13 @@ impl ServiceCatalog for ServiceCatalogClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteServiceActionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteServiceActionError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteServiceActionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8802,11 +8942,16 @@ impl ServiceCatalog for ServiceCatalogClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteTagOptionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteTagOptionOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteTagOptionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteTagOptionOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8814,11 +8959,10 @@ impl ServiceCatalog for ServiceCatalogClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteTagOptionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteTagOptionError>
+                            })
+                            .and_then(|response| Err(DeleteTagOptionError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8844,11 +8988,16 @@ impl ServiceCatalog for ServiceCatalogClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeConstraintError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeConstraintOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeConstraintError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeConstraintOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8856,11 +9005,12 @@ impl ServiceCatalog for ServiceCatalogClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeConstraintError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeConstraintError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeConstraintError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8886,11 +9036,17 @@ impl ServiceCatalog for ServiceCatalogClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeCopyProductStatusError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeCopyProductStatusOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeCopyProductStatusError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeCopyProductStatusOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8898,13 +9054,13 @@ impl ServiceCatalog for ServiceCatalogClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeCopyProductStatusError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeCopyProductStatusError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeCopyProductStatusError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8930,11 +9086,16 @@ impl ServiceCatalog for ServiceCatalogClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribePortfolioError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribePortfolioOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribePortfolioError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribePortfolioOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8942,11 +9103,12 @@ impl ServiceCatalog for ServiceCatalogClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribePortfolioError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribePortfolioError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribePortfolioError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8972,11 +9134,17 @@ impl ServiceCatalog for ServiceCatalogClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribePortfolioShareStatusError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribePortfolioShareStatusOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribePortfolioShareStatusError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribePortfolioShareStatusOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8984,13 +9152,13 @@ impl ServiceCatalog for ServiceCatalogClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribePortfolioShareStatusError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribePortfolioShareStatusError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribePortfolioShareStatusError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9016,11 +9184,16 @@ impl ServiceCatalog for ServiceCatalogClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeProductError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeProductOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeProductError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeProductOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9028,11 +9201,10 @@ impl ServiceCatalog for ServiceCatalogClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeProductError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeProductError>
+                            })
+                            .and_then(|response| Err(DescribeProductError::from_response(response)))
                     })
                     .boxed()
             }
@@ -9058,11 +9230,17 @@ impl ServiceCatalog for ServiceCatalogClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeProductAsAdminError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeProductAsAdminOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeProductAsAdminError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeProductAsAdminOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9070,13 +9248,13 @@ impl ServiceCatalog for ServiceCatalogClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeProductAsAdminError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeProductAsAdminError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeProductAsAdminError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9102,11 +9280,17 @@ impl ServiceCatalog for ServiceCatalogClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeProductViewError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeProductViewOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeProductViewError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeProductViewOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9114,11 +9298,13 @@ impl ServiceCatalog for ServiceCatalogClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeProductViewError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeProductViewError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeProductViewError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9144,11 +9330,17 @@ impl ServiceCatalog for ServiceCatalogClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeProvisionedProductError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeProvisionedProductOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeProvisionedProductError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeProvisionedProductOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9156,13 +9348,13 @@ impl ServiceCatalog for ServiceCatalogClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeProvisionedProductError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeProvisionedProductError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeProvisionedProductError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9189,11 +9381,17 @@ impl ServiceCatalog for ServiceCatalogClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeProvisionedProductPlanError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeProvisionedProductPlanOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeProvisionedProductPlanError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeProvisionedProductPlanOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9201,15 +9399,13 @@ impl ServiceCatalog for ServiceCatalogClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeProvisionedProductPlanError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeProvisionedProductPlanError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeProvisionedProductPlanError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9235,11 +9431,17 @@ impl ServiceCatalog for ServiceCatalogClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeProvisioningArtifactError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeProvisioningArtifactOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeProvisioningArtifactError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeProvisioningArtifactOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9247,13 +9449,13 @@ impl ServiceCatalog for ServiceCatalogClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeProvisioningArtifactError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeProvisioningArtifactError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeProvisioningArtifactError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9280,11 +9482,17 @@ impl ServiceCatalog for ServiceCatalogClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeProvisioningParametersError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeProvisioningParametersOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeProvisioningParametersError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeProvisioningParametersOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9292,15 +9500,13 @@ impl ServiceCatalog for ServiceCatalogClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeProvisioningParametersError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeProvisioningParametersError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeProvisioningParametersError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9323,11 +9529,16 @@ impl ServiceCatalog for ServiceCatalogClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeRecordError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeRecordOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeRecordError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeRecordOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9335,11 +9546,10 @@ impl ServiceCatalog for ServiceCatalogClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeRecordError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeRecordError>
+                            })
+                            .and_then(|response| Err(DescribeRecordError::from_response(response)))
                     })
                     .boxed()
             }
@@ -9365,11 +9575,17 @@ impl ServiceCatalog for ServiceCatalogClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeServiceActionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeServiceActionOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeServiceActionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeServiceActionOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9377,11 +9593,13 @@ impl ServiceCatalog for ServiceCatalogClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeServiceActionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeServiceActionError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeServiceActionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9407,11 +9625,16 @@ impl ServiceCatalog for ServiceCatalogClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeTagOptionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeTagOptionOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeTagOptionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeTagOptionOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9419,11 +9642,12 @@ impl ServiceCatalog for ServiceCatalogClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeTagOptionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeTagOptionError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeTagOptionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9447,11 +9671,17 @@ impl ServiceCatalog for ServiceCatalogClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DisableAWSOrganizationsAccessError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DisableAWSOrganizationsAccessOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DisableAWSOrganizationsAccessError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DisableAWSOrganizationsAccessOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9459,13 +9689,13 @@ impl ServiceCatalog for ServiceCatalogClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DisableAWSOrganizationsAccessError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DisableAWSOrganizationsAccessError>
+                            })
+                            .and_then(|response| {
+                                Err(DisableAWSOrganizationsAccessError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9492,11 +9722,17 @@ impl ServiceCatalog for ServiceCatalogClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DisassociateBudgetFromResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DisassociateBudgetFromResourceOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DisassociateBudgetFromResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DisassociateBudgetFromResourceOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9504,15 +9740,13 @@ impl ServiceCatalog for ServiceCatalogClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DisassociateBudgetFromResourceError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DisassociateBudgetFromResourceError>
+                            })
+                            .and_then(|response| {
+                                Err(DisassociateBudgetFromResourceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9541,11 +9775,17 @@ impl ServiceCatalog for ServiceCatalogClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DisassociatePrincipalFromPortfolioError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DisassociatePrincipalFromPortfolioOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DisassociatePrincipalFromPortfolioError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DisassociatePrincipalFromPortfolioOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9553,15 +9793,15 @@ impl ServiceCatalog for ServiceCatalogClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DisassociatePrincipalFromPortfolioError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DisassociatePrincipalFromPortfolioError>
+                            })
+                            .and_then(|response| {
+                                Err(DisassociatePrincipalFromPortfolioError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -9588,11 +9828,17 @@ impl ServiceCatalog for ServiceCatalogClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DisassociateProductFromPortfolioError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DisassociateProductFromPortfolioOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DisassociateProductFromPortfolioError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DisassociateProductFromPortfolioOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9600,15 +9846,15 @@ impl ServiceCatalog for ServiceCatalogClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DisassociateProductFromPortfolioError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DisassociateProductFromPortfolioError>
+                            })
+                            .and_then(|response| {
+                                Err(DisassociateProductFromPortfolioError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -9635,16 +9881,22 @@ impl ServiceCatalog for ServiceCatalogClient {
 
         self.client.sign_and_dispatch(request, |response| {
                         if response.status.is_success() {
-                            response.buffer().map(|try_response| {
-                try_response.and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<DisassociateServiceActionFromProvisioningArtifactOutput, _>()
-                })
-            }).boxed()
+                            response.buffer()
+                .map_err(|e| DisassociateServiceActionFromProvisioningArtifactError::from(e))
+                .map(|try_response| {
+                    try_response
+                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<DisassociateServiceActionFromProvisioningArtifactError>)
+                    .and_then(|response| {
+                        proto::json::ResponsePayload::new(&response).deserialize::<DisassociateServiceActionFromProvisioningArtifactOutput, _>()
+                    })
+                }).boxed()
                         } else {
                             response.buffer().map(|try_response| {
-                                try_response.map_or_else(|e| e, |response| {
-                                    Err(DisassociateServiceActionFromProvisioningArtifactError::from_response(response))
-                                }).boxed()
+                                try_response
+                                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<DisassociateServiceActionFromProvisioningArtifactError>)
+                                    .and_then(|response| {
+                                        Err(DisassociateServiceActionFromProvisioningArtifactError::from_response(response))
+                                    })
                             }).boxed()
                         }
                     })
@@ -9670,11 +9922,17 @@ impl ServiceCatalog for ServiceCatalogClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DisassociateTagOptionFromResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DisassociateTagOptionFromResourceOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DisassociateTagOptionFromResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DisassociateTagOptionFromResourceOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9682,15 +9940,15 @@ impl ServiceCatalog for ServiceCatalogClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DisassociateTagOptionFromResourceError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DisassociateTagOptionFromResourceError>
+                            })
+                            .and_then(|response| {
+                                Err(DisassociateTagOptionFromResourceError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -9714,11 +9972,17 @@ impl ServiceCatalog for ServiceCatalogClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| EnableAWSOrganizationsAccessError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<EnableAWSOrganizationsAccessOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<EnableAWSOrganizationsAccessError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<EnableAWSOrganizationsAccessOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9726,13 +9990,13 @@ impl ServiceCatalog for ServiceCatalogClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(EnableAWSOrganizationsAccessError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<EnableAWSOrganizationsAccessError>
+                            })
+                            .and_then(|response| {
+                                Err(EnableAWSOrganizationsAccessError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9758,11 +10022,17 @@ impl ServiceCatalog for ServiceCatalogClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ExecuteProvisionedProductPlanError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ExecuteProvisionedProductPlanOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ExecuteProvisionedProductPlanError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ExecuteProvisionedProductPlanOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9770,13 +10040,13 @@ impl ServiceCatalog for ServiceCatalogClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ExecuteProvisionedProductPlanError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ExecuteProvisionedProductPlanError>
+                            })
+                            .and_then(|response| {
+                                Err(ExecuteProvisionedProductPlanError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9803,16 +10073,22 @@ impl ServiceCatalog for ServiceCatalogClient {
 
         self.client.sign_and_dispatch(request, |response| {
                         if response.status.is_success() {
-                            response.buffer().map(|try_response| {
-                try_response.and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<ExecuteProvisionedProductServiceActionOutput, _>()
-                })
-            }).boxed()
+                            response.buffer()
+                .map_err(|e| ExecuteProvisionedProductServiceActionError::from(e))
+                .map(|try_response| {
+                    try_response
+                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<ExecuteProvisionedProductServiceActionError>)
+                    .and_then(|response| {
+                        proto::json::ResponsePayload::new(&response).deserialize::<ExecuteProvisionedProductServiceActionOutput, _>()
+                    })
+                }).boxed()
                         } else {
                             response.buffer().map(|try_response| {
-                                try_response.map_or_else(|e| e, |response| {
-                                    Err(ExecuteProvisionedProductServiceActionError::from_response(response))
-                                }).boxed()
+                                try_response
+                                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<ExecuteProvisionedProductServiceActionError>)
+                                    .and_then(|response| {
+                                        Err(ExecuteProvisionedProductServiceActionError::from_response(response))
+                                    })
                             }).boxed()
                         }
                     })
@@ -9836,11 +10112,17 @@ impl ServiceCatalog for ServiceCatalogClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetAWSOrganizationsAccessStatusError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetAWSOrganizationsAccessStatusOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetAWSOrganizationsAccessStatusError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetAWSOrganizationsAccessStatusOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9848,15 +10130,15 @@ impl ServiceCatalog for ServiceCatalogClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(GetAWSOrganizationsAccessStatusError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetAWSOrganizationsAccessStatusError>
+                            })
+                            .and_then(|response| {
+                                Err(GetAWSOrganizationsAccessStatusError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -9882,11 +10164,17 @@ impl ServiceCatalog for ServiceCatalogClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListAcceptedPortfolioSharesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListAcceptedPortfolioSharesOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListAcceptedPortfolioSharesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListAcceptedPortfolioSharesOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9894,13 +10182,13 @@ impl ServiceCatalog for ServiceCatalogClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ListAcceptedPortfolioSharesError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListAcceptedPortfolioSharesError>
+                            })
+                            .and_then(|response| {
+                                Err(ListAcceptedPortfolioSharesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9926,11 +10214,17 @@ impl ServiceCatalog for ServiceCatalogClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListBudgetsForResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListBudgetsForResourceOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListBudgetsForResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListBudgetsForResourceOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9938,13 +10232,13 @@ impl ServiceCatalog for ServiceCatalogClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ListBudgetsForResourceError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListBudgetsForResourceError>
+                            })
+                            .and_then(|response| {
+                                Err(ListBudgetsForResourceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9970,11 +10264,17 @@ impl ServiceCatalog for ServiceCatalogClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListConstraintsForPortfolioError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListConstraintsForPortfolioOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListConstraintsForPortfolioError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListConstraintsForPortfolioOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9982,13 +10282,13 @@ impl ServiceCatalog for ServiceCatalogClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ListConstraintsForPortfolioError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListConstraintsForPortfolioError>
+                            })
+                            .and_then(|response| {
+                                Err(ListConstraintsForPortfolioError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10014,11 +10314,16 @@ impl ServiceCatalog for ServiceCatalogClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListLaunchPathsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListLaunchPathsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListLaunchPathsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListLaunchPathsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10026,11 +10331,10 @@ impl ServiceCatalog for ServiceCatalogClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListLaunchPathsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListLaunchPathsError>
+                            })
+                            .and_then(|response| Err(ListLaunchPathsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -10057,11 +10361,17 @@ impl ServiceCatalog for ServiceCatalogClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListOrganizationPortfolioAccessError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListOrganizationPortfolioAccessOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListOrganizationPortfolioAccessError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListOrganizationPortfolioAccessOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10069,15 +10379,15 @@ impl ServiceCatalog for ServiceCatalogClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ListOrganizationPortfolioAccessError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListOrganizationPortfolioAccessError>
+                            })
+                            .and_then(|response| {
+                                Err(ListOrganizationPortfolioAccessError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -10103,11 +10413,17 @@ impl ServiceCatalog for ServiceCatalogClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListPortfolioAccessError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListPortfolioAccessOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListPortfolioAccessError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListPortfolioAccessOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10115,11 +10431,13 @@ impl ServiceCatalog for ServiceCatalogClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListPortfolioAccessError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListPortfolioAccessError>
+                            })
+                            .and_then(|response| {
+                                Err(ListPortfolioAccessError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10142,11 +10460,16 @@ impl ServiceCatalog for ServiceCatalogClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListPortfoliosError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListPortfoliosOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListPortfoliosError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListPortfoliosOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10154,11 +10477,10 @@ impl ServiceCatalog for ServiceCatalogClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListPortfoliosError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListPortfoliosError>
+                            })
+                            .and_then(|response| Err(ListPortfoliosError::from_response(response)))
                     })
                     .boxed()
             }
@@ -10184,11 +10506,17 @@ impl ServiceCatalog for ServiceCatalogClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListPortfoliosForProductError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListPortfoliosForProductOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListPortfoliosForProductError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListPortfoliosForProductOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10196,13 +10524,13 @@ impl ServiceCatalog for ServiceCatalogClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ListPortfoliosForProductError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListPortfoliosForProductError>
+                            })
+                            .and_then(|response| {
+                                Err(ListPortfoliosForProductError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10228,11 +10556,17 @@ impl ServiceCatalog for ServiceCatalogClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListPrincipalsForPortfolioError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListPrincipalsForPortfolioOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListPrincipalsForPortfolioError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListPrincipalsForPortfolioOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10240,13 +10574,13 @@ impl ServiceCatalog for ServiceCatalogClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ListPrincipalsForPortfolioError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListPrincipalsForPortfolioError>
+                            })
+                            .and_then(|response| {
+                                Err(ListPrincipalsForPortfolioError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10272,11 +10606,17 @@ impl ServiceCatalog for ServiceCatalogClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListProvisionedProductPlansError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListProvisionedProductPlansOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListProvisionedProductPlansError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListProvisionedProductPlansOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10284,13 +10624,13 @@ impl ServiceCatalog for ServiceCatalogClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ListProvisionedProductPlansError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListProvisionedProductPlansError>
+                            })
+                            .and_then(|response| {
+                                Err(ListProvisionedProductPlansError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10316,11 +10656,17 @@ impl ServiceCatalog for ServiceCatalogClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListProvisioningArtifactsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListProvisioningArtifactsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListProvisioningArtifactsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListProvisioningArtifactsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10328,13 +10674,13 @@ impl ServiceCatalog for ServiceCatalogClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ListProvisioningArtifactsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListProvisioningArtifactsError>
+                            })
+                            .and_then(|response| {
+                                Err(ListProvisioningArtifactsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10361,16 +10707,22 @@ impl ServiceCatalog for ServiceCatalogClient {
 
         self.client.sign_and_dispatch(request, |response| {
                         if response.status.is_success() {
-                            response.buffer().map(|try_response| {
-                try_response.and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<ListProvisioningArtifactsForServiceActionOutput, _>()
-                })
-            }).boxed()
+                            response.buffer()
+                .map_err(|e| ListProvisioningArtifactsForServiceActionError::from(e))
+                .map(|try_response| {
+                    try_response
+                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<ListProvisioningArtifactsForServiceActionError>)
+                    .and_then(|response| {
+                        proto::json::ResponsePayload::new(&response).deserialize::<ListProvisioningArtifactsForServiceActionOutput, _>()
+                    })
+                }).boxed()
                         } else {
                             response.buffer().map(|try_response| {
-                                try_response.map_or_else(|e| e, |response| {
-                                    Err(ListProvisioningArtifactsForServiceActionError::from_response(response))
-                                }).boxed()
+                                try_response
+                                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<ListProvisioningArtifactsForServiceActionError>)
+                                    .and_then(|response| {
+                                        Err(ListProvisioningArtifactsForServiceActionError::from_response(response))
+                                    })
                             }).boxed()
                         }
                     })
@@ -10395,11 +10747,16 @@ impl ServiceCatalog for ServiceCatalogClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListRecordHistoryError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListRecordHistoryOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListRecordHistoryError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListRecordHistoryOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10407,11 +10764,12 @@ impl ServiceCatalog for ServiceCatalogClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListRecordHistoryError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListRecordHistoryError>
+                            })
+                            .and_then(|response| {
+                                Err(ListRecordHistoryError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10437,11 +10795,17 @@ impl ServiceCatalog for ServiceCatalogClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListResourcesForTagOptionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListResourcesForTagOptionOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListResourcesForTagOptionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListResourcesForTagOptionOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10449,13 +10813,13 @@ impl ServiceCatalog for ServiceCatalogClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ListResourcesForTagOptionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListResourcesForTagOptionError>
+                            })
+                            .and_then(|response| {
+                                Err(ListResourcesForTagOptionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10481,11 +10845,16 @@ impl ServiceCatalog for ServiceCatalogClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListServiceActionsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListServiceActionsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListServiceActionsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListServiceActionsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10493,11 +10862,12 @@ impl ServiceCatalog for ServiceCatalogClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListServiceActionsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListServiceActionsError>
+                            })
+                            .and_then(|response| {
+                                Err(ListServiceActionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10524,16 +10894,22 @@ impl ServiceCatalog for ServiceCatalogClient {
 
         self.client.sign_and_dispatch(request, |response| {
                         if response.status.is_success() {
-                            response.buffer().map(|try_response| {
-                try_response.and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<ListServiceActionsForProvisioningArtifactOutput, _>()
-                })
-            }).boxed()
+                            response.buffer()
+                .map_err(|e| ListServiceActionsForProvisioningArtifactError::from(e))
+                .map(|try_response| {
+                    try_response
+                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<ListServiceActionsForProvisioningArtifactError>)
+                    .and_then(|response| {
+                        proto::json::ResponsePayload::new(&response).deserialize::<ListServiceActionsForProvisioningArtifactOutput, _>()
+                    })
+                }).boxed()
                         } else {
                             response.buffer().map(|try_response| {
-                                try_response.map_or_else(|e| e, |response| {
-                                    Err(ListServiceActionsForProvisioningArtifactError::from_response(response))
-                                }).boxed()
+                                try_response
+                                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<ListServiceActionsForProvisioningArtifactError>)
+                                    .and_then(|response| {
+                                        Err(ListServiceActionsForProvisioningArtifactError::from_response(response))
+                                    })
                             }).boxed()
                         }
                     })
@@ -10559,16 +10935,22 @@ impl ServiceCatalog for ServiceCatalogClient {
 
         self.client.sign_and_dispatch(request, |response| {
                         if response.status.is_success() {
-                            response.buffer().map(|try_response| {
-                try_response.and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<ListStackInstancesForProvisionedProductOutput, _>()
-                })
-            }).boxed()
+                            response.buffer()
+                .map_err(|e| ListStackInstancesForProvisionedProductError::from(e))
+                .map(|try_response| {
+                    try_response
+                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<ListStackInstancesForProvisionedProductError>)
+                    .and_then(|response| {
+                        proto::json::ResponsePayload::new(&response).deserialize::<ListStackInstancesForProvisionedProductOutput, _>()
+                    })
+                }).boxed()
                         } else {
                             response.buffer().map(|try_response| {
-                                try_response.map_or_else(|e| e, |response| {
-                                    Err(ListStackInstancesForProvisionedProductError::from_response(response))
-                                }).boxed()
+                                try_response
+                                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<ListStackInstancesForProvisionedProductError>)
+                                    .and_then(|response| {
+                                        Err(ListStackInstancesForProvisionedProductError::from_response(response))
+                                    })
                             }).boxed()
                         }
                     })
@@ -10590,11 +10972,16 @@ impl ServiceCatalog for ServiceCatalogClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListTagOptionsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListTagOptionsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListTagOptionsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListTagOptionsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10602,11 +10989,10 @@ impl ServiceCatalog for ServiceCatalogClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListTagOptionsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListTagOptionsError>
+                            })
+                            .and_then(|response| Err(ListTagOptionsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -10632,11 +11018,16 @@ impl ServiceCatalog for ServiceCatalogClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ProvisionProductError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ProvisionProductOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ProvisionProductError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ProvisionProductOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10644,11 +11035,12 @@ impl ServiceCatalog for ServiceCatalogClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ProvisionProductError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ProvisionProductError>
+                            })
+                            .and_then(|response| {
+                                Err(ProvisionProductError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10674,11 +11066,17 @@ impl ServiceCatalog for ServiceCatalogClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| RejectPortfolioShareError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RejectPortfolioShareOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<RejectPortfolioShareError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<RejectPortfolioShareOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10686,11 +11084,13 @@ impl ServiceCatalog for ServiceCatalogClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(RejectPortfolioShareError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<RejectPortfolioShareError>
+                            })
+                            .and_then(|response| {
+                                Err(RejectPortfolioShareError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10716,11 +11116,17 @@ impl ServiceCatalog for ServiceCatalogClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ScanProvisionedProductsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ScanProvisionedProductsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ScanProvisionedProductsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ScanProvisionedProductsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10728,13 +11134,13 @@ impl ServiceCatalog for ServiceCatalogClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ScanProvisionedProductsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ScanProvisionedProductsError>
+                            })
+                            .and_then(|response| {
+                                Err(ScanProvisionedProductsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10757,11 +11163,16 @@ impl ServiceCatalog for ServiceCatalogClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| SearchProductsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<SearchProductsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<SearchProductsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<SearchProductsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10769,11 +11180,10 @@ impl ServiceCatalog for ServiceCatalogClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(SearchProductsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<SearchProductsError>
+                            })
+                            .and_then(|response| Err(SearchProductsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -10799,11 +11209,17 @@ impl ServiceCatalog for ServiceCatalogClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| SearchProductsAsAdminError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<SearchProductsAsAdminOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<SearchProductsAsAdminError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<SearchProductsAsAdminOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10811,11 +11227,13 @@ impl ServiceCatalog for ServiceCatalogClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(SearchProductsAsAdminError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<SearchProductsAsAdminError>
+                            })
+                            .and_then(|response| {
+                                Err(SearchProductsAsAdminError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10841,11 +11259,17 @@ impl ServiceCatalog for ServiceCatalogClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| SearchProvisionedProductsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<SearchProvisionedProductsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<SearchProvisionedProductsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<SearchProvisionedProductsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10853,13 +11277,13 @@ impl ServiceCatalog for ServiceCatalogClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(SearchProvisionedProductsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<SearchProvisionedProductsError>
+                            })
+                            .and_then(|response| {
+                                Err(SearchProvisionedProductsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10885,11 +11309,17 @@ impl ServiceCatalog for ServiceCatalogClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| TerminateProvisionedProductError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<TerminateProvisionedProductOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<TerminateProvisionedProductError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<TerminateProvisionedProductOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10897,13 +11327,13 @@ impl ServiceCatalog for ServiceCatalogClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(TerminateProvisionedProductError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<TerminateProvisionedProductError>
+                            })
+                            .and_then(|response| {
+                                Err(TerminateProvisionedProductError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10929,11 +11359,16 @@ impl ServiceCatalog for ServiceCatalogClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateConstraintError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateConstraintOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateConstraintError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateConstraintOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10941,11 +11376,12 @@ impl ServiceCatalog for ServiceCatalogClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateConstraintError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateConstraintError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateConstraintError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10971,11 +11407,16 @@ impl ServiceCatalog for ServiceCatalogClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdatePortfolioError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdatePortfolioOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdatePortfolioError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdatePortfolioOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10983,11 +11424,10 @@ impl ServiceCatalog for ServiceCatalogClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdatePortfolioError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdatePortfolioError>
+                            })
+                            .and_then(|response| Err(UpdatePortfolioError::from_response(response)))
                     })
                     .boxed()
             }
@@ -11010,11 +11450,16 @@ impl ServiceCatalog for ServiceCatalogClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateProductError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateProductOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateProductError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateProductOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -11022,11 +11467,10 @@ impl ServiceCatalog for ServiceCatalogClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateProductError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateProductError>
+                            })
+                            .and_then(|response| Err(UpdateProductError::from_response(response)))
                     })
                     .boxed()
             }
@@ -11052,11 +11496,17 @@ impl ServiceCatalog for ServiceCatalogClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateProvisionedProductError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateProvisionedProductOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateProvisionedProductError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateProvisionedProductOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -11064,13 +11514,13 @@ impl ServiceCatalog for ServiceCatalogClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(UpdateProvisionedProductError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateProvisionedProductError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateProvisionedProductError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -11099,11 +11549,17 @@ impl ServiceCatalog for ServiceCatalogClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateProvisionedProductPropertiesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateProvisionedProductPropertiesOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateProvisionedProductPropertiesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateProvisionedProductPropertiesOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -11111,15 +11567,15 @@ impl ServiceCatalog for ServiceCatalogClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(UpdateProvisionedProductPropertiesError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateProvisionedProductPropertiesError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateProvisionedProductPropertiesError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -11145,11 +11601,17 @@ impl ServiceCatalog for ServiceCatalogClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateProvisioningArtifactError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateProvisioningArtifactOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateProvisioningArtifactError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateProvisioningArtifactOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -11157,13 +11619,13 @@ impl ServiceCatalog for ServiceCatalogClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(UpdateProvisioningArtifactError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateProvisioningArtifactError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateProvisioningArtifactError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -11189,11 +11651,17 @@ impl ServiceCatalog for ServiceCatalogClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateServiceActionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateServiceActionOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateServiceActionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateServiceActionOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -11201,11 +11669,13 @@ impl ServiceCatalog for ServiceCatalogClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateServiceActionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateServiceActionError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateServiceActionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -11231,11 +11701,16 @@ impl ServiceCatalog for ServiceCatalogClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateTagOptionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateTagOptionOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateTagOptionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateTagOptionOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -11243,11 +11718,10 @@ impl ServiceCatalog for ServiceCatalogClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateTagOptionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateTagOptionError>
+                            })
+                            .and_then(|response| Err(UpdateTagOptionError::from_response(response)))
                     })
                     .boxed()
             }

@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -3500,17 +3500,16 @@ impl CloudWatchLogs for CloudWatchLogsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(AssociateKmsKeyError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<AssociateKmsKeyError>
+                            })
+                            .and_then(|response| Err(AssociateKmsKeyError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3531,17 +3530,18 @@ impl CloudWatchLogs for CloudWatchLogsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CancelExportTaskError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CancelExportTaskError>
+                            })
+                            .and_then(|response| {
+                                Err(CancelExportTaskError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3564,11 +3564,16 @@ impl CloudWatchLogs for CloudWatchLogsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateExportTaskError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateExportTaskResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateExportTaskError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateExportTaskResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3576,11 +3581,12 @@ impl CloudWatchLogs for CloudWatchLogsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateExportTaskError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateExportTaskError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateExportTaskError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3601,17 +3607,16 @@ impl CloudWatchLogs for CloudWatchLogsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateLogGroupError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateLogGroupError>
+                            })
+                            .and_then(|response| Err(CreateLogGroupError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3632,17 +3637,16 @@ impl CloudWatchLogs for CloudWatchLogsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateLogStreamError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateLogStreamError>
+                            })
+                            .and_then(|response| Err(CreateLogStreamError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3663,17 +3667,18 @@ impl CloudWatchLogs for CloudWatchLogsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteDestinationError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteDestinationError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteDestinationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3694,17 +3699,16 @@ impl CloudWatchLogs for CloudWatchLogsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteLogGroupError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteLogGroupError>
+                            })
+                            .and_then(|response| Err(DeleteLogGroupError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3725,17 +3729,16 @@ impl CloudWatchLogs for CloudWatchLogsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteLogStreamError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteLogStreamError>
+                            })
+                            .and_then(|response| Err(DeleteLogStreamError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3756,17 +3759,18 @@ impl CloudWatchLogs for CloudWatchLogsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteMetricFilterError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteMetricFilterError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteMetricFilterError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3787,17 +3791,19 @@ impl CloudWatchLogs for CloudWatchLogsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteResourcePolicyError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteResourcePolicyError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteResourcePolicyError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3818,17 +3824,19 @@ impl CloudWatchLogs for CloudWatchLogsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteRetentionPolicyError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteRetentionPolicyError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteRetentionPolicyError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3849,19 +3857,19 @@ impl CloudWatchLogs for CloudWatchLogsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DeleteSubscriptionFilterError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteSubscriptionFilterError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteSubscriptionFilterError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3884,11 +3892,17 @@ impl CloudWatchLogs for CloudWatchLogsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeDestinationsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeDestinationsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeDestinationsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeDestinationsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3896,11 +3910,13 @@ impl CloudWatchLogs for CloudWatchLogsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeDestinationsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeDestinationsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeDestinationsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3923,11 +3939,17 @@ impl CloudWatchLogs for CloudWatchLogsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeExportTasksError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeExportTasksResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeExportTasksError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeExportTasksResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3935,11 +3957,13 @@ impl CloudWatchLogs for CloudWatchLogsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeExportTasksError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeExportTasksError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeExportTasksError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3962,11 +3986,16 @@ impl CloudWatchLogs for CloudWatchLogsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeLogGroupsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeLogGroupsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeLogGroupsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeLogGroupsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3974,11 +4003,12 @@ impl CloudWatchLogs for CloudWatchLogsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeLogGroupsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeLogGroupsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeLogGroupsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4001,11 +4031,16 @@ impl CloudWatchLogs for CloudWatchLogsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeLogStreamsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeLogStreamsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeLogStreamsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeLogStreamsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4013,11 +4048,12 @@ impl CloudWatchLogs for CloudWatchLogsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeLogStreamsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeLogStreamsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeLogStreamsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4040,11 +4076,17 @@ impl CloudWatchLogs for CloudWatchLogsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeMetricFiltersError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeMetricFiltersResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeMetricFiltersError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeMetricFiltersResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4052,11 +4094,13 @@ impl CloudWatchLogs for CloudWatchLogsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeMetricFiltersError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeMetricFiltersError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeMetricFiltersError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4079,11 +4123,16 @@ impl CloudWatchLogs for CloudWatchLogsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeQueriesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeQueriesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeQueriesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeQueriesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4091,11 +4140,10 @@ impl CloudWatchLogs for CloudWatchLogsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeQueriesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeQueriesError>
+                            })
+                            .and_then(|response| Err(DescribeQueriesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4118,11 +4166,17 @@ impl CloudWatchLogs for CloudWatchLogsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeResourcePoliciesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeResourcePoliciesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeResourcePoliciesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeResourcePoliciesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4130,13 +4184,13 @@ impl CloudWatchLogs for CloudWatchLogsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeResourcePoliciesError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeResourcePoliciesError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeResourcePoliciesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4159,11 +4213,17 @@ impl CloudWatchLogs for CloudWatchLogsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeSubscriptionFiltersError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeSubscriptionFiltersResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeSubscriptionFiltersError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeSubscriptionFiltersResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4171,13 +4231,13 @@ impl CloudWatchLogs for CloudWatchLogsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeSubscriptionFiltersError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeSubscriptionFiltersError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeSubscriptionFiltersError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4198,17 +4258,18 @@ impl CloudWatchLogs for CloudWatchLogsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DisassociateKmsKeyError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DisassociateKmsKeyError>
+                            })
+                            .and_then(|response| {
+                                Err(DisassociateKmsKeyError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4231,11 +4292,16 @@ impl CloudWatchLogs for CloudWatchLogsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| FilterLogEventsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<FilterLogEventsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<FilterLogEventsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<FilterLogEventsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4243,11 +4309,10 @@ impl CloudWatchLogs for CloudWatchLogsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(FilterLogEventsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<FilterLogEventsError>
+                            })
+                            .and_then(|response| Err(FilterLogEventsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4270,11 +4335,16 @@ impl CloudWatchLogs for CloudWatchLogsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetLogEventsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetLogEventsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetLogEventsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetLogEventsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4282,11 +4352,10 @@ impl CloudWatchLogs for CloudWatchLogsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetLogEventsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetLogEventsError>
+                            })
+                            .and_then(|response| Err(GetLogEventsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4309,11 +4378,16 @@ impl CloudWatchLogs for CloudWatchLogsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetLogGroupFieldsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetLogGroupFieldsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetLogGroupFieldsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetLogGroupFieldsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4321,11 +4395,12 @@ impl CloudWatchLogs for CloudWatchLogsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetLogGroupFieldsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetLogGroupFieldsError>
+                            })
+                            .and_then(|response| {
+                                Err(GetLogGroupFieldsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4348,11 +4423,16 @@ impl CloudWatchLogs for CloudWatchLogsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetLogRecordError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetLogRecordResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetLogRecordError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetLogRecordResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4360,11 +4440,10 @@ impl CloudWatchLogs for CloudWatchLogsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetLogRecordError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetLogRecordError>
+                            })
+                            .and_then(|response| Err(GetLogRecordError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4387,11 +4466,16 @@ impl CloudWatchLogs for CloudWatchLogsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetQueryResultsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetQueryResultsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetQueryResultsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetQueryResultsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4399,11 +4483,10 @@ impl CloudWatchLogs for CloudWatchLogsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetQueryResultsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetQueryResultsError>
+                            })
+                            .and_then(|response| Err(GetQueryResultsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4426,11 +4509,16 @@ impl CloudWatchLogs for CloudWatchLogsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListTagsLogGroupError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListTagsLogGroupResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListTagsLogGroupError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListTagsLogGroupResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4438,11 +4526,12 @@ impl CloudWatchLogs for CloudWatchLogsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListTagsLogGroupError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListTagsLogGroupError>
+                            })
+                            .and_then(|response| {
+                                Err(ListTagsLogGroupError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4465,11 +4554,16 @@ impl CloudWatchLogs for CloudWatchLogsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| PutDestinationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PutDestinationResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<PutDestinationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<PutDestinationResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4477,11 +4571,10 @@ impl CloudWatchLogs for CloudWatchLogsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(PutDestinationError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<PutDestinationError>
+                            })
+                            .and_then(|response| Err(PutDestinationError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4502,17 +4595,19 @@ impl CloudWatchLogs for CloudWatchLogsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(PutDestinationPolicyError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<PutDestinationPolicyError>
+                            })
+                            .and_then(|response| {
+                                Err(PutDestinationPolicyError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4535,11 +4630,16 @@ impl CloudWatchLogs for CloudWatchLogsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| PutLogEventsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PutLogEventsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<PutLogEventsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<PutLogEventsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4547,11 +4647,10 @@ impl CloudWatchLogs for CloudWatchLogsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(PutLogEventsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<PutLogEventsError>
+                            })
+                            .and_then(|response| Err(PutLogEventsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4572,17 +4671,16 @@ impl CloudWatchLogs for CloudWatchLogsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(PutMetricFilterError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<PutMetricFilterError>
+                            })
+                            .and_then(|response| Err(PutMetricFilterError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4605,11 +4703,16 @@ impl CloudWatchLogs for CloudWatchLogsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| PutResourcePolicyError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PutResourcePolicyResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<PutResourcePolicyError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<PutResourcePolicyResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4617,11 +4720,12 @@ impl CloudWatchLogs for CloudWatchLogsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(PutResourcePolicyError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<PutResourcePolicyError>
+                            })
+                            .and_then(|response| {
+                                Err(PutResourcePolicyError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4642,17 +4746,18 @@ impl CloudWatchLogs for CloudWatchLogsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(PutRetentionPolicyError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<PutRetentionPolicyError>
+                            })
+                            .and_then(|response| {
+                                Err(PutRetentionPolicyError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4673,17 +4778,19 @@ impl CloudWatchLogs for CloudWatchLogsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(PutSubscriptionFilterError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<PutSubscriptionFilterError>
+                            })
+                            .and_then(|response| {
+                                Err(PutSubscriptionFilterError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4706,11 +4813,16 @@ impl CloudWatchLogs for CloudWatchLogsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StartQueryError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StartQueryResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StartQueryError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StartQueryResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4718,11 +4830,10 @@ impl CloudWatchLogs for CloudWatchLogsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(StartQueryError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StartQueryError>
+                            })
+                            .and_then(|response| Err(StartQueryError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4745,11 +4856,16 @@ impl CloudWatchLogs for CloudWatchLogsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StopQueryError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StopQueryResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StopQueryError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StopQueryResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4757,11 +4873,10 @@ impl CloudWatchLogs for CloudWatchLogsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(StopQueryError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StopQueryError>
+                            })
+                            .and_then(|response| Err(StopQueryError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4779,17 +4894,16 @@ impl CloudWatchLogs for CloudWatchLogsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(TagLogGroupError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<TagLogGroupError>
+                            })
+                            .and_then(|response| Err(TagLogGroupError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4812,11 +4926,16 @@ impl CloudWatchLogs for CloudWatchLogsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| TestMetricFilterError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<TestMetricFilterResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<TestMetricFilterError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<TestMetricFilterResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4824,11 +4943,12 @@ impl CloudWatchLogs for CloudWatchLogsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(TestMetricFilterError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<TestMetricFilterError>
+                            })
+                            .and_then(|response| {
+                                Err(TestMetricFilterError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4846,17 +4966,16 @@ impl CloudWatchLogs for CloudWatchLogsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UntagLogGroupError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UntagLogGroupError>
+                            })
+                            .and_then(|response| Err(UntagLogGroupError::from_response(response)))
                     })
                     .boxed()
             }

@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -7756,11 +7756,16 @@ impl GameLift for GameLiftClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AcceptMatchError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AcceptMatchOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<AcceptMatchError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AcceptMatchOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7768,11 +7773,10 @@ impl GameLift for GameLiftClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(AcceptMatchError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<AcceptMatchError>
+                            })
+                            .and_then(|response| Err(AcceptMatchError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7795,11 +7799,16 @@ impl GameLift for GameLiftClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateAliasError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateAliasOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateAliasError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateAliasOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7807,11 +7816,10 @@ impl GameLift for GameLiftClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateAliasError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateAliasError>
+                            })
+                            .and_then(|response| Err(CreateAliasError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7834,11 +7842,16 @@ impl GameLift for GameLiftClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateBuildError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateBuildOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateBuildError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateBuildOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7846,11 +7859,10 @@ impl GameLift for GameLiftClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateBuildError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateBuildError>
+                            })
+                            .and_then(|response| Err(CreateBuildError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7873,11 +7885,16 @@ impl GameLift for GameLiftClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateFleetError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateFleetOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateFleetError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateFleetOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7885,11 +7902,10 @@ impl GameLift for GameLiftClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateFleetError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateFleetError>
+                            })
+                            .and_then(|response| Err(CreateFleetError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7912,11 +7928,16 @@ impl GameLift for GameLiftClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateGameSessionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateGameSessionOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateGameSessionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateGameSessionOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7924,11 +7945,12 @@ impl GameLift for GameLiftClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateGameSessionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateGameSessionError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateGameSessionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7951,11 +7973,17 @@ impl GameLift for GameLiftClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateGameSessionQueueError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateGameSessionQueueOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateGameSessionQueueError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateGameSessionQueueOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7963,13 +7991,13 @@ impl GameLift for GameLiftClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(CreateGameSessionQueueError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateGameSessionQueueError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateGameSessionQueueError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7993,11 +8021,17 @@ impl GameLift for GameLiftClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateMatchmakingConfigurationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateMatchmakingConfigurationOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateMatchmakingConfigurationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateMatchmakingConfigurationOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8005,15 +8039,13 @@ impl GameLift for GameLiftClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(CreateMatchmakingConfigurationError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateMatchmakingConfigurationError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateMatchmakingConfigurationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8036,11 +8068,17 @@ impl GameLift for GameLiftClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateMatchmakingRuleSetError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateMatchmakingRuleSetOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateMatchmakingRuleSetError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateMatchmakingRuleSetOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8048,13 +8086,13 @@ impl GameLift for GameLiftClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(CreateMatchmakingRuleSetError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateMatchmakingRuleSetError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateMatchmakingRuleSetError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8077,11 +8115,17 @@ impl GameLift for GameLiftClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreatePlayerSessionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreatePlayerSessionOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreatePlayerSessionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreatePlayerSessionOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8089,11 +8133,13 @@ impl GameLift for GameLiftClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreatePlayerSessionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreatePlayerSessionError>
+                            })
+                            .and_then(|response| {
+                                Err(CreatePlayerSessionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8116,11 +8162,17 @@ impl GameLift for GameLiftClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreatePlayerSessionsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreatePlayerSessionsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreatePlayerSessionsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreatePlayerSessionsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8128,11 +8180,13 @@ impl GameLift for GameLiftClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreatePlayerSessionsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreatePlayerSessionsError>
+                            })
+                            .and_then(|response| {
+                                Err(CreatePlayerSessionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8155,11 +8209,16 @@ impl GameLift for GameLiftClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateScriptError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateScriptOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateScriptError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateScriptOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8167,11 +8226,10 @@ impl GameLift for GameLiftClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateScriptError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateScriptError>
+                            })
+                            .and_then(|response| Err(CreateScriptError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8194,11 +8252,17 @@ impl GameLift for GameLiftClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateVpcPeeringAuthorizationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateVpcPeeringAuthorizationOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateVpcPeeringAuthorizationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateVpcPeeringAuthorizationOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8206,13 +8270,13 @@ impl GameLift for GameLiftClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(CreateVpcPeeringAuthorizationError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateVpcPeeringAuthorizationError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateVpcPeeringAuthorizationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8235,11 +8299,17 @@ impl GameLift for GameLiftClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateVpcPeeringConnectionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateVpcPeeringConnectionOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateVpcPeeringConnectionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateVpcPeeringConnectionOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8247,13 +8317,13 @@ impl GameLift for GameLiftClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(CreateVpcPeeringConnectionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateVpcPeeringConnectionError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateVpcPeeringConnectionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8271,17 +8341,16 @@ impl GameLift for GameLiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteAliasError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteAliasError>
+                            })
+                            .and_then(|response| Err(DeleteAliasError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8299,17 +8368,16 @@ impl GameLift for GameLiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteBuildError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteBuildError>
+                            })
+                            .and_then(|response| Err(DeleteBuildError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8327,17 +8395,16 @@ impl GameLift for GameLiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteFleetError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteFleetError>
+                            })
+                            .and_then(|response| Err(DeleteFleetError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8360,11 +8427,17 @@ impl GameLift for GameLiftClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteGameSessionQueueError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteGameSessionQueueOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteGameSessionQueueError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteGameSessionQueueOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8372,13 +8445,13 @@ impl GameLift for GameLiftClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DeleteGameSessionQueueError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteGameSessionQueueError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteGameSessionQueueError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8402,11 +8475,17 @@ impl GameLift for GameLiftClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteMatchmakingConfigurationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteMatchmakingConfigurationOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteMatchmakingConfigurationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteMatchmakingConfigurationOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8414,15 +8493,13 @@ impl GameLift for GameLiftClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DeleteMatchmakingConfigurationError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteMatchmakingConfigurationError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteMatchmakingConfigurationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8445,11 +8522,17 @@ impl GameLift for GameLiftClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteMatchmakingRuleSetError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteMatchmakingRuleSetOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteMatchmakingRuleSetError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteMatchmakingRuleSetOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8457,13 +8540,13 @@ impl GameLift for GameLiftClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DeleteMatchmakingRuleSetError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteMatchmakingRuleSetError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteMatchmakingRuleSetError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8484,17 +8567,19 @@ impl GameLift for GameLiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteScalingPolicyError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteScalingPolicyError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteScalingPolicyError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8512,17 +8597,16 @@ impl GameLift for GameLiftClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteScriptError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteScriptError>
+                            })
+                            .and_then(|response| Err(DeleteScriptError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8545,11 +8629,17 @@ impl GameLift for GameLiftClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteVpcPeeringAuthorizationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteVpcPeeringAuthorizationOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteVpcPeeringAuthorizationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteVpcPeeringAuthorizationOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8557,13 +8647,13 @@ impl GameLift for GameLiftClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DeleteVpcPeeringAuthorizationError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteVpcPeeringAuthorizationError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteVpcPeeringAuthorizationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8586,11 +8676,17 @@ impl GameLift for GameLiftClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteVpcPeeringConnectionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteVpcPeeringConnectionOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteVpcPeeringConnectionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteVpcPeeringConnectionOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8598,13 +8694,13 @@ impl GameLift for GameLiftClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DeleteVpcPeeringConnectionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteVpcPeeringConnectionError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteVpcPeeringConnectionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8627,11 +8723,16 @@ impl GameLift for GameLiftClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeAliasError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeAliasOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeAliasError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeAliasOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8639,11 +8740,10 @@ impl GameLift for GameLiftClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeAliasError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeAliasError>
+                            })
+                            .and_then(|response| Err(DescribeAliasError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8666,11 +8766,16 @@ impl GameLift for GameLiftClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeBuildError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeBuildOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeBuildError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeBuildOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8678,11 +8783,10 @@ impl GameLift for GameLiftClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeBuildError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeBuildError>
+                            })
+                            .and_then(|response| Err(DescribeBuildError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8705,11 +8809,17 @@ impl GameLift for GameLiftClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeEC2InstanceLimitsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeEC2InstanceLimitsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeEC2InstanceLimitsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeEC2InstanceLimitsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8717,13 +8827,13 @@ impl GameLift for GameLiftClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeEC2InstanceLimitsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeEC2InstanceLimitsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeEC2InstanceLimitsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8746,11 +8856,17 @@ impl GameLift for GameLiftClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeFleetAttributesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeFleetAttributesOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeFleetAttributesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeFleetAttributesOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8758,13 +8874,13 @@ impl GameLift for GameLiftClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeFleetAttributesError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeFleetAttributesError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeFleetAttributesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8787,11 +8903,17 @@ impl GameLift for GameLiftClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeFleetCapacityError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeFleetCapacityOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeFleetCapacityError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeFleetCapacityOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8799,11 +8921,13 @@ impl GameLift for GameLiftClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeFleetCapacityError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeFleetCapacityError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeFleetCapacityError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8826,11 +8950,17 @@ impl GameLift for GameLiftClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeFleetEventsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeFleetEventsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeFleetEventsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeFleetEventsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8838,11 +8968,13 @@ impl GameLift for GameLiftClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeFleetEventsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeFleetEventsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeFleetEventsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8865,11 +8997,17 @@ impl GameLift for GameLiftClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeFleetPortSettingsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeFleetPortSettingsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeFleetPortSettingsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeFleetPortSettingsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8877,13 +9015,13 @@ impl GameLift for GameLiftClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeFleetPortSettingsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeFleetPortSettingsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeFleetPortSettingsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8906,11 +9044,17 @@ impl GameLift for GameLiftClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeFleetUtilizationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeFleetUtilizationOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeFleetUtilizationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeFleetUtilizationOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8918,13 +9062,13 @@ impl GameLift for GameLiftClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeFleetUtilizationError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeFleetUtilizationError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeFleetUtilizationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8947,11 +9091,17 @@ impl GameLift for GameLiftClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeGameSessionDetailsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeGameSessionDetailsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeGameSessionDetailsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeGameSessionDetailsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8959,13 +9109,13 @@ impl GameLift for GameLiftClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeGameSessionDetailsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeGameSessionDetailsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeGameSessionDetailsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8988,11 +9138,17 @@ impl GameLift for GameLiftClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeGameSessionPlacementError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeGameSessionPlacementOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeGameSessionPlacementError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeGameSessionPlacementOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9000,13 +9156,13 @@ impl GameLift for GameLiftClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeGameSessionPlacementError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeGameSessionPlacementError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeGameSessionPlacementError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9029,11 +9185,17 @@ impl GameLift for GameLiftClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeGameSessionQueuesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeGameSessionQueuesOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeGameSessionQueuesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeGameSessionQueuesOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9041,13 +9203,13 @@ impl GameLift for GameLiftClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeGameSessionQueuesError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeGameSessionQueuesError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeGameSessionQueuesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9070,11 +9232,17 @@ impl GameLift for GameLiftClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeGameSessionsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeGameSessionsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeGameSessionsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeGameSessionsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9082,11 +9250,13 @@ impl GameLift for GameLiftClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeGameSessionsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeGameSessionsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeGameSessionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9109,11 +9279,16 @@ impl GameLift for GameLiftClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeInstancesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeInstancesOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeInstancesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeInstancesOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9121,11 +9296,12 @@ impl GameLift for GameLiftClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeInstancesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeInstancesError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeInstancesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9148,11 +9324,17 @@ impl GameLift for GameLiftClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeMatchmakingError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeMatchmakingOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeMatchmakingError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeMatchmakingOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9160,11 +9342,13 @@ impl GameLift for GameLiftClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeMatchmakingError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeMatchmakingError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeMatchmakingError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9188,11 +9372,17 @@ impl GameLift for GameLiftClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeMatchmakingConfigurationsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeMatchmakingConfigurationsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeMatchmakingConfigurationsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeMatchmakingConfigurationsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9200,15 +9390,15 @@ impl GameLift for GameLiftClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeMatchmakingConfigurationsError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeMatchmakingConfigurationsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeMatchmakingConfigurationsError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -9231,11 +9421,17 @@ impl GameLift for GameLiftClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeMatchmakingRuleSetsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeMatchmakingRuleSetsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeMatchmakingRuleSetsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeMatchmakingRuleSetsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9243,13 +9439,13 @@ impl GameLift for GameLiftClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeMatchmakingRuleSetsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeMatchmakingRuleSetsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeMatchmakingRuleSetsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9272,11 +9468,17 @@ impl GameLift for GameLiftClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribePlayerSessionsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribePlayerSessionsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribePlayerSessionsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribePlayerSessionsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9284,13 +9486,13 @@ impl GameLift for GameLiftClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribePlayerSessionsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribePlayerSessionsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribePlayerSessionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9313,11 +9515,17 @@ impl GameLift for GameLiftClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeRuntimeConfigurationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeRuntimeConfigurationOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeRuntimeConfigurationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeRuntimeConfigurationOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9325,13 +9533,13 @@ impl GameLift for GameLiftClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeRuntimeConfigurationError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeRuntimeConfigurationError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeRuntimeConfigurationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9354,11 +9562,17 @@ impl GameLift for GameLiftClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeScalingPoliciesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeScalingPoliciesOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeScalingPoliciesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeScalingPoliciesOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9366,13 +9580,13 @@ impl GameLift for GameLiftClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeScalingPoliciesError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeScalingPoliciesError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeScalingPoliciesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9395,11 +9609,16 @@ impl GameLift for GameLiftClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeScriptError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeScriptOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeScriptError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeScriptOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9407,11 +9626,10 @@ impl GameLift for GameLiftClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeScriptError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeScriptError>
+                            })
+                            .and_then(|response| Err(DescribeScriptError::from_response(response)))
                     })
                     .boxed()
             }
@@ -9433,11 +9651,17 @@ impl GameLift for GameLiftClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeVpcPeeringAuthorizationsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeVpcPeeringAuthorizationsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeVpcPeeringAuthorizationsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeVpcPeeringAuthorizationsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9445,15 +9669,15 @@ impl GameLift for GameLiftClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeVpcPeeringAuthorizationsError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeVpcPeeringAuthorizationsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeVpcPeeringAuthorizationsError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -9476,11 +9700,17 @@ impl GameLift for GameLiftClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeVpcPeeringConnectionsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeVpcPeeringConnectionsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeVpcPeeringConnectionsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeVpcPeeringConnectionsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9488,13 +9718,13 @@ impl GameLift for GameLiftClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeVpcPeeringConnectionsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeVpcPeeringConnectionsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeVpcPeeringConnectionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9517,11 +9747,17 @@ impl GameLift for GameLiftClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetGameSessionLogUrlError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetGameSessionLogUrlOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetGameSessionLogUrlError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetGameSessionLogUrlOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9529,11 +9765,13 @@ impl GameLift for GameLiftClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetGameSessionLogUrlError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetGameSessionLogUrlError>
+                            })
+                            .and_then(|response| {
+                                Err(GetGameSessionLogUrlError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9556,11 +9794,16 @@ impl GameLift for GameLiftClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetInstanceAccessError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetInstanceAccessOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetInstanceAccessError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetInstanceAccessOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9568,11 +9811,12 @@ impl GameLift for GameLiftClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetInstanceAccessError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetInstanceAccessError>
+                            })
+                            .and_then(|response| {
+                                Err(GetInstanceAccessError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9595,11 +9839,16 @@ impl GameLift for GameLiftClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListAliasesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListAliasesOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListAliasesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListAliasesOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9607,11 +9856,10 @@ impl GameLift for GameLiftClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListAliasesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListAliasesError>
+                            })
+                            .and_then(|response| Err(ListAliasesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -9634,11 +9882,16 @@ impl GameLift for GameLiftClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListBuildsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListBuildsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListBuildsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListBuildsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9646,11 +9899,10 @@ impl GameLift for GameLiftClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListBuildsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListBuildsError>
+                            })
+                            .and_then(|response| Err(ListBuildsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -9673,11 +9925,16 @@ impl GameLift for GameLiftClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListFleetsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListFleetsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListFleetsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListFleetsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9685,11 +9942,10 @@ impl GameLift for GameLiftClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListFleetsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListFleetsError>
+                            })
+                            .and_then(|response| Err(ListFleetsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -9712,11 +9968,16 @@ impl GameLift for GameLiftClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListScriptsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListScriptsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListScriptsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListScriptsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9724,11 +9985,10 @@ impl GameLift for GameLiftClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListScriptsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListScriptsError>
+                            })
+                            .and_then(|response| Err(ListScriptsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -9751,11 +10011,16 @@ impl GameLift for GameLiftClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| PutScalingPolicyError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PutScalingPolicyOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<PutScalingPolicyError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<PutScalingPolicyOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9763,11 +10028,12 @@ impl GameLift for GameLiftClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(PutScalingPolicyError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<PutScalingPolicyError>
+                            })
+                            .and_then(|response| {
+                                Err(PutScalingPolicyError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9790,11 +10056,17 @@ impl GameLift for GameLiftClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| RequestUploadCredentialsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RequestUploadCredentialsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<RequestUploadCredentialsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<RequestUploadCredentialsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9802,13 +10074,13 @@ impl GameLift for GameLiftClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(RequestUploadCredentialsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<RequestUploadCredentialsError>
+                            })
+                            .and_then(|response| {
+                                Err(RequestUploadCredentialsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9831,11 +10103,16 @@ impl GameLift for GameLiftClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ResolveAliasError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ResolveAliasOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ResolveAliasError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ResolveAliasOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9843,11 +10120,10 @@ impl GameLift for GameLiftClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ResolveAliasError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ResolveAliasError>
+                            })
+                            .and_then(|response| Err(ResolveAliasError::from_response(response)))
                     })
                     .boxed()
             }
@@ -9870,11 +10146,16 @@ impl GameLift for GameLiftClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| SearchGameSessionsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<SearchGameSessionsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<SearchGameSessionsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<SearchGameSessionsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9882,11 +10163,12 @@ impl GameLift for GameLiftClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(SearchGameSessionsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<SearchGameSessionsError>
+                            })
+                            .and_then(|response| {
+                                Err(SearchGameSessionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9909,11 +10191,16 @@ impl GameLift for GameLiftClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StartFleetActionsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StartFleetActionsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StartFleetActionsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StartFleetActionsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9921,11 +10208,12 @@ impl GameLift for GameLiftClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(StartFleetActionsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StartFleetActionsError>
+                            })
+                            .and_then(|response| {
+                                Err(StartFleetActionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9948,11 +10236,17 @@ impl GameLift for GameLiftClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StartGameSessionPlacementError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StartGameSessionPlacementOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StartGameSessionPlacementError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StartGameSessionPlacementOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9960,13 +10254,13 @@ impl GameLift for GameLiftClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(StartGameSessionPlacementError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StartGameSessionPlacementError>
+                            })
+                            .and_then(|response| {
+                                Err(StartGameSessionPlacementError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9989,11 +10283,16 @@ impl GameLift for GameLiftClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StartMatchBackfillError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StartMatchBackfillOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StartMatchBackfillError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StartMatchBackfillOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10001,11 +10300,12 @@ impl GameLift for GameLiftClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(StartMatchBackfillError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StartMatchBackfillError>
+                            })
+                            .and_then(|response| {
+                                Err(StartMatchBackfillError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10028,11 +10328,16 @@ impl GameLift for GameLiftClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StartMatchmakingError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StartMatchmakingOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StartMatchmakingError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StartMatchmakingOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10040,11 +10345,12 @@ impl GameLift for GameLiftClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(StartMatchmakingError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StartMatchmakingError>
+                            })
+                            .and_then(|response| {
+                                Err(StartMatchmakingError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10067,11 +10373,16 @@ impl GameLift for GameLiftClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StopFleetActionsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StopFleetActionsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StopFleetActionsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StopFleetActionsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10079,11 +10390,12 @@ impl GameLift for GameLiftClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(StopFleetActionsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StopFleetActionsError>
+                            })
+                            .and_then(|response| {
+                                Err(StopFleetActionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10106,11 +10418,17 @@ impl GameLift for GameLiftClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StopGameSessionPlacementError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StopGameSessionPlacementOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StopGameSessionPlacementError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StopGameSessionPlacementOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10118,13 +10436,13 @@ impl GameLift for GameLiftClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(StopGameSessionPlacementError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StopGameSessionPlacementError>
+                            })
+                            .and_then(|response| {
+                                Err(StopGameSessionPlacementError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10147,11 +10465,16 @@ impl GameLift for GameLiftClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StopMatchmakingError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StopMatchmakingOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StopMatchmakingError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StopMatchmakingOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10159,11 +10482,10 @@ impl GameLift for GameLiftClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(StopMatchmakingError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StopMatchmakingError>
+                            })
+                            .and_then(|response| Err(StopMatchmakingError::from_response(response)))
                     })
                     .boxed()
             }
@@ -10186,11 +10508,16 @@ impl GameLift for GameLiftClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateAliasError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateAliasOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateAliasError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateAliasOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10198,11 +10525,10 @@ impl GameLift for GameLiftClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateAliasError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateAliasError>
+                            })
+                            .and_then(|response| Err(UpdateAliasError::from_response(response)))
                     })
                     .boxed()
             }
@@ -10225,11 +10551,16 @@ impl GameLift for GameLiftClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateBuildError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateBuildOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateBuildError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateBuildOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10237,11 +10568,10 @@ impl GameLift for GameLiftClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateBuildError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateBuildError>
+                            })
+                            .and_then(|response| Err(UpdateBuildError::from_response(response)))
                     })
                     .boxed()
             }
@@ -10264,11 +10594,17 @@ impl GameLift for GameLiftClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateFleetAttributesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateFleetAttributesOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateFleetAttributesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateFleetAttributesOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10276,11 +10612,13 @@ impl GameLift for GameLiftClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateFleetAttributesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateFleetAttributesError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateFleetAttributesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10303,11 +10641,17 @@ impl GameLift for GameLiftClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateFleetCapacityError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateFleetCapacityOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateFleetCapacityError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateFleetCapacityOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10315,11 +10659,13 @@ impl GameLift for GameLiftClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateFleetCapacityError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateFleetCapacityError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateFleetCapacityError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10342,11 +10688,17 @@ impl GameLift for GameLiftClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateFleetPortSettingsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateFleetPortSettingsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateFleetPortSettingsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateFleetPortSettingsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10354,13 +10706,13 @@ impl GameLift for GameLiftClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(UpdateFleetPortSettingsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateFleetPortSettingsError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateFleetPortSettingsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10383,11 +10735,16 @@ impl GameLift for GameLiftClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateGameSessionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateGameSessionOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateGameSessionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateGameSessionOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10395,11 +10752,12 @@ impl GameLift for GameLiftClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateGameSessionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateGameSessionError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateGameSessionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10422,11 +10780,17 @@ impl GameLift for GameLiftClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateGameSessionQueueError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateGameSessionQueueOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateGameSessionQueueError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateGameSessionQueueOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10434,13 +10798,13 @@ impl GameLift for GameLiftClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(UpdateGameSessionQueueError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateGameSessionQueueError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateGameSessionQueueError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10464,11 +10828,17 @@ impl GameLift for GameLiftClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateMatchmakingConfigurationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateMatchmakingConfigurationOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateMatchmakingConfigurationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateMatchmakingConfigurationOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10476,15 +10846,13 @@ impl GameLift for GameLiftClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(UpdateMatchmakingConfigurationError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateMatchmakingConfigurationError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateMatchmakingConfigurationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10507,11 +10875,17 @@ impl GameLift for GameLiftClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateRuntimeConfigurationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateRuntimeConfigurationOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateRuntimeConfigurationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateRuntimeConfigurationOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10519,13 +10893,13 @@ impl GameLift for GameLiftClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(UpdateRuntimeConfigurationError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateRuntimeConfigurationError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateRuntimeConfigurationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10548,11 +10922,16 @@ impl GameLift for GameLiftClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateScriptError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateScriptOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateScriptError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateScriptOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10560,11 +10939,10 @@ impl GameLift for GameLiftClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateScriptError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateScriptError>
+                            })
+                            .and_then(|response| Err(UpdateScriptError::from_response(response)))
                     })
                     .boxed()
             }
@@ -10587,11 +10965,17 @@ impl GameLift for GameLiftClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ValidateMatchmakingRuleSetError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ValidateMatchmakingRuleSetOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ValidateMatchmakingRuleSetError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ValidateMatchmakingRuleSetOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10599,13 +10983,13 @@ impl GameLift for GameLiftClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ValidateMatchmakingRuleSetError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ValidateMatchmakingRuleSetError>
+                            })
+                            .and_then(|response| {
+                                Err(ValidateMatchmakingRuleSetError::from_response(response))
+                            })
                     })
                     .boxed()
             }

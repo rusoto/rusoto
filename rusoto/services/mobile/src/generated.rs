@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
@@ -1037,10 +1037,11 @@ impl Mobile for MobileClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateProjectError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateProjectResult, _>()?;
+                                .deserialize::<CreateProjectResult, _>();
 
                             result
                         })
@@ -1051,11 +1052,8 @@ impl Mobile for MobileClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateProjectError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateProjectError>())
+                            .and_then(|response| Err(CreateProjectError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1079,10 +1077,11 @@ impl Mobile for MobileClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteProjectError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteProjectResult, _>()?;
+                                .deserialize::<DeleteProjectResult, _>();
 
                             result
                         })
@@ -1093,11 +1092,8 @@ impl Mobile for MobileClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteProjectError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteProjectError>())
+                            .and_then(|response| Err(DeleteProjectError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1121,10 +1117,11 @@ impl Mobile for MobileClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeBundleError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeBundleResult, _>()?;
+                                .deserialize::<DescribeBundleResult, _>();
 
                             result
                         })
@@ -1135,11 +1132,8 @@ impl Mobile for MobileClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DescribeBundleError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeBundleError>())
+                            .and_then(|response| Err(DescribeBundleError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1170,10 +1164,11 @@ impl Mobile for MobileClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeProjectError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeProjectResult, _>()?;
+                                .deserialize::<DescribeProjectResult, _>();
 
                             result
                         })
@@ -1184,11 +1179,8 @@ impl Mobile for MobileClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DescribeProjectError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeProjectError>())
+                            .and_then(|response| Err(DescribeProjectError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1221,10 +1213,11 @@ impl Mobile for MobileClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ExportBundleError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ExportBundleResult, _>()?;
+                                .deserialize::<ExportBundleResult, _>();
 
                             result
                         })
@@ -1235,11 +1228,8 @@ impl Mobile for MobileClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ExportBundleError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ExportBundleError>())
+                            .and_then(|response| Err(ExportBundleError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1263,10 +1253,11 @@ impl Mobile for MobileClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ExportProjectError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ExportProjectResult, _>()?;
+                                .deserialize::<ExportProjectResult, _>();
 
                             result
                         })
@@ -1277,11 +1268,8 @@ impl Mobile for MobileClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ExportProjectError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ExportProjectError>())
+                            .and_then(|response| Err(ExportProjectError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1314,10 +1302,11 @@ impl Mobile for MobileClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListBundlesError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListBundlesResult, _>()?;
+                                .deserialize::<ListBundlesResult, _>();
 
                             result
                         })
@@ -1328,11 +1317,8 @@ impl Mobile for MobileClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListBundlesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListBundlesError>())
+                            .and_then(|response| Err(ListBundlesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1365,10 +1351,11 @@ impl Mobile for MobileClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListProjectsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListProjectsResult, _>()?;
+                                .deserialize::<ListProjectsResult, _>();
 
                             result
                         })
@@ -1379,11 +1366,8 @@ impl Mobile for MobileClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListProjectsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListProjectsError>())
+                            .and_then(|response| Err(ListProjectsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1417,10 +1401,11 @@ impl Mobile for MobileClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateProjectError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateProjectResult, _>()?;
+                                .deserialize::<UpdateProjectResult, _>();
 
                             result
                         })
@@ -1431,11 +1416,8 @@ impl Mobile for MobileClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateProjectError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateProjectError>())
+                            .and_then(|response| Err(UpdateProjectError::from_response(response)))
                     })
                     .boxed()
             }

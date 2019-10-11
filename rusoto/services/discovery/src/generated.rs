@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -2752,16 +2752,22 @@ impl Discovery for DiscoveryClient {
 
         self.client.sign_and_dispatch(request, |response| {
                         if response.status.is_success() {
-                            response.buffer().map(|try_response| {
-                try_response.and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<AssociateConfigurationItemsToApplicationResponse, _>()
-                })
-            }).boxed()
+                            response.buffer()
+                .map_err(|e| AssociateConfigurationItemsToApplicationError::from(e))
+                .map(|try_response| {
+                    try_response
+                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<AssociateConfigurationItemsToApplicationError>)
+                    .and_then(|response| {
+                        proto::json::ResponsePayload::new(&response).deserialize::<AssociateConfigurationItemsToApplicationResponse, _>()
+                    })
+                }).boxed()
                         } else {
                             response.buffer().map(|try_response| {
-                                try_response.map_or_else(|e| e, |response| {
-                                    Err(AssociateConfigurationItemsToApplicationError::from_response(response))
-                                }).boxed()
+                                try_response
+                                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<AssociateConfigurationItemsToApplicationError>)
+                                    .and_then(|response| {
+                                        Err(AssociateConfigurationItemsToApplicationError::from_response(response))
+                                    })
                             }).boxed()
                         }
                     })
@@ -2786,11 +2792,17 @@ impl Discovery for DiscoveryClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| BatchDeleteImportDataError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<BatchDeleteImportDataResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<BatchDeleteImportDataError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<BatchDeleteImportDataResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2798,11 +2810,13 @@ impl Discovery for DiscoveryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(BatchDeleteImportDataError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<BatchDeleteImportDataError>
+                            })
+                            .and_then(|response| {
+                                Err(BatchDeleteImportDataError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2828,11 +2842,16 @@ impl Discovery for DiscoveryClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateApplicationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateApplicationResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateApplicationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateApplicationResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2840,11 +2859,12 @@ impl Discovery for DiscoveryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateApplicationError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateApplicationError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateApplicationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2867,11 +2887,16 @@ impl Discovery for DiscoveryClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateTagsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateTagsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateTagsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateTagsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2879,11 +2904,10 @@ impl Discovery for DiscoveryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateTagsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateTagsError>
+                            })
+                            .and_then(|response| Err(CreateTagsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2909,11 +2933,16 @@ impl Discovery for DiscoveryClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteApplicationsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteApplicationsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteApplicationsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteApplicationsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2921,11 +2950,12 @@ impl Discovery for DiscoveryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteApplicationsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteApplicationsError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteApplicationsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2948,11 +2978,16 @@ impl Discovery for DiscoveryClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteTagsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteTagsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteTagsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteTagsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2960,11 +2995,10 @@ impl Discovery for DiscoveryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteTagsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteTagsError>
+                            })
+                            .and_then(|response| Err(DeleteTagsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2990,11 +3024,16 @@ impl Discovery for DiscoveryClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeAgentsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeAgentsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeAgentsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeAgentsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3002,11 +3041,10 @@ impl Discovery for DiscoveryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeAgentsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeAgentsError>
+                            })
+                            .and_then(|response| Err(DescribeAgentsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3032,11 +3070,17 @@ impl Discovery for DiscoveryClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeConfigurationsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeConfigurationsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeConfigurationsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeConfigurationsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3044,13 +3088,13 @@ impl Discovery for DiscoveryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeConfigurationsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeConfigurationsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeConfigurationsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3076,11 +3120,17 @@ impl Discovery for DiscoveryClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeContinuousExportsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeContinuousExportsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeContinuousExportsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeContinuousExportsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3088,13 +3138,13 @@ impl Discovery for DiscoveryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeContinuousExportsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeContinuousExportsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeContinuousExportsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3120,11 +3170,17 @@ impl Discovery for DiscoveryClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeExportConfigurationsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeExportConfigurationsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeExportConfigurationsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeExportConfigurationsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3132,13 +3188,13 @@ impl Discovery for DiscoveryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeExportConfigurationsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeExportConfigurationsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeExportConfigurationsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3164,11 +3220,17 @@ impl Discovery for DiscoveryClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeExportTasksError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeExportTasksResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeExportTasksError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeExportTasksResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3176,11 +3238,13 @@ impl Discovery for DiscoveryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeExportTasksError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeExportTasksError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeExportTasksError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3206,11 +3270,17 @@ impl Discovery for DiscoveryClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeImportTasksError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeImportTasksResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeImportTasksError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeImportTasksResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3218,11 +3288,13 @@ impl Discovery for DiscoveryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeImportTasksError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeImportTasksError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeImportTasksError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3248,11 +3320,16 @@ impl Discovery for DiscoveryClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeTagsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeTagsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeTagsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeTagsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3260,11 +3337,10 @@ impl Discovery for DiscoveryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeTagsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeTagsError>
+                            })
+                            .and_then(|response| Err(DescribeTagsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3291,16 +3367,22 @@ impl Discovery for DiscoveryClient {
 
         self.client.sign_and_dispatch(request, |response| {
                         if response.status.is_success() {
-                            response.buffer().map(|try_response| {
-                try_response.and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<DisassociateConfigurationItemsFromApplicationResponse, _>()
-                })
-            }).boxed()
+                            response.buffer()
+                .map_err(|e| DisassociateConfigurationItemsFromApplicationError::from(e))
+                .map(|try_response| {
+                    try_response
+                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<DisassociateConfigurationItemsFromApplicationError>)
+                    .and_then(|response| {
+                        proto::json::ResponsePayload::new(&response).deserialize::<DisassociateConfigurationItemsFromApplicationResponse, _>()
+                    })
+                }).boxed()
                         } else {
                             response.buffer().map(|try_response| {
-                                try_response.map_or_else(|e| e, |response| {
-                                    Err(DisassociateConfigurationItemsFromApplicationError::from_response(response))
-                                }).boxed()
+                                try_response
+                                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<DisassociateConfigurationItemsFromApplicationError>)
+                                    .and_then(|response| {
+                                        Err(DisassociateConfigurationItemsFromApplicationError::from_response(response))
+                                    })
                             }).boxed()
                         }
                     })
@@ -3323,11 +3405,17 @@ impl Discovery for DiscoveryClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ExportConfigurationsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ExportConfigurationsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ExportConfigurationsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ExportConfigurationsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3335,11 +3423,13 @@ impl Discovery for DiscoveryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ExportConfigurationsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ExportConfigurationsError>
+                            })
+                            .and_then(|response| {
+                                Err(ExportConfigurationsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3363,11 +3453,17 @@ impl Discovery for DiscoveryClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetDiscoverySummaryError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetDiscoverySummaryResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetDiscoverySummaryError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetDiscoverySummaryResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3375,11 +3471,13 @@ impl Discovery for DiscoveryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetDiscoverySummaryError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetDiscoverySummaryError>
+                            })
+                            .and_then(|response| {
+                                Err(GetDiscoverySummaryError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3405,11 +3503,16 @@ impl Discovery for DiscoveryClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListConfigurationsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListConfigurationsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListConfigurationsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListConfigurationsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3417,11 +3520,12 @@ impl Discovery for DiscoveryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListConfigurationsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListConfigurationsError>
+                            })
+                            .and_then(|response| {
+                                Err(ListConfigurationsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3447,11 +3551,17 @@ impl Discovery for DiscoveryClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListServerNeighborsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListServerNeighborsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListServerNeighborsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListServerNeighborsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3459,11 +3569,13 @@ impl Discovery for DiscoveryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListServerNeighborsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListServerNeighborsError>
+                            })
+                            .and_then(|response| {
+                                Err(ListServerNeighborsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3487,11 +3599,17 @@ impl Discovery for DiscoveryClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StartContinuousExportError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StartContinuousExportResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StartContinuousExportError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StartContinuousExportResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3499,11 +3617,13 @@ impl Discovery for DiscoveryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(StartContinuousExportError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StartContinuousExportError>
+                            })
+                            .and_then(|response| {
+                                Err(StartContinuousExportError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3530,11 +3650,17 @@ impl Discovery for DiscoveryClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StartDataCollectionByAgentIdsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StartDataCollectionByAgentIdsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StartDataCollectionByAgentIdsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StartDataCollectionByAgentIdsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3542,13 +3668,13 @@ impl Discovery for DiscoveryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(StartDataCollectionByAgentIdsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StartDataCollectionByAgentIdsError>
+                            })
+                            .and_then(|response| {
+                                Err(StartDataCollectionByAgentIdsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3574,11 +3700,16 @@ impl Discovery for DiscoveryClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StartExportTaskError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StartExportTaskResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StartExportTaskError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StartExportTaskResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3586,11 +3717,10 @@ impl Discovery for DiscoveryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(StartExportTaskError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StartExportTaskError>
+                            })
+                            .and_then(|response| Err(StartExportTaskError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3616,11 +3746,16 @@ impl Discovery for DiscoveryClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StartImportTaskError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StartImportTaskResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StartImportTaskError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StartImportTaskResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3628,11 +3763,10 @@ impl Discovery for DiscoveryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(StartImportTaskError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StartImportTaskError>
+                            })
+                            .and_then(|response| Err(StartImportTaskError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3658,11 +3792,17 @@ impl Discovery for DiscoveryClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StopContinuousExportError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StopContinuousExportResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StopContinuousExportError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StopContinuousExportResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3670,11 +3810,13 @@ impl Discovery for DiscoveryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(StopContinuousExportError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StopContinuousExportError>
+                            })
+                            .and_then(|response| {
+                                Err(StopContinuousExportError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3700,11 +3842,17 @@ impl Discovery for DiscoveryClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StopDataCollectionByAgentIdsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StopDataCollectionByAgentIdsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StopDataCollectionByAgentIdsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StopDataCollectionByAgentIdsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3712,13 +3860,13 @@ impl Discovery for DiscoveryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(StopDataCollectionByAgentIdsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StopDataCollectionByAgentIdsError>
+                            })
+                            .and_then(|response| {
+                                Err(StopDataCollectionByAgentIdsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3744,11 +3892,16 @@ impl Discovery for DiscoveryClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateApplicationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateApplicationResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateApplicationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateApplicationResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3756,11 +3909,12 @@ impl Discovery for DiscoveryClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateApplicationError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateApplicationError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateApplicationError::from_response(response))
+                            })
                     })
                     .boxed()
             }

@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
@@ -2172,11 +2172,11 @@ impl Ram for RamClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AcceptResourceShareInvitationError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AcceptResourceShareInvitationResponse, _>(
-                            )?;
+                                .deserialize::<AcceptResourceShareInvitationResponse, _>();
 
                             result
                         })
@@ -2187,13 +2187,10 @@ impl Ram for RamClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(AcceptResourceShareInvitationError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<AcceptResourceShareInvitationError>())
+                            .and_then(|response| {
+                                Err(AcceptResourceShareInvitationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2217,10 +2214,11 @@ impl Ram for RamClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AssociateResourceShareError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AssociateResourceShareResponse, _>()?;
+                                .deserialize::<AssociateResourceShareResponse, _>();
 
                             result
                         })
@@ -2231,13 +2229,10 @@ impl Ram for RamClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(AssociateResourceShareError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<AssociateResourceShareError>())
+                            .and_then(|response| {
+                                Err(AssociateResourceShareError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2261,10 +2256,11 @@ impl Ram for RamClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateResourceShareError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateResourceShareResponse, _>()?;
+                                .deserialize::<CreateResourceShareResponse, _>();
 
                             result
                         })
@@ -2275,11 +2271,10 @@ impl Ram for RamClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateResourceShareError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateResourceShareError>())
+                            .and_then(|response| {
+                                Err(CreateResourceShareError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2307,10 +2302,11 @@ impl Ram for RamClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteResourceShareError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteResourceShareResponse, _>()?;
+                                .deserialize::<DeleteResourceShareResponse, _>();
 
                             result
                         })
@@ -2321,11 +2317,10 @@ impl Ram for RamClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteResourceShareError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteResourceShareError>())
+                            .and_then(|response| {
+                                Err(DeleteResourceShareError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2349,10 +2344,11 @@ impl Ram for RamClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DisassociateResourceShareError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DisassociateResourceShareResponse, _>()?;
+                                .deserialize::<DisassociateResourceShareResponse, _>();
 
                             result
                         })
@@ -2363,13 +2359,10 @@ impl Ram for RamClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(DisassociateResourceShareError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DisassociateResourceShareError>())
+                            .and_then(|response| {
+                                Err(DisassociateResourceShareError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2390,11 +2383,12 @@ impl Ram for RamClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| EnableSharingWithAwsOrganizationError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
                                 .deserialize::<EnableSharingWithAwsOrganizationResponse, _>(
-                            )?;
+                            );
 
                             result
                         })
@@ -2405,15 +2399,12 @@ impl Ram for RamClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(EnableSharingWithAwsOrganizationError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<EnableSharingWithAwsOrganizationError>())
+                            .and_then(|response| {
+                                Err(EnableSharingWithAwsOrganizationError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -2437,10 +2428,11 @@ impl Ram for RamClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetResourcePoliciesError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetResourcePoliciesResponse, _>()?;
+                                .deserialize::<GetResourcePoliciesResponse, _>();
 
                             result
                         })
@@ -2451,11 +2443,10 @@ impl Ram for RamClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetResourcePoliciesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetResourcePoliciesError>())
+                            .and_then(|response| {
+                                Err(GetResourcePoliciesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2479,11 +2470,11 @@ impl Ram for RamClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetResourceShareAssociationsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetResourceShareAssociationsResponse, _>(
-                            )?;
+                                .deserialize::<GetResourceShareAssociationsResponse, _>();
 
                             result
                         })
@@ -2494,13 +2485,10 @@ impl Ram for RamClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(GetResourceShareAssociationsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetResourceShareAssociationsError>())
+                            .and_then(|response| {
+                                Err(GetResourceShareAssociationsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2524,10 +2512,11 @@ impl Ram for RamClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetResourceShareInvitationsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetResourceShareInvitationsResponse, _>()?;
+                                .deserialize::<GetResourceShareInvitationsResponse, _>();
 
                             result
                         })
@@ -2538,13 +2527,10 @@ impl Ram for RamClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(GetResourceShareInvitationsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetResourceShareInvitationsError>())
+                            .and_then(|response| {
+                                Err(GetResourceShareInvitationsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2568,10 +2554,11 @@ impl Ram for RamClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetResourceSharesError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetResourceSharesResponse, _>()?;
+                                .deserialize::<GetResourceSharesResponse, _>();
 
                             result
                         })
@@ -2582,11 +2569,10 @@ impl Ram for RamClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetResourceSharesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetResourceSharesError>())
+                            .and_then(|response| {
+                                Err(GetResourceSharesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2610,10 +2596,11 @@ impl Ram for RamClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListPrincipalsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListPrincipalsResponse, _>()?;
+                                .deserialize::<ListPrincipalsResponse, _>();
 
                             result
                         })
@@ -2624,11 +2611,8 @@ impl Ram for RamClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListPrincipalsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListPrincipalsError>())
+                            .and_then(|response| Err(ListPrincipalsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2652,10 +2636,11 @@ impl Ram for RamClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListResourcesError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListResourcesResponse, _>()?;
+                                .deserialize::<ListResourcesResponse, _>();
 
                             result
                         })
@@ -2666,11 +2651,8 @@ impl Ram for RamClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListResourcesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListResourcesError>())
+                            .and_then(|response| Err(ListResourcesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2695,11 +2677,11 @@ impl Ram for RamClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| RejectResourceShareInvitationError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RejectResourceShareInvitationResponse, _>(
-                            )?;
+                                .deserialize::<RejectResourceShareInvitationResponse, _>();
 
                             result
                         })
@@ -2710,13 +2692,10 @@ impl Ram for RamClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(RejectResourceShareInvitationError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<RejectResourceShareInvitationError>())
+                            .and_then(|response| {
+                                Err(RejectResourceShareInvitationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2740,10 +2719,11 @@ impl Ram for RamClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| TagResourceError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<TagResourceResponse, _>()?;
+                                .deserialize::<TagResourceResponse, _>();
 
                             result
                         })
@@ -2754,11 +2734,8 @@ impl Ram for RamClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(TagResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<TagResourceError>())
+                            .and_then(|response| Err(TagResourceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2782,10 +2759,11 @@ impl Ram for RamClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UntagResourceError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UntagResourceResponse, _>()?;
+                                .deserialize::<UntagResourceResponse, _>();
 
                             result
                         })
@@ -2796,11 +2774,8 @@ impl Ram for RamClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UntagResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UntagResourceError>())
+                            .and_then(|response| Err(UntagResourceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2824,10 +2799,11 @@ impl Ram for RamClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateResourceShareError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateResourceShareResponse, _>()?;
+                                .deserialize::<UpdateResourceShareResponse, _>();
 
                             result
                         })
@@ -2838,11 +2814,10 @@ impl Ram for RamClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateResourceShareError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateResourceShareError>())
+                            .and_then(|response| {
+                                Err(UpdateResourceShareError::from_response(response))
+                            })
                     })
                     .boxed()
             }

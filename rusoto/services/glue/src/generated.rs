@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -10228,11 +10228,17 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| BatchCreatePartitionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<BatchCreatePartitionResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<BatchCreatePartitionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<BatchCreatePartitionResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10240,11 +10246,13 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(BatchCreatePartitionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<BatchCreatePartitionError>
+                            })
+                            .and_then(|response| {
+                                Err(BatchCreatePartitionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10267,11 +10275,17 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| BatchDeleteConnectionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<BatchDeleteConnectionResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<BatchDeleteConnectionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<BatchDeleteConnectionResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10279,11 +10293,13 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(BatchDeleteConnectionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<BatchDeleteConnectionError>
+                            })
+                            .and_then(|response| {
+                                Err(BatchDeleteConnectionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10306,11 +10322,17 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| BatchDeletePartitionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<BatchDeletePartitionResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<BatchDeletePartitionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<BatchDeletePartitionResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10318,11 +10340,13 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(BatchDeletePartitionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<BatchDeletePartitionError>
+                            })
+                            .and_then(|response| {
+                                Err(BatchDeletePartitionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10345,11 +10369,16 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| BatchDeleteTableError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<BatchDeleteTableResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<BatchDeleteTableError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<BatchDeleteTableResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10357,11 +10386,12 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(BatchDeleteTableError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<BatchDeleteTableError>
+                            })
+                            .and_then(|response| {
+                                Err(BatchDeleteTableError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10384,11 +10414,17 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| BatchDeleteTableVersionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<BatchDeleteTableVersionResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<BatchDeleteTableVersionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<BatchDeleteTableVersionResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10396,13 +10432,13 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(BatchDeleteTableVersionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<BatchDeleteTableVersionError>
+                            })
+                            .and_then(|response| {
+                                Err(BatchDeleteTableVersionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10425,11 +10461,16 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| BatchGetCrawlersError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<BatchGetCrawlersResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<BatchGetCrawlersError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<BatchGetCrawlersResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10437,11 +10478,12 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(BatchGetCrawlersError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<BatchGetCrawlersError>
+                            })
+                            .and_then(|response| {
+                                Err(BatchGetCrawlersError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10464,11 +10506,17 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| BatchGetDevEndpointsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<BatchGetDevEndpointsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<BatchGetDevEndpointsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<BatchGetDevEndpointsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10476,11 +10524,13 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(BatchGetDevEndpointsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<BatchGetDevEndpointsError>
+                            })
+                            .and_then(|response| {
+                                Err(BatchGetDevEndpointsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10503,11 +10553,16 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| BatchGetJobsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<BatchGetJobsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<BatchGetJobsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<BatchGetJobsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10515,11 +10570,10 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(BatchGetJobsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<BatchGetJobsError>
+                            })
+                            .and_then(|response| Err(BatchGetJobsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -10542,11 +10596,16 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| BatchGetPartitionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<BatchGetPartitionResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<BatchGetPartitionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<BatchGetPartitionResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10554,11 +10613,12 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(BatchGetPartitionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<BatchGetPartitionError>
+                            })
+                            .and_then(|response| {
+                                Err(BatchGetPartitionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10581,11 +10641,16 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| BatchGetTriggersError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<BatchGetTriggersResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<BatchGetTriggersError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<BatchGetTriggersResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10593,11 +10658,12 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(BatchGetTriggersError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<BatchGetTriggersError>
+                            })
+                            .and_then(|response| {
+                                Err(BatchGetTriggersError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10620,11 +10686,17 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GlueBatchStopJobRunError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<BatchStopJobRunResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GlueBatchStopJobRunError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<BatchStopJobRunResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10632,11 +10704,13 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GlueBatchStopJobRunError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GlueBatchStopJobRunError>
+                            })
+                            .and_then(|response| {
+                                Err(GlueBatchStopJobRunError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10659,11 +10733,16 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateClassifierError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateClassifierResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateClassifierError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateClassifierResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10671,11 +10750,12 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateClassifierError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateClassifierError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateClassifierError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10698,11 +10778,16 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateConnectionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateConnectionResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateConnectionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateConnectionResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10710,11 +10795,12 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateConnectionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateConnectionError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateConnectionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10737,11 +10823,16 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateCrawlerError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateCrawlerResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateCrawlerError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateCrawlerResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10749,11 +10840,10 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateCrawlerError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateCrawlerError>
+                            })
+                            .and_then(|response| Err(CreateCrawlerError::from_response(response)))
                     })
                     .boxed()
             }
@@ -10776,11 +10866,16 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateDatabaseError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateDatabaseResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateDatabaseError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateDatabaseResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10788,11 +10883,10 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateDatabaseError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateDatabaseError>
+                            })
+                            .and_then(|response| Err(CreateDatabaseError::from_response(response)))
                     })
                     .boxed()
             }
@@ -10815,11 +10909,16 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateDevEndpointError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateDevEndpointResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateDevEndpointError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateDevEndpointResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10827,11 +10926,12 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateDevEndpointError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateDevEndpointError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateDevEndpointError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10854,11 +10954,16 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateJobError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateJobResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateJobError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateJobResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10866,11 +10971,10 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateJobError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateJobError>
+                            })
+                            .and_then(|response| Err(CreateJobError::from_response(response)))
                     })
                     .boxed()
             }
@@ -10893,11 +10997,16 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreatePartitionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreatePartitionResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreatePartitionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreatePartitionResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10905,11 +11014,10 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreatePartitionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreatePartitionError>
+                            })
+                            .and_then(|response| Err(CreatePartitionError::from_response(response)))
                     })
                     .boxed()
             }
@@ -10932,11 +11040,16 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateScriptError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateScriptResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateScriptError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateScriptResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10944,11 +11057,10 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateScriptError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateScriptError>
+                            })
+                            .and_then(|response| Err(CreateScriptError::from_response(response)))
                     })
                     .boxed()
             }
@@ -10971,11 +11083,17 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateSecurityConfigurationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateSecurityConfigurationResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateSecurityConfigurationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateSecurityConfigurationResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10983,13 +11101,13 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(CreateSecurityConfigurationError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateSecurityConfigurationError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateSecurityConfigurationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -11012,11 +11130,16 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateTableError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateTableResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateTableError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateTableResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -11024,11 +11147,10 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateTableError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateTableError>
+                            })
+                            .and_then(|response| Err(CreateTableError::from_response(response)))
                     })
                     .boxed()
             }
@@ -11051,11 +11173,16 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateTriggerError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateTriggerResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateTriggerError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateTriggerResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -11063,11 +11190,10 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateTriggerError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateTriggerError>
+                            })
+                            .and_then(|response| Err(CreateTriggerError::from_response(response)))
                     })
                     .boxed()
             }
@@ -11090,11 +11216,17 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateUserDefinedFunctionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateUserDefinedFunctionResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateUserDefinedFunctionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateUserDefinedFunctionResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -11102,13 +11234,13 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(CreateUserDefinedFunctionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateUserDefinedFunctionError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateUserDefinedFunctionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -11131,11 +11263,16 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteClassifierError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteClassifierResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteClassifierError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteClassifierResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -11143,11 +11280,12 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteClassifierError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteClassifierError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteClassifierError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -11170,11 +11308,16 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteConnectionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteConnectionResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteConnectionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteConnectionResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -11182,11 +11325,12 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteConnectionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteConnectionError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteConnectionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -11209,11 +11353,16 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteCrawlerError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteCrawlerResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteCrawlerError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteCrawlerResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -11221,11 +11370,10 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteCrawlerError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteCrawlerError>
+                            })
+                            .and_then(|response| Err(DeleteCrawlerError::from_response(response)))
                     })
                     .boxed()
             }
@@ -11248,11 +11396,16 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteDatabaseError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteDatabaseResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteDatabaseError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteDatabaseResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -11260,11 +11413,10 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteDatabaseError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteDatabaseError>
+                            })
+                            .and_then(|response| Err(DeleteDatabaseError::from_response(response)))
                     })
                     .boxed()
             }
@@ -11287,11 +11439,16 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteDevEndpointError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteDevEndpointResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteDevEndpointError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteDevEndpointResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -11299,11 +11456,12 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteDevEndpointError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteDevEndpointError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteDevEndpointError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -11326,11 +11484,16 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteJobError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteJobResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteJobError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteJobResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -11338,11 +11501,10 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteJobError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteJobError>
+                            })
+                            .and_then(|response| Err(DeleteJobError::from_response(response)))
                     })
                     .boxed()
             }
@@ -11365,11 +11527,16 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeletePartitionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeletePartitionResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeletePartitionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeletePartitionResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -11377,11 +11544,10 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeletePartitionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeletePartitionError>
+                            })
+                            .and_then(|response| Err(DeletePartitionError::from_response(response)))
                     })
                     .boxed()
             }
@@ -11404,11 +11570,17 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteResourcePolicyError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteResourcePolicyResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteResourcePolicyError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteResourcePolicyResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -11416,11 +11588,13 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteResourcePolicyError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteResourcePolicyError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteResourcePolicyError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -11443,11 +11617,17 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteSecurityConfigurationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteSecurityConfigurationResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteSecurityConfigurationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteSecurityConfigurationResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -11455,13 +11635,13 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DeleteSecurityConfigurationError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteSecurityConfigurationError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteSecurityConfigurationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -11484,11 +11664,16 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteTableError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteTableResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteTableError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteTableResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -11496,11 +11681,10 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteTableError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteTableError>
+                            })
+                            .and_then(|response| Err(DeleteTableError::from_response(response)))
                     })
                     .boxed()
             }
@@ -11523,11 +11707,16 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteTableVersionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteTableVersionResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteTableVersionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteTableVersionResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -11535,11 +11724,12 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteTableVersionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteTableVersionError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteTableVersionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -11562,11 +11752,16 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteTriggerError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteTriggerResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteTriggerError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteTriggerResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -11574,11 +11769,10 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteTriggerError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteTriggerError>
+                            })
+                            .and_then(|response| Err(DeleteTriggerError::from_response(response)))
                     })
                     .boxed()
             }
@@ -11601,11 +11795,17 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteUserDefinedFunctionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteUserDefinedFunctionResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteUserDefinedFunctionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteUserDefinedFunctionResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -11613,13 +11813,13 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DeleteUserDefinedFunctionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteUserDefinedFunctionError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteUserDefinedFunctionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -11642,11 +11842,17 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetCatalogImportStatusError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetCatalogImportStatusResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetCatalogImportStatusError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetCatalogImportStatusResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -11654,13 +11860,13 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(GetCatalogImportStatusError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetCatalogImportStatusError>
+                            })
+                            .and_then(|response| {
+                                Err(GetCatalogImportStatusError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -11683,11 +11889,16 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetClassifierError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetClassifierResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetClassifierError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetClassifierResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -11695,11 +11906,10 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetClassifierError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetClassifierError>
+                            })
+                            .and_then(|response| Err(GetClassifierError::from_response(response)))
                     })
                     .boxed()
             }
@@ -11722,11 +11932,16 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetClassifiersError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetClassifiersResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetClassifiersError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetClassifiersResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -11734,11 +11949,10 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetClassifiersError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetClassifiersError>
+                            })
+                            .and_then(|response| Err(GetClassifiersError::from_response(response)))
                     })
                     .boxed()
             }
@@ -11761,11 +11975,16 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetConnectionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetConnectionResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetConnectionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetConnectionResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -11773,11 +11992,10 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetConnectionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetConnectionError>
+                            })
+                            .and_then(|response| Err(GetConnectionError::from_response(response)))
                     })
                     .boxed()
             }
@@ -11800,11 +12018,16 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetConnectionsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetConnectionsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetConnectionsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetConnectionsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -11812,11 +12035,10 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetConnectionsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetConnectionsError>
+                            })
+                            .and_then(|response| Err(GetConnectionsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -11839,11 +12061,16 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetCrawlerError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetCrawlerResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetCrawlerError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetCrawlerResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -11851,11 +12078,10 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetCrawlerError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetCrawlerError>
+                            })
+                            .and_then(|response| Err(GetCrawlerError::from_response(response)))
                     })
                     .boxed()
             }
@@ -11878,11 +12104,16 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetCrawlerMetricsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetCrawlerMetricsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetCrawlerMetricsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetCrawlerMetricsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -11890,11 +12121,12 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetCrawlerMetricsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetCrawlerMetricsError>
+                            })
+                            .and_then(|response| {
+                                Err(GetCrawlerMetricsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -11917,11 +12149,16 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetCrawlersError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetCrawlersResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetCrawlersError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetCrawlersResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -11929,11 +12166,10 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetCrawlersError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetCrawlersError>
+                            })
+                            .and_then(|response| Err(GetCrawlersError::from_response(response)))
                     })
                     .boxed()
             }
@@ -11957,11 +12193,17 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetDataCatalogEncryptionSettingsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetDataCatalogEncryptionSettingsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetDataCatalogEncryptionSettingsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetDataCatalogEncryptionSettingsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -11969,15 +12211,15 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(GetDataCatalogEncryptionSettingsError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetDataCatalogEncryptionSettingsError>
+                            })
+                            .and_then(|response| {
+                                Err(GetDataCatalogEncryptionSettingsError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -12000,11 +12242,16 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetDatabaseError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetDatabaseResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetDatabaseError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetDatabaseResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -12012,11 +12259,10 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetDatabaseError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetDatabaseError>
+                            })
+                            .and_then(|response| Err(GetDatabaseError::from_response(response)))
                     })
                     .boxed()
             }
@@ -12039,11 +12285,16 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetDatabasesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetDatabasesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetDatabasesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetDatabasesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -12051,11 +12302,10 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetDatabasesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetDatabasesError>
+                            })
+                            .and_then(|response| Err(GetDatabasesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -12078,11 +12328,16 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetDataflowGraphError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetDataflowGraphResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetDataflowGraphError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetDataflowGraphResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -12090,11 +12345,12 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetDataflowGraphError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetDataflowGraphError>
+                            })
+                            .and_then(|response| {
+                                Err(GetDataflowGraphError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -12117,11 +12373,16 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetDevEndpointError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetDevEndpointResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetDevEndpointError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetDevEndpointResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -12129,11 +12390,10 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetDevEndpointError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetDevEndpointError>
+                            })
+                            .and_then(|response| Err(GetDevEndpointError::from_response(response)))
                     })
                     .boxed()
             }
@@ -12156,11 +12416,16 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetDevEndpointsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetDevEndpointsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetDevEndpointsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetDevEndpointsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -12168,11 +12433,10 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetDevEndpointsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetDevEndpointsError>
+                            })
+                            .and_then(|response| Err(GetDevEndpointsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -12192,11 +12456,14 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetJobError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetJobResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<GetJobError>)
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetJobResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -12204,11 +12471,8 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetJobError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<GetJobError>)
+                            .and_then(|response| Err(GetJobError::from_response(response)))
                     })
                     .boxed()
             }
@@ -12231,11 +12495,16 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetJobRunError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetJobRunResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetJobRunError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetJobRunResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -12243,11 +12512,10 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetJobRunError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetJobRunError>
+                            })
+                            .and_then(|response| Err(GetJobRunError::from_response(response)))
                     })
                     .boxed()
             }
@@ -12270,11 +12538,16 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetJobRunsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetJobRunsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetJobRunsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetJobRunsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -12282,11 +12555,10 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetJobRunsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetJobRunsError>
+                            })
+                            .and_then(|response| Err(GetJobRunsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -12306,11 +12578,14 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetJobsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetJobsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<GetJobsError>)
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetJobsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -12318,11 +12593,8 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetJobsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<GetJobsError>)
+                            .and_then(|response| Err(GetJobsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -12345,11 +12617,16 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetMappingError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetMappingResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetMappingError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetMappingResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -12357,11 +12634,10 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetMappingError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetMappingError>
+                            })
+                            .and_then(|response| Err(GetMappingError::from_response(response)))
                     })
                     .boxed()
             }
@@ -12384,11 +12660,16 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetPartitionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetPartitionResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetPartitionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetPartitionResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -12396,11 +12677,10 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetPartitionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetPartitionError>
+                            })
+                            .and_then(|response| Err(GetPartitionError::from_response(response)))
                     })
                     .boxed()
             }
@@ -12423,11 +12703,16 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetPartitionsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetPartitionsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetPartitionsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetPartitionsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -12435,11 +12720,10 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetPartitionsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetPartitionsError>
+                            })
+                            .and_then(|response| Err(GetPartitionsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -12459,11 +12743,14 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetPlanError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetPlanResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<GetPlanError>)
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetPlanResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -12471,11 +12758,8 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetPlanError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<GetPlanError>)
+                            .and_then(|response| Err(GetPlanError::from_response(response)))
                     })
                     .boxed()
             }
@@ -12496,11 +12780,16 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetResourcePolicyError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetResourcePolicyResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetResourcePolicyError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetResourcePolicyResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -12508,11 +12797,12 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetResourcePolicyError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetResourcePolicyError>
+                            })
+                            .and_then(|response| {
+                                Err(GetResourcePolicyError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -12535,11 +12825,17 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetSecurityConfigurationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetSecurityConfigurationResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetSecurityConfigurationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetSecurityConfigurationResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -12547,13 +12843,13 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(GetSecurityConfigurationError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetSecurityConfigurationError>
+                            })
+                            .and_then(|response| {
+                                Err(GetSecurityConfigurationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -12576,11 +12872,17 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetSecurityConfigurationsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetSecurityConfigurationsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetSecurityConfigurationsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetSecurityConfigurationsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -12588,13 +12890,13 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(GetSecurityConfigurationsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetSecurityConfigurationsError>
+                            })
+                            .and_then(|response| {
+                                Err(GetSecurityConfigurationsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -12614,11 +12916,14 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetTableError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetTableResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<GetTableError>)
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetTableResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -12626,11 +12931,8 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetTableError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<GetTableError>)
+                            .and_then(|response| Err(GetTableError::from_response(response)))
                     })
                     .boxed()
             }
@@ -12653,11 +12955,16 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetTableVersionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetTableVersionResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetTableVersionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetTableVersionResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -12665,11 +12972,10 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetTableVersionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetTableVersionError>
+                            })
+                            .and_then(|response| Err(GetTableVersionError::from_response(response)))
                     })
                     .boxed()
             }
@@ -12692,11 +12998,16 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetTableVersionsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetTableVersionsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetTableVersionsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetTableVersionsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -12704,11 +13015,12 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetTableVersionsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetTableVersionsError>
+                            })
+                            .and_then(|response| {
+                                Err(GetTableVersionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -12731,11 +13043,16 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetTablesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetTablesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetTablesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetTablesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -12743,11 +13060,10 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetTablesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetTablesError>
+                            })
+                            .and_then(|response| Err(GetTablesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -12767,11 +13083,14 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetTagsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetTagsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<GetTagsError>)
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetTagsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -12779,11 +13098,8 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetTagsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<GetTagsError>)
+                            .and_then(|response| Err(GetTagsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -12806,11 +13122,16 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetTriggerError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetTriggerResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetTriggerError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetTriggerResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -12818,11 +13139,10 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetTriggerError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetTriggerError>
+                            })
+                            .and_then(|response| Err(GetTriggerError::from_response(response)))
                     })
                     .boxed()
             }
@@ -12845,11 +13165,16 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetTriggersError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetTriggersResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetTriggersError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetTriggersResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -12857,11 +13182,10 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetTriggersError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetTriggersError>
+                            })
+                            .and_then(|response| Err(GetTriggersError::from_response(response)))
                     })
                     .boxed()
             }
@@ -12884,11 +13208,17 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetUserDefinedFunctionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetUserDefinedFunctionResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetUserDefinedFunctionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetUserDefinedFunctionResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -12896,13 +13226,13 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(GetUserDefinedFunctionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetUserDefinedFunctionError>
+                            })
+                            .and_then(|response| {
+                                Err(GetUserDefinedFunctionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -12925,11 +13255,17 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetUserDefinedFunctionsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetUserDefinedFunctionsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetUserDefinedFunctionsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetUserDefinedFunctionsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -12937,13 +13273,13 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(GetUserDefinedFunctionsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetUserDefinedFunctionsError>
+                            })
+                            .and_then(|response| {
+                                Err(GetUserDefinedFunctionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -12966,11 +13302,17 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ImportCatalogToGlueError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ImportCatalogToGlueResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ImportCatalogToGlueError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ImportCatalogToGlueResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -12978,11 +13320,13 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ImportCatalogToGlueError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ImportCatalogToGlueError>
+                            })
+                            .and_then(|response| {
+                                Err(ImportCatalogToGlueError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -13005,11 +13349,16 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListCrawlersError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListCrawlersResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListCrawlersError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListCrawlersResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -13017,11 +13366,10 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListCrawlersError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListCrawlersError>
+                            })
+                            .and_then(|response| Err(ListCrawlersError::from_response(response)))
                     })
                     .boxed()
             }
@@ -13044,11 +13392,16 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListDevEndpointsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListDevEndpointsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListDevEndpointsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListDevEndpointsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -13056,11 +13409,12 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListDevEndpointsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListDevEndpointsError>
+                            })
+                            .and_then(|response| {
+                                Err(ListDevEndpointsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -13080,11 +13434,14 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListJobsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListJobsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<ListJobsError>)
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListJobsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -13092,11 +13449,8 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListJobsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<ListJobsError>)
+                            .and_then(|response| Err(ListJobsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -13119,11 +13473,16 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListTriggersError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListTriggersResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListTriggersError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListTriggersResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -13131,11 +13490,10 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListTriggersError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListTriggersError>
+                            })
+                            .and_then(|response| Err(ListTriggersError::from_response(response)))
                     })
                     .boxed()
             }
@@ -13159,11 +13517,17 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| PutDataCatalogEncryptionSettingsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PutDataCatalogEncryptionSettingsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<PutDataCatalogEncryptionSettingsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<PutDataCatalogEncryptionSettingsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -13171,15 +13535,15 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(PutDataCatalogEncryptionSettingsError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<PutDataCatalogEncryptionSettingsError>
+                            })
+                            .and_then(|response| {
+                                Err(PutDataCatalogEncryptionSettingsError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -13202,11 +13566,16 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| PutResourcePolicyError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PutResourcePolicyResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<PutResourcePolicyError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<PutResourcePolicyResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -13214,11 +13583,12 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(PutResourcePolicyError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<PutResourcePolicyError>
+                            })
+                            .and_then(|response| {
+                                Err(PutResourcePolicyError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -13241,11 +13611,16 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ResetJobBookmarkError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ResetJobBookmarkResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ResetJobBookmarkError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ResetJobBookmarkResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -13253,11 +13628,12 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ResetJobBookmarkError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ResetJobBookmarkError>
+                            })
+                            .and_then(|response| {
+                                Err(ResetJobBookmarkError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -13280,11 +13656,16 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StartCrawlerError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StartCrawlerResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StartCrawlerError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StartCrawlerResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -13292,11 +13673,10 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(StartCrawlerError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StartCrawlerError>
+                            })
+                            .and_then(|response| Err(StartCrawlerError::from_response(response)))
                     })
                     .boxed()
             }
@@ -13319,11 +13699,17 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StartCrawlerScheduleError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StartCrawlerScheduleResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StartCrawlerScheduleError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StartCrawlerScheduleResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -13331,11 +13717,13 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(StartCrawlerScheduleError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StartCrawlerScheduleError>
+                            })
+                            .and_then(|response| {
+                                Err(StartCrawlerScheduleError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -13358,11 +13746,16 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StartJobRunError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StartJobRunResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StartJobRunError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StartJobRunResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -13370,11 +13763,10 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(StartJobRunError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StartJobRunError>
+                            })
+                            .and_then(|response| Err(StartJobRunError::from_response(response)))
                     })
                     .boxed()
             }
@@ -13397,11 +13789,16 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StartTriggerError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StartTriggerResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StartTriggerError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StartTriggerResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -13409,11 +13806,10 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(StartTriggerError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StartTriggerError>
+                            })
+                            .and_then(|response| Err(StartTriggerError::from_response(response)))
                     })
                     .boxed()
             }
@@ -13436,11 +13832,16 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StopCrawlerError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StopCrawlerResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StopCrawlerError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StopCrawlerResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -13448,11 +13849,10 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(StopCrawlerError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StopCrawlerError>
+                            })
+                            .and_then(|response| Err(StopCrawlerError::from_response(response)))
                     })
                     .boxed()
             }
@@ -13475,11 +13875,17 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StopCrawlerScheduleError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StopCrawlerScheduleResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StopCrawlerScheduleError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StopCrawlerScheduleResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -13487,11 +13893,13 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(StopCrawlerScheduleError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StopCrawlerScheduleError>
+                            })
+                            .and_then(|response| {
+                                Err(StopCrawlerScheduleError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -13514,11 +13922,16 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StopTriggerError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StopTriggerResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StopTriggerError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StopTriggerResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -13526,11 +13939,10 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(StopTriggerError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StopTriggerError>
+                            })
+                            .and_then(|response| Err(StopTriggerError::from_response(response)))
                     })
                     .boxed()
             }
@@ -13553,11 +13965,16 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| TagResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<TagResourceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<TagResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<TagResourceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -13565,11 +13982,10 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(TagResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<TagResourceError>
+                            })
+                            .and_then(|response| Err(TagResourceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -13592,11 +14008,16 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UntagResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UntagResourceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UntagResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UntagResourceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -13604,11 +14025,10 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UntagResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UntagResourceError>
+                            })
+                            .and_then(|response| Err(UntagResourceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -13631,11 +14051,16 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateClassifierError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateClassifierResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateClassifierError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateClassifierResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -13643,11 +14068,12 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateClassifierError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateClassifierError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateClassifierError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -13670,11 +14096,16 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateConnectionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateConnectionResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateConnectionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateConnectionResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -13682,11 +14113,12 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateConnectionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateConnectionError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateConnectionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -13709,11 +14141,16 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateCrawlerError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateCrawlerResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateCrawlerError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateCrawlerResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -13721,11 +14158,10 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateCrawlerError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateCrawlerError>
+                            })
+                            .and_then(|response| Err(UpdateCrawlerError::from_response(response)))
                     })
                     .boxed()
             }
@@ -13748,11 +14184,17 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateCrawlerScheduleError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateCrawlerScheduleResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateCrawlerScheduleError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateCrawlerScheduleResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -13760,11 +14202,13 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateCrawlerScheduleError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateCrawlerScheduleError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateCrawlerScheduleError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -13787,11 +14231,16 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateDatabaseError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateDatabaseResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateDatabaseError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateDatabaseResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -13799,11 +14248,10 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateDatabaseError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateDatabaseError>
+                            })
+                            .and_then(|response| Err(UpdateDatabaseError::from_response(response)))
                     })
                     .boxed()
             }
@@ -13826,11 +14274,16 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateDevEndpointError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateDevEndpointResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateDevEndpointError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateDevEndpointResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -13838,11 +14291,12 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateDevEndpointError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateDevEndpointError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateDevEndpointError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -13865,11 +14319,16 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateJobError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateJobResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateJobError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateJobResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -13877,11 +14336,10 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateJobError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateJobError>
+                            })
+                            .and_then(|response| Err(UpdateJobError::from_response(response)))
                     })
                     .boxed()
             }
@@ -13904,11 +14362,16 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdatePartitionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdatePartitionResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdatePartitionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdatePartitionResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -13916,11 +14379,10 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdatePartitionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdatePartitionError>
+                            })
+                            .and_then(|response| Err(UpdatePartitionError::from_response(response)))
                     })
                     .boxed()
             }
@@ -13943,11 +14405,16 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateTableError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateTableResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateTableError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateTableResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -13955,11 +14422,10 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateTableError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateTableError>
+                            })
+                            .and_then(|response| Err(UpdateTableError::from_response(response)))
                     })
                     .boxed()
             }
@@ -13982,11 +14448,16 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateTriggerError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateTriggerResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateTriggerError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateTriggerResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -13994,11 +14465,10 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateTriggerError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateTriggerError>
+                            })
+                            .and_then(|response| Err(UpdateTriggerError::from_response(response)))
                     })
                     .boxed()
             }
@@ -14021,11 +14491,17 @@ impl Glue for GlueClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateUserDefinedFunctionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateUserDefinedFunctionResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateUserDefinedFunctionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateUserDefinedFunctionResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -14033,13 +14509,13 @@ impl Glue for GlueClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(UpdateUserDefinedFunctionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateUserDefinedFunctionError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateUserDefinedFunctionError::from_response(response))
+                            })
                     })
                     .boxed()
             }

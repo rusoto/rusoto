@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -457,8 +457,9 @@ impl LexRuntime for LexRuntimeClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| PostContentError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let mut result = PostContentResponse::default();
                             result.audio_stream = Some(response.body);
 
@@ -519,11 +520,8 @@ impl LexRuntime for LexRuntimeClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(PostContentError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<PostContentError>())
+                            .and_then(|response| Err(PostContentError::from_response(response)))
                     })
                     .boxed()
             }
@@ -550,10 +548,11 @@ impl LexRuntime for LexRuntimeClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| PostTextError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PostTextResponse, _>()?;
+                                .deserialize::<PostTextResponse, _>();
 
                             result
                         })
@@ -564,11 +563,8 @@ impl LexRuntime for LexRuntimeClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(PostTextError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<PostTextError>())
+                            .and_then(|response| Err(PostTextError::from_response(response)))
                     })
                     .boxed()
             }

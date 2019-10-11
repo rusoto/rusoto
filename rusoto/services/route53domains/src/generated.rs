@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -2265,11 +2265,17 @@ impl Route53Domains for Route53DomainsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CheckDomainAvailabilityError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CheckDomainAvailabilityResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CheckDomainAvailabilityError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CheckDomainAvailabilityResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2277,13 +2283,13 @@ impl Route53Domains for Route53DomainsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(CheckDomainAvailabilityError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CheckDomainAvailabilityError>
+                            })
+                            .and_then(|response| {
+                                Err(CheckDomainAvailabilityError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2309,11 +2315,17 @@ impl Route53Domains for Route53DomainsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CheckDomainTransferabilityError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CheckDomainTransferabilityResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CheckDomainTransferabilityError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CheckDomainTransferabilityResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2321,13 +2333,13 @@ impl Route53Domains for Route53DomainsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(CheckDomainTransferabilityError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CheckDomainTransferabilityError>
+                            })
+                            .and_then(|response| {
+                                Err(CheckDomainTransferabilityError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2353,11 +2365,17 @@ impl Route53Domains for Route53DomainsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteTagsForDomainError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteTagsForDomainResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteTagsForDomainError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteTagsForDomainResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2365,11 +2383,13 @@ impl Route53Domains for Route53DomainsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteTagsForDomainError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteTagsForDomainError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteTagsForDomainError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2395,11 +2415,17 @@ impl Route53Domains for Route53DomainsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DisableDomainAutoRenewError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DisableDomainAutoRenewResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DisableDomainAutoRenewError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DisableDomainAutoRenewResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2407,13 +2433,13 @@ impl Route53Domains for Route53DomainsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DisableDomainAutoRenewError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DisableDomainAutoRenewError>
+                            })
+                            .and_then(|response| {
+                                Err(DisableDomainAutoRenewError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2439,11 +2465,17 @@ impl Route53Domains for Route53DomainsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DisableDomainTransferLockError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DisableDomainTransferLockResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DisableDomainTransferLockError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DisableDomainTransferLockResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2451,13 +2483,13 @@ impl Route53Domains for Route53DomainsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DisableDomainTransferLockError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DisableDomainTransferLockError>
+                            })
+                            .and_then(|response| {
+                                Err(DisableDomainTransferLockError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2483,11 +2515,17 @@ impl Route53Domains for Route53DomainsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| EnableDomainAutoRenewError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<EnableDomainAutoRenewResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<EnableDomainAutoRenewError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<EnableDomainAutoRenewResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2495,11 +2533,13 @@ impl Route53Domains for Route53DomainsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(EnableDomainAutoRenewError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<EnableDomainAutoRenewError>
+                            })
+                            .and_then(|response| {
+                                Err(EnableDomainAutoRenewError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2525,11 +2565,17 @@ impl Route53Domains for Route53DomainsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| EnableDomainTransferLockError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<EnableDomainTransferLockResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<EnableDomainTransferLockError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<EnableDomainTransferLockResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2537,13 +2583,13 @@ impl Route53Domains for Route53DomainsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(EnableDomainTransferLockError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<EnableDomainTransferLockError>
+                            })
+                            .and_then(|response| {
+                                Err(EnableDomainTransferLockError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2569,11 +2615,17 @@ impl Route53Domains for Route53DomainsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetContactReachabilityStatusError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetContactReachabilityStatusResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetContactReachabilityStatusError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetContactReachabilityStatusResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2581,13 +2633,13 @@ impl Route53Domains for Route53DomainsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(GetContactReachabilityStatusError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetContactReachabilityStatusError>
+                            })
+                            .and_then(|response| {
+                                Err(GetContactReachabilityStatusError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2610,11 +2662,16 @@ impl Route53Domains for Route53DomainsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetDomainDetailError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetDomainDetailResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetDomainDetailError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetDomainDetailResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2622,11 +2679,10 @@ impl Route53Domains for Route53DomainsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetDomainDetailError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetDomainDetailError>
+                            })
+                            .and_then(|response| Err(GetDomainDetailError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2652,11 +2708,17 @@ impl Route53Domains for Route53DomainsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetDomainSuggestionsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetDomainSuggestionsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetDomainSuggestionsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetDomainSuggestionsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2664,11 +2726,13 @@ impl Route53Domains for Route53DomainsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetDomainSuggestionsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetDomainSuggestionsError>
+                            })
+                            .and_then(|response| {
+                                Err(GetDomainSuggestionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2694,11 +2758,16 @@ impl Route53Domains for Route53DomainsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetOperationDetailError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetOperationDetailResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetOperationDetailError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetOperationDetailResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2706,11 +2775,12 @@ impl Route53Domains for Route53DomainsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetOperationDetailError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetOperationDetailError>
+                            })
+                            .and_then(|response| {
+                                Err(GetOperationDetailError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2733,11 +2803,16 @@ impl Route53Domains for Route53DomainsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListDomainsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListDomainsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListDomainsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListDomainsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2745,11 +2820,10 @@ impl Route53Domains for Route53DomainsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListDomainsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListDomainsError>
+                            })
+                            .and_then(|response| Err(ListDomainsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2772,11 +2846,16 @@ impl Route53Domains for Route53DomainsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListOperationsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListOperationsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListOperationsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListOperationsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2784,11 +2863,10 @@ impl Route53Domains for Route53DomainsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListOperationsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListOperationsError>
+                            })
+                            .and_then(|response| Err(ListOperationsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2811,11 +2889,16 @@ impl Route53Domains for Route53DomainsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListTagsForDomainError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListTagsForDomainResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListTagsForDomainError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListTagsForDomainResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2823,11 +2906,12 @@ impl Route53Domains for Route53DomainsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListTagsForDomainError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListTagsForDomainError>
+                            })
+                            .and_then(|response| {
+                                Err(ListTagsForDomainError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2850,11 +2934,16 @@ impl Route53Domains for Route53DomainsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| RegisterDomainError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RegisterDomainResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<RegisterDomainError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<RegisterDomainResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2862,11 +2951,10 @@ impl Route53Domains for Route53DomainsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(RegisterDomainError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<RegisterDomainError>
+                            })
+                            .and_then(|response| Err(RegisterDomainError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2889,11 +2977,16 @@ impl Route53Domains for Route53DomainsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| RenewDomainError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RenewDomainResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<RenewDomainError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<RenewDomainResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2901,11 +2994,10 @@ impl Route53Domains for Route53DomainsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(RenewDomainError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<RenewDomainError>
+                            })
+                            .and_then(|response| Err(RenewDomainError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2932,11 +3024,17 @@ impl Route53Domains for Route53DomainsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ResendContactReachabilityEmailError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ResendContactReachabilityEmailResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ResendContactReachabilityEmailError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ResendContactReachabilityEmailResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2944,15 +3042,13 @@ impl Route53Domains for Route53DomainsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ResendContactReachabilityEmailError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ResendContactReachabilityEmailError>
+                            })
+                            .and_then(|response| {
+                                Err(ResendContactReachabilityEmailError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2978,11 +3074,17 @@ impl Route53Domains for Route53DomainsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| RetrieveDomainAuthCodeError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RetrieveDomainAuthCodeResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<RetrieveDomainAuthCodeError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<RetrieveDomainAuthCodeResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2990,13 +3092,13 @@ impl Route53Domains for Route53DomainsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(RetrieveDomainAuthCodeError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<RetrieveDomainAuthCodeError>
+                            })
+                            .and_then(|response| {
+                                Err(RetrieveDomainAuthCodeError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3019,11 +3121,16 @@ impl Route53Domains for Route53DomainsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| TransferDomainError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<TransferDomainResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<TransferDomainError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<TransferDomainResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3031,11 +3138,10 @@ impl Route53Domains for Route53DomainsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(TransferDomainError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<TransferDomainError>
+                            })
+                            .and_then(|response| Err(TransferDomainError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3061,11 +3167,17 @@ impl Route53Domains for Route53DomainsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateDomainContactError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateDomainContactResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateDomainContactError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateDomainContactResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3073,11 +3185,13 @@ impl Route53Domains for Route53DomainsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateDomainContactError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateDomainContactError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateDomainContactError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3103,11 +3217,17 @@ impl Route53Domains for Route53DomainsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateDomainContactPrivacyError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateDomainContactPrivacyResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateDomainContactPrivacyError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateDomainContactPrivacyResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3115,13 +3235,13 @@ impl Route53Domains for Route53DomainsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(UpdateDomainContactPrivacyError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateDomainContactPrivacyError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateDomainContactPrivacyError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3147,11 +3267,17 @@ impl Route53Domains for Route53DomainsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateDomainNameserversError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateDomainNameserversResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateDomainNameserversError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateDomainNameserversResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3159,13 +3285,13 @@ impl Route53Domains for Route53DomainsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(UpdateDomainNameserversError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateDomainNameserversError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateDomainNameserversError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3191,11 +3317,17 @@ impl Route53Domains for Route53DomainsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateTagsForDomainError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateTagsForDomainResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateTagsForDomainError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateTagsForDomainResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3203,11 +3335,13 @@ impl Route53Domains for Route53DomainsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateTagsForDomainError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateTagsForDomainError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateTagsForDomainError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3230,11 +3364,16 @@ impl Route53Domains for Route53DomainsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ViewBillingError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ViewBillingResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ViewBillingError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ViewBillingResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3242,11 +3381,10 @@ impl Route53Domains for Route53DomainsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ViewBillingError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ViewBillingError>
+                            })
+                            .and_then(|response| Err(ViewBillingError::from_response(response)))
                     })
                     .boxed()
             }

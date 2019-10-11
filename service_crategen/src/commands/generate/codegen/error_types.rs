@@ -64,7 +64,7 @@ pub trait GenerateErrorTypes {
                             {description_matchers}
                         }}
                     }}
-                 }}",
+                }}",
             operation = operation_name,
             type_name = error_type_name(service, operation_name),
             error_from_body_impl =

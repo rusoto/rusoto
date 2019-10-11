@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -7443,11 +7443,16 @@ impl WAFRegional for WAFRegionalClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AssociateWebACLError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AssociateWebACLResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<AssociateWebACLError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AssociateWebACLResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7455,11 +7460,10 @@ impl WAFRegional for WAFRegionalClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(AssociateWebACLError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<AssociateWebACLError>
+                            })
+                            .and_then(|response| Err(AssociateWebACLError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7485,11 +7489,16 @@ impl WAFRegional for WAFRegionalClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateByteMatchSetError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateByteMatchSetResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateByteMatchSetError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateByteMatchSetResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7497,11 +7506,12 @@ impl WAFRegional for WAFRegionalClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateByteMatchSetError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateByteMatchSetError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateByteMatchSetError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7524,11 +7534,16 @@ impl WAFRegional for WAFRegionalClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateGeoMatchSetError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateGeoMatchSetResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateGeoMatchSetError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateGeoMatchSetResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7536,11 +7551,12 @@ impl WAFRegional for WAFRegionalClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateGeoMatchSetError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateGeoMatchSetError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateGeoMatchSetError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7563,11 +7579,16 @@ impl WAFRegional for WAFRegionalClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateIPSetError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateIPSetResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateIPSetError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateIPSetResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7575,11 +7596,10 @@ impl WAFRegional for WAFRegionalClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateIPSetError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateIPSetError>
+                            })
+                            .and_then(|response| Err(CreateIPSetError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7605,11 +7625,17 @@ impl WAFRegional for WAFRegionalClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateRateBasedRuleError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateRateBasedRuleResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateRateBasedRuleError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateRateBasedRuleResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7617,11 +7643,13 @@ impl WAFRegional for WAFRegionalClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateRateBasedRuleError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateRateBasedRuleError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateRateBasedRuleError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7647,11 +7675,17 @@ impl WAFRegional for WAFRegionalClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateRegexMatchSetError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateRegexMatchSetResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateRegexMatchSetError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateRegexMatchSetResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7659,11 +7693,13 @@ impl WAFRegional for WAFRegionalClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateRegexMatchSetError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateRegexMatchSetError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateRegexMatchSetError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7689,11 +7725,17 @@ impl WAFRegional for WAFRegionalClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateRegexPatternSetError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateRegexPatternSetResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateRegexPatternSetError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateRegexPatternSetResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7701,11 +7743,13 @@ impl WAFRegional for WAFRegionalClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateRegexPatternSetError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateRegexPatternSetError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateRegexPatternSetError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7728,11 +7772,16 @@ impl WAFRegional for WAFRegionalClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateRuleError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateRuleResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateRuleError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateRuleResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7740,11 +7789,10 @@ impl WAFRegional for WAFRegionalClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateRuleError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateRuleError>
+                            })
+                            .and_then(|response| Err(CreateRuleError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7767,11 +7815,16 @@ impl WAFRegional for WAFRegionalClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateRuleGroupError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateRuleGroupResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateRuleGroupError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateRuleGroupResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7779,11 +7832,10 @@ impl WAFRegional for WAFRegionalClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateRuleGroupError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateRuleGroupError>
+                            })
+                            .and_then(|response| Err(CreateRuleGroupError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7809,11 +7861,17 @@ impl WAFRegional for WAFRegionalClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateSizeConstraintSetError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateSizeConstraintSetResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateSizeConstraintSetError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateSizeConstraintSetResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7821,13 +7879,13 @@ impl WAFRegional for WAFRegionalClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(CreateSizeConstraintSetError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateSizeConstraintSetError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateSizeConstraintSetError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7853,11 +7911,17 @@ impl WAFRegional for WAFRegionalClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateSqlInjectionMatchSetError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateSqlInjectionMatchSetResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateSqlInjectionMatchSetError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateSqlInjectionMatchSetResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7865,13 +7929,13 @@ impl WAFRegional for WAFRegionalClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(CreateSqlInjectionMatchSetError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateSqlInjectionMatchSetError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateSqlInjectionMatchSetError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7894,11 +7958,16 @@ impl WAFRegional for WAFRegionalClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateWebACLError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateWebACLResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateWebACLError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateWebACLResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7906,11 +7975,10 @@ impl WAFRegional for WAFRegionalClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateWebACLError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateWebACLError>
+                            })
+                            .and_then(|response| Err(CreateWebACLError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7933,11 +8001,16 @@ impl WAFRegional for WAFRegionalClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateXssMatchSetError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateXssMatchSetResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateXssMatchSetError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateXssMatchSetResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7945,11 +8018,12 @@ impl WAFRegional for WAFRegionalClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateXssMatchSetError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateXssMatchSetError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateXssMatchSetError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7975,11 +8049,16 @@ impl WAFRegional for WAFRegionalClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteByteMatchSetError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteByteMatchSetResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteByteMatchSetError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteByteMatchSetResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7987,11 +8066,12 @@ impl WAFRegional for WAFRegionalClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteByteMatchSetError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteByteMatchSetError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteByteMatchSetError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8014,11 +8094,16 @@ impl WAFRegional for WAFRegionalClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteGeoMatchSetError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteGeoMatchSetResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteGeoMatchSetError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteGeoMatchSetResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8026,11 +8111,12 @@ impl WAFRegional for WAFRegionalClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteGeoMatchSetError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteGeoMatchSetError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteGeoMatchSetError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8053,11 +8139,16 @@ impl WAFRegional for WAFRegionalClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteIPSetError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteIPSetResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteIPSetError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteIPSetResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8065,11 +8156,10 @@ impl WAFRegional for WAFRegionalClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteIPSetError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteIPSetError>
+                            })
+                            .and_then(|response| Err(DeleteIPSetError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8095,11 +8185,17 @@ impl WAFRegional for WAFRegionalClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteLoggingConfigurationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteLoggingConfigurationResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteLoggingConfigurationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteLoggingConfigurationResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8107,13 +8203,13 @@ impl WAFRegional for WAFRegionalClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DeleteLoggingConfigurationError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteLoggingConfigurationError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteLoggingConfigurationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8139,11 +8235,17 @@ impl WAFRegional for WAFRegionalClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeletePermissionPolicyError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeletePermissionPolicyResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeletePermissionPolicyError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeletePermissionPolicyResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8151,13 +8253,13 @@ impl WAFRegional for WAFRegionalClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DeletePermissionPolicyError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeletePermissionPolicyError>
+                            })
+                            .and_then(|response| {
+                                Err(DeletePermissionPolicyError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8183,11 +8285,17 @@ impl WAFRegional for WAFRegionalClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteRateBasedRuleError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteRateBasedRuleResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteRateBasedRuleError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteRateBasedRuleResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8195,11 +8303,13 @@ impl WAFRegional for WAFRegionalClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteRateBasedRuleError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteRateBasedRuleError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteRateBasedRuleError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8225,11 +8335,17 @@ impl WAFRegional for WAFRegionalClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteRegexMatchSetError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteRegexMatchSetResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteRegexMatchSetError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteRegexMatchSetResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8237,11 +8353,13 @@ impl WAFRegional for WAFRegionalClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteRegexMatchSetError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteRegexMatchSetError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteRegexMatchSetError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8267,11 +8385,17 @@ impl WAFRegional for WAFRegionalClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteRegexPatternSetError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteRegexPatternSetResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteRegexPatternSetError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteRegexPatternSetResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8279,11 +8403,13 @@ impl WAFRegional for WAFRegionalClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteRegexPatternSetError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteRegexPatternSetError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteRegexPatternSetError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8306,11 +8432,16 @@ impl WAFRegional for WAFRegionalClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteRuleError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteRuleResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteRuleError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteRuleResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8318,11 +8449,10 @@ impl WAFRegional for WAFRegionalClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteRuleError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteRuleError>
+                            })
+                            .and_then(|response| Err(DeleteRuleError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8345,11 +8475,16 @@ impl WAFRegional for WAFRegionalClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteRuleGroupError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteRuleGroupResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteRuleGroupError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteRuleGroupResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8357,11 +8492,10 @@ impl WAFRegional for WAFRegionalClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteRuleGroupError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteRuleGroupError>
+                            })
+                            .and_then(|response| Err(DeleteRuleGroupError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8387,11 +8521,17 @@ impl WAFRegional for WAFRegionalClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteSizeConstraintSetError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteSizeConstraintSetResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteSizeConstraintSetError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteSizeConstraintSetResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8399,13 +8539,13 @@ impl WAFRegional for WAFRegionalClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DeleteSizeConstraintSetError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteSizeConstraintSetError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteSizeConstraintSetError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8431,11 +8571,17 @@ impl WAFRegional for WAFRegionalClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteSqlInjectionMatchSetError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteSqlInjectionMatchSetResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteSqlInjectionMatchSetError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteSqlInjectionMatchSetResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8443,13 +8589,13 @@ impl WAFRegional for WAFRegionalClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DeleteSqlInjectionMatchSetError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteSqlInjectionMatchSetError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteSqlInjectionMatchSetError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8472,11 +8618,16 @@ impl WAFRegional for WAFRegionalClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteWebACLError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteWebACLResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteWebACLError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteWebACLResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8484,11 +8635,10 @@ impl WAFRegional for WAFRegionalClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteWebACLError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteWebACLError>
+                            })
+                            .and_then(|response| Err(DeleteWebACLError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8511,11 +8661,16 @@ impl WAFRegional for WAFRegionalClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteXssMatchSetError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteXssMatchSetResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteXssMatchSetError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteXssMatchSetResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8523,11 +8678,12 @@ impl WAFRegional for WAFRegionalClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteXssMatchSetError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteXssMatchSetError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteXssMatchSetError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8553,11 +8709,16 @@ impl WAFRegional for WAFRegionalClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DisassociateWebACLError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DisassociateWebACLResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DisassociateWebACLError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DisassociateWebACLResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8565,11 +8726,12 @@ impl WAFRegional for WAFRegionalClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DisassociateWebACLError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DisassociateWebACLError>
+                            })
+                            .and_then(|response| {
+                                Err(DisassociateWebACLError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8592,11 +8754,16 @@ impl WAFRegional for WAFRegionalClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetByteMatchSetError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetByteMatchSetResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetByteMatchSetError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetByteMatchSetResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8604,11 +8771,10 @@ impl WAFRegional for WAFRegionalClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetByteMatchSetError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetByteMatchSetError>
+                            })
+                            .and_then(|response| Err(GetByteMatchSetError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8627,11 +8793,16 @@ impl WAFRegional for WAFRegionalClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetChangeTokenError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetChangeTokenResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetChangeTokenError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetChangeTokenResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8639,11 +8810,10 @@ impl WAFRegional for WAFRegionalClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetChangeTokenError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetChangeTokenError>
+                            })
+                            .and_then(|response| Err(GetChangeTokenError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8669,11 +8839,17 @@ impl WAFRegional for WAFRegionalClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetChangeTokenStatusError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetChangeTokenStatusResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetChangeTokenStatusError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetChangeTokenStatusResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8681,11 +8857,13 @@ impl WAFRegional for WAFRegionalClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetChangeTokenStatusError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetChangeTokenStatusError>
+                            })
+                            .and_then(|response| {
+                                Err(GetChangeTokenStatusError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8708,11 +8886,16 @@ impl WAFRegional for WAFRegionalClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetGeoMatchSetError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetGeoMatchSetResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetGeoMatchSetError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetGeoMatchSetResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8720,11 +8903,10 @@ impl WAFRegional for WAFRegionalClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetGeoMatchSetError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetGeoMatchSetError>
+                            })
+                            .and_then(|response| Err(GetGeoMatchSetError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8744,11 +8926,14 @@ impl WAFRegional for WAFRegionalClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetIPSetError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetIPSetResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<GetIPSetError>)
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetIPSetResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8756,11 +8941,8 @@ impl WAFRegional for WAFRegionalClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetIPSetError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<GetIPSetError>)
+                            .and_then(|response| Err(GetIPSetError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8786,11 +8968,17 @@ impl WAFRegional for WAFRegionalClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetLoggingConfigurationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetLoggingConfigurationResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetLoggingConfigurationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetLoggingConfigurationResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8798,13 +8986,13 @@ impl WAFRegional for WAFRegionalClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(GetLoggingConfigurationError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetLoggingConfigurationError>
+                            })
+                            .and_then(|response| {
+                                Err(GetLoggingConfigurationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8830,11 +9018,17 @@ impl WAFRegional for WAFRegionalClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetPermissionPolicyError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetPermissionPolicyResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetPermissionPolicyError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetPermissionPolicyResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8842,11 +9036,13 @@ impl WAFRegional for WAFRegionalClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetPermissionPolicyError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetPermissionPolicyError>
+                            })
+                            .and_then(|response| {
+                                Err(GetPermissionPolicyError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8869,11 +9065,16 @@ impl WAFRegional for WAFRegionalClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetRateBasedRuleError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetRateBasedRuleResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetRateBasedRuleError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetRateBasedRuleResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8881,11 +9082,12 @@ impl WAFRegional for WAFRegionalClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetRateBasedRuleError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetRateBasedRuleError>
+                            })
+                            .and_then(|response| {
+                                Err(GetRateBasedRuleError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8911,11 +9113,17 @@ impl WAFRegional for WAFRegionalClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetRateBasedRuleManagedKeysError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetRateBasedRuleManagedKeysResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetRateBasedRuleManagedKeysError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetRateBasedRuleManagedKeysResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8923,13 +9131,13 @@ impl WAFRegional for WAFRegionalClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(GetRateBasedRuleManagedKeysError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetRateBasedRuleManagedKeysError>
+                            })
+                            .and_then(|response| {
+                                Err(GetRateBasedRuleManagedKeysError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8952,11 +9160,16 @@ impl WAFRegional for WAFRegionalClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetRegexMatchSetError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetRegexMatchSetResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetRegexMatchSetError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetRegexMatchSetResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8964,11 +9177,12 @@ impl WAFRegional for WAFRegionalClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetRegexMatchSetError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetRegexMatchSetError>
+                            })
+                            .and_then(|response| {
+                                Err(GetRegexMatchSetError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8994,11 +9208,16 @@ impl WAFRegional for WAFRegionalClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetRegexPatternSetError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetRegexPatternSetResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetRegexPatternSetError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetRegexPatternSetResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9006,11 +9225,12 @@ impl WAFRegional for WAFRegionalClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetRegexPatternSetError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetRegexPatternSetError>
+                            })
+                            .and_then(|response| {
+                                Err(GetRegexPatternSetError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9030,11 +9250,14 @@ impl WAFRegional for WAFRegionalClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetRuleError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetRuleResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<GetRuleError>)
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetRuleResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9042,11 +9265,8 @@ impl WAFRegional for WAFRegionalClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetRuleError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<GetRuleError>)
+                            .and_then(|response| Err(GetRuleError::from_response(response)))
                     })
                     .boxed()
             }
@@ -9069,11 +9289,16 @@ impl WAFRegional for WAFRegionalClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetRuleGroupError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetRuleGroupResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetRuleGroupError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetRuleGroupResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9081,11 +9306,10 @@ impl WAFRegional for WAFRegionalClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetRuleGroupError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetRuleGroupError>
+                            })
+                            .and_then(|response| Err(GetRuleGroupError::from_response(response)))
                     })
                     .boxed()
             }
@@ -9111,11 +9335,16 @@ impl WAFRegional for WAFRegionalClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetSampledRequestsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetSampledRequestsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetSampledRequestsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetSampledRequestsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9123,11 +9352,12 @@ impl WAFRegional for WAFRegionalClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetSampledRequestsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetSampledRequestsError>
+                            })
+                            .and_then(|response| {
+                                Err(GetSampledRequestsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9153,11 +9383,17 @@ impl WAFRegional for WAFRegionalClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetSizeConstraintSetError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetSizeConstraintSetResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetSizeConstraintSetError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetSizeConstraintSetResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9165,11 +9401,13 @@ impl WAFRegional for WAFRegionalClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetSizeConstraintSetError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetSizeConstraintSetError>
+                            })
+                            .and_then(|response| {
+                                Err(GetSizeConstraintSetError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9195,11 +9433,17 @@ impl WAFRegional for WAFRegionalClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetSqlInjectionMatchSetError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetSqlInjectionMatchSetResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetSqlInjectionMatchSetError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetSqlInjectionMatchSetResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9207,13 +9451,13 @@ impl WAFRegional for WAFRegionalClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(GetSqlInjectionMatchSetError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetSqlInjectionMatchSetError>
+                            })
+                            .and_then(|response| {
+                                Err(GetSqlInjectionMatchSetError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9236,11 +9480,16 @@ impl WAFRegional for WAFRegionalClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetWebACLError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetWebACLResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetWebACLError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetWebACLResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9248,11 +9497,10 @@ impl WAFRegional for WAFRegionalClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetWebACLError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetWebACLError>
+                            })
+                            .and_then(|response| Err(GetWebACLError::from_response(response)))
                     })
                     .boxed()
             }
@@ -9278,11 +9526,17 @@ impl WAFRegional for WAFRegionalClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetWebACLForResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetWebACLForResourceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetWebACLForResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetWebACLForResourceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9290,11 +9544,13 @@ impl WAFRegional for WAFRegionalClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetWebACLForResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetWebACLForResourceError>
+                            })
+                            .and_then(|response| {
+                                Err(GetWebACLForResourceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9317,11 +9573,16 @@ impl WAFRegional for WAFRegionalClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetXssMatchSetError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetXssMatchSetResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetXssMatchSetError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetXssMatchSetResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9329,11 +9590,10 @@ impl WAFRegional for WAFRegionalClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetXssMatchSetError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetXssMatchSetError>
+                            })
+                            .and_then(|response| Err(GetXssMatchSetError::from_response(response)))
                     })
                     .boxed()
             }
@@ -9360,11 +9620,17 @@ impl WAFRegional for WAFRegionalClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListActivatedRulesInRuleGroupError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListActivatedRulesInRuleGroupResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListActivatedRulesInRuleGroupError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListActivatedRulesInRuleGroupResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9372,13 +9638,13 @@ impl WAFRegional for WAFRegionalClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ListActivatedRulesInRuleGroupError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListActivatedRulesInRuleGroupError>
+                            })
+                            .and_then(|response| {
+                                Err(ListActivatedRulesInRuleGroupError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9401,11 +9667,16 @@ impl WAFRegional for WAFRegionalClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListByteMatchSetsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListByteMatchSetsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListByteMatchSetsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListByteMatchSetsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9413,11 +9684,12 @@ impl WAFRegional for WAFRegionalClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListByteMatchSetsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListByteMatchSetsError>
+                            })
+                            .and_then(|response| {
+                                Err(ListByteMatchSetsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9440,11 +9712,16 @@ impl WAFRegional for WAFRegionalClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListGeoMatchSetsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListGeoMatchSetsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListGeoMatchSetsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListGeoMatchSetsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9452,11 +9729,12 @@ impl WAFRegional for WAFRegionalClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListGeoMatchSetsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListGeoMatchSetsError>
+                            })
+                            .and_then(|response| {
+                                Err(ListGeoMatchSetsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9479,11 +9757,16 @@ impl WAFRegional for WAFRegionalClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListIPSetsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListIPSetsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListIPSetsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListIPSetsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9491,11 +9774,10 @@ impl WAFRegional for WAFRegionalClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListIPSetsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListIPSetsError>
+                            })
+                            .and_then(|response| Err(ListIPSetsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -9521,11 +9803,17 @@ impl WAFRegional for WAFRegionalClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListLoggingConfigurationsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListLoggingConfigurationsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListLoggingConfigurationsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListLoggingConfigurationsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9533,13 +9821,13 @@ impl WAFRegional for WAFRegionalClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ListLoggingConfigurationsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListLoggingConfigurationsError>
+                            })
+                            .and_then(|response| {
+                                Err(ListLoggingConfigurationsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9565,11 +9853,16 @@ impl WAFRegional for WAFRegionalClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListRateBasedRulesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListRateBasedRulesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListRateBasedRulesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListRateBasedRulesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9577,11 +9870,12 @@ impl WAFRegional for WAFRegionalClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListRateBasedRulesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListRateBasedRulesError>
+                            })
+                            .and_then(|response| {
+                                Err(ListRateBasedRulesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9607,11 +9901,16 @@ impl WAFRegional for WAFRegionalClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListRegexMatchSetsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListRegexMatchSetsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListRegexMatchSetsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListRegexMatchSetsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9619,11 +9918,12 @@ impl WAFRegional for WAFRegionalClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListRegexMatchSetsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListRegexMatchSetsError>
+                            })
+                            .and_then(|response| {
+                                Err(ListRegexMatchSetsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9649,11 +9949,17 @@ impl WAFRegional for WAFRegionalClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListRegexPatternSetsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListRegexPatternSetsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListRegexPatternSetsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListRegexPatternSetsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9661,11 +9967,13 @@ impl WAFRegional for WAFRegionalClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListRegexPatternSetsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListRegexPatternSetsError>
+                            })
+                            .and_then(|response| {
+                                Err(ListRegexPatternSetsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9691,11 +9999,17 @@ impl WAFRegional for WAFRegionalClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListResourcesForWebACLError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListResourcesForWebACLResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListResourcesForWebACLError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListResourcesForWebACLResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9703,13 +10017,13 @@ impl WAFRegional for WAFRegionalClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ListResourcesForWebACLError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListResourcesForWebACLError>
+                            })
+                            .and_then(|response| {
+                                Err(ListResourcesForWebACLError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9732,11 +10046,16 @@ impl WAFRegional for WAFRegionalClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListRuleGroupsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListRuleGroupsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListRuleGroupsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListRuleGroupsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9744,11 +10063,10 @@ impl WAFRegional for WAFRegionalClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListRuleGroupsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListRuleGroupsError>
+                            })
+                            .and_then(|response| Err(ListRuleGroupsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -9771,11 +10089,16 @@ impl WAFRegional for WAFRegionalClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListRulesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListRulesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListRulesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListRulesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9783,11 +10106,10 @@ impl WAFRegional for WAFRegionalClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListRulesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListRulesError>
+                            })
+                            .and_then(|response| Err(ListRulesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -9813,11 +10135,17 @@ impl WAFRegional for WAFRegionalClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListSizeConstraintSetsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListSizeConstraintSetsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListSizeConstraintSetsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListSizeConstraintSetsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9825,13 +10153,13 @@ impl WAFRegional for WAFRegionalClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ListSizeConstraintSetsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListSizeConstraintSetsError>
+                            })
+                            .and_then(|response| {
+                                Err(ListSizeConstraintSetsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9857,11 +10185,17 @@ impl WAFRegional for WAFRegionalClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListSqlInjectionMatchSetsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListSqlInjectionMatchSetsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListSqlInjectionMatchSetsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListSqlInjectionMatchSetsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9869,13 +10203,13 @@ impl WAFRegional for WAFRegionalClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ListSqlInjectionMatchSetsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListSqlInjectionMatchSetsError>
+                            })
+                            .and_then(|response| {
+                                Err(ListSqlInjectionMatchSetsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9901,11 +10235,17 @@ impl WAFRegional for WAFRegionalClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListSubscribedRuleGroupsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListSubscribedRuleGroupsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListSubscribedRuleGroupsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListSubscribedRuleGroupsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9913,13 +10253,13 @@ impl WAFRegional for WAFRegionalClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ListSubscribedRuleGroupsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListSubscribedRuleGroupsError>
+                            })
+                            .and_then(|response| {
+                                Err(ListSubscribedRuleGroupsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9942,11 +10282,16 @@ impl WAFRegional for WAFRegionalClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListWebACLsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListWebACLsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListWebACLsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListWebACLsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9954,11 +10299,10 @@ impl WAFRegional for WAFRegionalClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListWebACLsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListWebACLsError>
+                            })
+                            .and_then(|response| Err(ListWebACLsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -9981,11 +10325,16 @@ impl WAFRegional for WAFRegionalClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListXssMatchSetsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListXssMatchSetsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListXssMatchSetsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListXssMatchSetsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9993,11 +10342,12 @@ impl WAFRegional for WAFRegionalClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListXssMatchSetsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListXssMatchSetsError>
+                            })
+                            .and_then(|response| {
+                                Err(ListXssMatchSetsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10023,11 +10373,17 @@ impl WAFRegional for WAFRegionalClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| PutLoggingConfigurationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PutLoggingConfigurationResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<PutLoggingConfigurationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<PutLoggingConfigurationResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10035,13 +10391,13 @@ impl WAFRegional for WAFRegionalClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(PutLoggingConfigurationError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<PutLoggingConfigurationError>
+                            })
+                            .and_then(|response| {
+                                Err(PutLoggingConfigurationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10067,11 +10423,17 @@ impl WAFRegional for WAFRegionalClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| PutPermissionPolicyError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PutPermissionPolicyResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<PutPermissionPolicyError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<PutPermissionPolicyResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10079,11 +10441,13 @@ impl WAFRegional for WAFRegionalClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(PutPermissionPolicyError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<PutPermissionPolicyError>
+                            })
+                            .and_then(|response| {
+                                Err(PutPermissionPolicyError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10109,11 +10473,16 @@ impl WAFRegional for WAFRegionalClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateByteMatchSetError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateByteMatchSetResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateByteMatchSetError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateByteMatchSetResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10121,11 +10490,12 @@ impl WAFRegional for WAFRegionalClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateByteMatchSetError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateByteMatchSetError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateByteMatchSetError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10148,11 +10518,16 @@ impl WAFRegional for WAFRegionalClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateGeoMatchSetError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateGeoMatchSetResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateGeoMatchSetError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateGeoMatchSetResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10160,11 +10535,12 @@ impl WAFRegional for WAFRegionalClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateGeoMatchSetError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateGeoMatchSetError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateGeoMatchSetError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10187,11 +10563,16 @@ impl WAFRegional for WAFRegionalClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateIPSetError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateIPSetResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateIPSetError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateIPSetResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10199,11 +10580,10 @@ impl WAFRegional for WAFRegionalClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateIPSetError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateIPSetError>
+                            })
+                            .and_then(|response| Err(UpdateIPSetError::from_response(response)))
                     })
                     .boxed()
             }
@@ -10229,11 +10609,17 @@ impl WAFRegional for WAFRegionalClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateRateBasedRuleError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateRateBasedRuleResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateRateBasedRuleError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateRateBasedRuleResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10241,11 +10627,13 @@ impl WAFRegional for WAFRegionalClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateRateBasedRuleError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateRateBasedRuleError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateRateBasedRuleError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10271,11 +10659,17 @@ impl WAFRegional for WAFRegionalClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateRegexMatchSetError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateRegexMatchSetResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateRegexMatchSetError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateRegexMatchSetResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10283,11 +10677,13 @@ impl WAFRegional for WAFRegionalClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateRegexMatchSetError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateRegexMatchSetError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateRegexMatchSetError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10313,11 +10709,17 @@ impl WAFRegional for WAFRegionalClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateRegexPatternSetError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateRegexPatternSetResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateRegexPatternSetError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateRegexPatternSetResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10325,11 +10727,13 @@ impl WAFRegional for WAFRegionalClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateRegexPatternSetError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateRegexPatternSetError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateRegexPatternSetError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10352,11 +10756,16 @@ impl WAFRegional for WAFRegionalClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateRuleError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateRuleResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateRuleError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateRuleResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10364,11 +10773,10 @@ impl WAFRegional for WAFRegionalClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateRuleError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateRuleError>
+                            })
+                            .and_then(|response| Err(UpdateRuleError::from_response(response)))
                     })
                     .boxed()
             }
@@ -10391,11 +10799,16 @@ impl WAFRegional for WAFRegionalClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateRuleGroupError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateRuleGroupResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateRuleGroupError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateRuleGroupResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10403,11 +10816,10 @@ impl WAFRegional for WAFRegionalClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateRuleGroupError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateRuleGroupError>
+                            })
+                            .and_then(|response| Err(UpdateRuleGroupError::from_response(response)))
                     })
                     .boxed()
             }
@@ -10433,11 +10845,17 @@ impl WAFRegional for WAFRegionalClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateSizeConstraintSetError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateSizeConstraintSetResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateSizeConstraintSetError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateSizeConstraintSetResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10445,13 +10863,13 @@ impl WAFRegional for WAFRegionalClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(UpdateSizeConstraintSetError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateSizeConstraintSetError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateSizeConstraintSetError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10477,11 +10895,17 @@ impl WAFRegional for WAFRegionalClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateSqlInjectionMatchSetError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateSqlInjectionMatchSetResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateSqlInjectionMatchSetError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateSqlInjectionMatchSetResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10489,13 +10913,13 @@ impl WAFRegional for WAFRegionalClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(UpdateSqlInjectionMatchSetError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateSqlInjectionMatchSetError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateSqlInjectionMatchSetError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -10518,11 +10942,16 @@ impl WAFRegional for WAFRegionalClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateWebACLError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateWebACLResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateWebACLError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateWebACLResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10530,11 +10959,10 @@ impl WAFRegional for WAFRegionalClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateWebACLError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateWebACLError>
+                            })
+                            .and_then(|response| Err(UpdateWebACLError::from_response(response)))
                     })
                     .boxed()
             }
@@ -10557,11 +10985,16 @@ impl WAFRegional for WAFRegionalClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateXssMatchSetError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateXssMatchSetResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateXssMatchSetError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateXssMatchSetResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -10569,11 +11002,12 @@ impl WAFRegional for WAFRegionalClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateXssMatchSetError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateXssMatchSetError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateXssMatchSetError::from_response(response))
+                            })
                     })
                     .boxed()
             }

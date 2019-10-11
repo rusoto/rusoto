@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -5239,11 +5239,16 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AddTagsToResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AddTagsToResourceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<AddTagsToResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AddTagsToResourceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5251,11 +5256,12 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(AddTagsToResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<AddTagsToResourceError>
+                            })
+                            .and_then(|response| {
+                                Err(AddTagsToResourceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5282,11 +5288,17 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ApplyPendingMaintenanceActionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ApplyPendingMaintenanceActionResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ApplyPendingMaintenanceActionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ApplyPendingMaintenanceActionResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5294,13 +5306,13 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ApplyPendingMaintenanceActionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ApplyPendingMaintenanceActionError>
+                            })
+                            .and_then(|response| {
+                                Err(ApplyPendingMaintenanceActionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5323,11 +5335,16 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateEndpointError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateEndpointResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateEndpointError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateEndpointResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5335,11 +5352,10 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateEndpointError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateEndpointError>
+                            })
+                            .and_then(|response| Err(CreateEndpointError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5362,11 +5378,17 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateEventSubscriptionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateEventSubscriptionResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateEventSubscriptionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateEventSubscriptionResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5374,13 +5396,13 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(CreateEventSubscriptionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateEventSubscriptionError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateEventSubscriptionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5406,11 +5428,17 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateReplicationInstanceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateReplicationInstanceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateReplicationInstanceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateReplicationInstanceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5418,13 +5446,13 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(CreateReplicationInstanceError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateReplicationInstanceError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateReplicationInstanceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5450,11 +5478,17 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateReplicationSubnetGroupError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateReplicationSubnetGroupResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateReplicationSubnetGroupError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateReplicationSubnetGroupResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5462,13 +5496,13 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(CreateReplicationSubnetGroupError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateReplicationSubnetGroupError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateReplicationSubnetGroupError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5491,11 +5525,17 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateReplicationTaskError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateReplicationTaskResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateReplicationTaskError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateReplicationTaskResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5503,11 +5543,13 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateReplicationTaskError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateReplicationTaskError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateReplicationTaskError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5530,11 +5572,16 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteCertificateError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteCertificateResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteCertificateError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteCertificateResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5542,11 +5589,12 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteCertificateError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteCertificateError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteCertificateError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5569,11 +5617,16 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteEndpointError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteEndpointResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteEndpointError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteEndpointResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5581,11 +5634,10 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteEndpointError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteEndpointError>
+                            })
+                            .and_then(|response| Err(DeleteEndpointError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5608,11 +5660,17 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteEventSubscriptionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteEventSubscriptionResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteEventSubscriptionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteEventSubscriptionResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5620,13 +5678,13 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DeleteEventSubscriptionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteEventSubscriptionError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteEventSubscriptionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5652,11 +5710,17 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteReplicationInstanceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteReplicationInstanceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteReplicationInstanceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteReplicationInstanceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5664,13 +5728,13 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DeleteReplicationInstanceError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteReplicationInstanceError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteReplicationInstanceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5696,11 +5760,17 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteReplicationSubnetGroupError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteReplicationSubnetGroupResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteReplicationSubnetGroupError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteReplicationSubnetGroupResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5708,13 +5778,13 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DeleteReplicationSubnetGroupError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteReplicationSubnetGroupError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteReplicationSubnetGroupError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5737,11 +5807,17 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteReplicationTaskError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteReplicationTaskResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteReplicationTaskError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteReplicationTaskResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5749,11 +5825,13 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteReplicationTaskError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteReplicationTaskError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteReplicationTaskError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5777,11 +5855,17 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeAccountAttributesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeAccountAttributesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeAccountAttributesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeAccountAttributesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5789,13 +5873,13 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeAccountAttributesError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeAccountAttributesError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeAccountAttributesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5818,11 +5902,17 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeCertificatesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeCertificatesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeCertificatesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeCertificatesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5830,11 +5920,13 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeCertificatesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeCertificatesError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeCertificatesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5857,11 +5949,17 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeConnectionsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeConnectionsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeConnectionsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeConnectionsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5869,11 +5967,13 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeConnectionsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeConnectionsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeConnectionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5896,11 +5996,17 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeEndpointTypesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeEndpointTypesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeEndpointTypesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeEndpointTypesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5908,11 +6014,13 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeEndpointTypesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeEndpointTypesError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeEndpointTypesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5935,11 +6043,16 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeEndpointsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeEndpointsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeEndpointsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeEndpointsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5947,11 +6060,12 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeEndpointsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeEndpointsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeEndpointsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5974,11 +6088,17 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeEventCategoriesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeEventCategoriesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeEventCategoriesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeEventCategoriesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5986,13 +6106,13 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeEventCategoriesError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeEventCategoriesError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeEventCategoriesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6018,11 +6138,17 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeEventSubscriptionsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeEventSubscriptionsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeEventSubscriptionsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeEventSubscriptionsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6030,13 +6156,13 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeEventSubscriptionsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeEventSubscriptionsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeEventSubscriptionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6059,11 +6185,16 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeEventsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeEventsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeEventsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeEventsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6071,11 +6202,10 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeEventsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeEventsError>
+                            })
+                            .and_then(|response| Err(DescribeEventsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -6102,16 +6232,22 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
                         if response.status.is_success() {
-                            response.buffer().map(|try_response| {
-                try_response.and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<DescribeOrderableReplicationInstancesResponse, _>()
-                })
-            }).boxed()
+                            response.buffer()
+                .map_err(|e| DescribeOrderableReplicationInstancesError::from(e))
+                .map(|try_response| {
+                    try_response
+                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<DescribeOrderableReplicationInstancesError>)
+                    .and_then(|response| {
+                        proto::json::ResponsePayload::new(&response).deserialize::<DescribeOrderableReplicationInstancesResponse, _>()
+                    })
+                }).boxed()
                         } else {
                             response.buffer().map(|try_response| {
-                                try_response.map_or_else(|e| e, |response| {
-                                    Err(DescribeOrderableReplicationInstancesError::from_response(response))
-                                }).boxed()
+                                try_response
+                                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<DescribeOrderableReplicationInstancesError>)
+                                    .and_then(|response| {
+                                        Err(DescribeOrderableReplicationInstancesError::from_response(response))
+                                    })
                             }).boxed()
                         }
                     })
@@ -6139,11 +6275,17 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribePendingMaintenanceActionsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribePendingMaintenanceActionsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribePendingMaintenanceActionsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribePendingMaintenanceActionsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6151,15 +6293,15 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribePendingMaintenanceActionsError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribePendingMaintenanceActionsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribePendingMaintenanceActionsError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -6185,11 +6327,17 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeRefreshSchemasStatusError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeRefreshSchemasStatusResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeRefreshSchemasStatusError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeRefreshSchemasStatusResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6197,13 +6345,13 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeRefreshSchemasStatusError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeRefreshSchemasStatusError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeRefreshSchemasStatusError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6232,11 +6380,17 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeReplicationInstanceTaskLogsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeReplicationInstanceTaskLogsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeReplicationInstanceTaskLogsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeReplicationInstanceTaskLogsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6244,15 +6398,15 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeReplicationInstanceTaskLogsError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeReplicationInstanceTaskLogsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeReplicationInstanceTaskLogsError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -6278,11 +6432,17 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeReplicationInstancesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeReplicationInstancesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeReplicationInstancesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeReplicationInstancesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6290,13 +6450,13 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeReplicationInstancesError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeReplicationInstancesError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeReplicationInstancesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6323,11 +6483,17 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeReplicationSubnetGroupsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeReplicationSubnetGroupsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeReplicationSubnetGroupsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeReplicationSubnetGroupsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6335,15 +6501,15 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeReplicationSubnetGroupsError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeReplicationSubnetGroupsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeReplicationSubnetGroupsError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -6370,16 +6536,22 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
 
         self.client.sign_and_dispatch(request, |response| {
                         if response.status.is_success() {
-                            response.buffer().map(|try_response| {
-                try_response.and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<DescribeReplicationTaskAssessmentResultsResponse, _>()
-                })
-            }).boxed()
+                            response.buffer()
+                .map_err(|e| DescribeReplicationTaskAssessmentResultsError::from(e))
+                .map(|try_response| {
+                    try_response
+                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<DescribeReplicationTaskAssessmentResultsError>)
+                    .and_then(|response| {
+                        proto::json::ResponsePayload::new(&response).deserialize::<DescribeReplicationTaskAssessmentResultsResponse, _>()
+                    })
+                }).boxed()
                         } else {
                             response.buffer().map(|try_response| {
-                                try_response.map_or_else(|e| e, |response| {
-                                    Err(DescribeReplicationTaskAssessmentResultsError::from_response(response))
-                                }).boxed()
+                                try_response
+                                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<DescribeReplicationTaskAssessmentResultsError>)
+                                    .and_then(|response| {
+                                        Err(DescribeReplicationTaskAssessmentResultsError::from_response(response))
+                                    })
                             }).boxed()
                         }
                     })
@@ -6404,11 +6576,17 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeReplicationTasksError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeReplicationTasksResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeReplicationTasksError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeReplicationTasksResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6416,13 +6594,13 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeReplicationTasksError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeReplicationTasksError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeReplicationTasksError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6445,11 +6623,16 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeSchemasError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeSchemasResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeSchemasError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeSchemasResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6457,11 +6640,10 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeSchemasError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeSchemasError>
+                            })
+                            .and_then(|response| Err(DescribeSchemasError::from_response(response)))
                     })
                     .boxed()
             }
@@ -6484,11 +6666,17 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeTableStatisticsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeTableStatisticsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeTableStatisticsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeTableStatisticsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6496,13 +6684,13 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeTableStatisticsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeTableStatisticsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeTableStatisticsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6525,11 +6713,16 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ImportCertificateError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ImportCertificateResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ImportCertificateError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ImportCertificateResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6537,11 +6730,12 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ImportCertificateError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ImportCertificateError>
+                            })
+                            .and_then(|response| {
+                                Err(ImportCertificateError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6564,11 +6758,17 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListTagsForResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListTagsForResourceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListTagsForResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListTagsForResourceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6576,11 +6776,13 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListTagsForResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListTagsForResourceError>
+                            })
+                            .and_then(|response| {
+                                Err(ListTagsForResourceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6603,11 +6805,16 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ModifyEndpointError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ModifyEndpointResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ModifyEndpointError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ModifyEndpointResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6615,11 +6822,10 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ModifyEndpointError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ModifyEndpointError>
+                            })
+                            .and_then(|response| Err(ModifyEndpointError::from_response(response)))
                     })
                     .boxed()
             }
@@ -6642,11 +6848,17 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ModifyEventSubscriptionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ModifyEventSubscriptionResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ModifyEventSubscriptionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ModifyEventSubscriptionResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6654,13 +6866,13 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ModifyEventSubscriptionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ModifyEventSubscriptionError>
+                            })
+                            .and_then(|response| {
+                                Err(ModifyEventSubscriptionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6686,11 +6898,17 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ModifyReplicationInstanceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ModifyReplicationInstanceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ModifyReplicationInstanceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ModifyReplicationInstanceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6698,13 +6916,13 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ModifyReplicationInstanceError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ModifyReplicationInstanceError>
+                            })
+                            .and_then(|response| {
+                                Err(ModifyReplicationInstanceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6730,11 +6948,17 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ModifyReplicationSubnetGroupError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ModifyReplicationSubnetGroupResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ModifyReplicationSubnetGroupError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ModifyReplicationSubnetGroupResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6742,13 +6966,13 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ModifyReplicationSubnetGroupError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ModifyReplicationSubnetGroupError>
+                            })
+                            .and_then(|response| {
+                                Err(ModifyReplicationSubnetGroupError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6771,11 +6995,17 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ModifyReplicationTaskError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ModifyReplicationTaskResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ModifyReplicationTaskError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ModifyReplicationTaskResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6783,11 +7013,13 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ModifyReplicationTaskError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ModifyReplicationTaskError>
+                            })
+                            .and_then(|response| {
+                                Err(ModifyReplicationTaskError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6813,11 +7045,17 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| RebootReplicationInstanceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RebootReplicationInstanceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<RebootReplicationInstanceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<RebootReplicationInstanceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6825,13 +7063,13 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(RebootReplicationInstanceError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<RebootReplicationInstanceError>
+                            })
+                            .and_then(|response| {
+                                Err(RebootReplicationInstanceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6854,11 +7092,16 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| RefreshSchemasError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RefreshSchemasResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<RefreshSchemasError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<RefreshSchemasResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6866,11 +7109,10 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(RefreshSchemasError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<RefreshSchemasError>
+                            })
+                            .and_then(|response| Err(RefreshSchemasError::from_response(response)))
                     })
                     .boxed()
             }
@@ -6893,11 +7135,16 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ReloadTablesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ReloadTablesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ReloadTablesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ReloadTablesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6905,11 +7152,10 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ReloadTablesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ReloadTablesError>
+                            })
+                            .and_then(|response| Err(ReloadTablesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -6932,11 +7178,17 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| RemoveTagsFromResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RemoveTagsFromResourceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<RemoveTagsFromResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<RemoveTagsFromResourceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6944,13 +7196,13 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(RemoveTagsFromResourceError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<RemoveTagsFromResourceError>
+                            })
+                            .and_then(|response| {
+                                Err(RemoveTagsFromResourceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6973,11 +7225,17 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StartReplicationTaskError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StartReplicationTaskResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StartReplicationTaskError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StartReplicationTaskResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6985,11 +7243,13 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(StartReplicationTaskError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StartReplicationTaskError>
+                            })
+                            .and_then(|response| {
+                                Err(StartReplicationTaskError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7016,11 +7276,17 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StartReplicationTaskAssessmentError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StartReplicationTaskAssessmentResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StartReplicationTaskAssessmentError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StartReplicationTaskAssessmentResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7028,15 +7294,13 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(StartReplicationTaskAssessmentError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StartReplicationTaskAssessmentError>
+                            })
+                            .and_then(|response| {
+                                Err(StartReplicationTaskAssessmentError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7059,11 +7323,17 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StopReplicationTaskError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StopReplicationTaskResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StopReplicationTaskError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StopReplicationTaskResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7071,11 +7341,13 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(StopReplicationTaskError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StopReplicationTaskError>
+                            })
+                            .and_then(|response| {
+                                Err(StopReplicationTaskError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7098,11 +7370,16 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| TestConnectionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<TestConnectionResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<TestConnectionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<TestConnectionResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7110,11 +7387,10 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(TestConnectionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<TestConnectionError>
+                            })
+                            .and_then(|response| Err(TestConnectionError::from_response(response)))
                     })
                     .boxed()
             }

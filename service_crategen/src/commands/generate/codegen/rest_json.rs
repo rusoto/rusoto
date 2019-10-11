@@ -65,19 +65,25 @@ impl GenerateProtocol for RestJsonGenerator {
 
                     self.client.sign_and_dispatch(request, |response| {{
                         if {status_check} {{
-                            response.buffer().map(|try_response| {{
-                                try_response.map(|response| {{
-                                    {parse_body}
-                                    {parse_headers}
-                                    {parse_status_code}
-                                    result
-                                }})
-                            }}).boxed()
+                            response.buffer()
+                                .map_err(|e| {error_type}::from(e))
+                                .map(|try_response| {{
+                                    try_response
+                                        .map_err(|e| e.into())
+                                        .and_then(|response| {{
+                                            {parse_body}
+                                            {parse_headers}
+                                            {parse_status_code}
+                                            result
+                                        }})
+                                }}).boxed()
                         }} else {{
                             response.buffer().map(|try_response| {{
-                                try_response.map_or_else(|e| Err(e), |response| {{
-                                    Err({error_type}::from_response(response))
-                                }}).boxed()
+                                try_response
+                                    .map_err(|e| e.into::<{error_type}>())
+                                    .and_then(|response| {{
+                                        Err({error_type}::from_response(response))
+                                    }})
                             }}).boxed()
                         }}
                     }})
@@ -118,7 +124,7 @@ impl GenerateProtocol for RestJsonGenerator {
 
         let res = writeln!(
             writer,
-            "use futures::FutureExt;
+            "use futures::{{FutureExt, TryFutureExt}};
                   use rusoto_core::signature::SignedRequest;
                   use rusoto_core::proto;
                   use serde::{{Deserialize, Serialize}};"
@@ -421,7 +427,7 @@ fn payload_body_parser(
 /// as the result object
 fn json_body_parser(output_shape: &str, mutable_result: bool) -> String {
     format!(
-        "let {mutable} result = proto::json::ResponsePayload::new(&response).deserialize::<{output_shape}, _>()?;",
+        "let {mutable} result = proto::json::ResponsePayload::new(&response).deserialize::<{output_shape}, _>();",
         output_shape = output_shape,
         mutable = if mutable_result { "mut" } else { "" }
     )

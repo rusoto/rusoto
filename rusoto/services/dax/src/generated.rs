@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -2542,11 +2542,16 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateClusterError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateClusterResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateClusterError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateClusterResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2554,11 +2559,10 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateClusterError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateClusterError>
+                            })
+                            .and_then(|response| Err(CreateClusterError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2581,11 +2585,17 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateParameterGroupError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateParameterGroupResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateParameterGroupError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateParameterGroupResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2593,11 +2603,13 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateParameterGroupError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateParameterGroupError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateParameterGroupError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2620,11 +2632,16 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateSubnetGroupError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateSubnetGroupResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateSubnetGroupError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateSubnetGroupResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2632,11 +2649,12 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateSubnetGroupError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateSubnetGroupError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateSubnetGroupError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2659,11 +2677,17 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DecreaseReplicationFactorError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DecreaseReplicationFactorResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DecreaseReplicationFactorError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DecreaseReplicationFactorResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2671,13 +2695,13 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DecreaseReplicationFactorError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DecreaseReplicationFactorError>
+                            })
+                            .and_then(|response| {
+                                Err(DecreaseReplicationFactorError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2700,11 +2724,16 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteClusterError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteClusterResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteClusterError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteClusterResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2712,11 +2741,10 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteClusterError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteClusterError>
+                            })
+                            .and_then(|response| Err(DeleteClusterError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2739,11 +2767,17 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteParameterGroupError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteParameterGroupResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteParameterGroupError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteParameterGroupResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2751,11 +2785,13 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteParameterGroupError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteParameterGroupError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteParameterGroupError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2778,11 +2814,16 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteSubnetGroupError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteSubnetGroupResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteSubnetGroupError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteSubnetGroupResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2790,11 +2831,12 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteSubnetGroupError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteSubnetGroupError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteSubnetGroupError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2817,11 +2859,16 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeClustersError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeClustersResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeClustersError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeClustersResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2829,11 +2876,12 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeClustersError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeClustersError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeClustersError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2856,11 +2904,17 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeDefaultParametersError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeDefaultParametersResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeDefaultParametersError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeDefaultParametersResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2868,13 +2922,13 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeDefaultParametersError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeDefaultParametersError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeDefaultParametersError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2897,11 +2951,16 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeEventsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeEventsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeEventsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeEventsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2909,11 +2968,10 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeEventsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeEventsError>
+                            })
+                            .and_then(|response| Err(DescribeEventsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2936,11 +2994,17 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeParameterGroupsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeParameterGroupsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeParameterGroupsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeParameterGroupsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2948,13 +3012,13 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeParameterGroupsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeParameterGroupsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeParameterGroupsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2977,11 +3041,16 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeParametersError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeParametersResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeParametersError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeParametersResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2989,11 +3058,12 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeParametersError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeParametersError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeParametersError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3016,11 +3086,17 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeSubnetGroupsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeSubnetGroupsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeSubnetGroupsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeSubnetGroupsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3028,11 +3104,13 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeSubnetGroupsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeSubnetGroupsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeSubnetGroupsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3055,11 +3133,17 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| IncreaseReplicationFactorError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<IncreaseReplicationFactorResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<IncreaseReplicationFactorError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<IncreaseReplicationFactorResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3067,13 +3151,13 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(IncreaseReplicationFactorError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<IncreaseReplicationFactorError>
+                            })
+                            .and_then(|response| {
+                                Err(IncreaseReplicationFactorError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3093,11 +3177,14 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListTagsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListTagsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<ListTagsError>)
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListTagsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3105,11 +3192,8 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListTagsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<ListTagsError>)
+                            .and_then(|response| Err(ListTagsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3132,11 +3216,16 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| RebootNodeError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RebootNodeResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<RebootNodeError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<RebootNodeResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3144,11 +3233,10 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(RebootNodeError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<RebootNodeError>
+                            })
+                            .and_then(|response| Err(RebootNodeError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3171,11 +3259,16 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| TagResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<TagResourceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<TagResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<TagResourceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3183,11 +3276,10 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(TagResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<TagResourceError>
+                            })
+                            .and_then(|response| Err(TagResourceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3210,11 +3302,16 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UntagResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UntagResourceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UntagResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UntagResourceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3222,11 +3319,10 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UntagResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UntagResourceError>
+                            })
+                            .and_then(|response| Err(UntagResourceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3249,11 +3345,16 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateClusterError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateClusterResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateClusterError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateClusterResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3261,11 +3362,10 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateClusterError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateClusterError>
+                            })
+                            .and_then(|response| Err(UpdateClusterError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3288,11 +3388,17 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateParameterGroupError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateParameterGroupResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateParameterGroupError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateParameterGroupResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3300,11 +3406,13 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateParameterGroupError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateParameterGroupError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateParameterGroupError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3327,11 +3435,16 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateSubnetGroupError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateSubnetGroupResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateSubnetGroupError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateSubnetGroupResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3339,11 +3452,12 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateSubnetGroupError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateSubnetGroupError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateSubnetGroupError::from_response(response))
+                            })
                     })
                     .boxed()
             }

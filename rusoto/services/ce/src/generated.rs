@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -1499,11 +1499,16 @@ impl CostExplorer for CostExplorerClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetCostAndUsageError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetCostAndUsageResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetCostAndUsageError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetCostAndUsageResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1511,11 +1516,10 @@ impl CostExplorer for CostExplorerClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetCostAndUsageError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetCostAndUsageError>
+                            })
+                            .and_then(|response| Err(GetCostAndUsageError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1538,11 +1542,16 @@ impl CostExplorer for CostExplorerClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetCostForecastError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetCostForecastResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetCostForecastError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetCostForecastResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1550,11 +1559,10 @@ impl CostExplorer for CostExplorerClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetCostForecastError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetCostForecastError>
+                            })
+                            .and_then(|response| Err(GetCostForecastError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1577,11 +1585,16 @@ impl CostExplorer for CostExplorerClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetDimensionValuesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetDimensionValuesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetDimensionValuesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetDimensionValuesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1589,11 +1602,12 @@ impl CostExplorer for CostExplorerClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetDimensionValuesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetDimensionValuesError>
+                            })
+                            .and_then(|response| {
+                                Err(GetDimensionValuesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1619,11 +1633,17 @@ impl CostExplorer for CostExplorerClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetReservationCoverageError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetReservationCoverageResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetReservationCoverageError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetReservationCoverageResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1631,13 +1651,13 @@ impl CostExplorer for CostExplorerClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(GetReservationCoverageError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetReservationCoverageError>
+                            })
+                            .and_then(|response| {
+                                Err(GetReservationCoverageError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1664,16 +1684,22 @@ impl CostExplorer for CostExplorerClient {
 
         self.client.sign_and_dispatch(request, |response| {
                         if response.status.is_success() {
-                            response.buffer().map(|try_response| {
-                try_response.and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<GetReservationPurchaseRecommendationResponse, _>()
-                })
-            }).boxed()
+                            response.buffer()
+                .map_err(|e| GetReservationPurchaseRecommendationError::from(e))
+                .map(|try_response| {
+                    try_response
+                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<GetReservationPurchaseRecommendationError>)
+                    .and_then(|response| {
+                        proto::json::ResponsePayload::new(&response).deserialize::<GetReservationPurchaseRecommendationResponse, _>()
+                    })
+                }).boxed()
                         } else {
                             response.buffer().map(|try_response| {
-                                try_response.map_or_else(|e| e, |response| {
-                                    Err(GetReservationPurchaseRecommendationError::from_response(response))
-                                }).boxed()
+                                try_response
+                                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<GetReservationPurchaseRecommendationError>)
+                                    .and_then(|response| {
+                                        Err(GetReservationPurchaseRecommendationError::from_response(response))
+                                    })
                             }).boxed()
                         }
                     })
@@ -1698,11 +1724,17 @@ impl CostExplorer for CostExplorerClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetReservationUtilizationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetReservationUtilizationResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetReservationUtilizationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetReservationUtilizationResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1710,13 +1742,13 @@ impl CostExplorer for CostExplorerClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(GetReservationUtilizationError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetReservationUtilizationError>
+                            })
+                            .and_then(|response| {
+                                Err(GetReservationUtilizationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1736,11 +1768,14 @@ impl CostExplorer for CostExplorerClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetTagsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetTagsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<GetTagsError>)
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetTagsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1748,11 +1783,8 @@ impl CostExplorer for CostExplorerClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetTagsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<GetTagsError>)
+                            .and_then(|response| Err(GetTagsError::from_response(response)))
                     })
                     .boxed()
             }

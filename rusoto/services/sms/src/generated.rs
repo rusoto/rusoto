@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -3116,11 +3116,16 @@ impl ServerMigrationService for ServerMigrationServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateAppError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateAppResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateAppError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateAppResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3128,11 +3133,10 @@ impl ServerMigrationService for ServerMigrationServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateAppError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateAppError>
+                            })
+                            .and_then(|response| Err(CreateAppError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3158,11 +3162,17 @@ impl ServerMigrationService for ServerMigrationServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateReplicationJobError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateReplicationJobResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateReplicationJobError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateReplicationJobResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3170,11 +3180,13 @@ impl ServerMigrationService for ServerMigrationServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateReplicationJobError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateReplicationJobError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateReplicationJobError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3200,11 +3212,16 @@ impl ServerMigrationService for ServerMigrationServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteAppError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteAppResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteAppError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteAppResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3212,11 +3229,10 @@ impl ServerMigrationService for ServerMigrationServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteAppError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteAppError>
+                            })
+                            .and_then(|response| Err(DeleteAppError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3242,11 +3258,17 @@ impl ServerMigrationService for ServerMigrationServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteAppLaunchConfigurationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteAppLaunchConfigurationResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteAppLaunchConfigurationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteAppLaunchConfigurationResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3254,13 +3276,13 @@ impl ServerMigrationService for ServerMigrationServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DeleteAppLaunchConfigurationError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteAppLaunchConfigurationError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteAppLaunchConfigurationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3289,11 +3311,17 @@ impl ServerMigrationService for ServerMigrationServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteAppReplicationConfigurationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteAppReplicationConfigurationResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteAppReplicationConfigurationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteAppReplicationConfigurationResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3301,15 +3329,15 @@ impl ServerMigrationService for ServerMigrationServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DeleteAppReplicationConfigurationError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteAppReplicationConfigurationError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteAppReplicationConfigurationError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -3335,11 +3363,17 @@ impl ServerMigrationService for ServerMigrationServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteReplicationJobError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteReplicationJobResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteReplicationJobError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteReplicationJobResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3347,11 +3381,13 @@ impl ServerMigrationService for ServerMigrationServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteReplicationJobError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteReplicationJobError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteReplicationJobError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3375,11 +3411,17 @@ impl ServerMigrationService for ServerMigrationServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteServerCatalogError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteServerCatalogResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteServerCatalogError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteServerCatalogResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3387,11 +3429,13 @@ impl ServerMigrationService for ServerMigrationServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteServerCatalogError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteServerCatalogError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteServerCatalogError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3417,11 +3461,17 @@ impl ServerMigrationService for ServerMigrationServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DisassociateConnectorError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DisassociateConnectorResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DisassociateConnectorError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DisassociateConnectorResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3429,11 +3479,13 @@ impl ServerMigrationService for ServerMigrationServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DisassociateConnectorError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DisassociateConnectorError>
+                            })
+                            .and_then(|response| {
+                                Err(DisassociateConnectorError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3459,11 +3511,16 @@ impl ServerMigrationService for ServerMigrationServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GenerateChangeSetError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GenerateChangeSetResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GenerateChangeSetError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GenerateChangeSetResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3471,11 +3528,12 @@ impl ServerMigrationService for ServerMigrationServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GenerateChangeSetError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GenerateChangeSetError>
+                            })
+                            .and_then(|response| {
+                                Err(GenerateChangeSetError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3501,11 +3559,16 @@ impl ServerMigrationService for ServerMigrationServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GenerateTemplateError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GenerateTemplateResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GenerateTemplateError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GenerateTemplateResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3513,11 +3576,12 @@ impl ServerMigrationService for ServerMigrationServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GenerateTemplateError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GenerateTemplateError>
+                            })
+                            .and_then(|response| {
+                                Err(GenerateTemplateError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3540,11 +3604,14 @@ impl ServerMigrationService for ServerMigrationServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetAppError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetAppResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<GetAppError>)
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetAppResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3552,11 +3619,8 @@ impl ServerMigrationService for ServerMigrationServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetAppError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<GetAppError>)
+                            .and_then(|response| Err(GetAppError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3582,11 +3646,17 @@ impl ServerMigrationService for ServerMigrationServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetAppLaunchConfigurationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetAppLaunchConfigurationResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetAppLaunchConfigurationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetAppLaunchConfigurationResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3594,13 +3664,13 @@ impl ServerMigrationService for ServerMigrationServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(GetAppLaunchConfigurationError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetAppLaunchConfigurationError>
+                            })
+                            .and_then(|response| {
+                                Err(GetAppLaunchConfigurationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3627,11 +3697,17 @@ impl ServerMigrationService for ServerMigrationServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetAppReplicationConfigurationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetAppReplicationConfigurationResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetAppReplicationConfigurationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetAppReplicationConfigurationResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3639,15 +3715,13 @@ impl ServerMigrationService for ServerMigrationServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(GetAppReplicationConfigurationError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetAppReplicationConfigurationError>
+                            })
+                            .and_then(|response| {
+                                Err(GetAppReplicationConfigurationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3673,11 +3747,16 @@ impl ServerMigrationService for ServerMigrationServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetConnectorsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetConnectorsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetConnectorsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetConnectorsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3685,11 +3764,10 @@ impl ServerMigrationService for ServerMigrationServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetConnectorsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetConnectorsError>
+                            })
+                            .and_then(|response| Err(GetConnectorsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3715,11 +3793,16 @@ impl ServerMigrationService for ServerMigrationServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetReplicationJobsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetReplicationJobsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetReplicationJobsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetReplicationJobsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3727,11 +3810,12 @@ impl ServerMigrationService for ServerMigrationServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetReplicationJobsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetReplicationJobsError>
+                            })
+                            .and_then(|response| {
+                                Err(GetReplicationJobsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3757,11 +3841,16 @@ impl ServerMigrationService for ServerMigrationServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetReplicationRunsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetReplicationRunsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetReplicationRunsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetReplicationRunsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3769,11 +3858,12 @@ impl ServerMigrationService for ServerMigrationServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetReplicationRunsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetReplicationRunsError>
+                            })
+                            .and_then(|response| {
+                                Err(GetReplicationRunsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3799,11 +3889,16 @@ impl ServerMigrationService for ServerMigrationServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetServersError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetServersResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetServersError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetServersResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3811,11 +3906,10 @@ impl ServerMigrationService for ServerMigrationServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetServersError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetServersError>
+                            })
+                            .and_then(|response| Err(GetServersError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3839,11 +3933,17 @@ impl ServerMigrationService for ServerMigrationServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ImportServerCatalogError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ImportServerCatalogResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ImportServerCatalogError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ImportServerCatalogResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3851,11 +3951,13 @@ impl ServerMigrationService for ServerMigrationServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ImportServerCatalogError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ImportServerCatalogError>
+                            })
+                            .and_then(|response| {
+                                Err(ImportServerCatalogError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3881,11 +3983,16 @@ impl ServerMigrationService for ServerMigrationServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| LaunchAppError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<LaunchAppResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<LaunchAppError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<LaunchAppResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3893,11 +4000,10 @@ impl ServerMigrationService for ServerMigrationServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(LaunchAppError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<LaunchAppError>
+                            })
+                            .and_then(|response| Err(LaunchAppError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3920,11 +4026,14 @@ impl ServerMigrationService for ServerMigrationServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListAppsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListAppsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<ListAppsError>)
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListAppsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3932,11 +4041,8 @@ impl ServerMigrationService for ServerMigrationServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListAppsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<ListAppsError>)
+                            .and_then(|response| Err(ListAppsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3962,11 +4068,17 @@ impl ServerMigrationService for ServerMigrationServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| PutAppLaunchConfigurationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PutAppLaunchConfigurationResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<PutAppLaunchConfigurationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<PutAppLaunchConfigurationResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3974,13 +4086,13 @@ impl ServerMigrationService for ServerMigrationServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(PutAppLaunchConfigurationError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<PutAppLaunchConfigurationError>
+                            })
+                            .and_then(|response| {
+                                Err(PutAppLaunchConfigurationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4007,11 +4119,17 @@ impl ServerMigrationService for ServerMigrationServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| PutAppReplicationConfigurationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PutAppReplicationConfigurationResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<PutAppReplicationConfigurationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<PutAppReplicationConfigurationResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4019,15 +4137,13 @@ impl ServerMigrationService for ServerMigrationServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(PutAppReplicationConfigurationError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<PutAppReplicationConfigurationError>
+                            })
+                            .and_then(|response| {
+                                Err(PutAppReplicationConfigurationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4053,11 +4169,17 @@ impl ServerMigrationService for ServerMigrationServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StartAppReplicationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StartAppReplicationResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StartAppReplicationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StartAppReplicationResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4065,11 +4187,13 @@ impl ServerMigrationService for ServerMigrationServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(StartAppReplicationError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StartAppReplicationError>
+                            })
+                            .and_then(|response| {
+                                Err(StartAppReplicationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4095,11 +4219,17 @@ impl ServerMigrationService for ServerMigrationServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StartOnDemandReplicationRunError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StartOnDemandReplicationRunResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StartOnDemandReplicationRunError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StartOnDemandReplicationRunResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4107,13 +4237,13 @@ impl ServerMigrationService for ServerMigrationServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(StartOnDemandReplicationRunError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StartOnDemandReplicationRunError>
+                            })
+                            .and_then(|response| {
+                                Err(StartOnDemandReplicationRunError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4139,11 +4269,16 @@ impl ServerMigrationService for ServerMigrationServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StopAppReplicationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StopAppReplicationResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StopAppReplicationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StopAppReplicationResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4151,11 +4286,12 @@ impl ServerMigrationService for ServerMigrationServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(StopAppReplicationError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StopAppReplicationError>
+                            })
+                            .and_then(|response| {
+                                Err(StopAppReplicationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4181,11 +4317,16 @@ impl ServerMigrationService for ServerMigrationServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| TerminateAppError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<TerminateAppResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<TerminateAppError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<TerminateAppResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4193,11 +4334,10 @@ impl ServerMigrationService for ServerMigrationServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(TerminateAppError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<TerminateAppError>
+                            })
+                            .and_then(|response| Err(TerminateAppError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4223,11 +4363,16 @@ impl ServerMigrationService for ServerMigrationServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateAppError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateAppResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateAppError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateAppResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4235,11 +4380,10 @@ impl ServerMigrationService for ServerMigrationServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateAppError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateAppError>
+                            })
+                            .and_then(|response| Err(UpdateAppError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4265,11 +4409,17 @@ impl ServerMigrationService for ServerMigrationServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateReplicationJobError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateReplicationJobResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateReplicationJobError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateReplicationJobResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4277,11 +4427,13 @@ impl ServerMigrationService for ServerMigrationServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateReplicationJobError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateReplicationJobError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateReplicationJobError::from_response(response))
+                            })
                     })
                     .boxed()
             }

@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -2288,11 +2288,16 @@ impl StepFunctions for StepFunctionsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateActivityError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateActivityOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateActivityError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateActivityOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2300,11 +2305,10 @@ impl StepFunctions for StepFunctionsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateActivityError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateActivityError>
+                            })
+                            .and_then(|response| Err(CreateActivityError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2327,11 +2331,16 @@ impl StepFunctions for StepFunctionsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateStateMachineError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateStateMachineOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateStateMachineError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateStateMachineOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2339,11 +2348,12 @@ impl StepFunctions for StepFunctionsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateStateMachineError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateStateMachineError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateStateMachineError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2366,11 +2376,16 @@ impl StepFunctions for StepFunctionsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteActivityError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteActivityOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteActivityError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteActivityOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2378,11 +2393,10 @@ impl StepFunctions for StepFunctionsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteActivityError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteActivityError>
+                            })
+                            .and_then(|response| Err(DeleteActivityError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2405,11 +2419,16 @@ impl StepFunctions for StepFunctionsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteStateMachineError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteStateMachineOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteStateMachineError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteStateMachineOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2417,11 +2436,12 @@ impl StepFunctions for StepFunctionsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteStateMachineError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteStateMachineError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteStateMachineError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2444,11 +2464,16 @@ impl StepFunctions for StepFunctionsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeActivityError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeActivityOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeActivityError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeActivityOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2456,11 +2481,12 @@ impl StepFunctions for StepFunctionsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeActivityError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeActivityError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeActivityError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2483,11 +2509,16 @@ impl StepFunctions for StepFunctionsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeExecutionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeExecutionOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeExecutionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeExecutionOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2495,11 +2526,12 @@ impl StepFunctions for StepFunctionsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeExecutionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeExecutionError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeExecutionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2522,11 +2554,17 @@ impl StepFunctions for StepFunctionsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeStateMachineError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeStateMachineOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeStateMachineError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeStateMachineOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2534,11 +2572,13 @@ impl StepFunctions for StepFunctionsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeStateMachineError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeStateMachineError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeStateMachineError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2565,11 +2605,17 @@ impl StepFunctions for StepFunctionsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeStateMachineForExecutionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeStateMachineForExecutionOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeStateMachineForExecutionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeStateMachineForExecutionOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2577,15 +2623,15 @@ impl StepFunctions for StepFunctionsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeStateMachineForExecutionError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeStateMachineForExecutionError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeStateMachineForExecutionError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -2608,11 +2654,16 @@ impl StepFunctions for StepFunctionsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetActivityTaskError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetActivityTaskOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetActivityTaskError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetActivityTaskOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2620,11 +2671,10 @@ impl StepFunctions for StepFunctionsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetActivityTaskError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetActivityTaskError>
+                            })
+                            .and_then(|response| Err(GetActivityTaskError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2647,11 +2697,17 @@ impl StepFunctions for StepFunctionsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetExecutionHistoryError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetExecutionHistoryOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetExecutionHistoryError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetExecutionHistoryOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2659,11 +2715,13 @@ impl StepFunctions for StepFunctionsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetExecutionHistoryError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetExecutionHistoryError>
+                            })
+                            .and_then(|response| {
+                                Err(GetExecutionHistoryError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2686,11 +2744,16 @@ impl StepFunctions for StepFunctionsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListActivitiesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListActivitiesOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListActivitiesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListActivitiesOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2698,11 +2761,10 @@ impl StepFunctions for StepFunctionsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListActivitiesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListActivitiesError>
+                            })
+                            .and_then(|response| Err(ListActivitiesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2725,11 +2787,16 @@ impl StepFunctions for StepFunctionsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListExecutionsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListExecutionsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListExecutionsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListExecutionsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2737,11 +2804,10 @@ impl StepFunctions for StepFunctionsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListExecutionsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListExecutionsError>
+                            })
+                            .and_then(|response| Err(ListExecutionsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2764,11 +2830,16 @@ impl StepFunctions for StepFunctionsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListStateMachinesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListStateMachinesOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListStateMachinesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListStateMachinesOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2776,11 +2847,12 @@ impl StepFunctions for StepFunctionsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListStateMachinesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListStateMachinesError>
+                            })
+                            .and_then(|response| {
+                                Err(ListStateMachinesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2803,11 +2875,17 @@ impl StepFunctions for StepFunctionsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListTagsForResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListTagsForResourceOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListTagsForResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListTagsForResourceOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2815,11 +2893,13 @@ impl StepFunctions for StepFunctionsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListTagsForResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListTagsForResourceError>
+                            })
+                            .and_then(|response| {
+                                Err(ListTagsForResourceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2842,11 +2922,16 @@ impl StepFunctions for StepFunctionsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| SendTaskFailureError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<SendTaskFailureOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<SendTaskFailureError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<SendTaskFailureOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2854,11 +2939,10 @@ impl StepFunctions for StepFunctionsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(SendTaskFailureError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<SendTaskFailureError>
+                            })
+                            .and_then(|response| Err(SendTaskFailureError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2881,11 +2965,16 @@ impl StepFunctions for StepFunctionsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| SendTaskHeartbeatError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<SendTaskHeartbeatOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<SendTaskHeartbeatError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<SendTaskHeartbeatOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2893,11 +2982,12 @@ impl StepFunctions for StepFunctionsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(SendTaskHeartbeatError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<SendTaskHeartbeatError>
+                            })
+                            .and_then(|response| {
+                                Err(SendTaskHeartbeatError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2920,11 +3010,16 @@ impl StepFunctions for StepFunctionsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| SendTaskSuccessError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<SendTaskSuccessOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<SendTaskSuccessError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<SendTaskSuccessOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2932,11 +3027,10 @@ impl StepFunctions for StepFunctionsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(SendTaskSuccessError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<SendTaskSuccessError>
+                            })
+                            .and_then(|response| Err(SendTaskSuccessError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2959,11 +3053,16 @@ impl StepFunctions for StepFunctionsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StartExecutionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StartExecutionOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StartExecutionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StartExecutionOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2971,11 +3070,10 @@ impl StepFunctions for StepFunctionsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(StartExecutionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StartExecutionError>
+                            })
+                            .and_then(|response| Err(StartExecutionError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2998,11 +3096,16 @@ impl StepFunctions for StepFunctionsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StopExecutionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StopExecutionOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StopExecutionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StopExecutionOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3010,11 +3113,10 @@ impl StepFunctions for StepFunctionsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(StopExecutionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StopExecutionError>
+                            })
+                            .and_then(|response| Err(StopExecutionError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3037,11 +3139,16 @@ impl StepFunctions for StepFunctionsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| TagResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<TagResourceOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<TagResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<TagResourceOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3049,11 +3156,10 @@ impl StepFunctions for StepFunctionsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(TagResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<TagResourceError>
+                            })
+                            .and_then(|response| Err(TagResourceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3076,11 +3182,16 @@ impl StepFunctions for StepFunctionsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UntagResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UntagResourceOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UntagResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UntagResourceOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3088,11 +3199,10 @@ impl StepFunctions for StepFunctionsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UntagResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UntagResourceError>
+                            })
+                            .and_then(|response| Err(UntagResourceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3115,11 +3225,16 @@ impl StepFunctions for StepFunctionsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateStateMachineError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateStateMachineOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateStateMachineError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateStateMachineOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3127,11 +3242,12 @@ impl StepFunctions for StepFunctionsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateStateMachineError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateStateMachineError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateStateMachineError::from_response(response))
+                            })
                     })
                     .boxed()
             }

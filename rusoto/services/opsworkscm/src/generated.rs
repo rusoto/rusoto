@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -1460,11 +1460,16 @@ impl OpsWorksCM for OpsWorksCMClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AssociateNodeError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AssociateNodeResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<AssociateNodeError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AssociateNodeResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1472,11 +1477,10 @@ impl OpsWorksCM for OpsWorksCMClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(AssociateNodeError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<AssociateNodeError>
+                            })
+                            .and_then(|response| Err(AssociateNodeError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1499,11 +1503,16 @@ impl OpsWorksCM for OpsWorksCMClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateBackupError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateBackupResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateBackupError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateBackupResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1511,11 +1520,10 @@ impl OpsWorksCM for OpsWorksCMClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateBackupError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateBackupError>
+                            })
+                            .and_then(|response| Err(CreateBackupError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1538,11 +1546,16 @@ impl OpsWorksCM for OpsWorksCMClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateServerError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateServerResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateServerError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateServerResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1550,11 +1563,10 @@ impl OpsWorksCM for OpsWorksCMClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateServerError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateServerError>
+                            })
+                            .and_then(|response| Err(CreateServerError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1577,11 +1589,16 @@ impl OpsWorksCM for OpsWorksCMClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteBackupError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteBackupResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteBackupError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteBackupResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1589,11 +1606,10 @@ impl OpsWorksCM for OpsWorksCMClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteBackupError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteBackupError>
+                            })
+                            .and_then(|response| Err(DeleteBackupError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1616,11 +1632,16 @@ impl OpsWorksCM for OpsWorksCMClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteServerError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteServerResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteServerError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteServerResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1628,11 +1649,10 @@ impl OpsWorksCM for OpsWorksCMClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteServerError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteServerError>
+                            })
+                            .and_then(|response| Err(DeleteServerError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1656,11 +1676,17 @@ impl OpsWorksCM for OpsWorksCMClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeAccountAttributesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeAccountAttributesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeAccountAttributesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeAccountAttributesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1668,13 +1694,13 @@ impl OpsWorksCM for OpsWorksCMClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeAccountAttributesError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeAccountAttributesError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeAccountAttributesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1697,11 +1723,16 @@ impl OpsWorksCM for OpsWorksCMClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeBackupsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeBackupsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeBackupsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeBackupsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1709,11 +1740,10 @@ impl OpsWorksCM for OpsWorksCMClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeBackupsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeBackupsError>
+                            })
+                            .and_then(|response| Err(DescribeBackupsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1736,11 +1766,16 @@ impl OpsWorksCM for OpsWorksCMClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeEventsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeEventsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeEventsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeEventsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1748,11 +1783,10 @@ impl OpsWorksCM for OpsWorksCMClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeEventsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeEventsError>
+                            })
+                            .and_then(|response| Err(DescribeEventsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1779,11 +1813,17 @@ impl OpsWorksCM for OpsWorksCMClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeNodeAssociationStatusError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeNodeAssociationStatusResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeNodeAssociationStatusError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeNodeAssociationStatusResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1791,13 +1831,13 @@ impl OpsWorksCM for OpsWorksCMClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeNodeAssociationStatusError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeNodeAssociationStatusError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeNodeAssociationStatusError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1820,11 +1860,16 @@ impl OpsWorksCM for OpsWorksCMClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeServersError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeServersResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeServersError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeServersResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1832,11 +1877,10 @@ impl OpsWorksCM for OpsWorksCMClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeServersError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeServersError>
+                            })
+                            .and_then(|response| Err(DescribeServersError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1859,11 +1903,16 @@ impl OpsWorksCM for OpsWorksCMClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DisassociateNodeError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DisassociateNodeResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DisassociateNodeError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DisassociateNodeResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1871,11 +1920,12 @@ impl OpsWorksCM for OpsWorksCMClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DisassociateNodeError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DisassociateNodeError>
+                            })
+                            .and_then(|response| {
+                                Err(DisassociateNodeError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1901,11 +1951,17 @@ impl OpsWorksCM for OpsWorksCMClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ExportServerEngineAttributeError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ExportServerEngineAttributeResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ExportServerEngineAttributeError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ExportServerEngineAttributeResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1913,13 +1969,13 @@ impl OpsWorksCM for OpsWorksCMClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ExportServerEngineAttributeError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ExportServerEngineAttributeError>
+                            })
+                            .and_then(|response| {
+                                Err(ExportServerEngineAttributeError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1942,11 +1998,16 @@ impl OpsWorksCM for OpsWorksCMClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| RestoreServerError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RestoreServerResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<RestoreServerError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<RestoreServerResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1954,11 +2015,10 @@ impl OpsWorksCM for OpsWorksCMClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(RestoreServerError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<RestoreServerError>
+                            })
+                            .and_then(|response| Err(RestoreServerError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1981,11 +2041,16 @@ impl OpsWorksCM for OpsWorksCMClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StartMaintenanceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StartMaintenanceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StartMaintenanceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StartMaintenanceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1993,11 +2058,12 @@ impl OpsWorksCM for OpsWorksCMClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(StartMaintenanceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StartMaintenanceError>
+                            })
+                            .and_then(|response| {
+                                Err(StartMaintenanceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2020,11 +2086,16 @@ impl OpsWorksCM for OpsWorksCMClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateServerError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateServerResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateServerError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateServerResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2032,11 +2103,10 @@ impl OpsWorksCM for OpsWorksCMClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateServerError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateServerError>
+                            })
+                            .and_then(|response| Err(UpdateServerError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2062,11 +2132,17 @@ impl OpsWorksCM for OpsWorksCMClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateServerEngineAttributesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateServerEngineAttributesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateServerEngineAttributesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateServerEngineAttributesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2074,13 +2150,13 @@ impl OpsWorksCM for OpsWorksCMClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(UpdateServerEngineAttributesError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateServerEngineAttributesError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateServerEngineAttributesError::from_response(response))
+                            })
                     })
                     .boxed()
             }

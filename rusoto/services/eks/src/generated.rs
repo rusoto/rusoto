@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
@@ -975,10 +975,11 @@ impl Eks for EksClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateClusterError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateClusterResponse, _>()?;
+                                .deserialize::<CreateClusterResponse, _>();
 
                             result
                         })
@@ -989,11 +990,8 @@ impl Eks for EksClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateClusterError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateClusterError>())
+                            .and_then(|response| Err(CreateClusterError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1014,10 +1012,11 @@ impl Eks for EksClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteClusterError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteClusterResponse, _>()?;
+                                .deserialize::<DeleteClusterResponse, _>();
 
                             result
                         })
@@ -1028,11 +1027,8 @@ impl Eks for EksClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteClusterError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteClusterError>())
+                            .and_then(|response| Err(DeleteClusterError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1053,10 +1049,11 @@ impl Eks for EksClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeClusterError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeClusterResponse, _>()?;
+                                .deserialize::<DescribeClusterResponse, _>();
 
                             result
                         })
@@ -1067,11 +1064,8 @@ impl Eks for EksClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DescribeClusterError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeClusterError>())
+                            .and_then(|response| Err(DescribeClusterError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1096,10 +1090,11 @@ impl Eks for EksClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeUpdateError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeUpdateResponse, _>()?;
+                                .deserialize::<DescribeUpdateResponse, _>();
 
                             result
                         })
@@ -1110,11 +1105,8 @@ impl Eks for EksClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DescribeUpdateError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeUpdateError>())
+                            .and_then(|response| Err(DescribeUpdateError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1144,10 +1136,11 @@ impl Eks for EksClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListClustersError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListClustersResponse, _>()?;
+                                .deserialize::<ListClustersResponse, _>();
 
                             result
                         })
@@ -1158,11 +1151,8 @@ impl Eks for EksClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListClustersError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListClustersError>())
+                            .and_then(|response| Err(ListClustersError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1192,10 +1182,11 @@ impl Eks for EksClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListUpdatesError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListUpdatesResponse, _>()?;
+                                .deserialize::<ListUpdatesResponse, _>();
 
                             result
                         })
@@ -1206,11 +1197,8 @@ impl Eks for EksClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListUpdatesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListUpdatesError>())
+                            .and_then(|response| Err(ListUpdatesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1234,10 +1222,11 @@ impl Eks for EksClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateClusterConfigError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateClusterConfigResponse, _>()?;
+                                .deserialize::<UpdateClusterConfigResponse, _>();
 
                             result
                         })
@@ -1248,11 +1237,10 @@ impl Eks for EksClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateClusterConfigError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateClusterConfigError>())
+                            .and_then(|response| {
+                                Err(UpdateClusterConfigError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1276,10 +1264,11 @@ impl Eks for EksClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateClusterVersionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateClusterVersionResponse, _>()?;
+                                .deserialize::<UpdateClusterVersionResponse, _>();
 
                             result
                         })
@@ -1290,11 +1279,10 @@ impl Eks for EksClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateClusterVersionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateClusterVersionError>())
+                            .and_then(|response| {
+                                Err(UpdateClusterVersionError::from_response(response))
+                            })
                     })
                     .boxed()
             }

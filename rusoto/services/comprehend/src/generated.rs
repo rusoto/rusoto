@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -5246,11 +5246,17 @@ impl Comprehend for ComprehendClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| BatchDetectDominantLanguageError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<BatchDetectDominantLanguageResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<BatchDetectDominantLanguageError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<BatchDetectDominantLanguageResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5258,13 +5264,13 @@ impl Comprehend for ComprehendClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(BatchDetectDominantLanguageError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<BatchDetectDominantLanguageError>
+                            })
+                            .and_then(|response| {
+                                Err(BatchDetectDominantLanguageError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5287,11 +5293,17 @@ impl Comprehend for ComprehendClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| BatchDetectEntitiesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<BatchDetectEntitiesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<BatchDetectEntitiesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<BatchDetectEntitiesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5299,11 +5311,13 @@ impl Comprehend for ComprehendClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(BatchDetectEntitiesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<BatchDetectEntitiesError>
+                            })
+                            .and_then(|response| {
+                                Err(BatchDetectEntitiesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5326,11 +5340,17 @@ impl Comprehend for ComprehendClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| BatchDetectKeyPhrasesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<BatchDetectKeyPhrasesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<BatchDetectKeyPhrasesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<BatchDetectKeyPhrasesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5338,11 +5358,13 @@ impl Comprehend for ComprehendClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(BatchDetectKeyPhrasesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<BatchDetectKeyPhrasesError>
+                            })
+                            .and_then(|response| {
+                                Err(BatchDetectKeyPhrasesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5365,11 +5387,17 @@ impl Comprehend for ComprehendClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| BatchDetectSentimentError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<BatchDetectSentimentResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<BatchDetectSentimentError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<BatchDetectSentimentResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5377,11 +5405,13 @@ impl Comprehend for ComprehendClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(BatchDetectSentimentError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<BatchDetectSentimentError>
+                            })
+                            .and_then(|response| {
+                                Err(BatchDetectSentimentError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5404,11 +5434,16 @@ impl Comprehend for ComprehendClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| BatchDetectSyntaxError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<BatchDetectSyntaxResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<BatchDetectSyntaxError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<BatchDetectSyntaxResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5416,11 +5451,12 @@ impl Comprehend for ComprehendClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(BatchDetectSyntaxError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<BatchDetectSyntaxError>
+                            })
+                            .and_then(|response| {
+                                Err(BatchDetectSyntaxError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5446,11 +5482,17 @@ impl Comprehend for ComprehendClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateDocumentClassifierError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateDocumentClassifierResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateDocumentClassifierError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateDocumentClassifierResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5458,13 +5500,13 @@ impl Comprehend for ComprehendClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(CreateDocumentClassifierError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateDocumentClassifierError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateDocumentClassifierError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5487,11 +5529,17 @@ impl Comprehend for ComprehendClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateEntityRecognizerError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateEntityRecognizerResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateEntityRecognizerError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateEntityRecognizerResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5499,13 +5547,13 @@ impl Comprehend for ComprehendClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(CreateEntityRecognizerError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateEntityRecognizerError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateEntityRecognizerError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5531,11 +5579,17 @@ impl Comprehend for ComprehendClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteDocumentClassifierError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteDocumentClassifierResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteDocumentClassifierError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteDocumentClassifierResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5543,13 +5597,13 @@ impl Comprehend for ComprehendClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DeleteDocumentClassifierError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteDocumentClassifierError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteDocumentClassifierError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5572,11 +5626,17 @@ impl Comprehend for ComprehendClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteEntityRecognizerError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteEntityRecognizerResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteEntityRecognizerError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteEntityRecognizerResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5584,13 +5644,13 @@ impl Comprehend for ComprehendClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DeleteEntityRecognizerError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteEntityRecognizerError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteEntityRecognizerError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5619,11 +5679,17 @@ impl Comprehend for ComprehendClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeDocumentClassificationJobError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeDocumentClassificationJobResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeDocumentClassificationJobError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeDocumentClassificationJobResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5631,15 +5697,15 @@ impl Comprehend for ComprehendClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeDocumentClassificationJobError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeDocumentClassificationJobError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeDocumentClassificationJobError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -5665,11 +5731,17 @@ impl Comprehend for ComprehendClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeDocumentClassifierError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeDocumentClassifierResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeDocumentClassifierError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeDocumentClassifierResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5677,13 +5749,13 @@ impl Comprehend for ComprehendClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeDocumentClassifierError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeDocumentClassifierError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeDocumentClassifierError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5710,16 +5782,22 @@ impl Comprehend for ComprehendClient {
 
         self.client.sign_and_dispatch(request, |response| {
                         if response.status.is_success() {
-                            response.buffer().map(|try_response| {
-                try_response.and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<DescribeDominantLanguageDetectionJobResponse, _>()
-                })
-            }).boxed()
+                            response.buffer()
+                .map_err(|e| DescribeDominantLanguageDetectionJobError::from(e))
+                .map(|try_response| {
+                    try_response
+                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<DescribeDominantLanguageDetectionJobError>)
+                    .and_then(|response| {
+                        proto::json::ResponsePayload::new(&response).deserialize::<DescribeDominantLanguageDetectionJobResponse, _>()
+                    })
+                }).boxed()
                         } else {
                             response.buffer().map(|try_response| {
-                                try_response.map_or_else(|e| e, |response| {
-                                    Err(DescribeDominantLanguageDetectionJobError::from_response(response))
-                                }).boxed()
+                                try_response
+                                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<DescribeDominantLanguageDetectionJobError>)
+                                    .and_then(|response| {
+                                        Err(DescribeDominantLanguageDetectionJobError::from_response(response))
+                                    })
                             }).boxed()
                         }
                     })
@@ -5744,11 +5822,17 @@ impl Comprehend for ComprehendClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeEntitiesDetectionJobError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeEntitiesDetectionJobResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeEntitiesDetectionJobError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeEntitiesDetectionJobResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5756,13 +5840,13 @@ impl Comprehend for ComprehendClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeEntitiesDetectionJobError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeEntitiesDetectionJobError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeEntitiesDetectionJobError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5788,11 +5872,17 @@ impl Comprehend for ComprehendClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeEntityRecognizerError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeEntityRecognizerResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeEntityRecognizerError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeEntityRecognizerResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5800,13 +5890,13 @@ impl Comprehend for ComprehendClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeEntityRecognizerError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeEntityRecognizerError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeEntityRecognizerError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5833,11 +5923,17 @@ impl Comprehend for ComprehendClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeKeyPhrasesDetectionJobError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeKeyPhrasesDetectionJobResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeKeyPhrasesDetectionJobError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeKeyPhrasesDetectionJobResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5845,15 +5941,13 @@ impl Comprehend for ComprehendClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeKeyPhrasesDetectionJobError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeKeyPhrasesDetectionJobError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeKeyPhrasesDetectionJobError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5880,11 +5974,17 @@ impl Comprehend for ComprehendClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeSentimentDetectionJobError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeSentimentDetectionJobResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeSentimentDetectionJobError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeSentimentDetectionJobResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5892,13 +5992,13 @@ impl Comprehend for ComprehendClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeSentimentDetectionJobError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeSentimentDetectionJobError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeSentimentDetectionJobError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5924,11 +6024,17 @@ impl Comprehend for ComprehendClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeTopicsDetectionJobError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeTopicsDetectionJobResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeTopicsDetectionJobError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeTopicsDetectionJobResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5936,13 +6042,13 @@ impl Comprehend for ComprehendClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeTopicsDetectionJobError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeTopicsDetectionJobError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeTopicsDetectionJobError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5965,11 +6071,17 @@ impl Comprehend for ComprehendClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DetectDominantLanguageError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DetectDominantLanguageResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DetectDominantLanguageError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DetectDominantLanguageResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5977,13 +6089,13 @@ impl Comprehend for ComprehendClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DetectDominantLanguageError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DetectDominantLanguageError>
+                            })
+                            .and_then(|response| {
+                                Err(DetectDominantLanguageError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6006,11 +6118,16 @@ impl Comprehend for ComprehendClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DetectEntitiesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DetectEntitiesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DetectEntitiesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DetectEntitiesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6018,11 +6135,10 @@ impl Comprehend for ComprehendClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DetectEntitiesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DetectEntitiesError>
+                            })
+                            .and_then(|response| Err(DetectEntitiesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -6045,11 +6161,16 @@ impl Comprehend for ComprehendClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DetectKeyPhrasesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DetectKeyPhrasesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DetectKeyPhrasesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DetectKeyPhrasesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6057,11 +6178,12 @@ impl Comprehend for ComprehendClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DetectKeyPhrasesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DetectKeyPhrasesError>
+                            })
+                            .and_then(|response| {
+                                Err(DetectKeyPhrasesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6084,11 +6206,16 @@ impl Comprehend for ComprehendClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DetectSentimentError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DetectSentimentResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DetectSentimentError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DetectSentimentResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6096,11 +6223,10 @@ impl Comprehend for ComprehendClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DetectSentimentError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DetectSentimentError>
+                            })
+                            .and_then(|response| Err(DetectSentimentError::from_response(response)))
                     })
                     .boxed()
             }
@@ -6123,11 +6249,16 @@ impl Comprehend for ComprehendClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DetectSyntaxError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DetectSyntaxResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DetectSyntaxError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DetectSyntaxResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6135,11 +6266,10 @@ impl Comprehend for ComprehendClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DetectSyntaxError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DetectSyntaxError>
+                            })
+                            .and_then(|response| Err(DetectSyntaxError::from_response(response)))
                     })
                     .boxed()
             }
@@ -6166,11 +6296,17 @@ impl Comprehend for ComprehendClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListDocumentClassificationJobsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListDocumentClassificationJobsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListDocumentClassificationJobsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListDocumentClassificationJobsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6178,15 +6314,13 @@ impl Comprehend for ComprehendClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ListDocumentClassificationJobsError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListDocumentClassificationJobsError>
+                            })
+                            .and_then(|response| {
+                                Err(ListDocumentClassificationJobsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6212,11 +6346,17 @@ impl Comprehend for ComprehendClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListDocumentClassifiersError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListDocumentClassifiersResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListDocumentClassifiersError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListDocumentClassifiersResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6224,13 +6364,13 @@ impl Comprehend for ComprehendClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ListDocumentClassifiersError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListDocumentClassifiersError>
+                            })
+                            .and_then(|response| {
+                                Err(ListDocumentClassifiersError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6259,11 +6399,17 @@ impl Comprehend for ComprehendClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListDominantLanguageDetectionJobsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListDominantLanguageDetectionJobsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListDominantLanguageDetectionJobsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListDominantLanguageDetectionJobsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6271,15 +6417,15 @@ impl Comprehend for ComprehendClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ListDominantLanguageDetectionJobsError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListDominantLanguageDetectionJobsError>
+                            })
+                            .and_then(|response| {
+                                Err(ListDominantLanguageDetectionJobsError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -6305,11 +6451,17 @@ impl Comprehend for ComprehendClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListEntitiesDetectionJobsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListEntitiesDetectionJobsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListEntitiesDetectionJobsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListEntitiesDetectionJobsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6317,13 +6469,13 @@ impl Comprehend for ComprehendClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ListEntitiesDetectionJobsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListEntitiesDetectionJobsError>
+                            })
+                            .and_then(|response| {
+                                Err(ListEntitiesDetectionJobsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6346,11 +6498,17 @@ impl Comprehend for ComprehendClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListEntityRecognizersError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListEntityRecognizersResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListEntityRecognizersError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListEntityRecognizersResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6358,11 +6516,13 @@ impl Comprehend for ComprehendClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListEntityRecognizersError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListEntityRecognizersError>
+                            })
+                            .and_then(|response| {
+                                Err(ListEntityRecognizersError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6388,11 +6548,17 @@ impl Comprehend for ComprehendClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListKeyPhrasesDetectionJobsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListKeyPhrasesDetectionJobsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListKeyPhrasesDetectionJobsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListKeyPhrasesDetectionJobsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6400,13 +6566,13 @@ impl Comprehend for ComprehendClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ListKeyPhrasesDetectionJobsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListKeyPhrasesDetectionJobsError>
+                            })
+                            .and_then(|response| {
+                                Err(ListKeyPhrasesDetectionJobsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6432,11 +6598,17 @@ impl Comprehend for ComprehendClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListSentimentDetectionJobsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListSentimentDetectionJobsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListSentimentDetectionJobsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListSentimentDetectionJobsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6444,13 +6616,13 @@ impl Comprehend for ComprehendClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ListSentimentDetectionJobsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListSentimentDetectionJobsError>
+                            })
+                            .and_then(|response| {
+                                Err(ListSentimentDetectionJobsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6473,11 +6645,17 @@ impl Comprehend for ComprehendClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListTagsForResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListTagsForResourceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListTagsForResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListTagsForResourceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6485,11 +6663,13 @@ impl Comprehend for ComprehendClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListTagsForResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListTagsForResourceError>
+                            })
+                            .and_then(|response| {
+                                Err(ListTagsForResourceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6515,11 +6695,17 @@ impl Comprehend for ComprehendClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListTopicsDetectionJobsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListTopicsDetectionJobsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListTopicsDetectionJobsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListTopicsDetectionJobsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6527,13 +6713,13 @@ impl Comprehend for ComprehendClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ListTopicsDetectionJobsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListTopicsDetectionJobsError>
+                            })
+                            .and_then(|response| {
+                                Err(ListTopicsDetectionJobsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6560,11 +6746,17 @@ impl Comprehend for ComprehendClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StartDocumentClassificationJobError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StartDocumentClassificationJobResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StartDocumentClassificationJobError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StartDocumentClassificationJobResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6572,15 +6764,13 @@ impl Comprehend for ComprehendClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(StartDocumentClassificationJobError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StartDocumentClassificationJobError>
+                            })
+                            .and_then(|response| {
+                                Err(StartDocumentClassificationJobError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6609,11 +6799,17 @@ impl Comprehend for ComprehendClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StartDominantLanguageDetectionJobError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StartDominantLanguageDetectionJobResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StartDominantLanguageDetectionJobError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StartDominantLanguageDetectionJobResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6621,15 +6817,15 @@ impl Comprehend for ComprehendClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(StartDominantLanguageDetectionJobError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StartDominantLanguageDetectionJobError>
+                            })
+                            .and_then(|response| {
+                                Err(StartDominantLanguageDetectionJobError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -6655,11 +6851,17 @@ impl Comprehend for ComprehendClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StartEntitiesDetectionJobError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StartEntitiesDetectionJobResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StartEntitiesDetectionJobError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StartEntitiesDetectionJobResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6667,13 +6869,13 @@ impl Comprehend for ComprehendClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(StartEntitiesDetectionJobError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StartEntitiesDetectionJobError>
+                            })
+                            .and_then(|response| {
+                                Err(StartEntitiesDetectionJobError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6699,11 +6901,17 @@ impl Comprehend for ComprehendClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StartKeyPhrasesDetectionJobError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StartKeyPhrasesDetectionJobResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StartKeyPhrasesDetectionJobError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StartKeyPhrasesDetectionJobResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6711,13 +6919,13 @@ impl Comprehend for ComprehendClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(StartKeyPhrasesDetectionJobError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StartKeyPhrasesDetectionJobError>
+                            })
+                            .and_then(|response| {
+                                Err(StartKeyPhrasesDetectionJobError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6743,11 +6951,17 @@ impl Comprehend for ComprehendClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StartSentimentDetectionJobError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StartSentimentDetectionJobResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StartSentimentDetectionJobError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StartSentimentDetectionJobResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6755,13 +6969,13 @@ impl Comprehend for ComprehendClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(StartSentimentDetectionJobError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StartSentimentDetectionJobError>
+                            })
+                            .and_then(|response| {
+                                Err(StartSentimentDetectionJobError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6787,11 +7001,17 @@ impl Comprehend for ComprehendClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StartTopicsDetectionJobError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StartTopicsDetectionJobResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StartTopicsDetectionJobError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StartTopicsDetectionJobResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6799,13 +7019,13 @@ impl Comprehend for ComprehendClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(StartTopicsDetectionJobError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StartTopicsDetectionJobError>
+                            })
+                            .and_then(|response| {
+                                Err(StartTopicsDetectionJobError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6832,11 +7052,17 @@ impl Comprehend for ComprehendClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StopDominantLanguageDetectionJobError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StopDominantLanguageDetectionJobResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StopDominantLanguageDetectionJobError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StopDominantLanguageDetectionJobResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6844,15 +7070,15 @@ impl Comprehend for ComprehendClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(StopDominantLanguageDetectionJobError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StopDominantLanguageDetectionJobError>
+                            })
+                            .and_then(|response| {
+                                Err(StopDominantLanguageDetectionJobError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -6878,11 +7104,17 @@ impl Comprehend for ComprehendClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StopEntitiesDetectionJobError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StopEntitiesDetectionJobResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StopEntitiesDetectionJobError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StopEntitiesDetectionJobResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6890,13 +7122,13 @@ impl Comprehend for ComprehendClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(StopEntitiesDetectionJobError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StopEntitiesDetectionJobError>
+                            })
+                            .and_then(|response| {
+                                Err(StopEntitiesDetectionJobError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6922,11 +7154,17 @@ impl Comprehend for ComprehendClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StopKeyPhrasesDetectionJobError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StopKeyPhrasesDetectionJobResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StopKeyPhrasesDetectionJobError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StopKeyPhrasesDetectionJobResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6934,13 +7172,13 @@ impl Comprehend for ComprehendClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(StopKeyPhrasesDetectionJobError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StopKeyPhrasesDetectionJobError>
+                            })
+                            .and_then(|response| {
+                                Err(StopKeyPhrasesDetectionJobError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6966,11 +7204,17 @@ impl Comprehend for ComprehendClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StopSentimentDetectionJobError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StopSentimentDetectionJobResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StopSentimentDetectionJobError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StopSentimentDetectionJobResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6978,13 +7222,13 @@ impl Comprehend for ComprehendClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(StopSentimentDetectionJobError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StopSentimentDetectionJobError>
+                            })
+                            .and_then(|response| {
+                                Err(StopSentimentDetectionJobError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7011,11 +7255,17 @@ impl Comprehend for ComprehendClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StopTrainingDocumentClassifierError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StopTrainingDocumentClassifierResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StopTrainingDocumentClassifierError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StopTrainingDocumentClassifierResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7023,15 +7273,13 @@ impl Comprehend for ComprehendClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(StopTrainingDocumentClassifierError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StopTrainingDocumentClassifierError>
+                            })
+                            .and_then(|response| {
+                                Err(StopTrainingDocumentClassifierError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7057,11 +7305,17 @@ impl Comprehend for ComprehendClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StopTrainingEntityRecognizerError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StopTrainingEntityRecognizerResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StopTrainingEntityRecognizerError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StopTrainingEntityRecognizerResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7069,13 +7323,13 @@ impl Comprehend for ComprehendClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(StopTrainingEntityRecognizerError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StopTrainingEntityRecognizerError>
+                            })
+                            .and_then(|response| {
+                                Err(StopTrainingEntityRecognizerError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7098,11 +7352,16 @@ impl Comprehend for ComprehendClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| TagResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<TagResourceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<TagResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<TagResourceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7110,11 +7369,10 @@ impl Comprehend for ComprehendClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(TagResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<TagResourceError>
+                            })
+                            .and_then(|response| Err(TagResourceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7137,11 +7395,16 @@ impl Comprehend for ComprehendClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UntagResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UntagResourceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UntagResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UntagResourceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7149,11 +7412,10 @@ impl Comprehend for ComprehendClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UntagResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UntagResourceError>
+                            })
+                            .and_then(|response| Err(UntagResourceError::from_response(response)))
                     })
                     .boxed()
             }

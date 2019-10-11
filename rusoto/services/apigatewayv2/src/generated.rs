@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
@@ -6743,10 +6743,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             if response.status.as_u16() == 201 {
                 response
                     .buffer()
+                    .map_err(|e| CreateApiError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateApiResponse, _>()?;
+                                .deserialize::<CreateApiResponse, _>();
 
                             result
                         })
@@ -6757,11 +6758,8 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateApiError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateApiError>())
+                            .and_then(|response| Err(CreateApiError::from_response(response)))
                     })
                     .boxed()
             }
@@ -6788,10 +6786,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             if response.status.as_u16() == 201 {
                 response
                     .buffer()
+                    .map_err(|e| CreateApiMappingError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateApiMappingResponse, _>()?;
+                                .deserialize::<CreateApiMappingResponse, _>();
 
                             result
                         })
@@ -6802,11 +6801,10 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateApiMappingError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateApiMappingError>())
+                            .and_then(|response| {
+                                Err(CreateApiMappingError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6830,10 +6828,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             if response.status.as_u16() == 201 {
                 response
                     .buffer()
+                    .map_err(|e| CreateAuthorizerError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateAuthorizerResponse, _>()?;
+                                .deserialize::<CreateAuthorizerResponse, _>();
 
                             result
                         })
@@ -6844,11 +6843,10 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateAuthorizerError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateAuthorizerError>())
+                            .and_then(|response| {
+                                Err(CreateAuthorizerError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6872,10 +6870,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             if response.status.as_u16() == 201 {
                 response
                     .buffer()
+                    .map_err(|e| CreateDeploymentError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateDeploymentResponse, _>()?;
+                                .deserialize::<CreateDeploymentResponse, _>();
 
                             result
                         })
@@ -6886,11 +6885,10 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateDeploymentError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateDeploymentError>())
+                            .and_then(|response| {
+                                Err(CreateDeploymentError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6914,10 +6912,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             if response.status.as_u16() == 201 {
                 response
                     .buffer()
+                    .map_err(|e| CreateDomainNameError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateDomainNameResponse, _>()?;
+                                .deserialize::<CreateDomainNameResponse, _>();
 
                             result
                         })
@@ -6928,11 +6927,10 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateDomainNameError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateDomainNameError>())
+                            .and_then(|response| {
+                                Err(CreateDomainNameError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6956,10 +6954,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             if response.status.as_u16() == 201 {
                 response
                     .buffer()
+                    .map_err(|e| CreateIntegrationError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateIntegrationResponse, _>()?;
+                                .deserialize::<CreateIntegrationResponse, _>();
 
                             result
                         })
@@ -6970,11 +6969,10 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateIntegrationError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateIntegrationError>())
+                            .and_then(|response| {
+                                Err(CreateIntegrationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7002,10 +7000,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             if response.status.as_u16() == 201 {
                 response
                     .buffer()
+                    .map_err(|e| CreateIntegrationResponseError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateIntegrationResponseResponse, _>()?;
+                                .deserialize::<CreateIntegrationResponseResponse, _>();
 
                             result
                         })
@@ -7016,13 +7015,10 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(CreateIntegrationResponseError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateIntegrationResponseError>())
+                            .and_then(|response| {
+                                Err(CreateIntegrationResponseError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7046,10 +7042,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             if response.status.as_u16() == 201 {
                 response
                     .buffer()
+                    .map_err(|e| CreateModelError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateModelResponse, _>()?;
+                                .deserialize::<CreateModelResponse, _>();
 
                             result
                         })
@@ -7060,11 +7057,8 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateModelError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateModelError>())
+                            .and_then(|response| Err(CreateModelError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7088,10 +7082,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             if response.status.as_u16() == 201 {
                 response
                     .buffer()
+                    .map_err(|e| CreateRouteError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateRouteResponse, _>()?;
+                                .deserialize::<CreateRouteResponse, _>();
 
                             result
                         })
@@ -7102,11 +7097,8 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateRouteError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateRouteError>())
+                            .and_then(|response| Err(CreateRouteError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7134,10 +7126,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             if response.status.as_u16() == 201 {
                 response
                     .buffer()
+                    .map_err(|e| CreateRouteResponseError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateRouteResponseResponse, _>()?;
+                                .deserialize::<CreateRouteResponseResponse, _>();
 
                             result
                         })
@@ -7148,11 +7141,10 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateRouteResponseError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateRouteResponseError>())
+                            .and_then(|response| {
+                                Err(CreateRouteResponseError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7176,10 +7168,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             if response.status.as_u16() == 201 {
                 response
                     .buffer()
+                    .map_err(|e| CreateStageError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateStageResponse, _>()?;
+                                .deserialize::<CreateStageResponse, _>();
 
                             result
                         })
@@ -7190,11 +7183,8 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateStageError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateStageError>())
+                            .and_then(|response| Err(CreateStageError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7212,8 +7202,9 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteApiError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -7225,11 +7216,8 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteApiError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteApiError>())
+                            .and_then(|response| Err(DeleteApiError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7254,8 +7242,9 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteApiMappingError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -7267,11 +7256,10 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteApiMappingError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteApiMappingError>())
+                            .and_then(|response| {
+                                Err(DeleteApiMappingError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7296,8 +7284,9 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteAuthorizerError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -7309,11 +7298,10 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteAuthorizerError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteAuthorizerError>())
+                            .and_then(|response| {
+                                Err(DeleteAuthorizerError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7338,8 +7326,9 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteDeploymentError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -7351,11 +7340,10 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteDeploymentError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteDeploymentError>())
+                            .and_then(|response| {
+                                Err(DeleteDeploymentError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7379,8 +7367,9 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteDomainNameError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -7392,11 +7381,10 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteDomainNameError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteDomainNameError>())
+                            .and_then(|response| {
+                                Err(DeleteDomainNameError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7421,8 +7409,9 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteIntegrationError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -7434,11 +7423,10 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteIntegrationError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteIntegrationError>())
+                            .and_then(|response| {
+                                Err(DeleteIntegrationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7459,8 +7447,9 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteIntegrationResponseError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -7472,13 +7461,10 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(DeleteIntegrationResponseError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteIntegrationResponseError>())
+                            .and_then(|response| {
+                                Err(DeleteIntegrationResponseError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7500,8 +7486,9 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteModelError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -7513,11 +7500,8 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteModelError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteModelError>())
+                            .and_then(|response| Err(DeleteModelError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7539,8 +7523,9 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteRouteError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -7552,11 +7537,8 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteRouteError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteRouteError>())
+                            .and_then(|response| Err(DeleteRouteError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7582,8 +7564,9 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteRouteResponseError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -7595,11 +7578,10 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteRouteResponseError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteRouteResponseError>())
+                            .and_then(|response| {
+                                Err(DeleteRouteResponseError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7621,8 +7603,9 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteStageError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -7634,11 +7617,8 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteStageError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteStageError>())
+                            .and_then(|response| Err(DeleteStageError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7656,10 +7636,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetApiError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetApiResponse, _>()?;
+                                .deserialize::<GetApiResponse, _>();
 
                             result
                         })
@@ -7670,11 +7651,8 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetApiError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetApiError>())
+                            .and_then(|response| Err(GetApiError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7699,10 +7677,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetApiMappingError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetApiMappingResponse, _>()?;
+                                .deserialize::<GetApiMappingResponse, _>();
 
                             result
                         })
@@ -7713,11 +7692,8 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetApiMappingError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetApiMappingError>())
+                            .and_then(|response| Err(GetApiMappingError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7750,10 +7726,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetApiMappingsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetApiMappingsResponse, _>()?;
+                                .deserialize::<GetApiMappingsResponse, _>();
 
                             result
                         })
@@ -7764,11 +7741,8 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetApiMappingsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetApiMappingsError>())
+                            .and_then(|response| Err(GetApiMappingsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7795,10 +7769,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetApisError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetApisResponse, _>()?;
+                                .deserialize::<GetApisResponse, _>();
 
                             result
                         })
@@ -7809,11 +7784,8 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetApisError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetApisError>())
+                            .and_then(|response| Err(GetApisError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7838,10 +7810,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetAuthorizerError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetAuthorizerResponse, _>()?;
+                                .deserialize::<GetAuthorizerResponse, _>();
 
                             result
                         })
@@ -7852,11 +7825,8 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetAuthorizerError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetAuthorizerError>())
+                            .and_then(|response| Err(GetAuthorizerError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7886,10 +7856,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetAuthorizersError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetAuthorizersResponse, _>()?;
+                                .deserialize::<GetAuthorizersResponse, _>();
 
                             result
                         })
@@ -7900,11 +7871,8 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetAuthorizersError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetAuthorizersError>())
+                            .and_then(|response| Err(GetAuthorizersError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7929,10 +7897,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetDeploymentError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetDeploymentResponse, _>()?;
+                                .deserialize::<GetDeploymentResponse, _>();
 
                             result
                         })
@@ -7943,11 +7912,8 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetDeploymentError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetDeploymentError>())
+                            .and_then(|response| Err(GetDeploymentError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7977,10 +7943,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetDeploymentsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetDeploymentsResponse, _>()?;
+                                .deserialize::<GetDeploymentsResponse, _>();
 
                             result
                         })
@@ -7991,11 +7958,8 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetDeploymentsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetDeploymentsError>())
+                            .and_then(|response| Err(GetDeploymentsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8019,10 +7983,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetDomainNameError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetDomainNameResponse, _>()?;
+                                .deserialize::<GetDomainNameResponse, _>();
 
                             result
                         })
@@ -8033,11 +7998,8 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetDomainNameError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetDomainNameError>())
+                            .and_then(|response| Err(GetDomainNameError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8067,10 +8029,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetDomainNamesError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetDomainNamesResponse, _>()?;
+                                .deserialize::<GetDomainNamesResponse, _>();
 
                             result
                         })
@@ -8081,11 +8044,8 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetDomainNamesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetDomainNamesError>())
+                            .and_then(|response| Err(GetDomainNamesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8110,10 +8070,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetIntegrationError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetIntegrationResponse, _>()?;
+                                .deserialize::<GetIntegrationResponse, _>();
 
                             result
                         })
@@ -8124,11 +8085,8 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetIntegrationError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetIntegrationError>())
+                            .and_then(|response| Err(GetIntegrationError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8149,10 +8107,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetIntegrationResponseError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetIntegrationResponseResponse, _>()?;
+                                .deserialize::<GetIntegrationResponseResponse, _>();
 
                             result
                         })
@@ -8163,13 +8122,10 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(GetIntegrationResponseError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetIntegrationResponseError>())
+                            .and_then(|response| {
+                                Err(GetIntegrationResponseError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8203,10 +8159,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetIntegrationResponsesError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetIntegrationResponsesResponse, _>()?;
+                                .deserialize::<GetIntegrationResponsesResponse, _>();
 
                             result
                         })
@@ -8217,13 +8174,10 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(GetIntegrationResponsesError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetIntegrationResponsesError>())
+                            .and_then(|response| {
+                                Err(GetIntegrationResponsesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8253,10 +8207,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetIntegrationsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetIntegrationsResponse, _>()?;
+                                .deserialize::<GetIntegrationsResponse, _>();
 
                             result
                         })
@@ -8267,11 +8222,8 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetIntegrationsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetIntegrationsError>())
+                            .and_then(|response| Err(GetIntegrationsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8293,10 +8245,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetModelError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetModelResponse, _>()?;
+                                .deserialize::<GetModelResponse, _>();
 
                             result
                         })
@@ -8307,11 +8260,8 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetModelError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetModelError>())
+                            .and_then(|response| Err(GetModelError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8336,10 +8286,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetModelTemplateError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetModelTemplateResponse, _>()?;
+                                .deserialize::<GetModelTemplateResponse, _>();
 
                             result
                         })
@@ -8350,11 +8301,10 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetModelTemplateError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetModelTemplateError>())
+                            .and_then(|response| {
+                                Err(GetModelTemplateError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8384,10 +8334,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetModelsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetModelsResponse, _>()?;
+                                .deserialize::<GetModelsResponse, _>();
 
                             result
                         })
@@ -8398,11 +8349,8 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetModelsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetModelsError>())
+                            .and_then(|response| Err(GetModelsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8424,10 +8372,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetRouteError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetRouteResponse, _>()?;
+                                .deserialize::<GetRouteResponse, _>();
 
                             result
                         })
@@ -8438,11 +8387,8 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetRouteError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetRouteError>())
+                            .and_then(|response| Err(GetRouteError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8468,10 +8414,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetRouteResponseError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetRouteResponseResponse, _>()?;
+                                .deserialize::<GetRouteResponseResponse, _>();
 
                             result
                         })
@@ -8482,11 +8429,10 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetRouteResponseError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetRouteResponseError>())
+                            .and_then(|response| {
+                                Err(GetRouteResponseError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8520,10 +8466,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetRouteResponsesError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetRouteResponsesResponse, _>()?;
+                                .deserialize::<GetRouteResponsesResponse, _>();
 
                             result
                         })
@@ -8534,11 +8481,10 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetRouteResponsesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetRouteResponsesError>())
+                            .and_then(|response| {
+                                Err(GetRouteResponsesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8568,10 +8514,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetRoutesError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetRoutesResponse, _>()?;
+                                .deserialize::<GetRoutesResponse, _>();
 
                             result
                         })
@@ -8582,11 +8529,8 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetRoutesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetRoutesError>())
+                            .and_then(|response| Err(GetRoutesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8608,10 +8552,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetStageError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetStageResponse, _>()?;
+                                .deserialize::<GetStageResponse, _>();
 
                             result
                         })
@@ -8622,11 +8567,8 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetStageError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetStageError>())
+                            .and_then(|response| Err(GetStageError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8656,10 +8598,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetStagesError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetStagesResponse, _>()?;
+                                .deserialize::<GetStagesResponse, _>();
 
                             result
                         })
@@ -8670,11 +8613,8 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetStagesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetStagesError>())
+                            .and_then(|response| Err(GetStagesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8698,10 +8638,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| UpdateApiError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateApiResponse, _>()?;
+                                .deserialize::<UpdateApiResponse, _>();
 
                             result
                         })
@@ -8712,11 +8653,8 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateApiError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateApiError>())
+                            .and_then(|response| Err(UpdateApiError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8744,10 +8682,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| UpdateApiMappingError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateApiMappingResponse, _>()?;
+                                .deserialize::<UpdateApiMappingResponse, _>();
 
                             result
                         })
@@ -8758,11 +8697,10 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateApiMappingError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateApiMappingError>())
+                            .and_then(|response| {
+                                Err(UpdateApiMappingError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8790,10 +8728,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| UpdateAuthorizerError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateAuthorizerResponse, _>()?;
+                                .deserialize::<UpdateAuthorizerResponse, _>();
 
                             result
                         })
@@ -8804,11 +8743,10 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateAuthorizerError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateAuthorizerError>())
+                            .and_then(|response| {
+                                Err(UpdateAuthorizerError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8836,10 +8774,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| UpdateDeploymentError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateDeploymentResponse, _>()?;
+                                .deserialize::<UpdateDeploymentResponse, _>();
 
                             result
                         })
@@ -8850,11 +8789,10 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateDeploymentError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateDeploymentError>())
+                            .and_then(|response| {
+                                Err(UpdateDeploymentError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8881,10 +8819,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| UpdateDomainNameError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateDomainNameResponse, _>()?;
+                                .deserialize::<UpdateDomainNameResponse, _>();
 
                             result
                         })
@@ -8895,11 +8834,10 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateDomainNameError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateDomainNameError>())
+                            .and_then(|response| {
+                                Err(UpdateDomainNameError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8927,10 +8865,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| UpdateIntegrationError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateIntegrationResponse, _>()?;
+                                .deserialize::<UpdateIntegrationResponse, _>();
 
                             result
                         })
@@ -8941,11 +8880,10 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateIntegrationError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateIntegrationError>())
+                            .and_then(|response| {
+                                Err(UpdateIntegrationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8969,10 +8907,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| UpdateIntegrationResponseError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateIntegrationResponseResponse, _>()?;
+                                .deserialize::<UpdateIntegrationResponseResponse, _>();
 
                             result
                         })
@@ -8983,13 +8922,10 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(UpdateIntegrationResponseError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateIntegrationResponseError>())
+                            .and_then(|response| {
+                                Err(UpdateIntegrationResponseError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9017,10 +8953,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| UpdateModelError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateModelResponse, _>()?;
+                                .deserialize::<UpdateModelResponse, _>();
 
                             result
                         })
@@ -9031,11 +8968,8 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateModelError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateModelError>())
+                            .and_then(|response| Err(UpdateModelError::from_response(response)))
                     })
                     .boxed()
             }
@@ -9063,10 +8997,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| UpdateRouteError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateRouteResponse, _>()?;
+                                .deserialize::<UpdateRouteResponse, _>();
 
                             result
                         })
@@ -9077,11 +9012,8 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateRouteError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateRouteError>())
+                            .and_then(|response| Err(UpdateRouteError::from_response(response)))
                     })
                     .boxed()
             }
@@ -9110,10 +9042,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| UpdateRouteResponseError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateRouteResponseResponse, _>()?;
+                                .deserialize::<UpdateRouteResponseResponse, _>();
 
                             result
                         })
@@ -9124,11 +9057,10 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateRouteResponseError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateRouteResponseError>())
+                            .and_then(|response| {
+                                Err(UpdateRouteResponseError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9156,10 +9088,11 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| UpdateStageError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateStageResponse, _>()?;
+                                .deserialize::<UpdateStageResponse, _>();
 
                             result
                         })
@@ -9170,11 +9103,8 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateStageError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateStageError>())
+                            .and_then(|response| Err(UpdateStageError::from_response(response)))
                     })
                     .boxed()
             }

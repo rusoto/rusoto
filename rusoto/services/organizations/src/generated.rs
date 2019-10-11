@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -5188,11 +5188,16 @@ impl Organizations for OrganizationsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AcceptHandshakeError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AcceptHandshakeResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<AcceptHandshakeError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AcceptHandshakeResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5200,11 +5205,10 @@ impl Organizations for OrganizationsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(AcceptHandshakeError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<AcceptHandshakeError>
+                            })
+                            .and_then(|response| Err(AcceptHandshakeError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5222,17 +5226,16 @@ impl Organizations for OrganizationsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(AttachPolicyError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<AttachPolicyError>
+                            })
+                            .and_then(|response| Err(AttachPolicyError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5255,11 +5258,16 @@ impl Organizations for OrganizationsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CancelHandshakeError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CancelHandshakeResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CancelHandshakeError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CancelHandshakeResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5267,11 +5275,10 @@ impl Organizations for OrganizationsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CancelHandshakeError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CancelHandshakeError>
+                            })
+                            .and_then(|response| Err(CancelHandshakeError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5294,11 +5301,16 @@ impl Organizations for OrganizationsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateAccountError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateAccountResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateAccountError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateAccountResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5306,11 +5318,10 @@ impl Organizations for OrganizationsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateAccountError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateAccountError>
+                            })
+                            .and_then(|response| Err(CreateAccountError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5336,11 +5347,17 @@ impl Organizations for OrganizationsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateGovCloudAccountError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateGovCloudAccountResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateGovCloudAccountError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateGovCloudAccountResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5348,11 +5365,13 @@ impl Organizations for OrganizationsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateGovCloudAccountError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateGovCloudAccountError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateGovCloudAccountError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5378,11 +5397,16 @@ impl Organizations for OrganizationsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateOrganizationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateOrganizationResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateOrganizationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateOrganizationResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5390,11 +5414,12 @@ impl Organizations for OrganizationsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateOrganizationError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateOrganizationError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateOrganizationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5420,11 +5445,17 @@ impl Organizations for OrganizationsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateOrganizationalUnitError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateOrganizationalUnitResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateOrganizationalUnitError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateOrganizationalUnitResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5432,13 +5463,13 @@ impl Organizations for OrganizationsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(CreateOrganizationalUnitError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateOrganizationalUnitError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateOrganizationalUnitError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5461,11 +5492,16 @@ impl Organizations for OrganizationsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreatePolicyError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreatePolicyResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreatePolicyError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreatePolicyResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5473,11 +5509,10 @@ impl Organizations for OrganizationsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreatePolicyError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreatePolicyError>
+                            })
+                            .and_then(|response| Err(CreatePolicyError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5500,11 +5535,16 @@ impl Organizations for OrganizationsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeclineHandshakeError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeclineHandshakeResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeclineHandshakeError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeclineHandshakeResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5512,11 +5552,12 @@ impl Organizations for OrganizationsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeclineHandshakeError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeclineHandshakeError>
+                            })
+                            .and_then(|response| {
+                                Err(DeclineHandshakeError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5536,17 +5577,18 @@ impl Organizations for OrganizationsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteOrganizationError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteOrganizationError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteOrganizationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5570,19 +5612,19 @@ impl Organizations for OrganizationsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DeleteOrganizationalUnitError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteOrganizationalUnitError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteOrganizationalUnitError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5600,17 +5642,16 @@ impl Organizations for OrganizationsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeletePolicyError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeletePolicyError>
+                            })
+                            .and_then(|response| Err(DeletePolicyError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5633,11 +5674,16 @@ impl Organizations for OrganizationsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeAccountError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeAccountResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeAccountError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeAccountResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5645,11 +5691,10 @@ impl Organizations for OrganizationsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeAccountError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeAccountError>
+                            })
+                            .and_then(|response| Err(DescribeAccountError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5675,11 +5720,17 @@ impl Organizations for OrganizationsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeCreateAccountStatusError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeCreateAccountStatusResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeCreateAccountStatusError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeCreateAccountStatusResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5687,13 +5738,13 @@ impl Organizations for OrganizationsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeCreateAccountStatusError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeCreateAccountStatusError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeCreateAccountStatusError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5719,11 +5770,16 @@ impl Organizations for OrganizationsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeHandshakeError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeHandshakeResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeHandshakeError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeHandshakeResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5731,11 +5787,12 @@ impl Organizations for OrganizationsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeHandshakeError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeHandshakeError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeHandshakeError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5759,11 +5816,17 @@ impl Organizations for OrganizationsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeOrganizationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeOrganizationResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeOrganizationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeOrganizationResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5771,11 +5834,13 @@ impl Organizations for OrganizationsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeOrganizationError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeOrganizationError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeOrganizationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5801,11 +5866,17 @@ impl Organizations for OrganizationsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeOrganizationalUnitError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeOrganizationalUnitResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeOrganizationalUnitError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeOrganizationalUnitResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5813,13 +5884,13 @@ impl Organizations for OrganizationsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeOrganizationalUnitError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeOrganizationalUnitError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeOrganizationalUnitError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5842,11 +5913,16 @@ impl Organizations for OrganizationsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribePolicyError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribePolicyResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribePolicyError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribePolicyResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5854,11 +5930,10 @@ impl Organizations for OrganizationsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribePolicyError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribePolicyError>
+                            })
+                            .and_then(|response| Err(DescribePolicyError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5876,17 +5951,16 @@ impl Organizations for OrganizationsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DetachPolicyError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DetachPolicyError>
+                            })
+                            .and_then(|response| Err(DetachPolicyError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5910,19 +5984,19 @@ impl Organizations for OrganizationsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DisableAWSServiceAccessError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DisableAWSServiceAccessError>
+                            })
+                            .and_then(|response| {
+                                Err(DisableAWSServiceAccessError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5948,11 +6022,16 @@ impl Organizations for OrganizationsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DisablePolicyTypeError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DisablePolicyTypeResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DisablePolicyTypeError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DisablePolicyTypeResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5960,11 +6039,12 @@ impl Organizations for OrganizationsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DisablePolicyTypeError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DisablePolicyTypeError>
+                            })
+                            .and_then(|response| {
+                                Err(DisablePolicyTypeError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5988,19 +6068,19 @@ impl Organizations for OrganizationsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(EnableAWSServiceAccessError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<EnableAWSServiceAccessError>
+                            })
+                            .and_then(|response| {
+                                Err(EnableAWSServiceAccessError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6024,11 +6104,16 @@ impl Organizations for OrganizationsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| EnableAllFeaturesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<EnableAllFeaturesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<EnableAllFeaturesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<EnableAllFeaturesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6036,11 +6121,12 @@ impl Organizations for OrganizationsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(EnableAllFeaturesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<EnableAllFeaturesError>
+                            })
+                            .and_then(|response| {
+                                Err(EnableAllFeaturesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6063,11 +6149,16 @@ impl Organizations for OrganizationsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| EnablePolicyTypeError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<EnablePolicyTypeResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<EnablePolicyTypeError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<EnablePolicyTypeResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6075,11 +6166,12 @@ impl Organizations for OrganizationsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(EnablePolicyTypeError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<EnablePolicyTypeError>
+                            })
+                            .and_then(|response| {
+                                Err(EnablePolicyTypeError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6105,11 +6197,17 @@ impl Organizations for OrganizationsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| InviteAccountToOrganizationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<InviteAccountToOrganizationResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<InviteAccountToOrganizationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<InviteAccountToOrganizationResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6117,13 +6215,13 @@ impl Organizations for OrganizationsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(InviteAccountToOrganizationError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<InviteAccountToOrganizationError>
+                            })
+                            .and_then(|response| {
+                                Err(InviteAccountToOrganizationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6143,17 +6241,18 @@ impl Organizations for OrganizationsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(LeaveOrganizationError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<LeaveOrganizationError>
+                            })
+                            .and_then(|response| {
+                                Err(LeaveOrganizationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6182,11 +6281,17 @@ impl Organizations for OrganizationsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListAWSServiceAccessForOrganizationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListAWSServiceAccessForOrganizationResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListAWSServiceAccessForOrganizationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListAWSServiceAccessForOrganizationResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6194,15 +6299,15 @@ impl Organizations for OrganizationsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ListAWSServiceAccessForOrganizationError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListAWSServiceAccessForOrganizationError>
+                            })
+                            .and_then(|response| {
+                                Err(ListAWSServiceAccessForOrganizationError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -6225,11 +6330,16 @@ impl Organizations for OrganizationsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListAccountsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListAccountsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListAccountsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListAccountsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6237,11 +6347,10 @@ impl Organizations for OrganizationsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListAccountsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListAccountsError>
+                            })
+                            .and_then(|response| Err(ListAccountsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -6267,11 +6376,17 @@ impl Organizations for OrganizationsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListAccountsForParentError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListAccountsForParentResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListAccountsForParentError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListAccountsForParentResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6279,11 +6394,13 @@ impl Organizations for OrganizationsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListAccountsForParentError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListAccountsForParentError>
+                            })
+                            .and_then(|response| {
+                                Err(ListAccountsForParentError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6306,11 +6423,16 @@ impl Organizations for OrganizationsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListChildrenError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListChildrenResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListChildrenError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListChildrenResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6318,11 +6440,10 @@ impl Organizations for OrganizationsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListChildrenError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListChildrenError>
+                            })
+                            .and_then(|response| Err(ListChildrenError::from_response(response)))
                     })
                     .boxed()
             }
@@ -6348,11 +6469,17 @@ impl Organizations for OrganizationsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListCreateAccountStatusError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListCreateAccountStatusResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListCreateAccountStatusError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListCreateAccountStatusResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6360,13 +6487,13 @@ impl Organizations for OrganizationsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ListCreateAccountStatusError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListCreateAccountStatusError>
+                            })
+                            .and_then(|response| {
+                                Err(ListCreateAccountStatusError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6392,11 +6519,17 @@ impl Organizations for OrganizationsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListHandshakesForAccountError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListHandshakesForAccountResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListHandshakesForAccountError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListHandshakesForAccountResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6404,13 +6537,13 @@ impl Organizations for OrganizationsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ListHandshakesForAccountError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListHandshakesForAccountError>
+                            })
+                            .and_then(|response| {
+                                Err(ListHandshakesForAccountError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6437,11 +6570,17 @@ impl Organizations for OrganizationsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListHandshakesForOrganizationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListHandshakesForOrganizationResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListHandshakesForOrganizationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListHandshakesForOrganizationResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6449,13 +6588,13 @@ impl Organizations for OrganizationsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ListHandshakesForOrganizationError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListHandshakesForOrganizationError>
+                            })
+                            .and_then(|response| {
+                                Err(ListHandshakesForOrganizationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6482,11 +6621,17 @@ impl Organizations for OrganizationsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListOrganizationalUnitsForParentError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListOrganizationalUnitsForParentResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListOrganizationalUnitsForParentError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListOrganizationalUnitsForParentResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6494,15 +6639,15 @@ impl Organizations for OrganizationsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ListOrganizationalUnitsForParentError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListOrganizationalUnitsForParentError>
+                            })
+                            .and_then(|response| {
+                                Err(ListOrganizationalUnitsForParentError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -6525,11 +6670,16 @@ impl Organizations for OrganizationsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListParentsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListParentsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListParentsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListParentsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6537,11 +6687,10 @@ impl Organizations for OrganizationsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListParentsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListParentsError>
+                            })
+                            .and_then(|response| Err(ListParentsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -6564,11 +6713,16 @@ impl Organizations for OrganizationsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListPoliciesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListPoliciesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListPoliciesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListPoliciesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6576,11 +6730,10 @@ impl Organizations for OrganizationsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListPoliciesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListPoliciesError>
+                            })
+                            .and_then(|response| Err(ListPoliciesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -6606,11 +6759,17 @@ impl Organizations for OrganizationsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListPoliciesForTargetError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListPoliciesForTargetResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListPoliciesForTargetError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListPoliciesForTargetResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6618,11 +6777,13 @@ impl Organizations for OrganizationsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListPoliciesForTargetError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListPoliciesForTargetError>
+                            })
+                            .and_then(|response| {
+                                Err(ListPoliciesForTargetError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6645,11 +6806,16 @@ impl Organizations for OrganizationsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListRootsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListRootsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListRootsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListRootsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6657,11 +6823,10 @@ impl Organizations for OrganizationsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListRootsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListRootsError>
+                            })
+                            .and_then(|response| Err(ListRootsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -6687,11 +6852,17 @@ impl Organizations for OrganizationsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListTagsForResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListTagsForResourceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListTagsForResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListTagsForResourceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6699,11 +6870,13 @@ impl Organizations for OrganizationsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListTagsForResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListTagsForResourceError>
+                            })
+                            .and_then(|response| {
+                                Err(ListTagsForResourceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6729,11 +6902,17 @@ impl Organizations for OrganizationsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListTargetsForPolicyError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListTargetsForPolicyResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListTargetsForPolicyError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListTargetsForPolicyResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6741,11 +6920,13 @@ impl Organizations for OrganizationsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListTargetsForPolicyError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListTargetsForPolicyError>
+                            })
+                            .and_then(|response| {
+                                Err(ListTargetsForPolicyError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6763,17 +6944,16 @@ impl Organizations for OrganizationsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(MoveAccountError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<MoveAccountError>
+                            })
+                            .and_then(|response| Err(MoveAccountError::from_response(response)))
                     })
                     .boxed()
             }
@@ -6797,19 +6977,19 @@ impl Organizations for OrganizationsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(RemoveAccountFromOrganizationError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<RemoveAccountFromOrganizationError>
+                            })
+                            .and_then(|response| {
+                                Err(RemoveAccountFromOrganizationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6827,17 +7007,16 @@ impl Organizations for OrganizationsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(TagResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<TagResourceError>
+                            })
+                            .and_then(|response| Err(TagResourceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -6855,17 +7034,16 @@ impl Organizations for OrganizationsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UntagResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UntagResourceError>
+                            })
+                            .and_then(|response| Err(UntagResourceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -6891,11 +7069,17 @@ impl Organizations for OrganizationsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateOrganizationalUnitError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateOrganizationalUnitResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateOrganizationalUnitError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateOrganizationalUnitResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6903,13 +7087,13 @@ impl Organizations for OrganizationsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(UpdateOrganizationalUnitError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateOrganizationalUnitError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateOrganizationalUnitError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6932,11 +7116,16 @@ impl Organizations for OrganizationsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdatePolicyError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdatePolicyResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdatePolicyError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdatePolicyResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6944,11 +7133,10 @@ impl Organizations for OrganizationsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdatePolicyError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdatePolicyError>
+                            })
+                            .and_then(|response| Err(UpdatePolicyError::from_response(response)))
                     })
                     .boxed()
             }

@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
@@ -2420,10 +2420,11 @@ impl Connect for ConnectClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateUserError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateUserResponse, _>()?;
+                                .deserialize::<CreateUserResponse, _>();
 
                             result
                         })
@@ -2434,11 +2435,8 @@ impl Connect for ConnectClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateUserError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateUserError>())
+                            .and_then(|response| Err(CreateUserError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2460,8 +2458,9 @@ impl Connect for ConnectClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteUserError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -2473,11 +2472,8 @@ impl Connect for ConnectClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteUserError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteUserError>())
+                            .and_then(|response| Err(DeleteUserError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2502,10 +2498,11 @@ impl Connect for ConnectClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeUserError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeUserResponse, _>()?;
+                                .deserialize::<DescribeUserResponse, _>();
 
                             result
                         })
@@ -2516,11 +2513,8 @@ impl Connect for ConnectClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DescribeUserError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeUserError>())
+                            .and_then(|response| Err(DescribeUserError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2545,10 +2539,11 @@ impl Connect for ConnectClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeUserHierarchyGroupError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeUserHierarchyGroupResponse, _>()?;
+                                .deserialize::<DescribeUserHierarchyGroupResponse, _>();
 
                             result
                         })
@@ -2559,13 +2554,10 @@ impl Connect for ConnectClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(DescribeUserHierarchyGroupError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeUserHierarchyGroupError>())
+                            .and_then(|response| {
+                                Err(DescribeUserHierarchyGroupError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2590,11 +2582,12 @@ impl Connect for ConnectClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeUserHierarchyStructureError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
                                 .deserialize::<DescribeUserHierarchyStructureResponse, _>(
-                            )?;
+                            );
 
                             result
                         })
@@ -2605,15 +2598,10 @@ impl Connect for ConnectClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(DescribeUserHierarchyStructureError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeUserHierarchyStructureError>())
+                            .and_then(|response| {
+                                Err(DescribeUserHierarchyStructureError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2638,10 +2626,11 @@ impl Connect for ConnectClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetContactAttributesError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetContactAttributesResponse, _>()?;
+                                .deserialize::<GetContactAttributesResponse, _>();
 
                             result
                         })
@@ -2652,11 +2641,10 @@ impl Connect for ConnectClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetContactAttributesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetContactAttributesError>())
+                            .and_then(|response| {
+                                Err(GetContactAttributesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2683,10 +2671,11 @@ impl Connect for ConnectClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetCurrentMetricDataError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetCurrentMetricDataResponse, _>()?;
+                                .deserialize::<GetCurrentMetricDataResponse, _>();
 
                             result
                         })
@@ -2697,11 +2686,10 @@ impl Connect for ConnectClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetCurrentMetricDataError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetCurrentMetricDataError>())
+                            .and_then(|response| {
+                                Err(GetCurrentMetricDataError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2725,10 +2713,11 @@ impl Connect for ConnectClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetFederationTokenError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetFederationTokenResponse, _>()?;
+                                .deserialize::<GetFederationTokenResponse, _>();
 
                             result
                         })
@@ -2739,11 +2728,10 @@ impl Connect for ConnectClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetFederationTokenError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetFederationTokenError>())
+                            .and_then(|response| {
+                                Err(GetFederationTokenError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2770,10 +2758,11 @@ impl Connect for ConnectClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetMetricDataError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetMetricDataResponse, _>()?;
+                                .deserialize::<GetMetricDataResponse, _>();
 
                             result
                         })
@@ -2784,11 +2773,8 @@ impl Connect for ConnectClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetMetricDataError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetMetricDataError>())
+                            .and_then(|response| Err(GetMetricDataError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2821,10 +2807,11 @@ impl Connect for ConnectClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListRoutingProfilesError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListRoutingProfilesResponse, _>()?;
+                                .deserialize::<ListRoutingProfilesResponse, _>();
 
                             result
                         })
@@ -2835,11 +2822,10 @@ impl Connect for ConnectClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListRoutingProfilesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListRoutingProfilesError>())
+                            .and_then(|response| {
+                                Err(ListRoutingProfilesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2872,10 +2858,11 @@ impl Connect for ConnectClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListSecurityProfilesError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListSecurityProfilesResponse, _>()?;
+                                .deserialize::<ListSecurityProfilesResponse, _>();
 
                             result
                         })
@@ -2886,11 +2873,10 @@ impl Connect for ConnectClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListSecurityProfilesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListSecurityProfilesError>())
+                            .and_then(|response| {
+                                Err(ListSecurityProfilesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2923,10 +2909,11 @@ impl Connect for ConnectClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListUserHierarchyGroupsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListUserHierarchyGroupsResponse, _>()?;
+                                .deserialize::<ListUserHierarchyGroupsResponse, _>();
 
                             result
                         })
@@ -2937,13 +2924,10 @@ impl Connect for ConnectClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(ListUserHierarchyGroupsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListUserHierarchyGroupsError>())
+                            .and_then(|response| {
+                                Err(ListUserHierarchyGroupsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2976,10 +2960,11 @@ impl Connect for ConnectClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListUsersError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListUsersResponse, _>()?;
+                                .deserialize::<ListUsersResponse, _>();
 
                             result
                         })
@@ -2990,11 +2975,8 @@ impl Connect for ConnectClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListUsersError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListUsersError>())
+                            .and_then(|response| Err(ListUsersError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3018,10 +3000,11 @@ impl Connect for ConnectClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StartOutboundVoiceContactError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StartOutboundVoiceContactResponse, _>()?;
+                                .deserialize::<StartOutboundVoiceContactResponse, _>();
 
                             result
                         })
@@ -3032,13 +3015,10 @@ impl Connect for ConnectClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(StartOutboundVoiceContactError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<StartOutboundVoiceContactError>())
+                            .and_then(|response| {
+                                Err(StartOutboundVoiceContactError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3062,10 +3042,11 @@ impl Connect for ConnectClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StopContactError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StopContactResponse, _>()?;
+                                .deserialize::<StopContactResponse, _>();
 
                             result
                         })
@@ -3076,11 +3057,8 @@ impl Connect for ConnectClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(StopContactError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<StopContactError>())
+                            .and_then(|response| Err(StopContactError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3104,10 +3082,11 @@ impl Connect for ConnectClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateContactAttributesError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateContactAttributesResponse, _>()?;
+                                .deserialize::<UpdateContactAttributesResponse, _>();
 
                             result
                         })
@@ -3118,13 +3097,10 @@ impl Connect for ConnectClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(UpdateContactAttributesError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateContactAttributesError>())
+                            .and_then(|response| {
+                                Err(UpdateContactAttributesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3152,8 +3128,9 @@ impl Connect for ConnectClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateUserHierarchyError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -3165,11 +3142,10 @@ impl Connect for ConnectClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateUserHierarchyError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateUserHierarchyError>())
+                            .and_then(|response| {
+                                Err(UpdateUserHierarchyError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3197,8 +3173,9 @@ impl Connect for ConnectClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateUserIdentityInfoError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -3210,13 +3187,10 @@ impl Connect for ConnectClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(UpdateUserIdentityInfoError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateUserIdentityInfoError>())
+                            .and_then(|response| {
+                                Err(UpdateUserIdentityInfoError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3244,8 +3218,9 @@ impl Connect for ConnectClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateUserPhoneConfigError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -3257,11 +3232,10 @@ impl Connect for ConnectClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateUserPhoneConfigError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateUserPhoneConfigError>())
+                            .and_then(|response| {
+                                Err(UpdateUserPhoneConfigError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3289,8 +3263,9 @@ impl Connect for ConnectClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateUserRoutingProfileError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -3302,13 +3277,10 @@ impl Connect for ConnectClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(UpdateUserRoutingProfileError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateUserRoutingProfileError>())
+                            .and_then(|response| {
+                                Err(UpdateUserRoutingProfileError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3336,8 +3308,9 @@ impl Connect for ConnectClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateUserSecurityProfilesError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -3349,13 +3322,10 @@ impl Connect for ConnectClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(UpdateUserSecurityProfilesError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateUserSecurityProfilesError>())
+                            .and_then(|response| {
+                                Err(UpdateUserSecurityProfilesError::from_response(response))
+                            })
                     })
                     .boxed()
             }

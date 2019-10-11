@@ -46,9 +46,11 @@ impl GenerateProtocol for JsonGenerator {
                             {ok_response}
                         }} else {{
                             response.buffer().map(|try_response| {{
-                                try_response.map_or_else(|e| e, |response| {{
-                                    Err({error_type}::from_response(response))
-                                }}).boxed()
+                                try_response
+                                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<{error_type}>)
+                                    .and_then(|response| {{
+                                        Err({error_type}::from_response(response))
+                                    }})
                             }}).boxed()
                         }}
                     }})
@@ -62,7 +64,7 @@ impl GenerateProtocol for JsonGenerator {
                          .unwrap_or_else(|| "".to_owned()),
                      http_method = operation.http.method,
                      name = operation.name,
-                     ok_response = generate_ok_response(operation, output_type),
+                     ok_response = generate_ok_response(service, operation, operation_name, output_type),
                      request_uri = operation.http.request_uri,
                      target_prefix = service.target_prefix().unwrap(),
                      json_version = service.json_version().unwrap(),
@@ -75,7 +77,7 @@ impl GenerateProtocol for JsonGenerator {
     fn generate_prelude(&self, writer: &mut FileWriter, service: &Service<'_>) -> IoResult {
         let res = writeln!(
             writer,
-            "use futures::FutureExt;
+            "use futures::{{FutureExt, TryFutureExt}};
         use rusoto_core::proto;
         use rusoto_core::signature::SignedRequest;
         use serde::{{Deserialize, Serialize}};"
@@ -159,17 +161,22 @@ fn generate_documentation(operation: &Operation) -> Option<String> {
         .map(|docs| crate::doco::Item(docs).to_string())
 }
 
-fn generate_ok_response(operation: &Operation, output_type: &str) -> String {
+fn generate_ok_response(service: &Service<'_>, operation: &Operation, operation_name: &str, output_type: &str) -> String {
     if operation.output.is_some() {
         format!(
-            "response.buffer().map(|try_response| {{
-                try_response.and_then(|response| {{
-                    proto::json::ResponsePayload::new(&response).deserialize::<{}, _>()
-                }})
-            }}).boxed()",
-            output_type
+            "response.buffer()
+                .map_err(|e| {error_type}::from(e))
+                .map(|try_response| {{
+                    try_response
+                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<{error_type}>)
+                    .and_then(|response| {{
+                        proto::json::ResponsePayload::new(&response).deserialize::<{}, _>()
+                    }})
+                }}).boxed()",
+            output_type = output_type,
+            error_type = error_type_name(service, operation_name),
         )
     } else {
-        "futures::future::ready(::std::mem::drop(response)).boxed()".to_owned()
+        "futures::future::ready(Ok(std::mem::drop(response))).boxed()".to_owned()
     }
 }

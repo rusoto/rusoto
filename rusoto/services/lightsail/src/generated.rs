@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -12205,11 +12205,16 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AllocateStaticIpError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AllocateStaticIpResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<AllocateStaticIpError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AllocateStaticIpResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -12217,11 +12222,12 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(AllocateStaticIpError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<AllocateStaticIpError>
+                            })
+                            .and_then(|response| {
+                                Err(AllocateStaticIpError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -12244,11 +12250,16 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AttachDiskError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AttachDiskResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<AttachDiskError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AttachDiskResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -12256,11 +12267,10 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(AttachDiskError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<AttachDiskError>
+                            })
+                            .and_then(|response| Err(AttachDiskError::from_response(response)))
                     })
                     .boxed()
             }
@@ -12286,11 +12296,17 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AttachInstancesToLoadBalancerError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AttachInstancesToLoadBalancerResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AttachInstancesToLoadBalancerError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AttachInstancesToLoadBalancerResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -12298,13 +12314,13 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(AttachInstancesToLoadBalancerError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AttachInstancesToLoadBalancerError>
+                            })
+                            .and_then(|response| {
+                                Err(AttachInstancesToLoadBalancerError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -12331,11 +12347,17 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AttachLoadBalancerTlsCertificateError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AttachLoadBalancerTlsCertificateResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AttachLoadBalancerTlsCertificateError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AttachLoadBalancerTlsCertificateResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -12343,15 +12365,15 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(AttachLoadBalancerTlsCertificateError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AttachLoadBalancerTlsCertificateError>
+                            })
+                            .and_then(|response| {
+                                Err(AttachLoadBalancerTlsCertificateError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -12374,11 +12396,16 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AttachStaticIpError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AttachStaticIpResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<AttachStaticIpError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AttachStaticIpResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -12386,11 +12413,10 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(AttachStaticIpError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<AttachStaticIpError>
+                            })
+                            .and_then(|response| Err(AttachStaticIpError::from_response(response)))
                     })
                     .boxed()
             }
@@ -12416,11 +12442,17 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CloseInstancePublicPortsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CloseInstancePublicPortsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CloseInstancePublicPortsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CloseInstancePublicPortsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -12428,13 +12460,13 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(CloseInstancePublicPortsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CloseInstancePublicPortsError>
+                            })
+                            .and_then(|response| {
+                                Err(CloseInstancePublicPortsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -12457,11 +12489,16 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CopySnapshotError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CopySnapshotResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CopySnapshotError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CopySnapshotResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -12469,11 +12506,10 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CopySnapshotError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CopySnapshotError>
+                            })
+                            .and_then(|response| Err(CopySnapshotError::from_response(response)))
                     })
                     .boxed()
             }
@@ -12499,11 +12535,17 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateCloudFormationStackError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateCloudFormationStackResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateCloudFormationStackError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateCloudFormationStackResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -12511,13 +12553,13 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(CreateCloudFormationStackError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateCloudFormationStackError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateCloudFormationStackError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -12540,11 +12582,16 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateDiskError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateDiskResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateDiskError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateDiskResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -12552,11 +12599,10 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateDiskError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateDiskError>
+                            })
+                            .and_then(|response| Err(CreateDiskError::from_response(response)))
                     })
                     .boxed()
             }
@@ -12579,11 +12625,17 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateDiskFromSnapshotError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateDiskFromSnapshotResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateDiskFromSnapshotError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateDiskFromSnapshotResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -12591,13 +12643,13 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(CreateDiskFromSnapshotError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateDiskFromSnapshotError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateDiskFromSnapshotError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -12620,11 +12672,16 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateDiskSnapshotError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateDiskSnapshotResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateDiskSnapshotError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateDiskSnapshotResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -12632,11 +12689,12 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateDiskSnapshotError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateDiskSnapshotError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateDiskSnapshotError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -12659,11 +12717,16 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateDomainError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateDomainResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateDomainError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateDomainResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -12671,11 +12734,10 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateDomainError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateDomainError>
+                            })
+                            .and_then(|response| Err(CreateDomainError::from_response(response)))
                     })
                     .boxed()
             }
@@ -12698,11 +12760,16 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateDomainEntryError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateDomainEntryResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateDomainEntryError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateDomainEntryResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -12710,11 +12777,12 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateDomainEntryError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateDomainEntryError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateDomainEntryError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -12737,11 +12805,17 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateInstanceSnapshotError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateInstanceSnapshotResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateInstanceSnapshotError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateInstanceSnapshotResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -12749,13 +12823,13 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(CreateInstanceSnapshotError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateInstanceSnapshotError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateInstanceSnapshotError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -12778,11 +12852,16 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateInstancesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateInstancesResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateInstancesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateInstancesResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -12790,11 +12869,10 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateInstancesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateInstancesError>
+                            })
+                            .and_then(|response| Err(CreateInstancesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -12820,11 +12898,17 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateInstancesFromSnapshotError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateInstancesFromSnapshotResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateInstancesFromSnapshotError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateInstancesFromSnapshotResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -12832,13 +12916,13 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(CreateInstancesFromSnapshotError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateInstancesFromSnapshotError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateInstancesFromSnapshotError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -12861,11 +12945,16 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateKeyPairError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateKeyPairResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateKeyPairError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateKeyPairResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -12873,11 +12962,10 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateKeyPairError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateKeyPairError>
+                            })
+                            .and_then(|response| Err(CreateKeyPairError::from_response(response)))
                     })
                     .boxed()
             }
@@ -12900,11 +12988,16 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateLoadBalancerError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateLoadBalancerResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateLoadBalancerError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateLoadBalancerResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -12912,11 +13005,12 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateLoadBalancerError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateLoadBalancerError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateLoadBalancerError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -12943,11 +13037,17 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateLoadBalancerTlsCertificateError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateLoadBalancerTlsCertificateResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateLoadBalancerTlsCertificateError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateLoadBalancerTlsCertificateResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -12955,15 +13055,15 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(CreateLoadBalancerTlsCertificateError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateLoadBalancerTlsCertificateError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateLoadBalancerTlsCertificateError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -12989,11 +13089,17 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateRelationalDatabaseError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateRelationalDatabaseResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateRelationalDatabaseError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateRelationalDatabaseResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -13001,13 +13107,13 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(CreateRelationalDatabaseError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateRelationalDatabaseError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateRelationalDatabaseError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -13036,11 +13142,17 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateRelationalDatabaseFromSnapshotError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateRelationalDatabaseFromSnapshotResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateRelationalDatabaseFromSnapshotError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateRelationalDatabaseFromSnapshotResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -13048,15 +13160,15 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(CreateRelationalDatabaseFromSnapshotError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateRelationalDatabaseFromSnapshotError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateRelationalDatabaseFromSnapshotError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -13083,11 +13195,17 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateRelationalDatabaseSnapshotError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateRelationalDatabaseSnapshotResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateRelationalDatabaseSnapshotError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateRelationalDatabaseSnapshotResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -13095,15 +13213,15 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(CreateRelationalDatabaseSnapshotError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateRelationalDatabaseSnapshotError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateRelationalDatabaseSnapshotError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -13126,11 +13244,16 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteDiskError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteDiskResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteDiskError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteDiskResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -13138,11 +13261,10 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteDiskError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteDiskError>
+                            })
+                            .and_then(|response| Err(DeleteDiskError::from_response(response)))
                     })
                     .boxed()
             }
@@ -13165,11 +13287,16 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteDiskSnapshotError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteDiskSnapshotResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteDiskSnapshotError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteDiskSnapshotResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -13177,11 +13304,12 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteDiskSnapshotError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteDiskSnapshotError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteDiskSnapshotError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -13204,11 +13332,16 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteDomainError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteDomainResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteDomainError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteDomainResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -13216,11 +13349,10 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteDomainError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteDomainError>
+                            })
+                            .and_then(|response| Err(DeleteDomainError::from_response(response)))
                     })
                     .boxed()
             }
@@ -13243,11 +13375,16 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteDomainEntryError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteDomainEntryResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteDomainEntryError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteDomainEntryResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -13255,11 +13392,12 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteDomainEntryError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteDomainEntryError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteDomainEntryError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -13282,11 +13420,16 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteInstanceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteInstanceResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteInstanceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteInstanceResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -13294,11 +13437,10 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteInstanceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteInstanceError>
+                            })
+                            .and_then(|response| Err(DeleteInstanceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -13321,11 +13463,17 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteInstanceSnapshotError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteInstanceSnapshotResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteInstanceSnapshotError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteInstanceSnapshotResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -13333,13 +13481,13 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DeleteInstanceSnapshotError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteInstanceSnapshotError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteInstanceSnapshotError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -13362,11 +13510,16 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteKeyPairError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteKeyPairResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteKeyPairError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteKeyPairResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -13374,11 +13527,10 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteKeyPairError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteKeyPairError>
+                            })
+                            .and_then(|response| Err(DeleteKeyPairError::from_response(response)))
                     })
                     .boxed()
             }
@@ -13401,11 +13553,17 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteKnownHostKeysError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteKnownHostKeysResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteKnownHostKeysError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteKnownHostKeysResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -13413,11 +13571,13 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteKnownHostKeysError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteKnownHostKeysError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteKnownHostKeysError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -13440,11 +13600,16 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteLoadBalancerError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteLoadBalancerResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteLoadBalancerError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteLoadBalancerResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -13452,11 +13617,12 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteLoadBalancerError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteLoadBalancerError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteLoadBalancerError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -13483,11 +13649,17 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteLoadBalancerTlsCertificateError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteLoadBalancerTlsCertificateResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteLoadBalancerTlsCertificateError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteLoadBalancerTlsCertificateResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -13495,15 +13667,15 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DeleteLoadBalancerTlsCertificateError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteLoadBalancerTlsCertificateError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteLoadBalancerTlsCertificateError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -13529,11 +13701,17 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteRelationalDatabaseError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteRelationalDatabaseResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteRelationalDatabaseError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteRelationalDatabaseResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -13541,13 +13719,13 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DeleteRelationalDatabaseError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteRelationalDatabaseError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteRelationalDatabaseError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -13574,11 +13752,17 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteRelationalDatabaseSnapshotError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteRelationalDatabaseSnapshotResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteRelationalDatabaseSnapshotError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteRelationalDatabaseSnapshotResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -13586,15 +13770,15 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DeleteRelationalDatabaseSnapshotError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteRelationalDatabaseSnapshotError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteRelationalDatabaseSnapshotError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -13617,11 +13801,16 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DetachDiskError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DetachDiskResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DetachDiskError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DetachDiskResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -13629,11 +13818,10 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DetachDiskError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DetachDiskError>
+                            })
+                            .and_then(|response| Err(DetachDiskError::from_response(response)))
                     })
                     .boxed()
             }
@@ -13660,11 +13848,17 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DetachInstancesFromLoadBalancerError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DetachInstancesFromLoadBalancerResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DetachInstancesFromLoadBalancerError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DetachInstancesFromLoadBalancerResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -13672,15 +13866,15 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DetachInstancesFromLoadBalancerError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DetachInstancesFromLoadBalancerError>
+                            })
+                            .and_then(|response| {
+                                Err(DetachInstancesFromLoadBalancerError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -13703,11 +13897,16 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DetachStaticIpError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DetachStaticIpResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DetachStaticIpError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DetachStaticIpResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -13715,11 +13914,10 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DetachStaticIpError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DetachStaticIpError>
+                            })
+                            .and_then(|response| Err(DetachStaticIpError::from_response(response)))
                     })
                     .boxed()
             }
@@ -13740,11 +13938,17 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DownloadDefaultKeyPairError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DownloadDefaultKeyPairResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DownloadDefaultKeyPairError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DownloadDefaultKeyPairResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -13752,13 +13956,13 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DownloadDefaultKeyPairError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DownloadDefaultKeyPairError>
+                            })
+                            .and_then(|response| {
+                                Err(DownloadDefaultKeyPairError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -13781,11 +13985,16 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ExportSnapshotError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ExportSnapshotResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ExportSnapshotError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ExportSnapshotResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -13793,11 +14002,10 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ExportSnapshotError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ExportSnapshotError>
+                            })
+                            .and_then(|response| Err(ExportSnapshotError::from_response(response)))
                     })
                     .boxed()
             }
@@ -13820,11 +14028,16 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetActiveNamesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetActiveNamesResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetActiveNamesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetActiveNamesResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -13832,11 +14045,10 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetActiveNamesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetActiveNamesError>
+                            })
+                            .and_then(|response| Err(GetActiveNamesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -13859,11 +14071,16 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetBlueprintsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetBlueprintsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetBlueprintsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetBlueprintsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -13871,11 +14088,10 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetBlueprintsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetBlueprintsError>
+                            })
+                            .and_then(|response| Err(GetBlueprintsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -13898,11 +14114,16 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetBundlesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetBundlesResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetBundlesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetBundlesResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -13910,11 +14131,10 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetBundlesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetBundlesError>
+                            })
+                            .and_then(|response| Err(GetBundlesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -13940,11 +14160,17 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetCloudFormationStackRecordsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetCloudFormationStackRecordsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetCloudFormationStackRecordsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetCloudFormationStackRecordsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -13952,13 +14178,13 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(GetCloudFormationStackRecordsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetCloudFormationStackRecordsError>
+                            })
+                            .and_then(|response| {
+                                Err(GetCloudFormationStackRecordsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -13978,11 +14204,14 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetDiskError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetDiskResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<GetDiskError>)
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetDiskResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -13990,11 +14219,8 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetDiskError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<GetDiskError>)
+                            .and_then(|response| Err(GetDiskError::from_response(response)))
                     })
                     .boxed()
             }
@@ -14017,11 +14243,16 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetDiskSnapshotError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetDiskSnapshotResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetDiskSnapshotError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetDiskSnapshotResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -14029,11 +14260,10 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetDiskSnapshotError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetDiskSnapshotError>
+                            })
+                            .and_then(|response| Err(GetDiskSnapshotError::from_response(response)))
                     })
                     .boxed()
             }
@@ -14056,11 +14286,16 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetDiskSnapshotsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetDiskSnapshotsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetDiskSnapshotsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetDiskSnapshotsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -14068,11 +14303,12 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetDiskSnapshotsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetDiskSnapshotsError>
+                            })
+                            .and_then(|response| {
+                                Err(GetDiskSnapshotsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -14092,11 +14328,14 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetDisksError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetDisksResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<GetDisksError>)
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetDisksResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -14104,11 +14343,8 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetDisksError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<GetDisksError>)
+                            .and_then(|response| Err(GetDisksError::from_response(response)))
                     })
                     .boxed()
             }
@@ -14128,11 +14364,16 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetDomainError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetDomainResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetDomainError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetDomainResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -14140,11 +14381,10 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetDomainError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetDomainError>
+                            })
+                            .and_then(|response| Err(GetDomainError::from_response(response)))
                     })
                     .boxed()
             }
@@ -14167,11 +14407,16 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetDomainsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetDomainsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetDomainsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetDomainsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -14179,11 +14424,10 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetDomainsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetDomainsError>
+                            })
+                            .and_then(|response| Err(GetDomainsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -14209,11 +14453,17 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetExportSnapshotRecordsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetExportSnapshotRecordsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetExportSnapshotRecordsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetExportSnapshotRecordsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -14221,13 +14471,13 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(GetExportSnapshotRecordsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetExportSnapshotRecordsError>
+                            })
+                            .and_then(|response| {
+                                Err(GetExportSnapshotRecordsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -14250,11 +14500,16 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetInstanceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetInstanceResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetInstanceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetInstanceResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -14262,11 +14517,10 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetInstanceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetInstanceError>
+                            })
+                            .and_then(|response| Err(GetInstanceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -14292,11 +14546,17 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetInstanceAccessDetailsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetInstanceAccessDetailsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetInstanceAccessDetailsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetInstanceAccessDetailsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -14304,13 +14564,13 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(GetInstanceAccessDetailsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetInstanceAccessDetailsError>
+                            })
+                            .and_then(|response| {
+                                Err(GetInstanceAccessDetailsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -14333,11 +14593,17 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetInstanceMetricDataError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetInstanceMetricDataResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetInstanceMetricDataError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetInstanceMetricDataResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -14345,11 +14611,13 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetInstanceMetricDataError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetInstanceMetricDataError>
+                            })
+                            .and_then(|response| {
+                                Err(GetInstanceMetricDataError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -14372,11 +14640,17 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetInstancePortStatesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetInstancePortStatesResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetInstancePortStatesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetInstancePortStatesResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -14384,11 +14658,13 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetInstancePortStatesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetInstancePortStatesError>
+                            })
+                            .and_then(|response| {
+                                Err(GetInstancePortStatesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -14411,11 +14687,17 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetInstanceSnapshotError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetInstanceSnapshotResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetInstanceSnapshotError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetInstanceSnapshotResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -14423,11 +14705,13 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetInstanceSnapshotError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetInstanceSnapshotError>
+                            })
+                            .and_then(|response| {
+                                Err(GetInstanceSnapshotError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -14450,11 +14734,17 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetInstanceSnapshotsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetInstanceSnapshotsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetInstanceSnapshotsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetInstanceSnapshotsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -14462,11 +14752,13 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetInstanceSnapshotsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetInstanceSnapshotsError>
+                            })
+                            .and_then(|response| {
+                                Err(GetInstanceSnapshotsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -14489,11 +14781,16 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetInstanceStateError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetInstanceStateResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetInstanceStateError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetInstanceStateResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -14501,11 +14798,12 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetInstanceStateError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetInstanceStateError>
+                            })
+                            .and_then(|response| {
+                                Err(GetInstanceStateError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -14528,11 +14826,16 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetInstancesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetInstancesResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetInstancesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetInstancesResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -14540,11 +14843,10 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetInstancesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetInstancesError>
+                            })
+                            .and_then(|response| Err(GetInstancesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -14567,11 +14869,16 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetKeyPairError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetKeyPairResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetKeyPairError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetKeyPairResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -14579,11 +14886,10 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetKeyPairError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetKeyPairError>
+                            })
+                            .and_then(|response| Err(GetKeyPairError::from_response(response)))
                     })
                     .boxed()
             }
@@ -14606,11 +14912,16 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetKeyPairsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetKeyPairsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetKeyPairsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetKeyPairsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -14618,11 +14929,10 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetKeyPairsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetKeyPairsError>
+                            })
+                            .and_then(|response| Err(GetKeyPairsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -14645,11 +14955,16 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetLoadBalancerError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetLoadBalancerResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetLoadBalancerError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetLoadBalancerResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -14657,11 +14972,10 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetLoadBalancerError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetLoadBalancerError>
+                            })
+                            .and_then(|response| Err(GetLoadBalancerError::from_response(response)))
                     })
                     .boxed()
             }
@@ -14687,11 +15001,17 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetLoadBalancerMetricDataError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetLoadBalancerMetricDataResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetLoadBalancerMetricDataError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetLoadBalancerMetricDataResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -14699,13 +15019,13 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(GetLoadBalancerMetricDataError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetLoadBalancerMetricDataError>
+                            })
+                            .and_then(|response| {
+                                Err(GetLoadBalancerMetricDataError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -14732,11 +15052,17 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetLoadBalancerTlsCertificatesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetLoadBalancerTlsCertificatesResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetLoadBalancerTlsCertificatesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetLoadBalancerTlsCertificatesResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -14744,15 +15070,13 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(GetLoadBalancerTlsCertificatesError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetLoadBalancerTlsCertificatesError>
+                            })
+                            .and_then(|response| {
+                                Err(GetLoadBalancerTlsCertificatesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -14775,11 +15099,16 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetLoadBalancersError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetLoadBalancersResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetLoadBalancersError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetLoadBalancersResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -14787,11 +15116,12 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetLoadBalancersError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetLoadBalancersError>
+                            })
+                            .and_then(|response| {
+                                Err(GetLoadBalancersError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -14814,11 +15144,16 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetOperationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetOperationResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetOperationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetOperationResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -14826,11 +15161,10 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetOperationError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetOperationError>
+                            })
+                            .and_then(|response| Err(GetOperationError::from_response(response)))
                     })
                     .boxed()
             }
@@ -14853,11 +15187,16 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetOperationsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetOperationsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetOperationsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetOperationsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -14865,11 +15204,10 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetOperationsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetOperationsError>
+                            })
+                            .and_then(|response| Err(GetOperationsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -14895,11 +15233,17 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetOperationsForResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetOperationsForResourceResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetOperationsForResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetOperationsForResourceResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -14907,13 +15251,13 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(GetOperationsForResourceError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetOperationsForResourceError>
+                            })
+                            .and_then(|response| {
+                                Err(GetOperationsForResourceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -14936,11 +15280,16 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetRegionsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetRegionsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetRegionsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetRegionsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -14948,11 +15297,10 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetRegionsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetRegionsError>
+                            })
+                            .and_then(|response| Err(GetRegionsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -14975,11 +15323,17 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetRelationalDatabaseError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetRelationalDatabaseResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetRelationalDatabaseError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetRelationalDatabaseResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -14987,11 +15341,13 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetRelationalDatabaseError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetRelationalDatabaseError>
+                            })
+                            .and_then(|response| {
+                                Err(GetRelationalDatabaseError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -15018,11 +15374,17 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetRelationalDatabaseBlueprintsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetRelationalDatabaseBlueprintsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetRelationalDatabaseBlueprintsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetRelationalDatabaseBlueprintsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -15030,15 +15392,15 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(GetRelationalDatabaseBlueprintsError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetRelationalDatabaseBlueprintsError>
+                            })
+                            .and_then(|response| {
+                                Err(GetRelationalDatabaseBlueprintsError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -15064,11 +15426,17 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetRelationalDatabaseBundlesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetRelationalDatabaseBundlesResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetRelationalDatabaseBundlesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetRelationalDatabaseBundlesResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -15076,13 +15444,13 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(GetRelationalDatabaseBundlesError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetRelationalDatabaseBundlesError>
+                            })
+                            .and_then(|response| {
+                                Err(GetRelationalDatabaseBundlesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -15108,11 +15476,17 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetRelationalDatabaseEventsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetRelationalDatabaseEventsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetRelationalDatabaseEventsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetRelationalDatabaseEventsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -15120,13 +15494,13 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(GetRelationalDatabaseEventsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetRelationalDatabaseEventsError>
+                            })
+                            .and_then(|response| {
+                                Err(GetRelationalDatabaseEventsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -15153,11 +15527,17 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetRelationalDatabaseLogEventsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetRelationalDatabaseLogEventsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetRelationalDatabaseLogEventsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetRelationalDatabaseLogEventsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -15165,15 +15545,13 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(GetRelationalDatabaseLogEventsError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetRelationalDatabaseLogEventsError>
+                            })
+                            .and_then(|response| {
+                                Err(GetRelationalDatabaseLogEventsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -15200,11 +15578,17 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetRelationalDatabaseLogStreamsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetRelationalDatabaseLogStreamsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetRelationalDatabaseLogStreamsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetRelationalDatabaseLogStreamsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -15212,15 +15596,15 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(GetRelationalDatabaseLogStreamsError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetRelationalDatabaseLogStreamsError>
+                            })
+                            .and_then(|response| {
+                                Err(GetRelationalDatabaseLogStreamsError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -15247,16 +15631,22 @@ impl Lightsail for LightsailClient {
 
         self.client.sign_and_dispatch(request, |response| {
                         if response.status.is_success() {
-                            response.buffer().map(|try_response| {
-                try_response.and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<GetRelationalDatabaseMasterUserPasswordResult, _>()
-                })
-            }).boxed()
+                            response.buffer()
+                .map_err(|e| GetRelationalDatabaseMasterUserPasswordError::from(e))
+                .map(|try_response| {
+                    try_response
+                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<GetRelationalDatabaseMasterUserPasswordError>)
+                    .and_then(|response| {
+                        proto::json::ResponsePayload::new(&response).deserialize::<GetRelationalDatabaseMasterUserPasswordResult, _>()
+                    })
+                }).boxed()
                         } else {
                             response.buffer().map(|try_response| {
-                                try_response.map_or_else(|e| e, |response| {
-                                    Err(GetRelationalDatabaseMasterUserPasswordError::from_response(response))
-                                }).boxed()
+                                try_response
+                                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<GetRelationalDatabaseMasterUserPasswordError>)
+                                    .and_then(|response| {
+                                        Err(GetRelationalDatabaseMasterUserPasswordError::from_response(response))
+                                    })
                             }).boxed()
                         }
                     })
@@ -15282,11 +15672,17 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetRelationalDatabaseMetricDataError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetRelationalDatabaseMetricDataResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetRelationalDatabaseMetricDataError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetRelationalDatabaseMetricDataResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -15294,15 +15690,15 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(GetRelationalDatabaseMetricDataError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetRelationalDatabaseMetricDataError>
+                            })
+                            .and_then(|response| {
+                                Err(GetRelationalDatabaseMetricDataError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -15329,11 +15725,17 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetRelationalDatabaseParametersError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetRelationalDatabaseParametersResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetRelationalDatabaseParametersError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetRelationalDatabaseParametersResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -15341,15 +15743,15 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(GetRelationalDatabaseParametersError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetRelationalDatabaseParametersError>
+                            })
+                            .and_then(|response| {
+                                Err(GetRelationalDatabaseParametersError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -15375,11 +15777,17 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetRelationalDatabaseSnapshotError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetRelationalDatabaseSnapshotResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetRelationalDatabaseSnapshotError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetRelationalDatabaseSnapshotResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -15387,13 +15795,13 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(GetRelationalDatabaseSnapshotError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetRelationalDatabaseSnapshotError>
+                            })
+                            .and_then(|response| {
+                                Err(GetRelationalDatabaseSnapshotError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -15420,11 +15828,17 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetRelationalDatabaseSnapshotsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetRelationalDatabaseSnapshotsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetRelationalDatabaseSnapshotsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetRelationalDatabaseSnapshotsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -15432,15 +15846,13 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(GetRelationalDatabaseSnapshotsError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetRelationalDatabaseSnapshotsError>
+                            })
+                            .and_then(|response| {
+                                Err(GetRelationalDatabaseSnapshotsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -15463,11 +15875,17 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetRelationalDatabasesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetRelationalDatabasesResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetRelationalDatabasesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetRelationalDatabasesResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -15475,13 +15893,13 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(GetRelationalDatabasesError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetRelationalDatabasesError>
+                            })
+                            .and_then(|response| {
+                                Err(GetRelationalDatabasesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -15504,11 +15922,16 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetStaticIpError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetStaticIpResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetStaticIpError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetStaticIpResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -15516,11 +15939,10 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetStaticIpError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetStaticIpError>
+                            })
+                            .and_then(|response| Err(GetStaticIpError::from_response(response)))
                     })
                     .boxed()
             }
@@ -15543,11 +15965,16 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetStaticIpsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetStaticIpsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetStaticIpsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetStaticIpsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -15555,11 +15982,10 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetStaticIpsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetStaticIpsError>
+                            })
+                            .and_then(|response| Err(GetStaticIpsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -15582,11 +16008,16 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ImportKeyPairError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ImportKeyPairResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ImportKeyPairError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ImportKeyPairResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -15594,11 +16025,10 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ImportKeyPairError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ImportKeyPairError>
+                            })
+                            .and_then(|response| Err(ImportKeyPairError::from_response(response)))
                     })
                     .boxed()
             }
@@ -15617,11 +16047,16 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| IsVpcPeeredError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<IsVpcPeeredResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<IsVpcPeeredError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<IsVpcPeeredResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -15629,11 +16064,10 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(IsVpcPeeredError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<IsVpcPeeredError>
+                            })
+                            .and_then(|response| Err(IsVpcPeeredError::from_response(response)))
                     })
                     .boxed()
             }
@@ -15656,11 +16090,17 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| OpenInstancePublicPortsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<OpenInstancePublicPortsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<OpenInstancePublicPortsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<OpenInstancePublicPortsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -15668,13 +16108,13 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(OpenInstancePublicPortsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<OpenInstancePublicPortsError>
+                            })
+                            .and_then(|response| {
+                                Err(OpenInstancePublicPortsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -15693,11 +16133,14 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| PeerVpcError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PeerVpcResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<PeerVpcError>)
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<PeerVpcResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -15705,11 +16148,8 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(PeerVpcError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<PeerVpcError>)
+                            .and_then(|response| Err(PeerVpcError::from_response(response)))
                     })
                     .boxed()
             }
@@ -15732,11 +16172,17 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| PutInstancePublicPortsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PutInstancePublicPortsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<PutInstancePublicPortsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<PutInstancePublicPortsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -15744,13 +16190,13 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(PutInstancePublicPortsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<PutInstancePublicPortsError>
+                            })
+                            .and_then(|response| {
+                                Err(PutInstancePublicPortsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -15773,11 +16219,16 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| RebootInstanceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RebootInstanceResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<RebootInstanceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<RebootInstanceResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -15785,11 +16236,10 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(RebootInstanceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<RebootInstanceError>
+                            })
+                            .and_then(|response| Err(RebootInstanceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -15815,11 +16265,17 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| RebootRelationalDatabaseError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RebootRelationalDatabaseResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<RebootRelationalDatabaseError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<RebootRelationalDatabaseResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -15827,13 +16283,13 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(RebootRelationalDatabaseError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<RebootRelationalDatabaseError>
+                            })
+                            .and_then(|response| {
+                                Err(RebootRelationalDatabaseError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -15856,11 +16312,16 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ReleaseStaticIpError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ReleaseStaticIpResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ReleaseStaticIpError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ReleaseStaticIpResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -15868,11 +16329,10 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ReleaseStaticIpError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ReleaseStaticIpError>
+                            })
+                            .and_then(|response| Err(ReleaseStaticIpError::from_response(response)))
                     })
                     .boxed()
             }
@@ -15895,11 +16355,16 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StartInstanceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StartInstanceResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StartInstanceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StartInstanceResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -15907,11 +16372,10 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(StartInstanceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StartInstanceError>
+                            })
+                            .and_then(|response| Err(StartInstanceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -15934,11 +16398,17 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StartRelationalDatabaseError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StartRelationalDatabaseResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StartRelationalDatabaseError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StartRelationalDatabaseResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -15946,13 +16416,13 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(StartRelationalDatabaseError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StartRelationalDatabaseError>
+                            })
+                            .and_then(|response| {
+                                Err(StartRelationalDatabaseError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -15975,11 +16445,16 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StopInstanceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StopInstanceResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StopInstanceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StopInstanceResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -15987,11 +16462,10 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(StopInstanceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StopInstanceError>
+                            })
+                            .and_then(|response| Err(StopInstanceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -16014,11 +16488,17 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StopRelationalDatabaseError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StopRelationalDatabaseResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StopRelationalDatabaseError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StopRelationalDatabaseResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -16026,13 +16506,13 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(StopRelationalDatabaseError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StopRelationalDatabaseError>
+                            })
+                            .and_then(|response| {
+                                Err(StopRelationalDatabaseError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -16055,11 +16535,16 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| TagResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<TagResourceResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<TagResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<TagResourceResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -16067,11 +16552,10 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(TagResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<TagResourceError>
+                            })
+                            .and_then(|response| Err(TagResourceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -16090,11 +16574,16 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UnpeerVpcError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UnpeerVpcResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UnpeerVpcError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UnpeerVpcResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -16102,11 +16591,10 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UnpeerVpcError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UnpeerVpcError>
+                            })
+                            .and_then(|response| Err(UnpeerVpcError::from_response(response)))
                     })
                     .boxed()
             }
@@ -16129,11 +16617,16 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UntagResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UntagResourceResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UntagResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UntagResourceResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -16141,11 +16634,10 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UntagResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UntagResourceError>
+                            })
+                            .and_then(|response| Err(UntagResourceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -16168,11 +16660,16 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateDomainEntryError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateDomainEntryResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateDomainEntryError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateDomainEntryResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -16180,11 +16677,12 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateDomainEntryError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateDomainEntryError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateDomainEntryError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -16210,11 +16708,17 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateLoadBalancerAttributeError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateLoadBalancerAttributeResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateLoadBalancerAttributeError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateLoadBalancerAttributeResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -16222,13 +16726,13 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(UpdateLoadBalancerAttributeError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateLoadBalancerAttributeError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateLoadBalancerAttributeError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -16254,11 +16758,17 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateRelationalDatabaseError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateRelationalDatabaseResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateRelationalDatabaseError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateRelationalDatabaseResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -16266,13 +16776,13 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(UpdateRelationalDatabaseError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateRelationalDatabaseError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateRelationalDatabaseError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -16301,11 +16811,17 @@ impl Lightsail for LightsailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateRelationalDatabaseParametersError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateRelationalDatabaseParametersResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateRelationalDatabaseParametersError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateRelationalDatabaseParametersResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -16313,15 +16829,15 @@ impl Lightsail for LightsailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(UpdateRelationalDatabaseParametersError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateRelationalDatabaseParametersError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateRelationalDatabaseParametersError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }

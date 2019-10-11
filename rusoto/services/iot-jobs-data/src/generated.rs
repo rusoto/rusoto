@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
@@ -606,10 +606,11 @@ impl IotJobsData for IotJobsDataClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeJobExecutionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeJobExecutionResponse, _>()?;
+                                .deserialize::<DescribeJobExecutionResponse, _>();
 
                             result
                         })
@@ -620,11 +621,10 @@ impl IotJobsData for IotJobsDataClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DescribeJobExecutionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeJobExecutionError>())
+                            .and_then(|response| {
+                                Err(DescribeJobExecutionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -647,10 +647,11 @@ impl IotJobsData for IotJobsDataClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetPendingJobExecutionsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetPendingJobExecutionsResponse, _>()?;
+                                .deserialize::<GetPendingJobExecutionsResponse, _>();
 
                             result
                         })
@@ -661,13 +662,10 @@ impl IotJobsData for IotJobsDataClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(GetPendingJobExecutionsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetPendingJobExecutionsError>())
+                            .and_then(|response| {
+                                Err(GetPendingJobExecutionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -695,11 +693,11 @@ impl IotJobsData for IotJobsDataClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StartNextPendingJobExecutionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StartNextPendingJobExecutionResponse, _>(
-                            )?;
+                                .deserialize::<StartNextPendingJobExecutionResponse, _>();
 
                             result
                         })
@@ -710,13 +708,10 @@ impl IotJobsData for IotJobsDataClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(StartNextPendingJobExecutionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<StartNextPendingJobExecutionError>())
+                            .and_then(|response| {
+                                Err(StartNextPendingJobExecutionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -745,10 +740,11 @@ impl IotJobsData for IotJobsDataClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateJobExecutionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateJobExecutionResponse, _>()?;
+                                .deserialize::<UpdateJobExecutionResponse, _>();
 
                             result
                         })
@@ -759,11 +755,10 @@ impl IotJobsData for IotJobsDataClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateJobExecutionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateJobExecutionError>())
+                            .and_then(|response| {
+                                Err(UpdateJobExecutionError::from_response(response))
+                            })
                     })
                     .boxed()
             }

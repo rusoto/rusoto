@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -184,8 +184,9 @@ impl KinesisVideoMedia for KinesisVideoMediaClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetMediaError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let mut result = GetMediaOutput::default();
                             result.payload = Some(response.body);
 
@@ -203,11 +204,8 @@ impl KinesisVideoMedia for KinesisVideoMediaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetMediaError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetMediaError>())
+                            .and_then(|response| Err(GetMediaError::from_response(response)))
                     })
                     .boxed()
             }

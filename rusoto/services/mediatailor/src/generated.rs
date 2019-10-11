@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
@@ -656,10 +656,11 @@ impl MediaTailor for MediaTailorClient {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| DeletePlaybackConfigurationError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeletePlaybackConfigurationResponse, _>()?;
+                                .deserialize::<DeletePlaybackConfigurationResponse, _>();
 
                             result
                         })
@@ -670,13 +671,10 @@ impl MediaTailor for MediaTailorClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(DeletePlaybackConfigurationError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeletePlaybackConfigurationError>())
+                            .and_then(|response| {
+                                Err(DeletePlaybackConfigurationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -699,10 +697,11 @@ impl MediaTailor for MediaTailorClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetPlaybackConfigurationError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetPlaybackConfigurationResponse, _>()?;
+                                .deserialize::<GetPlaybackConfigurationResponse, _>();
 
                             result
                         })
@@ -713,13 +712,10 @@ impl MediaTailor for MediaTailorClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(GetPlaybackConfigurationError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetPlaybackConfigurationError>())
+                            .and_then(|response| {
+                                Err(GetPlaybackConfigurationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -751,10 +747,11 @@ impl MediaTailor for MediaTailorClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListPlaybackConfigurationsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListPlaybackConfigurationsResponse, _>()?;
+                                .deserialize::<ListPlaybackConfigurationsResponse, _>();
 
                             result
                         })
@@ -765,13 +762,10 @@ impl MediaTailor for MediaTailorClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(ListPlaybackConfigurationsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListPlaybackConfigurationsError>())
+                            .and_then(|response| {
+                                Err(ListPlaybackConfigurationsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -794,10 +788,11 @@ impl MediaTailor for MediaTailorClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListTagsForResourceError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListTagsForResourceResponse, _>()?;
+                                .deserialize::<ListTagsForResourceResponse, _>();
 
                             result
                         })
@@ -808,11 +803,10 @@ impl MediaTailor for MediaTailorClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListTagsForResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListTagsForResourceError>())
+                            .and_then(|response| {
+                                Err(ListTagsForResourceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -837,10 +831,11 @@ impl MediaTailor for MediaTailorClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| PutPlaybackConfigurationError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PutPlaybackConfigurationResponse, _>()?;
+                                .deserialize::<PutPlaybackConfigurationResponse, _>();
 
                             result
                         })
@@ -851,13 +846,10 @@ impl MediaTailor for MediaTailorClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(PutPlaybackConfigurationError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<PutPlaybackConfigurationError>())
+                            .and_then(|response| {
+                                Err(PutPlaybackConfigurationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -879,8 +871,9 @@ impl MediaTailor for MediaTailorClient {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| TagResourceError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -892,11 +885,8 @@ impl MediaTailor for MediaTailorClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(TagResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<TagResourceError>())
+                            .and_then(|response| Err(TagResourceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -922,8 +912,9 @@ impl MediaTailor for MediaTailorClient {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| UntagResourceError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -935,11 +926,8 @@ impl MediaTailor for MediaTailorClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UntagResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UntagResourceError>())
+                            .and_then(|response| Err(UntagResourceError::from_response(response)))
                     })
                     .boxed()
             }

@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -470,10 +470,11 @@ impl KinesisVideoArchivedMedia for KinesisVideoArchivedMediaClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetHLSStreamingSessionURLError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetHLSStreamingSessionURLOutput, _>()?;
+                                .deserialize::<GetHLSStreamingSessionURLOutput, _>();
 
                             result
                         })
@@ -484,13 +485,10 @@ impl KinesisVideoArchivedMedia for KinesisVideoArchivedMediaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(GetHLSStreamingSessionURLError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetHLSStreamingSessionURLError>())
+                            .and_then(|response| {
+                                Err(GetHLSStreamingSessionURLError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -514,8 +512,9 @@ impl KinesisVideoArchivedMedia for KinesisVideoArchivedMediaClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetMediaForFragmentListError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let mut result = GetMediaForFragmentListOutput::default();
                             result.payload = Some(response.body);
 
@@ -533,13 +532,10 @@ impl KinesisVideoArchivedMedia for KinesisVideoArchivedMediaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(GetMediaForFragmentListError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetMediaForFragmentListError>())
+                            .and_then(|response| {
+                                Err(GetMediaForFragmentListError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -563,10 +559,11 @@ impl KinesisVideoArchivedMedia for KinesisVideoArchivedMediaClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListFragmentsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListFragmentsOutput, _>()?;
+                                .deserialize::<ListFragmentsOutput, _>();
 
                             result
                         })
@@ -577,11 +574,8 @@ impl KinesisVideoArchivedMedia for KinesisVideoArchivedMediaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListFragmentsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListFragmentsError>())
+                            .and_then(|response| Err(ListFragmentsError::from_response(response)))
                     })
                     .boxed()
             }

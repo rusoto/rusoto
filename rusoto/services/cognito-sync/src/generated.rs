@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
@@ -1898,10 +1898,11 @@ impl CognitoSync for CognitoSyncClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| BulkPublishError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<BulkPublishResponse, _>()?;
+                                .deserialize::<BulkPublishResponse, _>();
 
                             result
                         })
@@ -1912,11 +1913,8 @@ impl CognitoSync for CognitoSyncClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(BulkPublishError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<BulkPublishError>())
+                            .and_then(|response| Err(BulkPublishError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1942,10 +1940,11 @@ impl CognitoSync for CognitoSyncClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteDatasetError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteDatasetResponse, _>()?;
+                                .deserialize::<DeleteDatasetResponse, _>();
 
                             result
                         })
@@ -1956,11 +1955,8 @@ impl CognitoSync for CognitoSyncClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteDatasetError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteDatasetError>())
+                            .and_then(|response| Err(DeleteDatasetError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1986,10 +1982,11 @@ impl CognitoSync for CognitoSyncClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| DescribeDatasetError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeDatasetResponse, _>()?;
+                                .deserialize::<DescribeDatasetResponse, _>();
 
                             result
                         })
@@ -2000,11 +1997,8 @@ impl CognitoSync for CognitoSyncClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DescribeDatasetError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeDatasetError>())
+                            .and_then(|response| Err(DescribeDatasetError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2028,10 +2022,11 @@ impl CognitoSync for CognitoSyncClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| DescribeIdentityPoolUsageError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeIdentityPoolUsageResponse, _>()?;
+                                .deserialize::<DescribeIdentityPoolUsageResponse, _>();
 
                             result
                         })
@@ -2042,13 +2037,10 @@ impl CognitoSync for CognitoSyncClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(DescribeIdentityPoolUsageError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeIdentityPoolUsageError>())
+                            .and_then(|response| {
+                                Err(DescribeIdentityPoolUsageError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2073,10 +2065,11 @@ impl CognitoSync for CognitoSyncClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| DescribeIdentityUsageError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeIdentityUsageResponse, _>()?;
+                                .deserialize::<DescribeIdentityUsageResponse, _>();
 
                             result
                         })
@@ -2087,11 +2080,10 @@ impl CognitoSync for CognitoSyncClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DescribeIdentityUsageError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeIdentityUsageError>())
+                            .and_then(|response| {
+                                Err(DescribeIdentityUsageError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2115,10 +2107,11 @@ impl CognitoSync for CognitoSyncClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetBulkPublishDetailsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetBulkPublishDetailsResponse, _>()?;
+                                .deserialize::<GetBulkPublishDetailsResponse, _>();
 
                             result
                         })
@@ -2129,11 +2122,10 @@ impl CognitoSync for CognitoSyncClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetBulkPublishDetailsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetBulkPublishDetailsError>())
+                            .and_then(|response| {
+                                Err(GetBulkPublishDetailsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2157,10 +2149,11 @@ impl CognitoSync for CognitoSyncClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetCognitoEventsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetCognitoEventsResponse, _>()?;
+                                .deserialize::<GetCognitoEventsResponse, _>();
 
                             result
                         })
@@ -2171,11 +2164,10 @@ impl CognitoSync for CognitoSyncClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetCognitoEventsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetCognitoEventsError>())
+                            .and_then(|response| {
+                                Err(GetCognitoEventsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2199,11 +2191,11 @@ impl CognitoSync for CognitoSyncClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetIdentityPoolConfigurationError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetIdentityPoolConfigurationResponse, _>(
-                            )?;
+                                .deserialize::<GetIdentityPoolConfigurationResponse, _>();
 
                             result
                         })
@@ -2214,13 +2206,10 @@ impl CognitoSync for CognitoSyncClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(GetIdentityPoolConfigurationError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetIdentityPoolConfigurationError>())
+                            .and_then(|response| {
+                                Err(GetIdentityPoolConfigurationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2254,10 +2243,11 @@ impl CognitoSync for CognitoSyncClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListDatasetsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListDatasetsResponse, _>()?;
+                                .deserialize::<ListDatasetsResponse, _>();
 
                             result
                         })
@@ -2268,11 +2258,8 @@ impl CognitoSync for CognitoSyncClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListDatasetsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListDatasetsError>())
+                            .and_then(|response| Err(ListDatasetsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2302,10 +2289,11 @@ impl CognitoSync for CognitoSyncClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListIdentityPoolUsageError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListIdentityPoolUsageResponse, _>()?;
+                                .deserialize::<ListIdentityPoolUsageResponse, _>();
 
                             result
                         })
@@ -2316,11 +2304,10 @@ impl CognitoSync for CognitoSyncClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListIdentityPoolUsageError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListIdentityPoolUsageError>())
+                            .and_then(|response| {
+                                Err(ListIdentityPoolUsageError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2356,10 +2343,11 @@ impl CognitoSync for CognitoSyncClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListRecordsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListRecordsResponse, _>()?;
+                                .deserialize::<ListRecordsResponse, _>();
 
                             result
                         })
@@ -2370,11 +2358,8 @@ impl CognitoSync for CognitoSyncClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListRecordsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListRecordsError>())
+                            .and_then(|response| Err(ListRecordsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2402,10 +2387,11 @@ impl CognitoSync for CognitoSyncClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| RegisterDeviceError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RegisterDeviceResponse, _>()?;
+                                .deserialize::<RegisterDeviceResponse, _>();
 
                             result
                         })
@@ -2416,11 +2402,8 @@ impl CognitoSync for CognitoSyncClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(RegisterDeviceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<RegisterDeviceError>())
+                            .and_then(|response| Err(RegisterDeviceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2447,8 +2430,9 @@ impl CognitoSync for CognitoSyncClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| SetCognitoEventsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -2460,11 +2444,10 @@ impl CognitoSync for CognitoSyncClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(SetCognitoEventsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<SetCognitoEventsError>())
+                            .and_then(|response| {
+                                Err(SetCognitoEventsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2491,11 +2474,11 @@ impl CognitoSync for CognitoSyncClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| SetIdentityPoolConfigurationError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<SetIdentityPoolConfigurationResponse, _>(
-                            )?;
+                                .deserialize::<SetIdentityPoolConfigurationResponse, _>();
 
                             result
                         })
@@ -2506,13 +2489,10 @@ impl CognitoSync for CognitoSyncClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(SetIdentityPoolConfigurationError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<SetIdentityPoolConfigurationError>())
+                            .and_then(|response| {
+                                Err(SetIdentityPoolConfigurationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2533,10 +2513,11 @@ impl CognitoSync for CognitoSyncClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| SubscribeToDatasetError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<SubscribeToDatasetResponse, _>()?;
+                                .deserialize::<SubscribeToDatasetResponse, _>();
 
                             result
                         })
@@ -2547,11 +2528,10 @@ impl CognitoSync for CognitoSyncClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(SubscribeToDatasetError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<SubscribeToDatasetError>())
+                            .and_then(|response| {
+                                Err(SubscribeToDatasetError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2572,10 +2552,11 @@ impl CognitoSync for CognitoSyncClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| UnsubscribeFromDatasetError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UnsubscribeFromDatasetResponse, _>()?;
+                                .deserialize::<UnsubscribeFromDatasetResponse, _>();
 
                             result
                         })
@@ -2586,13 +2567,10 @@ impl CognitoSync for CognitoSyncClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(UnsubscribeFromDatasetError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UnsubscribeFromDatasetError>())
+                            .and_then(|response| {
+                                Err(UnsubscribeFromDatasetError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2625,10 +2603,11 @@ impl CognitoSync for CognitoSyncClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| UpdateRecordsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateRecordsResponse, _>()?;
+                                .deserialize::<UpdateRecordsResponse, _>();
 
                             result
                         })
@@ -2639,11 +2618,8 @@ impl CognitoSync for CognitoSyncClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateRecordsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateRecordsError>())
+                            .and_then(|response| Err(UpdateRecordsError::from_response(response)))
                     })
                     .boxed()
             }

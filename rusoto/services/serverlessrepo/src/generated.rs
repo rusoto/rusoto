@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
@@ -1921,10 +1921,11 @@ impl ServerlessRepo for ServerlessRepoClient {
             if response.status.as_u16() == 201 {
                 response
                     .buffer()
+                    .map_err(|e| CreateApplicationError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateApplicationResponse, _>()?;
+                                .deserialize::<CreateApplicationResponse, _>();
 
                             result
                         })
@@ -1935,11 +1936,10 @@ impl ServerlessRepo for ServerlessRepoClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateApplicationError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateApplicationError>())
+                            .and_then(|response| {
+                                Err(CreateApplicationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1967,10 +1967,11 @@ impl ServerlessRepo for ServerlessRepoClient {
             if response.status.as_u16() == 201 {
                 response
                     .buffer()
+                    .map_err(|e| CreateApplicationVersionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateApplicationVersionResponse, _>()?;
+                                .deserialize::<CreateApplicationVersionResponse, _>();
 
                             result
                         })
@@ -1981,13 +1982,10 @@ impl ServerlessRepo for ServerlessRepoClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(CreateApplicationVersionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateApplicationVersionError>())
+                            .and_then(|response| {
+                                Err(CreateApplicationVersionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2015,11 +2013,11 @@ impl ServerlessRepo for ServerlessRepoClient {
             if response.status.as_u16() == 201 {
                 response
                     .buffer()
+                    .map_err(|e| CreateCloudFormationChangeSetError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateCloudFormationChangeSetResponse, _>(
-                            )?;
+                                .deserialize::<CreateCloudFormationChangeSetResponse, _>();
 
                             result
                         })
@@ -2030,13 +2028,10 @@ impl ServerlessRepo for ServerlessRepoClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(CreateCloudFormationChangeSetError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateCloudFormationChangeSetError>())
+                            .and_then(|response| {
+                                Err(CreateCloudFormationChangeSetError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2063,11 +2058,11 @@ impl ServerlessRepo for ServerlessRepoClient {
             if response.status.as_u16() == 201 {
                 response
                     .buffer()
+                    .map_err(|e| CreateCloudFormationTemplateError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateCloudFormationTemplateResponse, _>(
-                            )?;
+                                .deserialize::<CreateCloudFormationTemplateResponse, _>();
 
                             result
                         })
@@ -2078,13 +2073,10 @@ impl ServerlessRepo for ServerlessRepoClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(CreateCloudFormationTemplateError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateCloudFormationTemplateError>())
+                            .and_then(|response| {
+                                Err(CreateCloudFormationTemplateError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2109,8 +2101,9 @@ impl ServerlessRepo for ServerlessRepoClient {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteApplicationError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -2122,11 +2115,10 @@ impl ServerlessRepo for ServerlessRepoClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteApplicationError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteApplicationError>())
+                            .and_then(|response| {
+                                Err(DeleteApplicationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2156,10 +2148,11 @@ impl ServerlessRepo for ServerlessRepoClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetApplicationError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetApplicationResponse, _>()?;
+                                .deserialize::<GetApplicationResponse, _>();
 
                             result
                         })
@@ -2170,11 +2163,8 @@ impl ServerlessRepo for ServerlessRepoClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetApplicationError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetApplicationError>())
+                            .and_then(|response| Err(GetApplicationError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2198,10 +2188,11 @@ impl ServerlessRepo for ServerlessRepoClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetApplicationPolicyError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetApplicationPolicyResponse, _>()?;
+                                .deserialize::<GetApplicationPolicyResponse, _>();
 
                             result
                         })
@@ -2212,11 +2203,10 @@ impl ServerlessRepo for ServerlessRepoClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetApplicationPolicyError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetApplicationPolicyError>())
+                            .and_then(|response| {
+                                Err(GetApplicationPolicyError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2241,10 +2231,11 @@ impl ServerlessRepo for ServerlessRepoClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetCloudFormationTemplateError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetCloudFormationTemplateResponse, _>()?;
+                                .deserialize::<GetCloudFormationTemplateResponse, _>();
 
                             result
                         })
@@ -2255,13 +2246,10 @@ impl ServerlessRepo for ServerlessRepoClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(GetCloudFormationTemplateError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetCloudFormationTemplateError>())
+                            .and_then(|response| {
+                                Err(GetCloudFormationTemplateError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2297,10 +2285,11 @@ impl ServerlessRepo for ServerlessRepoClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListApplicationDependenciesError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListApplicationDependenciesResponse, _>()?;
+                                .deserialize::<ListApplicationDependenciesResponse, _>();
 
                             result
                         })
@@ -2311,13 +2300,10 @@ impl ServerlessRepo for ServerlessRepoClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(ListApplicationDependenciesError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListApplicationDependenciesError>())
+                            .and_then(|response| {
+                                Err(ListApplicationDependenciesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2350,10 +2336,11 @@ impl ServerlessRepo for ServerlessRepoClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListApplicationVersionsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListApplicationVersionsResponse, _>()?;
+                                .deserialize::<ListApplicationVersionsResponse, _>();
 
                             result
                         })
@@ -2364,13 +2351,10 @@ impl ServerlessRepo for ServerlessRepoClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(ListApplicationVersionsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListApplicationVersionsError>())
+                            .and_then(|response| {
+                                Err(ListApplicationVersionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2400,10 +2384,11 @@ impl ServerlessRepo for ServerlessRepoClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListApplicationsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListApplicationsResponse, _>()?;
+                                .deserialize::<ListApplicationsResponse, _>();
 
                             result
                         })
@@ -2414,11 +2399,10 @@ impl ServerlessRepo for ServerlessRepoClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListApplicationsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListApplicationsError>())
+                            .and_then(|response| {
+                                Err(ListApplicationsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2448,10 +2432,11 @@ impl ServerlessRepo for ServerlessRepoClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| PutApplicationPolicyError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PutApplicationPolicyResponse, _>()?;
+                                .deserialize::<PutApplicationPolicyResponse, _>();
 
                             result
                         })
@@ -2462,11 +2447,10 @@ impl ServerlessRepo for ServerlessRepoClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(PutApplicationPolicyError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<PutApplicationPolicyError>())
+                            .and_then(|response| {
+                                Err(PutApplicationPolicyError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2493,10 +2477,11 @@ impl ServerlessRepo for ServerlessRepoClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| UpdateApplicationError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateApplicationResponse, _>()?;
+                                .deserialize::<UpdateApplicationResponse, _>();
 
                             result
                         })
@@ -2507,11 +2492,10 @@ impl ServerlessRepo for ServerlessRepoClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateApplicationError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateApplicationError>())
+                            .and_then(|response| {
+                                Err(UpdateApplicationError::from_response(response))
+                            })
                     })
                     .boxed()
             }

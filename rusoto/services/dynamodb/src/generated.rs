@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -4695,11 +4695,16 @@ impl DynamoDb for DynamoDbClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| BatchGetItemError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<BatchGetItemOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<BatchGetItemError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<BatchGetItemOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4707,11 +4712,10 @@ impl DynamoDb for DynamoDbClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(BatchGetItemError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<BatchGetItemError>
+                            })
+                            .and_then(|response| Err(BatchGetItemError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4734,11 +4738,16 @@ impl DynamoDb for DynamoDbClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| BatchWriteItemError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<BatchWriteItemOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<BatchWriteItemError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<BatchWriteItemOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4746,11 +4755,10 @@ impl DynamoDb for DynamoDbClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(BatchWriteItemError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<BatchWriteItemError>
+                            })
+                            .and_then(|response| Err(BatchWriteItemError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4773,11 +4781,16 @@ impl DynamoDb for DynamoDbClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateBackupError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateBackupOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateBackupError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateBackupOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4785,11 +4798,10 @@ impl DynamoDb for DynamoDbClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateBackupError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateBackupError>
+                            })
+                            .and_then(|response| Err(CreateBackupError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4812,11 +4824,16 @@ impl DynamoDb for DynamoDbClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateGlobalTableError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateGlobalTableOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateGlobalTableError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateGlobalTableOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4824,11 +4841,12 @@ impl DynamoDb for DynamoDbClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateGlobalTableError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateGlobalTableError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateGlobalTableError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4851,11 +4869,16 @@ impl DynamoDb for DynamoDbClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateTableError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateTableOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateTableError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateTableOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4863,11 +4886,10 @@ impl DynamoDb for DynamoDbClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateTableError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateTableError>
+                            })
+                            .and_then(|response| Err(CreateTableError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4890,11 +4912,16 @@ impl DynamoDb for DynamoDbClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteBackupError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteBackupOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteBackupError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteBackupOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4902,11 +4929,10 @@ impl DynamoDb for DynamoDbClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteBackupError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteBackupError>
+                            })
+                            .and_then(|response| Err(DeleteBackupError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4929,11 +4955,16 @@ impl DynamoDb for DynamoDbClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteItemError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteItemOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteItemError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteItemOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4941,11 +4972,10 @@ impl DynamoDb for DynamoDbClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteItemError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteItemError>
+                            })
+                            .and_then(|response| Err(DeleteItemError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4968,11 +4998,16 @@ impl DynamoDb for DynamoDbClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteTableError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteTableOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteTableError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteTableOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4980,11 +5015,10 @@ impl DynamoDb for DynamoDbClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteTableError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteTableError>
+                            })
+                            .and_then(|response| Err(DeleteTableError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5007,11 +5041,16 @@ impl DynamoDb for DynamoDbClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeBackupError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeBackupOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeBackupError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeBackupOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5019,11 +5058,10 @@ impl DynamoDb for DynamoDbClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeBackupError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeBackupError>
+                            })
+                            .and_then(|response| Err(DescribeBackupError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5049,11 +5087,17 @@ impl DynamoDb for DynamoDbClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeContinuousBackupsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeContinuousBackupsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeContinuousBackupsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeContinuousBackupsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5061,13 +5105,13 @@ impl DynamoDb for DynamoDbClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeContinuousBackupsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeContinuousBackupsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeContinuousBackupsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5088,11 +5132,16 @@ impl DynamoDb for DynamoDbClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeEndpointsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeEndpointsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeEndpointsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeEndpointsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5100,11 +5149,12 @@ impl DynamoDb for DynamoDbClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeEndpointsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeEndpointsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeEndpointsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5127,11 +5177,17 @@ impl DynamoDb for DynamoDbClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeGlobalTableError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeGlobalTableOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeGlobalTableError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeGlobalTableOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5139,11 +5195,13 @@ impl DynamoDb for DynamoDbClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeGlobalTableError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeGlobalTableError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeGlobalTableError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5169,11 +5227,17 @@ impl DynamoDb for DynamoDbClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeGlobalTableSettingsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeGlobalTableSettingsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeGlobalTableSettingsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeGlobalTableSettingsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5181,13 +5245,13 @@ impl DynamoDb for DynamoDbClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeGlobalTableSettingsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeGlobalTableSettingsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeGlobalTableSettingsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5206,11 +5270,16 @@ impl DynamoDb for DynamoDbClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeLimitsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeLimitsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeLimitsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeLimitsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5218,11 +5287,10 @@ impl DynamoDb for DynamoDbClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeLimitsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeLimitsError>
+                            })
+                            .and_then(|response| Err(DescribeLimitsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5245,11 +5313,16 @@ impl DynamoDb for DynamoDbClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeTableError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeTableOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeTableError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeTableOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5257,11 +5330,10 @@ impl DynamoDb for DynamoDbClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeTableError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeTableError>
+                            })
+                            .and_then(|response| Err(DescribeTableError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5284,11 +5356,16 @@ impl DynamoDb for DynamoDbClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeTimeToLiveError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeTimeToLiveOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeTimeToLiveError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeTimeToLiveOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5296,11 +5373,12 @@ impl DynamoDb for DynamoDbClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeTimeToLiveError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeTimeToLiveError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeTimeToLiveError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5320,11 +5398,14 @@ impl DynamoDb for DynamoDbClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetItemError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetItemOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<GetItemError>)
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetItemOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5332,11 +5413,8 @@ impl DynamoDb for DynamoDbClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetItemError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<GetItemError>)
+                            .and_then(|response| Err(GetItemError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5359,11 +5437,16 @@ impl DynamoDb for DynamoDbClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListBackupsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListBackupsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListBackupsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListBackupsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5371,11 +5454,10 @@ impl DynamoDb for DynamoDbClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListBackupsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListBackupsError>
+                            })
+                            .and_then(|response| Err(ListBackupsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5398,11 +5480,16 @@ impl DynamoDb for DynamoDbClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListGlobalTablesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListGlobalTablesOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListGlobalTablesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListGlobalTablesOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5410,11 +5497,12 @@ impl DynamoDb for DynamoDbClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListGlobalTablesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListGlobalTablesError>
+                            })
+                            .and_then(|response| {
+                                Err(ListGlobalTablesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5437,11 +5525,16 @@ impl DynamoDb for DynamoDbClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListTablesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListTablesOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListTablesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListTablesOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5449,11 +5542,10 @@ impl DynamoDb for DynamoDbClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListTablesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListTablesError>
+                            })
+                            .and_then(|response| Err(ListTablesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5476,11 +5568,16 @@ impl DynamoDb for DynamoDbClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListTagsOfResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListTagsOfResourceOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListTagsOfResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListTagsOfResourceOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5488,11 +5585,12 @@ impl DynamoDb for DynamoDbClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListTagsOfResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListTagsOfResourceError>
+                            })
+                            .and_then(|response| {
+                                Err(ListTagsOfResourceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5512,11 +5610,14 @@ impl DynamoDb for DynamoDbClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| PutItemError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PutItemOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<PutItemError>)
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<PutItemOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5524,11 +5625,8 @@ impl DynamoDb for DynamoDbClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(PutItemError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<PutItemError>)
+                            .and_then(|response| Err(PutItemError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5548,11 +5646,14 @@ impl DynamoDb for DynamoDbClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| QueryError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<QueryOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<QueryError>)
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<QueryOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5560,8 +5661,8 @@ impl DynamoDb for DynamoDbClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(|e| e, |response| Err(QueryError::from_response(response)))
-                            .boxed()
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<QueryError>)
+                            .and_then(|response| Err(QueryError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5584,11 +5685,17 @@ impl DynamoDb for DynamoDbClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| RestoreTableFromBackupError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RestoreTableFromBackupOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<RestoreTableFromBackupError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<RestoreTableFromBackupOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5596,13 +5703,13 @@ impl DynamoDb for DynamoDbClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(RestoreTableFromBackupError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<RestoreTableFromBackupError>
+                            })
+                            .and_then(|response| {
+                                Err(RestoreTableFromBackupError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5628,11 +5735,17 @@ impl DynamoDb for DynamoDbClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| RestoreTableToPointInTimeError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RestoreTableToPointInTimeOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<RestoreTableToPointInTimeError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<RestoreTableToPointInTimeOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5640,13 +5753,13 @@ impl DynamoDb for DynamoDbClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(RestoreTableToPointInTimeError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<RestoreTableToPointInTimeError>
+                            })
+                            .and_then(|response| {
+                                Err(RestoreTableToPointInTimeError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5666,11 +5779,14 @@ impl DynamoDb for DynamoDbClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ScanError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ScanOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<ScanError>)
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ScanOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5678,8 +5794,8 @@ impl DynamoDb for DynamoDbClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(|e| e, |response| Err(ScanError::from_response(response)))
-                            .boxed()
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<ScanError>)
+                            .and_then(|response| Err(ScanError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5697,17 +5813,16 @@ impl DynamoDb for DynamoDbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(TagResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<TagResourceError>
+                            })
+                            .and_then(|response| Err(TagResourceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5730,11 +5845,16 @@ impl DynamoDb for DynamoDbClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| TransactGetItemsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<TransactGetItemsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<TransactGetItemsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<TransactGetItemsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5742,11 +5862,12 @@ impl DynamoDb for DynamoDbClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(TransactGetItemsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<TransactGetItemsError>
+                            })
+                            .and_then(|response| {
+                                Err(TransactGetItemsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5769,11 +5890,16 @@ impl DynamoDb for DynamoDbClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| TransactWriteItemsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<TransactWriteItemsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<TransactWriteItemsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<TransactWriteItemsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5781,11 +5907,12 @@ impl DynamoDb for DynamoDbClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(TransactWriteItemsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<TransactWriteItemsError>
+                            })
+                            .and_then(|response| {
+                                Err(TransactWriteItemsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5803,17 +5930,16 @@ impl DynamoDb for DynamoDbClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UntagResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UntagResourceError>
+                            })
+                            .and_then(|response| Err(UntagResourceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5836,11 +5962,17 @@ impl DynamoDb for DynamoDbClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateContinuousBackupsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateContinuousBackupsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateContinuousBackupsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateContinuousBackupsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5848,13 +5980,13 @@ impl DynamoDb for DynamoDbClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(UpdateContinuousBackupsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateContinuousBackupsError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateContinuousBackupsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5877,11 +6009,16 @@ impl DynamoDb for DynamoDbClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateGlobalTableError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateGlobalTableOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateGlobalTableError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateGlobalTableOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5889,11 +6026,12 @@ impl DynamoDb for DynamoDbClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateGlobalTableError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateGlobalTableError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateGlobalTableError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5919,11 +6057,17 @@ impl DynamoDb for DynamoDbClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateGlobalTableSettingsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateGlobalTableSettingsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateGlobalTableSettingsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateGlobalTableSettingsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5931,13 +6075,13 @@ impl DynamoDb for DynamoDbClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(UpdateGlobalTableSettingsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateGlobalTableSettingsError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateGlobalTableSettingsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5960,11 +6104,16 @@ impl DynamoDb for DynamoDbClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateItemError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateItemOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateItemError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateItemOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5972,11 +6121,10 @@ impl DynamoDb for DynamoDbClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateItemError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateItemError>
+                            })
+                            .and_then(|response| Err(UpdateItemError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5999,11 +6147,16 @@ impl DynamoDb for DynamoDbClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateTableError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateTableOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateTableError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateTableOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6011,11 +6164,10 @@ impl DynamoDb for DynamoDbClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateTableError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateTableError>
+                            })
+                            .and_then(|response| Err(UpdateTableError::from_response(response)))
                     })
                     .boxed()
             }
@@ -6038,11 +6190,16 @@ impl DynamoDb for DynamoDbClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateTimeToLiveError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateTimeToLiveOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateTimeToLiveError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateTimeToLiveOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6050,11 +6207,12 @@ impl DynamoDb for DynamoDbClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateTimeToLiveError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateTimeToLiveError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateTimeToLiveError::from_response(response))
+                            })
                     })
                     .boxed()
             }

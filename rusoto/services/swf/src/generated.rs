@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -4506,11 +4506,17 @@ impl Swf for SwfClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CountClosedWorkflowExecutionsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<WorkflowExecutionCount, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CountClosedWorkflowExecutionsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<WorkflowExecutionCount, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4518,13 +4524,13 @@ impl Swf for SwfClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(CountClosedWorkflowExecutionsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CountClosedWorkflowExecutionsError>
+                            })
+                            .and_then(|response| {
+                                Err(CountClosedWorkflowExecutionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4550,11 +4556,17 @@ impl Swf for SwfClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CountOpenWorkflowExecutionsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<WorkflowExecutionCount, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CountOpenWorkflowExecutionsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<WorkflowExecutionCount, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4562,13 +4574,13 @@ impl Swf for SwfClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(CountOpenWorkflowExecutionsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CountOpenWorkflowExecutionsError>
+                            })
+                            .and_then(|response| {
+                                Err(CountOpenWorkflowExecutionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4594,11 +4606,17 @@ impl Swf for SwfClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CountPendingActivityTasksError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PendingTaskCount, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CountPendingActivityTasksError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<PendingTaskCount, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4606,13 +4624,13 @@ impl Swf for SwfClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(CountPendingActivityTasksError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CountPendingActivityTasksError>
+                            })
+                            .and_then(|response| {
+                                Err(CountPendingActivityTasksError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4638,11 +4656,17 @@ impl Swf for SwfClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CountPendingDecisionTasksError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PendingTaskCount, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CountPendingDecisionTasksError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<PendingTaskCount, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4650,13 +4674,13 @@ impl Swf for SwfClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(CountPendingDecisionTasksError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CountPendingDecisionTasksError>
+                            })
+                            .and_then(|response| {
+                                Err(CountPendingDecisionTasksError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4680,17 +4704,19 @@ impl Swf for SwfClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeprecateActivityTypeError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeprecateActivityTypeError>
+                            })
+                            .and_then(|response| {
+                                Err(DeprecateActivityTypeError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4711,17 +4737,16 @@ impl Swf for SwfClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeprecateDomainError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeprecateDomainError>
+                            })
+                            .and_then(|response| Err(DeprecateDomainError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4745,17 +4770,19 @@ impl Swf for SwfClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeprecateWorkflowTypeError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeprecateWorkflowTypeError>
+                            })
+                            .and_then(|response| {
+                                Err(DeprecateWorkflowTypeError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4778,11 +4805,17 @@ impl Swf for SwfClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeActivityTypeError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ActivityTypeDetail, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeActivityTypeError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ActivityTypeDetail, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4790,11 +4823,13 @@ impl Swf for SwfClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeActivityTypeError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeActivityTypeError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeActivityTypeError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4817,11 +4852,16 @@ impl Swf for SwfClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeDomainError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DomainDetail, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeDomainError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DomainDetail, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4829,11 +4869,10 @@ impl Swf for SwfClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeDomainError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeDomainError>
+                            })
+                            .and_then(|response| Err(DescribeDomainError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4859,11 +4898,17 @@ impl Swf for SwfClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeWorkflowExecutionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<WorkflowExecutionDetail, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeWorkflowExecutionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<WorkflowExecutionDetail, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4871,13 +4916,13 @@ impl Swf for SwfClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeWorkflowExecutionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeWorkflowExecutionError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeWorkflowExecutionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4900,11 +4945,17 @@ impl Swf for SwfClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeWorkflowTypeError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<WorkflowTypeDetail, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeWorkflowTypeError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<WorkflowTypeDetail, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4912,11 +4963,13 @@ impl Swf for SwfClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeWorkflowTypeError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeWorkflowTypeError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeWorkflowTypeError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4942,10 +4995,17 @@ impl Swf for SwfClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetWorkflowExecutionHistoryError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response).deserialize::<History, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetWorkflowExecutionHistoryError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<History, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4953,13 +5013,13 @@ impl Swf for SwfClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(GetWorkflowExecutionHistoryError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetWorkflowExecutionHistoryError>
+                            })
+                            .and_then(|response| {
+                                Err(GetWorkflowExecutionHistoryError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4982,11 +5042,16 @@ impl Swf for SwfClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListActivityTypesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ActivityTypeInfos, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListActivityTypesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ActivityTypeInfos, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4994,11 +5059,12 @@ impl Swf for SwfClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListActivityTypesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListActivityTypesError>
+                            })
+                            .and_then(|response| {
+                                Err(ListActivityTypesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5024,11 +5090,17 @@ impl Swf for SwfClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListClosedWorkflowExecutionsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<WorkflowExecutionInfos, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListClosedWorkflowExecutionsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<WorkflowExecutionInfos, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5036,13 +5108,13 @@ impl Swf for SwfClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ListClosedWorkflowExecutionsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListClosedWorkflowExecutionsError>
+                            })
+                            .and_then(|response| {
+                                Err(ListClosedWorkflowExecutionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5062,11 +5134,16 @@ impl Swf for SwfClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListDomainsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DomainInfos, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListDomainsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DomainInfos, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5074,11 +5151,10 @@ impl Swf for SwfClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListDomainsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListDomainsError>
+                            })
+                            .and_then(|response| Err(ListDomainsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5104,11 +5180,17 @@ impl Swf for SwfClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListOpenWorkflowExecutionsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<WorkflowExecutionInfos, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListOpenWorkflowExecutionsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<WorkflowExecutionInfos, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5116,13 +5198,13 @@ impl Swf for SwfClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ListOpenWorkflowExecutionsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListOpenWorkflowExecutionsError>
+                            })
+                            .and_then(|response| {
+                                Err(ListOpenWorkflowExecutionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5145,11 +5227,16 @@ impl Swf for SwfClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListWorkflowTypesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<WorkflowTypeInfos, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListWorkflowTypesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<WorkflowTypeInfos, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5157,11 +5244,12 @@ impl Swf for SwfClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListWorkflowTypesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListWorkflowTypesError>
+                            })
+                            .and_then(|response| {
+                                Err(ListWorkflowTypesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5184,11 +5272,17 @@ impl Swf for SwfClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| PollForActivityTaskError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ActivityTask, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<PollForActivityTaskError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ActivityTask, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5196,11 +5290,13 @@ impl Swf for SwfClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(PollForActivityTaskError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<PollForActivityTaskError>
+                            })
+                            .and_then(|response| {
+                                Err(PollForActivityTaskError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5223,11 +5319,17 @@ impl Swf for SwfClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| PollForDecisionTaskError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DecisionTask, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<PollForDecisionTaskError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DecisionTask, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5235,11 +5337,13 @@ impl Swf for SwfClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(PollForDecisionTaskError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<PollForDecisionTaskError>
+                            })
+                            .and_then(|response| {
+                                Err(PollForDecisionTaskError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5265,11 +5369,17 @@ impl Swf for SwfClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| RecordActivityTaskHeartbeatError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ActivityTaskStatus, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<RecordActivityTaskHeartbeatError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ActivityTaskStatus, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5277,13 +5387,13 @@ impl Swf for SwfClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(RecordActivityTaskHeartbeatError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<RecordActivityTaskHeartbeatError>
+                            })
+                            .and_then(|response| {
+                                Err(RecordActivityTaskHeartbeatError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5304,17 +5414,19 @@ impl Swf for SwfClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(RegisterActivityTypeError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<RegisterActivityTypeError>
+                            })
+                            .and_then(|response| {
+                                Err(RegisterActivityTypeError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5332,17 +5444,16 @@ impl Swf for SwfClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(RegisterDomainError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<RegisterDomainError>
+                            })
+                            .and_then(|response| Err(RegisterDomainError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5363,17 +5474,19 @@ impl Swf for SwfClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(RegisterWorkflowTypeError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<RegisterWorkflowTypeError>
+                            })
+                            .and_then(|response| {
+                                Err(RegisterWorkflowTypeError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5397,21 +5510,19 @@ impl Swf for SwfClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(RequestCancelWorkflowExecutionError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<RequestCancelWorkflowExecutionError>
+                            })
+                            .and_then(|response| {
+                                Err(RequestCancelWorkflowExecutionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5435,19 +5546,19 @@ impl Swf for SwfClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(RespondActivityTaskCanceledError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<RespondActivityTaskCanceledError>
+                            })
+                            .and_then(|response| {
+                                Err(RespondActivityTaskCanceledError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5471,19 +5582,19 @@ impl Swf for SwfClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(RespondActivityTaskCompletedError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<RespondActivityTaskCompletedError>
+                            })
+                            .and_then(|response| {
+                                Err(RespondActivityTaskCompletedError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5507,19 +5618,19 @@ impl Swf for SwfClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(RespondActivityTaskFailedError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<RespondActivityTaskFailedError>
+                            })
+                            .and_then(|response| {
+                                Err(RespondActivityTaskFailedError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5543,19 +5654,19 @@ impl Swf for SwfClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(RespondDecisionTaskCompletedError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<RespondDecisionTaskCompletedError>
+                            })
+                            .and_then(|response| {
+                                Err(RespondDecisionTaskCompletedError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5579,19 +5690,19 @@ impl Swf for SwfClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(SignalWorkflowExecutionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<SignalWorkflowExecutionError>
+                            })
+                            .and_then(|response| {
+                                Err(SignalWorkflowExecutionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5617,10 +5728,16 @@ impl Swf for SwfClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StartWorkflowExecutionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response).deserialize::<Run, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StartWorkflowExecutionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response).deserialize::<Run, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5628,13 +5745,13 @@ impl Swf for SwfClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(StartWorkflowExecutionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StartWorkflowExecutionError>
+                            })
+                            .and_then(|response| {
+                                Err(StartWorkflowExecutionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5658,19 +5775,19 @@ impl Swf for SwfClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(TerminateWorkflowExecutionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<TerminateWorkflowExecutionError>
+                            })
+                            .and_then(|response| {
+                                Err(TerminateWorkflowExecutionError::from_response(response))
+                            })
                     })
                     .boxed()
             }

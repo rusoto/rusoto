@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -5778,11 +5778,16 @@ impl Ecs for EcsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateClusterError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateClusterResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateClusterError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateClusterResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5790,11 +5795,10 @@ impl Ecs for EcsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateClusterError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateClusterError>
+                            })
+                            .and_then(|response| Err(CreateClusterError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5820,11 +5824,16 @@ impl Ecs for EcsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateServiceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateServiceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateServiceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateServiceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5832,11 +5841,10 @@ impl Ecs for EcsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateServiceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateServiceError>
+                            })
+                            .and_then(|response| Err(CreateServiceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5862,11 +5870,16 @@ impl Ecs for EcsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateTaskSetError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateTaskSetResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateTaskSetError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateTaskSetResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5874,11 +5887,10 @@ impl Ecs for EcsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateTaskSetError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateTaskSetError>
+                            })
+                            .and_then(|response| Err(CreateTaskSetError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5904,11 +5916,17 @@ impl Ecs for EcsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteAccountSettingError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteAccountSettingResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteAccountSettingError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteAccountSettingResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5916,11 +5934,13 @@ impl Ecs for EcsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteAccountSettingError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteAccountSettingError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteAccountSettingError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5946,11 +5966,16 @@ impl Ecs for EcsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteAttributesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteAttributesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteAttributesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteAttributesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5958,11 +5983,12 @@ impl Ecs for EcsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteAttributesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteAttributesError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteAttributesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5988,11 +6014,16 @@ impl Ecs for EcsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteClusterError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteClusterResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteClusterError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteClusterResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6000,11 +6031,10 @@ impl Ecs for EcsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteClusterError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteClusterError>
+                            })
+                            .and_then(|response| Err(DeleteClusterError::from_response(response)))
                     })
                     .boxed()
             }
@@ -6030,11 +6060,16 @@ impl Ecs for EcsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteServiceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteServiceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteServiceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteServiceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6042,11 +6077,10 @@ impl Ecs for EcsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteServiceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteServiceError>
+                            })
+                            .and_then(|response| Err(DeleteServiceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -6072,11 +6106,16 @@ impl Ecs for EcsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteTaskSetError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteTaskSetResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteTaskSetError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteTaskSetResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6084,11 +6123,10 @@ impl Ecs for EcsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteTaskSetError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteTaskSetError>
+                            })
+                            .and_then(|response| Err(DeleteTaskSetError::from_response(response)))
                     })
                     .boxed()
             }
@@ -6114,11 +6152,17 @@ impl Ecs for EcsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeregisterContainerInstanceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeregisterContainerInstanceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeregisterContainerInstanceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeregisterContainerInstanceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6126,13 +6170,13 @@ impl Ecs for EcsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DeregisterContainerInstanceError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeregisterContainerInstanceError>
+                            })
+                            .and_then(|response| {
+                                Err(DeregisterContainerInstanceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6158,11 +6202,17 @@ impl Ecs for EcsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeregisterTaskDefinitionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeregisterTaskDefinitionResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeregisterTaskDefinitionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeregisterTaskDefinitionResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6170,13 +6220,13 @@ impl Ecs for EcsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DeregisterTaskDefinitionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeregisterTaskDefinitionError>
+                            })
+                            .and_then(|response| {
+                                Err(DeregisterTaskDefinitionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6202,11 +6252,16 @@ impl Ecs for EcsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeClustersError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeClustersResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeClustersError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeClustersResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6214,11 +6269,12 @@ impl Ecs for EcsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeClustersError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeClustersError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeClustersError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6244,11 +6300,17 @@ impl Ecs for EcsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeContainerInstancesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeContainerInstancesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeContainerInstancesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeContainerInstancesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6256,13 +6318,13 @@ impl Ecs for EcsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeContainerInstancesError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeContainerInstancesError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeContainerInstancesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6288,11 +6350,16 @@ impl Ecs for EcsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeServicesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeServicesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeServicesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeServicesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6300,11 +6367,12 @@ impl Ecs for EcsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeServicesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeServicesError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeServicesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6330,11 +6398,17 @@ impl Ecs for EcsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeTaskDefinitionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeTaskDefinitionResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeTaskDefinitionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeTaskDefinitionResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6342,13 +6416,13 @@ impl Ecs for EcsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeTaskDefinitionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeTaskDefinitionError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeTaskDefinitionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6374,11 +6448,16 @@ impl Ecs for EcsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeTaskSetsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeTaskSetsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeTaskSetsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeTaskSetsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6386,11 +6465,12 @@ impl Ecs for EcsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeTaskSetsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeTaskSetsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeTaskSetsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6416,11 +6496,16 @@ impl Ecs for EcsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeTasksError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeTasksResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeTasksError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeTasksResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6428,11 +6513,10 @@ impl Ecs for EcsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeTasksError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeTasksError>
+                            })
+                            .and_then(|response| Err(DescribeTasksError::from_response(response)))
                     })
                     .boxed()
             }
@@ -6458,11 +6542,17 @@ impl Ecs for EcsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DiscoverPollEndpointError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DiscoverPollEndpointResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DiscoverPollEndpointError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DiscoverPollEndpointResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6470,11 +6560,13 @@ impl Ecs for EcsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DiscoverPollEndpointError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DiscoverPollEndpointError>
+                            })
+                            .and_then(|response| {
+                                Err(DiscoverPollEndpointError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6500,11 +6592,17 @@ impl Ecs for EcsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListAccountSettingsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListAccountSettingsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListAccountSettingsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListAccountSettingsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6512,11 +6610,13 @@ impl Ecs for EcsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListAccountSettingsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListAccountSettingsError>
+                            })
+                            .and_then(|response| {
+                                Err(ListAccountSettingsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6542,11 +6642,16 @@ impl Ecs for EcsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListAttributesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListAttributesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListAttributesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListAttributesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6554,11 +6659,10 @@ impl Ecs for EcsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListAttributesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListAttributesError>
+                            })
+                            .and_then(|response| Err(ListAttributesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -6584,11 +6688,16 @@ impl Ecs for EcsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListClustersError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListClustersResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListClustersError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListClustersResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6596,11 +6705,10 @@ impl Ecs for EcsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListClustersError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListClustersError>
+                            })
+                            .and_then(|response| Err(ListClustersError::from_response(response)))
                     })
                     .boxed()
             }
@@ -6626,11 +6734,17 @@ impl Ecs for EcsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListContainerInstancesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListContainerInstancesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListContainerInstancesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListContainerInstancesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6638,13 +6752,13 @@ impl Ecs for EcsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ListContainerInstancesError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListContainerInstancesError>
+                            })
+                            .and_then(|response| {
+                                Err(ListContainerInstancesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6670,11 +6784,16 @@ impl Ecs for EcsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListServicesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListServicesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListServicesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListServicesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6682,11 +6801,10 @@ impl Ecs for EcsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListServicesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListServicesError>
+                            })
+                            .and_then(|response| Err(ListServicesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -6712,11 +6830,17 @@ impl Ecs for EcsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListTagsForResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListTagsForResourceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListTagsForResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListTagsForResourceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6724,11 +6848,13 @@ impl Ecs for EcsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListTagsForResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListTagsForResourceError>
+                            })
+                            .and_then(|response| {
+                                Err(ListTagsForResourceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6754,11 +6880,17 @@ impl Ecs for EcsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListTaskDefinitionFamiliesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListTaskDefinitionFamiliesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListTaskDefinitionFamiliesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListTaskDefinitionFamiliesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6766,13 +6898,13 @@ impl Ecs for EcsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ListTaskDefinitionFamiliesError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListTaskDefinitionFamiliesError>
+                            })
+                            .and_then(|response| {
+                                Err(ListTaskDefinitionFamiliesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6798,11 +6930,17 @@ impl Ecs for EcsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListTaskDefinitionsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListTaskDefinitionsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListTaskDefinitionsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListTaskDefinitionsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6810,11 +6948,13 @@ impl Ecs for EcsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListTaskDefinitionsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListTaskDefinitionsError>
+                            })
+                            .and_then(|response| {
+                                Err(ListTaskDefinitionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6840,11 +6980,16 @@ impl Ecs for EcsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListTasksError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListTasksResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListTasksError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListTasksResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6852,11 +6997,10 @@ impl Ecs for EcsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListTasksError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListTasksError>
+                            })
+                            .and_then(|response| Err(ListTasksError::from_response(response)))
                     })
                     .boxed()
             }
@@ -6882,11 +7026,16 @@ impl Ecs for EcsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| PutAccountSettingError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PutAccountSettingResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<PutAccountSettingError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<PutAccountSettingResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6894,11 +7043,12 @@ impl Ecs for EcsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(PutAccountSettingError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<PutAccountSettingError>
+                            })
+                            .and_then(|response| {
+                                Err(PutAccountSettingError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6924,11 +7074,17 @@ impl Ecs for EcsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| PutAccountSettingDefaultError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PutAccountSettingDefaultResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<PutAccountSettingDefaultError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<PutAccountSettingDefaultResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6936,13 +7092,13 @@ impl Ecs for EcsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(PutAccountSettingDefaultError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<PutAccountSettingDefaultError>
+                            })
+                            .and_then(|response| {
+                                Err(PutAccountSettingDefaultError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6968,11 +7124,16 @@ impl Ecs for EcsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| PutAttributesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PutAttributesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<PutAttributesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<PutAttributesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6980,11 +7141,10 @@ impl Ecs for EcsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(PutAttributesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<PutAttributesError>
+                            })
+                            .and_then(|response| Err(PutAttributesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7010,11 +7170,17 @@ impl Ecs for EcsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| RegisterContainerInstanceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RegisterContainerInstanceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<RegisterContainerInstanceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<RegisterContainerInstanceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7022,13 +7188,13 @@ impl Ecs for EcsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(RegisterContainerInstanceError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<RegisterContainerInstanceError>
+                            })
+                            .and_then(|response| {
+                                Err(RegisterContainerInstanceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7054,11 +7220,17 @@ impl Ecs for EcsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| RegisterTaskDefinitionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RegisterTaskDefinitionResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<RegisterTaskDefinitionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<RegisterTaskDefinitionResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7066,13 +7238,13 @@ impl Ecs for EcsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(RegisterTaskDefinitionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<RegisterTaskDefinitionError>
+                            })
+                            .and_then(|response| {
+                                Err(RegisterTaskDefinitionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7092,11 +7264,14 @@ impl Ecs for EcsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| RunTaskError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RunTaskResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<RunTaskError>)
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<RunTaskResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7104,11 +7279,8 @@ impl Ecs for EcsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(RunTaskError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<RunTaskError>)
+                            .and_then(|response| Err(RunTaskError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7134,11 +7306,16 @@ impl Ecs for EcsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StartTaskError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StartTaskResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StartTaskError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StartTaskResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7146,11 +7323,10 @@ impl Ecs for EcsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(StartTaskError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StartTaskError>
+                            })
+                            .and_then(|response| Err(StartTaskError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7173,11 +7349,14 @@ impl Ecs for EcsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StopTaskError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StopTaskResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<StopTaskError>)
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StopTaskResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7185,11 +7364,8 @@ impl Ecs for EcsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(StopTaskError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<StopTaskError>)
+                            .and_then(|response| Err(StopTaskError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7215,11 +7391,17 @@ impl Ecs for EcsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| SubmitAttachmentStateChangesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<SubmitAttachmentStateChangesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<SubmitAttachmentStateChangesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<SubmitAttachmentStateChangesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7227,13 +7409,13 @@ impl Ecs for EcsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(SubmitAttachmentStateChangesError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<SubmitAttachmentStateChangesError>
+                            })
+                            .and_then(|response| {
+                                Err(SubmitAttachmentStateChangesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7259,11 +7441,17 @@ impl Ecs for EcsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| SubmitContainerStateChangeError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<SubmitContainerStateChangeResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<SubmitContainerStateChangeError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<SubmitContainerStateChangeResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7271,13 +7459,13 @@ impl Ecs for EcsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(SubmitContainerStateChangeError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<SubmitContainerStateChangeError>
+                            })
+                            .and_then(|response| {
+                                Err(SubmitContainerStateChangeError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7303,11 +7491,17 @@ impl Ecs for EcsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| SubmitTaskStateChangeError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<SubmitTaskStateChangeResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<SubmitTaskStateChangeError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<SubmitTaskStateChangeResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7315,11 +7509,13 @@ impl Ecs for EcsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(SubmitTaskStateChangeError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<SubmitTaskStateChangeError>
+                            })
+                            .and_then(|response| {
+                                Err(SubmitTaskStateChangeError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7345,11 +7541,16 @@ impl Ecs for EcsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| TagResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<TagResourceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<TagResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<TagResourceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7357,11 +7558,10 @@ impl Ecs for EcsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(TagResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<TagResourceError>
+                            })
+                            .and_then(|response| Err(TagResourceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7387,11 +7587,16 @@ impl Ecs for EcsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UntagResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UntagResourceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UntagResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UntagResourceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7399,11 +7604,10 @@ impl Ecs for EcsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UntagResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UntagResourceError>
+                            })
+                            .and_then(|response| Err(UntagResourceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7429,11 +7633,17 @@ impl Ecs for EcsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateContainerAgentError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateContainerAgentResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateContainerAgentError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateContainerAgentResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7441,11 +7651,13 @@ impl Ecs for EcsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateContainerAgentError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateContainerAgentError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateContainerAgentError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7472,11 +7684,17 @@ impl Ecs for EcsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateContainerInstancesStateError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateContainerInstancesStateResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateContainerInstancesStateError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateContainerInstancesStateResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7484,13 +7702,13 @@ impl Ecs for EcsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(UpdateContainerInstancesStateError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateContainerInstancesStateError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateContainerInstancesStateError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7516,11 +7734,16 @@ impl Ecs for EcsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateServiceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateServiceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateServiceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateServiceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7528,11 +7751,10 @@ impl Ecs for EcsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateServiceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateServiceError>
+                            })
+                            .and_then(|response| Err(UpdateServiceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7558,11 +7780,17 @@ impl Ecs for EcsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateServicePrimaryTaskSetError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateServicePrimaryTaskSetResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateServicePrimaryTaskSetError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateServicePrimaryTaskSetResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7570,13 +7798,13 @@ impl Ecs for EcsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(UpdateServicePrimaryTaskSetError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateServicePrimaryTaskSetError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateServicePrimaryTaskSetError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7602,11 +7830,16 @@ impl Ecs for EcsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateTaskSetError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateTaskSetResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateTaskSetError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateTaskSetResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7614,11 +7847,10 @@ impl Ecs for EcsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateTaskSetError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateTaskSetError>
+                            })
+                            .and_then(|response| Err(UpdateTaskSetError::from_response(response)))
                     })
                     .boxed()
             }

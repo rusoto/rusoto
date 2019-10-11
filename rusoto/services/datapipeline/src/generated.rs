@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -1836,11 +1836,16 @@ impl DataPipeline for DataPipelineClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ActivatePipelineError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ActivatePipelineOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ActivatePipelineError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ActivatePipelineOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1848,11 +1853,12 @@ impl DataPipeline for DataPipelineClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ActivatePipelineError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ActivatePipelineError>
+                            })
+                            .and_then(|response| {
+                                Err(ActivatePipelineError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1872,11 +1878,14 @@ impl DataPipeline for DataPipelineClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AddTagsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AddTagsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<AddTagsError>)
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AddTagsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1884,11 +1893,8 @@ impl DataPipeline for DataPipelineClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(AddTagsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<AddTagsError>)
+                            .and_then(|response| Err(AddTagsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1911,11 +1917,16 @@ impl DataPipeline for DataPipelineClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreatePipelineError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreatePipelineOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreatePipelineError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreatePipelineOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1923,11 +1934,10 @@ impl DataPipeline for DataPipelineClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreatePipelineError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreatePipelineError>
+                            })
+                            .and_then(|response| Err(CreatePipelineError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1950,11 +1960,16 @@ impl DataPipeline for DataPipelineClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeactivatePipelineError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeactivatePipelineOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeactivatePipelineError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeactivatePipelineOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1962,11 +1977,12 @@ impl DataPipeline for DataPipelineClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeactivatePipelineError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeactivatePipelineError>
+                            })
+                            .and_then(|response| {
+                                Err(DeactivatePipelineError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1984,17 +2000,16 @@ impl DataPipeline for DataPipelineClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeletePipelineError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeletePipelineError>
+                            })
+                            .and_then(|response| Err(DeletePipelineError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2017,11 +2032,16 @@ impl DataPipeline for DataPipelineClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeObjectsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeObjectsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeObjectsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeObjectsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2029,11 +2049,10 @@ impl DataPipeline for DataPipelineClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeObjectsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeObjectsError>
+                            })
+                            .and_then(|response| Err(DescribeObjectsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2056,11 +2075,16 @@ impl DataPipeline for DataPipelineClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribePipelinesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribePipelinesOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribePipelinesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribePipelinesOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2068,11 +2092,12 @@ impl DataPipeline for DataPipelineClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribePipelinesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribePipelinesError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribePipelinesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2095,11 +2120,16 @@ impl DataPipeline for DataPipelineClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| EvaluateExpressionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<EvaluateExpressionOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<EvaluateExpressionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<EvaluateExpressionOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2107,11 +2137,12 @@ impl DataPipeline for DataPipelineClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(EvaluateExpressionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<EvaluateExpressionError>
+                            })
+                            .and_then(|response| {
+                                Err(EvaluateExpressionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2134,11 +2165,17 @@ impl DataPipeline for DataPipelineClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetPipelineDefinitionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetPipelineDefinitionOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetPipelineDefinitionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetPipelineDefinitionOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2146,11 +2183,13 @@ impl DataPipeline for DataPipelineClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetPipelineDefinitionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetPipelineDefinitionError>
+                            })
+                            .and_then(|response| {
+                                Err(GetPipelineDefinitionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2173,11 +2212,16 @@ impl DataPipeline for DataPipelineClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListPipelinesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListPipelinesOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListPipelinesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListPipelinesOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2185,11 +2229,10 @@ impl DataPipeline for DataPipelineClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListPipelinesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListPipelinesError>
+                            })
+                            .and_then(|response| Err(ListPipelinesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2212,11 +2255,16 @@ impl DataPipeline for DataPipelineClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| PollForTaskError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PollForTaskOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<PollForTaskError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<PollForTaskOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2224,11 +2272,10 @@ impl DataPipeline for DataPipelineClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(PollForTaskError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<PollForTaskError>
+                            })
+                            .and_then(|response| Err(PollForTaskError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2251,11 +2298,17 @@ impl DataPipeline for DataPipelineClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| PutPipelineDefinitionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PutPipelineDefinitionOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<PutPipelineDefinitionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<PutPipelineDefinitionOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2263,11 +2316,13 @@ impl DataPipeline for DataPipelineClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(PutPipelineDefinitionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<PutPipelineDefinitionError>
+                            })
+                            .and_then(|response| {
+                                Err(PutPipelineDefinitionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2290,11 +2345,16 @@ impl DataPipeline for DataPipelineClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| QueryObjectsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<QueryObjectsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<QueryObjectsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<QueryObjectsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2302,11 +2362,10 @@ impl DataPipeline for DataPipelineClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(QueryObjectsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<QueryObjectsError>
+                            })
+                            .and_then(|response| Err(QueryObjectsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2329,11 +2388,16 @@ impl DataPipeline for DataPipelineClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| RemoveTagsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RemoveTagsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<RemoveTagsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<RemoveTagsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2341,11 +2405,10 @@ impl DataPipeline for DataPipelineClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(RemoveTagsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<RemoveTagsError>
+                            })
+                            .and_then(|response| Err(RemoveTagsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2368,11 +2431,16 @@ impl DataPipeline for DataPipelineClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ReportTaskProgressError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ReportTaskProgressOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ReportTaskProgressError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ReportTaskProgressOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2380,11 +2448,12 @@ impl DataPipeline for DataPipelineClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ReportTaskProgressError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ReportTaskProgressError>
+                            })
+                            .and_then(|response| {
+                                Err(ReportTaskProgressError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2407,11 +2476,17 @@ impl DataPipeline for DataPipelineClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ReportTaskRunnerHeartbeatError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ReportTaskRunnerHeartbeatOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ReportTaskRunnerHeartbeatError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ReportTaskRunnerHeartbeatOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2419,13 +2494,13 @@ impl DataPipeline for DataPipelineClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ReportTaskRunnerHeartbeatError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ReportTaskRunnerHeartbeatError>
+                            })
+                            .and_then(|response| {
+                                Err(ReportTaskRunnerHeartbeatError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2443,17 +2518,16 @@ impl DataPipeline for DataPipelineClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(SetStatusError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<SetStatusError>
+                            })
+                            .and_then(|response| Err(SetStatusError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2476,11 +2550,16 @@ impl DataPipeline for DataPipelineClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| SetTaskStatusError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<SetTaskStatusOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<SetTaskStatusError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<SetTaskStatusOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2488,11 +2567,10 @@ impl DataPipeline for DataPipelineClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(SetTaskStatusError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<SetTaskStatusError>
+                            })
+                            .and_then(|response| Err(SetTaskStatusError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2515,11 +2593,17 @@ impl DataPipeline for DataPipelineClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ValidatePipelineDefinitionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ValidatePipelineDefinitionOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ValidatePipelineDefinitionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ValidatePipelineDefinitionOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2527,13 +2611,13 @@ impl DataPipeline for DataPipelineClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ValidatePipelineDefinitionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ValidatePipelineDefinitionError>
+                            })
+                            .and_then(|response| {
+                                Err(ValidatePipelineDefinitionError::from_response(response))
+                            })
                     })
                     .boxed()
             }

@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -413,11 +413,16 @@ impl Pricing for PricingClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeServicesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeServicesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeServicesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeServicesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -425,11 +430,12 @@ impl Pricing for PricingClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeServicesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeServicesError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeServicesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -452,11 +458,16 @@ impl Pricing for PricingClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetAttributeValuesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetAttributeValuesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetAttributeValuesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetAttributeValuesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -464,11 +475,12 @@ impl Pricing for PricingClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetAttributeValuesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetAttributeValuesError>
+                            })
+                            .and_then(|response| {
+                                Err(GetAttributeValuesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -491,11 +503,16 @@ impl Pricing for PricingClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetProductsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetProductsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetProductsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetProductsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -503,11 +520,10 @@ impl Pricing for PricingClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetProductsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetProductsError>
+                            })
+                            .and_then(|response| Err(GetProductsError::from_response(response)))
                     })
                     .boxed()
             }

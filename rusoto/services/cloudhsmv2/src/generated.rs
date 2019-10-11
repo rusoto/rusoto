@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -1416,11 +1416,16 @@ impl CloudHsmv2 for CloudHsmv2Client {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CopyBackupToRegionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CopyBackupToRegionResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CopyBackupToRegionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CopyBackupToRegionResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1428,11 +1433,12 @@ impl CloudHsmv2 for CloudHsmv2Client {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CopyBackupToRegionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CopyBackupToRegionError>
+                            })
+                            .and_then(|response| {
+                                Err(CopyBackupToRegionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1455,11 +1461,16 @@ impl CloudHsmv2 for CloudHsmv2Client {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateClusterError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateClusterResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateClusterError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateClusterResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1467,11 +1478,10 @@ impl CloudHsmv2 for CloudHsmv2Client {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateClusterError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateClusterError>
+                            })
+                            .and_then(|response| Err(CreateClusterError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1494,11 +1504,16 @@ impl CloudHsmv2 for CloudHsmv2Client {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateHsmError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateHsmResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateHsmError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateHsmResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1506,11 +1521,10 @@ impl CloudHsmv2 for CloudHsmv2Client {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateHsmError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateHsmError>
+                            })
+                            .and_then(|response| Err(CreateHsmError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1533,11 +1547,16 @@ impl CloudHsmv2 for CloudHsmv2Client {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteBackupError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteBackupResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteBackupError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteBackupResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1545,11 +1564,10 @@ impl CloudHsmv2 for CloudHsmv2Client {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteBackupError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteBackupError>
+                            })
+                            .and_then(|response| Err(DeleteBackupError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1572,11 +1590,16 @@ impl CloudHsmv2 for CloudHsmv2Client {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteClusterError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteClusterResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteClusterError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteClusterResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1584,11 +1607,10 @@ impl CloudHsmv2 for CloudHsmv2Client {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteClusterError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteClusterError>
+                            })
+                            .and_then(|response| Err(DeleteClusterError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1611,11 +1633,16 @@ impl CloudHsmv2 for CloudHsmv2Client {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteHsmError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteHsmResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteHsmError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteHsmResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1623,11 +1650,10 @@ impl CloudHsmv2 for CloudHsmv2Client {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteHsmError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteHsmError>
+                            })
+                            .and_then(|response| Err(DeleteHsmError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1650,11 +1676,16 @@ impl CloudHsmv2 for CloudHsmv2Client {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeBackupsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeBackupsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeBackupsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeBackupsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1662,11 +1693,10 @@ impl CloudHsmv2 for CloudHsmv2Client {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeBackupsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeBackupsError>
+                            })
+                            .and_then(|response| Err(DescribeBackupsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1689,11 +1719,16 @@ impl CloudHsmv2 for CloudHsmv2Client {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeClustersError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeClustersResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeClustersError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeClustersResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1701,11 +1736,12 @@ impl CloudHsmv2 for CloudHsmv2Client {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeClustersError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeClustersError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeClustersError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1728,11 +1764,16 @@ impl CloudHsmv2 for CloudHsmv2Client {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| InitializeClusterError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<InitializeClusterResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<InitializeClusterError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<InitializeClusterResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1740,11 +1781,12 @@ impl CloudHsmv2 for CloudHsmv2Client {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(InitializeClusterError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<InitializeClusterError>
+                            })
+                            .and_then(|response| {
+                                Err(InitializeClusterError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1764,11 +1806,14 @@ impl CloudHsmv2 for CloudHsmv2Client {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListTagsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListTagsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<ListTagsError>)
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListTagsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1776,11 +1821,8 @@ impl CloudHsmv2 for CloudHsmv2Client {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListTagsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<ListTagsError>)
+                            .and_then(|response| Err(ListTagsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1803,11 +1845,16 @@ impl CloudHsmv2 for CloudHsmv2Client {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| RestoreBackupError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RestoreBackupResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<RestoreBackupError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<RestoreBackupResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1815,11 +1862,10 @@ impl CloudHsmv2 for CloudHsmv2Client {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(RestoreBackupError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<RestoreBackupError>
+                            })
+                            .and_then(|response| Err(RestoreBackupError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1842,11 +1888,16 @@ impl CloudHsmv2 for CloudHsmv2Client {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| TagResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<TagResourceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<TagResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<TagResourceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1854,11 +1905,10 @@ impl CloudHsmv2 for CloudHsmv2Client {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(TagResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<TagResourceError>
+                            })
+                            .and_then(|response| Err(TagResourceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1881,11 +1931,16 @@ impl CloudHsmv2 for CloudHsmv2Client {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UntagResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UntagResourceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UntagResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UntagResourceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1893,11 +1948,10 @@ impl CloudHsmv2 for CloudHsmv2Client {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UntagResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UntagResourceError>
+                            })
+                            .and_then(|response| Err(UntagResourceError::from_response(response)))
                     })
                     .boxed()
             }

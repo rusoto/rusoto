@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
@@ -1033,10 +1033,11 @@ impl Polly for PollyClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteLexiconError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteLexiconOutput, _>()?;
+                                .deserialize::<DeleteLexiconOutput, _>();
 
                             result
                         })
@@ -1047,11 +1048,8 @@ impl Polly for PollyClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteLexiconError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteLexiconError>())
+                            .and_then(|response| Err(DeleteLexiconError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1084,10 +1082,11 @@ impl Polly for PollyClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| DescribeVoicesError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeVoicesOutput, _>()?;
+                                .deserialize::<DescribeVoicesOutput, _>();
 
                             result
                         })
@@ -1098,11 +1097,8 @@ impl Polly for PollyClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DescribeVoicesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeVoicesError>())
+                            .and_then(|response| Err(DescribeVoicesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1123,10 +1119,11 @@ impl Polly for PollyClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetLexiconError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetLexiconOutput, _>()?;
+                                .deserialize::<GetLexiconOutput, _>();
 
                             result
                         })
@@ -1137,11 +1134,8 @@ impl Polly for PollyClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetLexiconError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetLexiconError>())
+                            .and_then(|response| Err(GetLexiconError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1162,10 +1156,11 @@ impl Polly for PollyClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetSpeechSynthesisTaskError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetSpeechSynthesisTaskOutput, _>()?;
+                                .deserialize::<GetSpeechSynthesisTaskOutput, _>();
 
                             result
                         })
@@ -1176,13 +1171,10 @@ impl Polly for PollyClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(GetSpeechSynthesisTaskError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetSpeechSynthesisTaskError>())
+                            .and_then(|response| {
+                                Err(GetSpeechSynthesisTaskError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1209,10 +1201,11 @@ impl Polly for PollyClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListLexiconsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListLexiconsOutput, _>()?;
+                                .deserialize::<ListLexiconsOutput, _>();
 
                             result
                         })
@@ -1223,11 +1216,8 @@ impl Polly for PollyClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListLexiconsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListLexiconsError>())
+                            .and_then(|response| Err(ListLexiconsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1260,10 +1250,11 @@ impl Polly for PollyClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListSpeechSynthesisTasksError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListSpeechSynthesisTasksOutput, _>()?;
+                                .deserialize::<ListSpeechSynthesisTasksOutput, _>();
 
                             result
                         })
@@ -1274,13 +1265,10 @@ impl Polly for PollyClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(ListSpeechSynthesisTasksError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListSpeechSynthesisTasksError>())
+                            .and_then(|response| {
+                                Err(ListSpeechSynthesisTasksError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1304,10 +1292,11 @@ impl Polly for PollyClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| PutLexiconError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PutLexiconOutput, _>()?;
+                                .deserialize::<PutLexiconOutput, _>();
 
                             result
                         })
@@ -1318,11 +1307,8 @@ impl Polly for PollyClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(PutLexiconError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<PutLexiconError>())
+                            .and_then(|response| Err(PutLexiconError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1346,10 +1332,11 @@ impl Polly for PollyClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| StartSpeechSynthesisTaskError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StartSpeechSynthesisTaskOutput, _>()?;
+                                .deserialize::<StartSpeechSynthesisTaskOutput, _>();
 
                             result
                         })
@@ -1360,13 +1347,10 @@ impl Polly for PollyClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(StartSpeechSynthesisTaskError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<StartSpeechSynthesisTaskError>())
+                            .and_then(|response| {
+                                Err(StartSpeechSynthesisTaskError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1390,8 +1374,9 @@ impl Polly for PollyClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| SynthesizeSpeechError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let mut result = SynthesizeSpeechOutput::default();
                             result.audio_stream = Some(response.body);
 
@@ -1415,11 +1400,10 @@ impl Polly for PollyClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(SynthesizeSpeechError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<SynthesizeSpeechError>())
+                            .and_then(|response| {
+                                Err(SynthesizeSpeechError::from_response(response))
+                            })
                     })
                     .boxed()
             }

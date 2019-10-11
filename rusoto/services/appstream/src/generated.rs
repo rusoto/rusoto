@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -4398,11 +4398,16 @@ impl AppStream for AppStreamClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AssociateFleetError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AssociateFleetResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<AssociateFleetError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AssociateFleetResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4410,11 +4415,10 @@ impl AppStream for AppStreamClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(AssociateFleetError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<AssociateFleetError>
+                            })
+                            .and_then(|response| Err(AssociateFleetError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4440,11 +4444,17 @@ impl AppStream for AppStreamClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| BatchAssociateUserStackError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<BatchAssociateUserStackResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<BatchAssociateUserStackError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<BatchAssociateUserStackResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4452,13 +4462,13 @@ impl AppStream for AppStreamClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(BatchAssociateUserStackError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<BatchAssociateUserStackError>
+                            })
+                            .and_then(|response| {
+                                Err(BatchAssociateUserStackError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4484,11 +4494,17 @@ impl AppStream for AppStreamClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| BatchDisassociateUserStackError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<BatchDisassociateUserStackResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<BatchDisassociateUserStackError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<BatchDisassociateUserStackResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4496,13 +4512,13 @@ impl AppStream for AppStreamClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(BatchDisassociateUserStackError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<BatchDisassociateUserStackError>
+                            })
+                            .and_then(|response| {
+                                Err(BatchDisassociateUserStackError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4525,11 +4541,16 @@ impl AppStream for AppStreamClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CopyImageError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CopyImageResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CopyImageError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CopyImageResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4537,11 +4558,10 @@ impl AppStream for AppStreamClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CopyImageError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CopyImageError>
+                            })
+                            .and_then(|response| Err(CopyImageError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4567,11 +4587,17 @@ impl AppStream for AppStreamClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateDirectoryConfigError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateDirectoryConfigResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateDirectoryConfigError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateDirectoryConfigResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4579,11 +4605,13 @@ impl AppStream for AppStreamClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateDirectoryConfigError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateDirectoryConfigError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateDirectoryConfigError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4606,11 +4634,16 @@ impl AppStream for AppStreamClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateFleetError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateFleetResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateFleetError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateFleetResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4618,11 +4651,10 @@ impl AppStream for AppStreamClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateFleetError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateFleetError>
+                            })
+                            .and_then(|response| Err(CreateFleetError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4645,11 +4677,16 @@ impl AppStream for AppStreamClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateImageBuilderError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateImageBuilderResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateImageBuilderError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateImageBuilderResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4657,11 +4694,12 @@ impl AppStream for AppStreamClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateImageBuilderError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateImageBuilderError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateImageBuilderError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4688,11 +4726,17 @@ impl AppStream for AppStreamClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateImageBuilderStreamingURLError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateImageBuilderStreamingURLResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateImageBuilderStreamingURLError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateImageBuilderStreamingURLResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4700,15 +4744,13 @@ impl AppStream for AppStreamClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(CreateImageBuilderStreamingURLError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateImageBuilderStreamingURLError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateImageBuilderStreamingURLError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4731,11 +4773,16 @@ impl AppStream for AppStreamClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateStackError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateStackResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateStackError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateStackResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4743,11 +4790,10 @@ impl AppStream for AppStreamClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateStackError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateStackError>
+                            })
+                            .and_then(|response| Err(CreateStackError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4770,11 +4816,16 @@ impl AppStream for AppStreamClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateStreamingURLError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateStreamingURLResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateStreamingURLError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateStreamingURLResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4782,11 +4833,12 @@ impl AppStream for AppStreamClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateStreamingURLError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateStreamingURLError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateStreamingURLError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4810,11 +4862,17 @@ impl AppStream for AppStreamClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateUsageReportSubscriptionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateUsageReportSubscriptionResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateUsageReportSubscriptionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateUsageReportSubscriptionResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4822,13 +4880,13 @@ impl AppStream for AppStreamClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(CreateUsageReportSubscriptionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateUsageReportSubscriptionError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateUsageReportSubscriptionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4851,11 +4909,16 @@ impl AppStream for AppStreamClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateUserError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateUserResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateUserError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateUserResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4863,11 +4926,10 @@ impl AppStream for AppStreamClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateUserError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateUserError>
+                            })
+                            .and_then(|response| Err(CreateUserError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4893,11 +4955,17 @@ impl AppStream for AppStreamClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteDirectoryConfigError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteDirectoryConfigResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteDirectoryConfigError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteDirectoryConfigResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4905,11 +4973,13 @@ impl AppStream for AppStreamClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteDirectoryConfigError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteDirectoryConfigError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteDirectoryConfigError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4932,11 +5002,16 @@ impl AppStream for AppStreamClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteFleetError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteFleetResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteFleetError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteFleetResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4944,11 +5019,10 @@ impl AppStream for AppStreamClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteFleetError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteFleetError>
+                            })
+                            .and_then(|response| Err(DeleteFleetError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4971,11 +5045,16 @@ impl AppStream for AppStreamClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteImageError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteImageResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteImageError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteImageResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4983,11 +5062,10 @@ impl AppStream for AppStreamClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteImageError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteImageError>
+                            })
+                            .and_then(|response| Err(DeleteImageError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5010,11 +5088,16 @@ impl AppStream for AppStreamClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteImageBuilderError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteImageBuilderResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteImageBuilderError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteImageBuilderResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5022,11 +5105,12 @@ impl AppStream for AppStreamClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteImageBuilderError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteImageBuilderError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteImageBuilderError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5052,11 +5136,17 @@ impl AppStream for AppStreamClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteImagePermissionsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteImagePermissionsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteImagePermissionsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteImagePermissionsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5064,13 +5154,13 @@ impl AppStream for AppStreamClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DeleteImagePermissionsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteImagePermissionsError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteImagePermissionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5093,11 +5183,16 @@ impl AppStream for AppStreamClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteStackError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteStackResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteStackError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteStackResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5105,11 +5200,10 @@ impl AppStream for AppStreamClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteStackError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteStackError>
+                            })
+                            .and_then(|response| Err(DeleteStackError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5133,11 +5227,17 @@ impl AppStream for AppStreamClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteUsageReportSubscriptionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteUsageReportSubscriptionResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteUsageReportSubscriptionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteUsageReportSubscriptionResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5145,13 +5245,13 @@ impl AppStream for AppStreamClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DeleteUsageReportSubscriptionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteUsageReportSubscriptionError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteUsageReportSubscriptionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5174,11 +5274,16 @@ impl AppStream for AppStreamClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteUserError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteUserResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteUserError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteUserResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5186,11 +5291,10 @@ impl AppStream for AppStreamClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteUserError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteUserError>
+                            })
+                            .and_then(|response| Err(DeleteUserError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5216,11 +5320,17 @@ impl AppStream for AppStreamClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeDirectoryConfigsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeDirectoryConfigsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeDirectoryConfigsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeDirectoryConfigsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5228,13 +5338,13 @@ impl AppStream for AppStreamClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeDirectoryConfigsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeDirectoryConfigsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeDirectoryConfigsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5257,11 +5367,16 @@ impl AppStream for AppStreamClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeFleetsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeFleetsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeFleetsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeFleetsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5269,11 +5384,10 @@ impl AppStream for AppStreamClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeFleetsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeFleetsError>
+                            })
+                            .and_then(|response| Err(DescribeFleetsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5299,11 +5413,17 @@ impl AppStream for AppStreamClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeImageBuildersError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeImageBuildersResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeImageBuildersError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeImageBuildersResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5311,11 +5431,13 @@ impl AppStream for AppStreamClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeImageBuildersError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeImageBuildersError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeImageBuildersError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5341,11 +5463,17 @@ impl AppStream for AppStreamClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeImagePermissionsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeImagePermissionsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeImagePermissionsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeImagePermissionsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5353,13 +5481,13 @@ impl AppStream for AppStreamClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeImagePermissionsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeImagePermissionsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeImagePermissionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5382,11 +5510,16 @@ impl AppStream for AppStreamClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeImagesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeImagesResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeImagesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeImagesResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5394,11 +5527,10 @@ impl AppStream for AppStreamClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeImagesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeImagesError>
+                            })
+                            .and_then(|response| Err(DescribeImagesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5421,11 +5553,16 @@ impl AppStream for AppStreamClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeSessionsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeSessionsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeSessionsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeSessionsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5433,11 +5570,12 @@ impl AppStream for AppStreamClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeSessionsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeSessionsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeSessionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5460,11 +5598,16 @@ impl AppStream for AppStreamClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeStacksError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeStacksResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeStacksError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeStacksResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5472,11 +5615,10 @@ impl AppStream for AppStreamClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeStacksError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeStacksError>
+                            })
+                            .and_then(|response| Err(DescribeStacksError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5503,11 +5645,17 @@ impl AppStream for AppStreamClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeUsageReportSubscriptionsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeUsageReportSubscriptionsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeUsageReportSubscriptionsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeUsageReportSubscriptionsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5515,15 +5663,15 @@ impl AppStream for AppStreamClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeUsageReportSubscriptionsError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeUsageReportSubscriptionsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeUsageReportSubscriptionsError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -5549,11 +5697,17 @@ impl AppStream for AppStreamClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeUserStackAssociationsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeUserStackAssociationsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeUserStackAssociationsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeUserStackAssociationsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5561,13 +5715,13 @@ impl AppStream for AppStreamClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeUserStackAssociationsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeUserStackAssociationsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeUserStackAssociationsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5590,11 +5744,16 @@ impl AppStream for AppStreamClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeUsersError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeUsersResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeUsersError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeUsersResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5602,11 +5761,10 @@ impl AppStream for AppStreamClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeUsersError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeUsersError>
+                            })
+                            .and_then(|response| Err(DescribeUsersError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5629,11 +5787,16 @@ impl AppStream for AppStreamClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DisableUserError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DisableUserResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DisableUserError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DisableUserResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5641,11 +5804,10 @@ impl AppStream for AppStreamClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DisableUserError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DisableUserError>
+                            })
+                            .and_then(|response| Err(DisableUserError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5668,11 +5830,16 @@ impl AppStream for AppStreamClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DisassociateFleetError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DisassociateFleetResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DisassociateFleetError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DisassociateFleetResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5680,11 +5847,12 @@ impl AppStream for AppStreamClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DisassociateFleetError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DisassociateFleetError>
+                            })
+                            .and_then(|response| {
+                                Err(DisassociateFleetError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5707,11 +5875,16 @@ impl AppStream for AppStreamClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| EnableUserError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<EnableUserResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<EnableUserError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<EnableUserResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5719,11 +5892,10 @@ impl AppStream for AppStreamClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(EnableUserError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<EnableUserError>
+                            })
+                            .and_then(|response| Err(EnableUserError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5746,11 +5918,16 @@ impl AppStream for AppStreamClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ExpireSessionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ExpireSessionResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ExpireSessionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ExpireSessionResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5758,11 +5935,10 @@ impl AppStream for AppStreamClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ExpireSessionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ExpireSessionError>
+                            })
+                            .and_then(|response| Err(ExpireSessionError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5788,11 +5964,17 @@ impl AppStream for AppStreamClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListAssociatedFleetsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListAssociatedFleetsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListAssociatedFleetsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListAssociatedFleetsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5800,11 +5982,13 @@ impl AppStream for AppStreamClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListAssociatedFleetsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListAssociatedFleetsError>
+                            })
+                            .and_then(|response| {
+                                Err(ListAssociatedFleetsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5830,11 +6014,17 @@ impl AppStream for AppStreamClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListAssociatedStacksError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListAssociatedStacksResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListAssociatedStacksError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListAssociatedStacksResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5842,11 +6032,13 @@ impl AppStream for AppStreamClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListAssociatedStacksError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListAssociatedStacksError>
+                            })
+                            .and_then(|response| {
+                                Err(ListAssociatedStacksError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5872,11 +6064,17 @@ impl AppStream for AppStreamClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListTagsForResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListTagsForResourceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListTagsForResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListTagsForResourceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5884,11 +6082,13 @@ impl AppStream for AppStreamClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListTagsForResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListTagsForResourceError>
+                            })
+                            .and_then(|response| {
+                                Err(ListTagsForResourceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5911,11 +6111,16 @@ impl AppStream for AppStreamClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StartFleetError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StartFleetResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StartFleetError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StartFleetResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5923,11 +6128,10 @@ impl AppStream for AppStreamClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(StartFleetError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StartFleetError>
+                            })
+                            .and_then(|response| Err(StartFleetError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5950,11 +6154,16 @@ impl AppStream for AppStreamClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StartImageBuilderError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StartImageBuilderResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StartImageBuilderError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StartImageBuilderResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5962,11 +6171,12 @@ impl AppStream for AppStreamClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(StartImageBuilderError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StartImageBuilderError>
+                            })
+                            .and_then(|response| {
+                                Err(StartImageBuilderError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5986,11 +6196,16 @@ impl AppStream for AppStreamClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StopFleetError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StopFleetResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StopFleetError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StopFleetResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5998,11 +6213,10 @@ impl AppStream for AppStreamClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(StopFleetError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StopFleetError>
+                            })
+                            .and_then(|response| Err(StopFleetError::from_response(response)))
                     })
                     .boxed()
             }
@@ -6025,11 +6239,16 @@ impl AppStream for AppStreamClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StopImageBuilderError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StopImageBuilderResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StopImageBuilderError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StopImageBuilderResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6037,11 +6256,12 @@ impl AppStream for AppStreamClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(StopImageBuilderError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StopImageBuilderError>
+                            })
+                            .and_then(|response| {
+                                Err(StopImageBuilderError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6064,11 +6284,16 @@ impl AppStream for AppStreamClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| TagResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<TagResourceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<TagResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<TagResourceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6076,11 +6301,10 @@ impl AppStream for AppStreamClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(TagResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<TagResourceError>
+                            })
+                            .and_then(|response| Err(TagResourceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -6103,11 +6327,16 @@ impl AppStream for AppStreamClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UntagResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UntagResourceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UntagResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UntagResourceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6115,11 +6344,10 @@ impl AppStream for AppStreamClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UntagResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UntagResourceError>
+                            })
+                            .and_then(|response| Err(UntagResourceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -6145,11 +6373,17 @@ impl AppStream for AppStreamClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateDirectoryConfigError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateDirectoryConfigResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateDirectoryConfigError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateDirectoryConfigResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6157,11 +6391,13 @@ impl AppStream for AppStreamClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateDirectoryConfigError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateDirectoryConfigError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateDirectoryConfigError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6184,11 +6420,16 @@ impl AppStream for AppStreamClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateFleetError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateFleetResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateFleetError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateFleetResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6196,11 +6437,10 @@ impl AppStream for AppStreamClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateFleetError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateFleetError>
+                            })
+                            .and_then(|response| Err(UpdateFleetError::from_response(response)))
                     })
                     .boxed()
             }
@@ -6226,11 +6466,17 @@ impl AppStream for AppStreamClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateImagePermissionsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateImagePermissionsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateImagePermissionsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateImagePermissionsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6238,13 +6484,13 @@ impl AppStream for AppStreamClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(UpdateImagePermissionsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateImagePermissionsError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateImagePermissionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6267,11 +6513,16 @@ impl AppStream for AppStreamClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateStackError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateStackResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateStackError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateStackResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6279,11 +6530,10 @@ impl AppStream for AppStreamClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateStackError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateStackError>
+                            })
+                            .and_then(|response| Err(UpdateStackError::from_response(response)))
                     })
                     .boxed()
             }

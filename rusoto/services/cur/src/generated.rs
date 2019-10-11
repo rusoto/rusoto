@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -305,11 +305,17 @@ impl CostAndUsageReport for CostAndUsageReportClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteReportDefinitionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteReportDefinitionResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteReportDefinitionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteReportDefinitionResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -317,13 +323,13 @@ impl CostAndUsageReport for CostAndUsageReportClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DeleteReportDefinitionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteReportDefinitionError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteReportDefinitionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -349,11 +355,17 @@ impl CostAndUsageReport for CostAndUsageReportClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeReportDefinitionsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeReportDefinitionsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeReportDefinitionsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeReportDefinitionsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -361,13 +373,13 @@ impl CostAndUsageReport for CostAndUsageReportClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeReportDefinitionsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeReportDefinitionsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeReportDefinitionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -393,11 +405,17 @@ impl CostAndUsageReport for CostAndUsageReportClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| PutReportDefinitionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PutReportDefinitionResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<PutReportDefinitionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<PutReportDefinitionResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -405,11 +423,13 @@ impl CostAndUsageReport for CostAndUsageReportClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(PutReportDefinitionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<PutReportDefinitionError>
+                            })
+                            .and_then(|response| {
+                                Err(PutReportDefinitionError::from_response(response))
+                            })
                     })
                     .boxed()
             }

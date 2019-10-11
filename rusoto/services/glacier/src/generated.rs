@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
@@ -3372,8 +3372,9 @@ impl Glacier for GlacierClient {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| AbortMultipartUploadError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -3385,11 +3386,10 @@ impl Glacier for GlacierClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(AbortMultipartUploadError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<AbortMultipartUploadError>())
+                            .and_then(|response| {
+                                Err(AbortMultipartUploadError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3415,8 +3415,9 @@ impl Glacier for GlacierClient {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| AbortVaultLockError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -3428,11 +3429,8 @@ impl Glacier for GlacierClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(AbortVaultLockError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<AbortVaultLockError>())
+                            .and_then(|response| Err(AbortVaultLockError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3465,8 +3463,9 @@ impl Glacier for GlacierClient {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| AddTagsToVaultError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -3478,11 +3477,8 @@ impl Glacier for GlacierClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(AddTagsToVaultError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<AddTagsToVaultError>())
+                            .and_then(|response| Err(AddTagsToVaultError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3517,10 +3513,11 @@ impl Glacier for GlacierClient {
             if response.status.as_u16() == 201 {
                 response
                     .buffer()
+                    .map_err(|e| CompleteMultipartUploadError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let mut result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ArchiveCreationOutput, _>()?;
+                                .deserialize::<ArchiveCreationOutput, _>();
                             if let Some(archive_id) = response.headers.get("x-amz-archive-id") {
                                 let value = archive_id.to_owned();
                                 result.archive_id = Some(value)
@@ -3543,13 +3540,10 @@ impl Glacier for GlacierClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(CompleteMultipartUploadError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CompleteMultipartUploadError>())
+                            .and_then(|response| {
+                                Err(CompleteMultipartUploadError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3576,8 +3570,9 @@ impl Glacier for GlacierClient {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| CompleteVaultLockError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -3589,11 +3584,10 @@ impl Glacier for GlacierClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CompleteVaultLockError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CompleteVaultLockError>())
+                            .and_then(|response| {
+                                Err(CompleteVaultLockError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3619,10 +3613,11 @@ impl Glacier for GlacierClient {
             if response.status.as_u16() == 201 {
                 response
                     .buffer()
+                    .map_err(|e| CreateVaultError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let mut result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateVaultOutput, _>()?;
+                                .deserialize::<CreateVaultOutput, _>();
                             if let Some(location) = response.headers.get("Location") {
                                 let value = location.to_owned();
                                 result.location = Some(value)
@@ -3637,11 +3632,8 @@ impl Glacier for GlacierClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateVaultError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateVaultError>())
+                            .and_then(|response| Err(CreateVaultError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3665,8 +3657,9 @@ impl Glacier for GlacierClient {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteArchiveError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -3678,11 +3671,8 @@ impl Glacier for GlacierClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteArchiveError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteArchiveError>())
+                            .and_then(|response| Err(DeleteArchiveError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3705,8 +3695,9 @@ impl Glacier for GlacierClient {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteVaultError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -3718,11 +3709,8 @@ impl Glacier for GlacierClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteVaultError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteVaultError>())
+                            .and_then(|response| Err(DeleteVaultError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3748,8 +3736,9 @@ impl Glacier for GlacierClient {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteVaultAccessPolicyError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -3761,13 +3750,10 @@ impl Glacier for GlacierClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(DeleteVaultAccessPolicyError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteVaultAccessPolicyError>())
+                            .and_then(|response| {
+                                Err(DeleteVaultAccessPolicyError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3793,8 +3779,9 @@ impl Glacier for GlacierClient {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteVaultNotificationsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -3806,13 +3793,10 @@ impl Glacier for GlacierClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(DeleteVaultNotificationsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteVaultNotificationsError>())
+                            .and_then(|response| {
+                                Err(DeleteVaultNotificationsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3839,10 +3823,11 @@ impl Glacier for GlacierClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeJobError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GlacierJobDescription, _>()?;
+                                .deserialize::<GlacierJobDescription, _>();
 
                             result
                         })
@@ -3853,11 +3838,8 @@ impl Glacier for GlacierClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DescribeJobError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeJobError>())
+                            .and_then(|response| Err(DescribeJobError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3883,10 +3865,11 @@ impl Glacier for GlacierClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeVaultError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeVaultOutput, _>()?;
+                                .deserialize::<DescribeVaultOutput, _>();
 
                             result
                         })
@@ -3897,11 +3880,8 @@ impl Glacier for GlacierClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DescribeVaultError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeVaultError>())
+                            .and_then(|response| Err(DescribeVaultError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3926,10 +3906,11 @@ impl Glacier for GlacierClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetDataRetrievalPolicyError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetDataRetrievalPolicyOutput, _>()?;
+                                .deserialize::<GetDataRetrievalPolicyOutput, _>();
 
                             result
                         })
@@ -3940,13 +3921,10 @@ impl Glacier for GlacierClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(GetDataRetrievalPolicyError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetDataRetrievalPolicyError>())
+                            .and_then(|response| {
+                                Err(GetDataRetrievalPolicyError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3977,8 +3955,9 @@ impl Glacier for GlacierClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetJobOutputError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let mut result = GetJobOutputOutput::default();
                             result.body = Some(response.body);
 
@@ -4014,11 +3993,8 @@ impl Glacier for GlacierClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetJobOutputError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetJobOutputError>())
+                            .and_then(|response| Err(GetJobOutputError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4044,10 +4020,11 @@ impl Glacier for GlacierClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetVaultAccessPolicyError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetVaultAccessPolicyOutput, _>()?;
+                                .deserialize::<GetVaultAccessPolicyOutput, _>();
 
                             result
                         })
@@ -4058,11 +4035,10 @@ impl Glacier for GlacierClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetVaultAccessPolicyError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetVaultAccessPolicyError>())
+                            .and_then(|response| {
+                                Err(GetVaultAccessPolicyError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4088,10 +4064,11 @@ impl Glacier for GlacierClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetVaultLockError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetVaultLockOutput, _>()?;
+                                .deserialize::<GetVaultLockOutput, _>();
 
                             result
                         })
@@ -4102,11 +4079,8 @@ impl Glacier for GlacierClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetVaultLockError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetVaultLockError>())
+                            .and_then(|response| Err(GetVaultLockError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4132,10 +4106,11 @@ impl Glacier for GlacierClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetVaultNotificationsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetVaultNotificationsOutput, _>()?;
+                                .deserialize::<GetVaultNotificationsOutput, _>();
 
                             result
                         })
@@ -4146,11 +4121,10 @@ impl Glacier for GlacierClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetVaultNotificationsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetVaultNotificationsError>())
+                            .and_then(|response| {
+                                Err(GetVaultNotificationsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4179,10 +4153,11 @@ impl Glacier for GlacierClient {
             if response.status.as_u16() == 202 {
                 response
                     .buffer()
+                    .map_err(|e| InitiateJobError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let mut result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<InitiateJobOutput, _>()?;
+                                .deserialize::<InitiateJobOutput, _>();
                             if let Some(job_id) = response.headers.get("x-amz-job-id") {
                                 let value = job_id.to_owned();
                                 result.job_id = Some(value)
@@ -4207,11 +4182,8 @@ impl Glacier for GlacierClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(InitiateJobError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<InitiateJobError>())
+                            .and_then(|response| Err(InitiateJobError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4248,10 +4220,11 @@ impl Glacier for GlacierClient {
             if response.status.as_u16() == 201 {
                 response
                     .buffer()
+                    .map_err(|e| InitiateMultipartUploadError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let mut result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<InitiateMultipartUploadOutput, _>()?;
+                                .deserialize::<InitiateMultipartUploadOutput, _>();
                             if let Some(location) = response.headers.get("Location") {
                                 let value = location.to_owned();
                                 result.location = Some(value)
@@ -4272,13 +4245,10 @@ impl Glacier for GlacierClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(InitiateMultipartUploadError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<InitiateMultipartUploadError>())
+                            .and_then(|response| {
+                                Err(InitiateMultipartUploadError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4307,10 +4277,11 @@ impl Glacier for GlacierClient {
             if response.status.as_u16() == 201 {
                 response
                     .buffer()
+                    .map_err(|e| InitiateVaultLockError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let mut result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<InitiateVaultLockOutput, _>()?;
+                                .deserialize::<InitiateVaultLockOutput, _>();
                             if let Some(lock_id) = response.headers.get("x-amz-lock-id") {
                                 let value = lock_id.to_owned();
                                 result.lock_id = Some(value)
@@ -4325,11 +4296,10 @@ impl Glacier for GlacierClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(InitiateVaultLockError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<InitiateVaultLockError>())
+                            .and_then(|response| {
+                                Err(InitiateVaultLockError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4367,10 +4337,11 @@ impl Glacier for GlacierClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListJobsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListJobsOutput, _>()?;
+                                .deserialize::<ListJobsOutput, _>();
 
                             result
                         })
@@ -4381,11 +4352,8 @@ impl Glacier for GlacierClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListJobsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListJobsError>())
+                            .and_then(|response| Err(ListJobsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4420,10 +4388,11 @@ impl Glacier for GlacierClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListMultipartUploadsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListMultipartUploadsOutput, _>()?;
+                                .deserialize::<ListMultipartUploadsOutput, _>();
 
                             result
                         })
@@ -4434,11 +4403,10 @@ impl Glacier for GlacierClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListMultipartUploadsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListMultipartUploadsError>())
+                            .and_then(|response| {
+                                Err(ListMultipartUploadsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4471,10 +4439,11 @@ impl Glacier for GlacierClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListPartsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListPartsOutput, _>()?;
+                                .deserialize::<ListPartsOutput, _>();
 
                             result
                         })
@@ -4485,11 +4454,8 @@ impl Glacier for GlacierClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListPartsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListPartsError>())
+                            .and_then(|response| Err(ListPartsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4514,10 +4480,11 @@ impl Glacier for GlacierClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListProvisionedCapacityError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListProvisionedCapacityOutput, _>()?;
+                                .deserialize::<ListProvisionedCapacityOutput, _>();
 
                             result
                         })
@@ -4528,13 +4495,10 @@ impl Glacier for GlacierClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(ListProvisionedCapacityError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListProvisionedCapacityError>())
+                            .and_then(|response| {
+                                Err(ListProvisionedCapacityError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4560,10 +4524,11 @@ impl Glacier for GlacierClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListTagsForVaultError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListTagsForVaultOutput, _>()?;
+                                .deserialize::<ListTagsForVaultOutput, _>();
 
                             result
                         })
@@ -4574,11 +4539,10 @@ impl Glacier for GlacierClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListTagsForVaultError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListTagsForVaultError>())
+                            .and_then(|response| {
+                                Err(ListTagsForVaultError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4609,10 +4573,11 @@ impl Glacier for GlacierClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListVaultsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListVaultsOutput, _>()?;
+                                .deserialize::<ListVaultsOutput, _>();
 
                             result
                         })
@@ -4623,11 +4588,8 @@ impl Glacier for GlacierClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListVaultsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListVaultsError>())
+                            .and_then(|response| Err(ListVaultsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4652,11 +4614,11 @@ impl Glacier for GlacierClient {
             if response.status.as_u16() == 201 {
                 response
                     .buffer()
+                    .map_err(|e| PurchaseProvisionedCapacityError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let mut result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PurchaseProvisionedCapacityOutput, _>(
-                            )?;
+                                .deserialize::<PurchaseProvisionedCapacityOutput, _>();
                             if let Some(capacity_id) = response.headers.get("x-amz-capacity-id") {
                                 let value = capacity_id.to_owned();
                                 result.capacity_id = Some(value)
@@ -4671,13 +4633,10 @@ impl Glacier for GlacierClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(PurchaseProvisionedCapacityError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<PurchaseProvisionedCapacityError>())
+                            .and_then(|response| {
+                                Err(PurchaseProvisionedCapacityError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4710,8 +4669,9 @@ impl Glacier for GlacierClient {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| RemoveTagsFromVaultError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -4723,11 +4683,10 @@ impl Glacier for GlacierClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(RemoveTagsFromVaultError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<RemoveTagsFromVaultError>())
+                            .and_then(|response| {
+                                Err(RemoveTagsFromVaultError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4755,8 +4714,9 @@ impl Glacier for GlacierClient {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| SetDataRetrievalPolicyError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -4768,13 +4728,10 @@ impl Glacier for GlacierClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(SetDataRetrievalPolicyError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<SetDataRetrievalPolicyError>())
+                            .and_then(|response| {
+                                Err(SetDataRetrievalPolicyError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4803,8 +4760,9 @@ impl Glacier for GlacierClient {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| SetVaultAccessPolicyError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -4816,11 +4774,10 @@ impl Glacier for GlacierClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(SetVaultAccessPolicyError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<SetVaultAccessPolicyError>())
+                            .and_then(|response| {
+                                Err(SetVaultAccessPolicyError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4849,8 +4806,9 @@ impl Glacier for GlacierClient {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| SetVaultNotificationsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -4862,11 +4820,10 @@ impl Glacier for GlacierClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(SetVaultNotificationsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<SetVaultNotificationsError>())
+                            .and_then(|response| {
+                                Err(SetVaultNotificationsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4910,10 +4867,11 @@ impl Glacier for GlacierClient {
             if response.status.as_u16() == 201 {
                 response
                     .buffer()
+                    .map_err(|e| UploadArchiveError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let mut result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ArchiveCreationOutput, _>()?;
+                                .deserialize::<ArchiveCreationOutput, _>();
                             if let Some(archive_id) = response.headers.get("x-amz-archive-id") {
                                 let value = archive_id.to_owned();
                                 result.archive_id = Some(value)
@@ -4936,11 +4894,8 @@ impl Glacier for GlacierClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UploadArchiveError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UploadArchiveError>())
+                            .and_then(|response| Err(UploadArchiveError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4982,10 +4937,11 @@ impl Glacier for GlacierClient {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| UploadMultipartPartError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let mut result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UploadMultipartPartOutput, _>()?;
+                                .deserialize::<UploadMultipartPartOutput, _>();
                             if let Some(checksum) = response.headers.get("x-amz-sha256-tree-hash") {
                                 let value = checksum.to_owned();
                                 result.checksum = Some(value)
@@ -5000,11 +4956,10 @@ impl Glacier for GlacierClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UploadMultipartPartError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UploadMultipartPartError>())
+                            .and_then(|response| {
+                                Err(UploadMultipartPartError::from_response(response))
+                            })
                     })
                     .boxed()
             }

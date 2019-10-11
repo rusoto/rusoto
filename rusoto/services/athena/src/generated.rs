@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -1756,11 +1756,16 @@ impl Athena for AthenaClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| BatchGetNamedQueryError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<BatchGetNamedQueryOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<BatchGetNamedQueryError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<BatchGetNamedQueryOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1768,11 +1773,12 @@ impl Athena for AthenaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(BatchGetNamedQueryError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<BatchGetNamedQueryError>
+                            })
+                            .and_then(|response| {
+                                Err(BatchGetNamedQueryError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1795,11 +1801,17 @@ impl Athena for AthenaClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| BatchGetQueryExecutionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<BatchGetQueryExecutionOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<BatchGetQueryExecutionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<BatchGetQueryExecutionOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1807,13 +1819,13 @@ impl Athena for AthenaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(BatchGetQueryExecutionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<BatchGetQueryExecutionError>
+                            })
+                            .and_then(|response| {
+                                Err(BatchGetQueryExecutionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1836,11 +1848,16 @@ impl Athena for AthenaClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateNamedQueryError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateNamedQueryOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateNamedQueryError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateNamedQueryOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1848,11 +1865,12 @@ impl Athena for AthenaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateNamedQueryError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateNamedQueryError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateNamedQueryError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1875,11 +1893,16 @@ impl Athena for AthenaClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateWorkGroupError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateWorkGroupOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateWorkGroupError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateWorkGroupOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1887,11 +1910,10 @@ impl Athena for AthenaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateWorkGroupError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateWorkGroupError>
+                            })
+                            .and_then(|response| Err(CreateWorkGroupError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1914,11 +1936,16 @@ impl Athena for AthenaClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteNamedQueryError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteNamedQueryOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteNamedQueryError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteNamedQueryOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1926,11 +1953,12 @@ impl Athena for AthenaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteNamedQueryError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteNamedQueryError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteNamedQueryError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1953,11 +1981,16 @@ impl Athena for AthenaClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteWorkGroupError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteWorkGroupOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteWorkGroupError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteWorkGroupOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1965,11 +1998,10 @@ impl Athena for AthenaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteWorkGroupError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteWorkGroupError>
+                            })
+                            .and_then(|response| Err(DeleteWorkGroupError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1992,11 +2024,16 @@ impl Athena for AthenaClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetNamedQueryError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetNamedQueryOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetNamedQueryError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetNamedQueryOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2004,11 +2041,10 @@ impl Athena for AthenaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetNamedQueryError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetNamedQueryError>
+                            })
+                            .and_then(|response| Err(GetNamedQueryError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2031,11 +2067,16 @@ impl Athena for AthenaClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetQueryExecutionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetQueryExecutionOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetQueryExecutionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetQueryExecutionOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2043,11 +2084,12 @@ impl Athena for AthenaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetQueryExecutionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetQueryExecutionError>
+                            })
+                            .and_then(|response| {
+                                Err(GetQueryExecutionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2070,11 +2112,16 @@ impl Athena for AthenaClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetQueryResultsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetQueryResultsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetQueryResultsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetQueryResultsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2082,11 +2129,10 @@ impl Athena for AthenaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetQueryResultsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetQueryResultsError>
+                            })
+                            .and_then(|response| Err(GetQueryResultsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2109,11 +2155,16 @@ impl Athena for AthenaClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetWorkGroupError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetWorkGroupOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetWorkGroupError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetWorkGroupOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2121,11 +2172,10 @@ impl Athena for AthenaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetWorkGroupError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetWorkGroupError>
+                            })
+                            .and_then(|response| Err(GetWorkGroupError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2148,11 +2198,16 @@ impl Athena for AthenaClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListNamedQueriesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListNamedQueriesOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListNamedQueriesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListNamedQueriesOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2160,11 +2215,12 @@ impl Athena for AthenaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListNamedQueriesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListNamedQueriesError>
+                            })
+                            .and_then(|response| {
+                                Err(ListNamedQueriesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2187,11 +2243,17 @@ impl Athena for AthenaClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListQueryExecutionsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListQueryExecutionsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListQueryExecutionsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListQueryExecutionsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2199,11 +2261,13 @@ impl Athena for AthenaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListQueryExecutionsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListQueryExecutionsError>
+                            })
+                            .and_then(|response| {
+                                Err(ListQueryExecutionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2226,11 +2290,17 @@ impl Athena for AthenaClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListTagsForResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListTagsForResourceOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListTagsForResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListTagsForResourceOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2238,11 +2308,13 @@ impl Athena for AthenaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListTagsForResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListTagsForResourceError>
+                            })
+                            .and_then(|response| {
+                                Err(ListTagsForResourceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2265,11 +2337,16 @@ impl Athena for AthenaClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListWorkGroupsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListWorkGroupsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListWorkGroupsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListWorkGroupsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2277,11 +2354,10 @@ impl Athena for AthenaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListWorkGroupsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListWorkGroupsError>
+                            })
+                            .and_then(|response| Err(ListWorkGroupsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2304,11 +2380,17 @@ impl Athena for AthenaClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StartQueryExecutionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StartQueryExecutionOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StartQueryExecutionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StartQueryExecutionOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2316,11 +2398,13 @@ impl Athena for AthenaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(StartQueryExecutionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StartQueryExecutionError>
+                            })
+                            .and_then(|response| {
+                                Err(StartQueryExecutionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2343,11 +2427,16 @@ impl Athena for AthenaClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StopQueryExecutionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StopQueryExecutionOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StopQueryExecutionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StopQueryExecutionOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2355,11 +2444,12 @@ impl Athena for AthenaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(StopQueryExecutionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StopQueryExecutionError>
+                            })
+                            .and_then(|response| {
+                                Err(StopQueryExecutionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2382,11 +2472,16 @@ impl Athena for AthenaClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| TagResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<TagResourceOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<TagResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<TagResourceOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2394,11 +2489,10 @@ impl Athena for AthenaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(TagResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<TagResourceError>
+                            })
+                            .and_then(|response| Err(TagResourceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2421,11 +2515,16 @@ impl Athena for AthenaClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UntagResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UntagResourceOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UntagResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UntagResourceOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2433,11 +2532,10 @@ impl Athena for AthenaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UntagResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UntagResourceError>
+                            })
+                            .and_then(|response| Err(UntagResourceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2460,11 +2558,16 @@ impl Athena for AthenaClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateWorkGroupError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateWorkGroupOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateWorkGroupError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateWorkGroupOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2472,11 +2575,10 @@ impl Athena for AthenaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateWorkGroupError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateWorkGroupError>
+                            })
+                            .and_then(|response| Err(UpdateWorkGroupError::from_response(response)))
                     })
                     .boxed()
             }

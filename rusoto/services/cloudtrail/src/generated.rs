@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -2073,11 +2073,14 @@ impl CloudTrail for CloudTrailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AddTagsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AddTagsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<AddTagsError>)
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AddTagsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2085,11 +2088,8 @@ impl CloudTrail for CloudTrailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(AddTagsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<AddTagsError>)
+                            .and_then(|response| Err(AddTagsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2115,11 +2115,16 @@ impl CloudTrail for CloudTrailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateTrailError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateTrailResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateTrailError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateTrailResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2127,11 +2132,10 @@ impl CloudTrail for CloudTrailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateTrailError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateTrailError>
+                            })
+                            .and_then(|response| Err(CreateTrailError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2157,11 +2161,16 @@ impl CloudTrail for CloudTrailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteTrailError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteTrailResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteTrailError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteTrailResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2169,11 +2178,10 @@ impl CloudTrail for CloudTrailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteTrailError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteTrailError>
+                            })
+                            .and_then(|response| Err(DeleteTrailError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2199,11 +2207,16 @@ impl CloudTrail for CloudTrailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeTrailsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeTrailsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeTrailsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeTrailsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2211,11 +2224,10 @@ impl CloudTrail for CloudTrailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeTrailsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeTrailsError>
+                            })
+                            .and_then(|response| Err(DescribeTrailsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2241,11 +2253,16 @@ impl CloudTrail for CloudTrailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetEventSelectorsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetEventSelectorsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetEventSelectorsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetEventSelectorsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2253,11 +2270,12 @@ impl CloudTrail for CloudTrailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetEventSelectorsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetEventSelectorsError>
+                            })
+                            .and_then(|response| {
+                                Err(GetEventSelectorsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2283,11 +2301,16 @@ impl CloudTrail for CloudTrailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetTrailStatusError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetTrailStatusResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetTrailStatusError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetTrailStatusResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2295,11 +2318,10 @@ impl CloudTrail for CloudTrailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetTrailStatusError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetTrailStatusError>
+                            })
+                            .and_then(|response| Err(GetTrailStatusError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2325,11 +2347,16 @@ impl CloudTrail for CloudTrailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListPublicKeysError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListPublicKeysResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListPublicKeysError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListPublicKeysResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2337,11 +2364,10 @@ impl CloudTrail for CloudTrailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListPublicKeysError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListPublicKeysError>
+                            })
+                            .and_then(|response| Err(ListPublicKeysError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2364,11 +2390,14 @@ impl CloudTrail for CloudTrailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListTagsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListTagsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<ListTagsError>)
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListTagsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2376,11 +2405,8 @@ impl CloudTrail for CloudTrailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListTagsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<ListTagsError>)
+                            .and_then(|response| Err(ListTagsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2406,11 +2432,16 @@ impl CloudTrail for CloudTrailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| LookupEventsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<LookupEventsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<LookupEventsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<LookupEventsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2418,11 +2449,10 @@ impl CloudTrail for CloudTrailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(LookupEventsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<LookupEventsError>
+                            })
+                            .and_then(|response| Err(LookupEventsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2448,11 +2478,16 @@ impl CloudTrail for CloudTrailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| PutEventSelectorsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PutEventSelectorsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<PutEventSelectorsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<PutEventSelectorsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2460,11 +2495,12 @@ impl CloudTrail for CloudTrailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(PutEventSelectorsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<PutEventSelectorsError>
+                            })
+                            .and_then(|response| {
+                                Err(PutEventSelectorsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2490,11 +2526,16 @@ impl CloudTrail for CloudTrailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| RemoveTagsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RemoveTagsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<RemoveTagsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<RemoveTagsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2502,11 +2543,10 @@ impl CloudTrail for CloudTrailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(RemoveTagsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<RemoveTagsError>
+                            })
+                            .and_then(|response| Err(RemoveTagsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2532,11 +2572,16 @@ impl CloudTrail for CloudTrailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StartLoggingError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StartLoggingResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StartLoggingError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StartLoggingResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2544,11 +2589,10 @@ impl CloudTrail for CloudTrailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(StartLoggingError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StartLoggingError>
+                            })
+                            .and_then(|response| Err(StartLoggingError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2574,11 +2618,16 @@ impl CloudTrail for CloudTrailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StopLoggingError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StopLoggingResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StopLoggingError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StopLoggingResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2586,11 +2635,10 @@ impl CloudTrail for CloudTrailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(StopLoggingError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StopLoggingError>
+                            })
+                            .and_then(|response| Err(StopLoggingError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2616,11 +2664,16 @@ impl CloudTrail for CloudTrailClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateTrailError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateTrailResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateTrailError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateTrailResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2628,11 +2681,10 @@ impl CloudTrail for CloudTrailClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateTrailError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateTrailError>
+                            })
+                            .and_then(|response| Err(UpdateTrailError::from_response(response)))
                     })
                     .boxed()
             }

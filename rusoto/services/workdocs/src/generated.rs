@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
@@ -4930,8 +4930,9 @@ impl Workdocs for WorkdocsClient {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| AbortDocumentVersionUploadError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -4943,13 +4944,10 @@ impl Workdocs for WorkdocsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(AbortDocumentVersionUploadError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<AbortDocumentVersionUploadError>())
+                            .and_then(|response| {
+                                Err(AbortDocumentVersionUploadError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4977,10 +4975,11 @@ impl Workdocs for WorkdocsClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ActivateUserError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ActivateUserResponse, _>()?;
+                                .deserialize::<ActivateUserResponse, _>();
 
                             result
                         })
@@ -4991,11 +4990,8 @@ impl Workdocs for WorkdocsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ActivateUserError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ActivateUserError>())
+                            .and_then(|response| Err(ActivateUserError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5026,10 +5022,11 @@ impl Workdocs for WorkdocsClient {
             if response.status.as_u16() == 201 {
                 response
                     .buffer()
+                    .map_err(|e| AddResourcePermissionsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AddResourcePermissionsResponse, _>()?;
+                                .deserialize::<AddResourcePermissionsResponse, _>();
 
                             result
                         })
@@ -5040,13 +5037,10 @@ impl Workdocs for WorkdocsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(AddResourcePermissionsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<AddResourcePermissionsError>())
+                            .and_then(|response| {
+                                Err(AddResourcePermissionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5078,10 +5072,11 @@ impl Workdocs for WorkdocsClient {
             if response.status.as_u16() == 201 {
                 response
                     .buffer()
+                    .map_err(|e| CreateCommentError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateCommentResponse, _>()?;
+                                .deserialize::<CreateCommentResponse, _>();
 
                             result
                         })
@@ -5092,11 +5087,8 @@ impl Workdocs for WorkdocsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateCommentError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateCommentError>())
+                            .and_then(|response| Err(CreateCommentError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5132,10 +5124,11 @@ impl Workdocs for WorkdocsClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| CreateCustomMetadataError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateCustomMetadataResponse, _>()?;
+                                .deserialize::<CreateCustomMetadataResponse, _>();
 
                             result
                         })
@@ -5146,11 +5139,10 @@ impl Workdocs for WorkdocsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateCustomMetadataError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateCustomMetadataError>())
+                            .and_then(|response| {
+                                Err(CreateCustomMetadataError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5178,10 +5170,11 @@ impl Workdocs for WorkdocsClient {
             if response.status.as_u16() == 201 {
                 response
                     .buffer()
+                    .map_err(|e| CreateFolderError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateFolderResponse, _>()?;
+                                .deserialize::<CreateFolderResponse, _>();
 
                             result
                         })
@@ -5192,11 +5185,8 @@ impl Workdocs for WorkdocsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateFolderError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateFolderError>())
+                            .and_then(|response| Err(CreateFolderError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5227,10 +5217,11 @@ impl Workdocs for WorkdocsClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| CreateLabelsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateLabelsResponse, _>()?;
+                                .deserialize::<CreateLabelsResponse, _>();
 
                             result
                         })
@@ -5241,11 +5232,8 @@ impl Workdocs for WorkdocsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateLabelsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateLabelsError>())
+                            .and_then(|response| Err(CreateLabelsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5273,11 +5261,12 @@ impl Workdocs for WorkdocsClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| CreateNotificationSubscriptionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
                                 .deserialize::<CreateNotificationSubscriptionResponse, _>(
-                            )?;
+                            );
 
                             result
                         })
@@ -5288,15 +5277,10 @@ impl Workdocs for WorkdocsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(CreateNotificationSubscriptionError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateNotificationSubscriptionError>())
+                            .and_then(|response| {
+                                Err(CreateNotificationSubscriptionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5324,10 +5308,11 @@ impl Workdocs for WorkdocsClient {
             if response.status.as_u16() == 201 {
                 response
                     .buffer()
+                    .map_err(|e| CreateUserError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateUserResponse, _>()?;
+                                .deserialize::<CreateUserResponse, _>();
 
                             result
                         })
@@ -5338,11 +5323,8 @@ impl Workdocs for WorkdocsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateUserError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateUserError>())
+                            .and_then(|response| Err(CreateUserError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5370,8 +5352,9 @@ impl Workdocs for WorkdocsClient {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| DeactivateUserError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -5383,11 +5366,8 @@ impl Workdocs for WorkdocsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeactivateUserError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeactivateUserError>())
+                            .and_then(|response| Err(DeactivateUserError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5414,8 +5394,9 @@ impl Workdocs for WorkdocsClient {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteCommentError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -5427,11 +5408,8 @@ impl Workdocs for WorkdocsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteCommentError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteCommentError>())
+                            .and_then(|response| Err(DeleteCommentError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5472,10 +5450,11 @@ impl Workdocs for WorkdocsClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteCustomMetadataError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteCustomMetadataResponse, _>()?;
+                                .deserialize::<DeleteCustomMetadataResponse, _>();
 
                             result
                         })
@@ -5486,11 +5465,10 @@ impl Workdocs for WorkdocsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteCustomMetadataError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteCustomMetadataError>())
+                            .and_then(|response| {
+                                Err(DeleteCustomMetadataError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5518,8 +5496,9 @@ impl Workdocs for WorkdocsClient {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteDocumentError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -5531,11 +5510,8 @@ impl Workdocs for WorkdocsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteDocumentError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteDocumentError>())
+                            .and_then(|response| Err(DeleteDocumentError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5557,8 +5533,9 @@ impl Workdocs for WorkdocsClient {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteFolderError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -5570,11 +5547,8 @@ impl Workdocs for WorkdocsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteFolderError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteFolderError>())
+                            .and_then(|response| Err(DeleteFolderError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5602,8 +5576,9 @@ impl Workdocs for WorkdocsClient {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteFolderContentsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -5615,11 +5590,10 @@ impl Workdocs for WorkdocsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteFolderContentsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteFolderContentsError>())
+                            .and_then(|response| {
+                                Err(DeleteFolderContentsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5657,10 +5631,11 @@ impl Workdocs for WorkdocsClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteLabelsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteLabelsResponse, _>()?;
+                                .deserialize::<DeleteLabelsResponse, _>();
 
                             result
                         })
@@ -5671,11 +5646,8 @@ impl Workdocs for WorkdocsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteLabelsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteLabelsError>())
+                            .and_then(|response| Err(DeleteLabelsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5700,8 +5672,9 @@ impl Workdocs for WorkdocsClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteNotificationSubscriptionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -5713,15 +5686,10 @@ impl Workdocs for WorkdocsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(DeleteNotificationSubscriptionError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteNotificationSubscriptionError>())
+                            .and_then(|response| {
+                                Err(DeleteNotificationSubscriptionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5743,8 +5711,9 @@ impl Workdocs for WorkdocsClient {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteUserError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -5756,11 +5725,8 @@ impl Workdocs for WorkdocsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteUserError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteUserError>())
+                            .and_then(|response| Err(DeleteUserError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5814,10 +5780,11 @@ impl Workdocs for WorkdocsClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| DescribeActivitiesError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeActivitiesResponse, _>()?;
+                                .deserialize::<DescribeActivitiesResponse, _>();
 
                             result
                         })
@@ -5828,11 +5795,10 @@ impl Workdocs for WorkdocsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DescribeActivitiesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeActivitiesError>())
+                            .and_then(|response| {
+                                Err(DescribeActivitiesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5869,10 +5835,11 @@ impl Workdocs for WorkdocsClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| DescribeCommentsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeCommentsResponse, _>()?;
+                                .deserialize::<DescribeCommentsResponse, _>();
 
                             result
                         })
@@ -5883,11 +5850,10 @@ impl Workdocs for WorkdocsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DescribeCommentsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeCommentsError>())
+                            .and_then(|response| {
+                                Err(DescribeCommentsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5929,10 +5895,11 @@ impl Workdocs for WorkdocsClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| DescribeDocumentVersionsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeDocumentVersionsResponse, _>()?;
+                                .deserialize::<DescribeDocumentVersionsResponse, _>();
 
                             result
                         })
@@ -5943,13 +5910,10 @@ impl Workdocs for WorkdocsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(DescribeDocumentVersionsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeDocumentVersionsError>())
+                            .and_then(|response| {
+                                Err(DescribeDocumentVersionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5997,10 +5961,11 @@ impl Workdocs for WorkdocsClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| DescribeFolderContentsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeFolderContentsResponse, _>()?;
+                                .deserialize::<DescribeFolderContentsResponse, _>();
 
                             result
                         })
@@ -6011,13 +5976,10 @@ impl Workdocs for WorkdocsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(DescribeFolderContentsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeFolderContentsError>())
+                            .and_then(|response| {
+                                Err(DescribeFolderContentsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6054,10 +6016,11 @@ impl Workdocs for WorkdocsClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| DescribeGroupsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeGroupsResponse, _>()?;
+                                .deserialize::<DescribeGroupsResponse, _>();
 
                             result
                         })
@@ -6068,11 +6031,8 @@ impl Workdocs for WorkdocsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DescribeGroupsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeGroupsError>())
+                            .and_then(|response| Err(DescribeGroupsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -6108,11 +6068,12 @@ impl Workdocs for WorkdocsClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| DescribeNotificationSubscriptionsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
                                 .deserialize::<DescribeNotificationSubscriptionsResponse, _>(
-                            )?;
+                            );
 
                             result
                         })
@@ -6123,15 +6084,12 @@ impl Workdocs for WorkdocsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(DescribeNotificationSubscriptionsError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeNotificationSubscriptionsError>())
+                            .and_then(|response| {
+                                Err(DescribeNotificationSubscriptionsError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -6170,10 +6128,11 @@ impl Workdocs for WorkdocsClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| DescribeResourcePermissionsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeResourcePermissionsResponse, _>()?;
+                                .deserialize::<DescribeResourcePermissionsResponse, _>();
 
                             result
                         })
@@ -6184,13 +6143,10 @@ impl Workdocs for WorkdocsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(DescribeResourcePermissionsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeResourcePermissionsError>())
+                            .and_then(|response| {
+                                Err(DescribeResourcePermissionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6221,10 +6177,11 @@ impl Workdocs for WorkdocsClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| DescribeRootFoldersError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeRootFoldersResponse, _>()?;
+                                .deserialize::<DescribeRootFoldersResponse, _>();
 
                             result
                         })
@@ -6235,11 +6192,10 @@ impl Workdocs for WorkdocsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DescribeRootFoldersError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeRootFoldersError>())
+                            .and_then(|response| {
+                                Err(DescribeRootFoldersError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6293,10 +6249,11 @@ impl Workdocs for WorkdocsClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| DescribeUsersError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeUsersResponse, _>()?;
+                                .deserialize::<DescribeUsersResponse, _>();
 
                             result
                         })
@@ -6307,11 +6264,8 @@ impl Workdocs for WorkdocsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DescribeUsersError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeUsersError>())
+                            .and_then(|response| Err(DescribeUsersError::from_response(response)))
                     })
                     .boxed()
             }
@@ -6334,10 +6288,11 @@ impl Workdocs for WorkdocsClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetCurrentUserError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetCurrentUserResponse, _>()?;
+                                .deserialize::<GetCurrentUserResponse, _>();
 
                             result
                         })
@@ -6348,11 +6303,8 @@ impl Workdocs for WorkdocsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetCurrentUserError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetCurrentUserError>())
+                            .and_then(|response| Err(GetCurrentUserError::from_response(response)))
                     })
                     .boxed()
             }
@@ -6385,10 +6337,11 @@ impl Workdocs for WorkdocsClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetDocumentError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetDocumentResponse, _>()?;
+                                .deserialize::<GetDocumentResponse, _>();
 
                             result
                         })
@@ -6399,11 +6352,8 @@ impl Workdocs for WorkdocsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetDocumentError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetDocumentError>())
+                            .and_then(|response| Err(GetDocumentError::from_response(response)))
                     })
                     .boxed()
             }
@@ -6442,10 +6392,11 @@ impl Workdocs for WorkdocsClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetDocumentPathError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetDocumentPathResponse, _>()?;
+                                .deserialize::<GetDocumentPathResponse, _>();
 
                             result
                         })
@@ -6456,11 +6407,8 @@ impl Workdocs for WorkdocsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetDocumentPathError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetDocumentPathError>())
+                            .and_then(|response| Err(GetDocumentPathError::from_response(response)))
                     })
                     .boxed()
             }
@@ -6497,10 +6445,11 @@ impl Workdocs for WorkdocsClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetDocumentVersionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetDocumentVersionResponse, _>()?;
+                                .deserialize::<GetDocumentVersionResponse, _>();
 
                             result
                         })
@@ -6511,11 +6460,10 @@ impl Workdocs for WorkdocsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetDocumentVersionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetDocumentVersionError>())
+                            .and_then(|response| {
+                                Err(GetDocumentVersionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6545,10 +6493,11 @@ impl Workdocs for WorkdocsClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetFolderError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetFolderResponse, _>()?;
+                                .deserialize::<GetFolderResponse, _>();
 
                             result
                         })
@@ -6559,11 +6508,8 @@ impl Workdocs for WorkdocsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetFolderError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetFolderError>())
+                            .and_then(|response| Err(GetFolderError::from_response(response)))
                     })
                     .boxed()
             }
@@ -6602,10 +6548,11 @@ impl Workdocs for WorkdocsClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetFolderPathError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetFolderPathResponse, _>()?;
+                                .deserialize::<GetFolderPathResponse, _>();
 
                             result
                         })
@@ -6616,11 +6563,8 @@ impl Workdocs for WorkdocsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetFolderPathError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetFolderPathError>())
+                            .and_then(|response| Err(GetFolderPathError::from_response(response)))
                     })
                     .boxed()
             }
@@ -6659,10 +6603,11 @@ impl Workdocs for WorkdocsClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetResourcesError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetResourcesResponse, _>()?;
+                                .deserialize::<GetResourcesResponse, _>();
 
                             result
                         })
@@ -6673,11 +6618,8 @@ impl Workdocs for WorkdocsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetResourcesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetResourcesError>())
+                            .and_then(|response| Err(GetResourcesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -6706,11 +6648,11 @@ impl Workdocs for WorkdocsClient {
             if response.status.as_u16() == 201 {
                 response
                     .buffer()
+                    .map_err(|e| InitiateDocumentVersionUploadError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<InitiateDocumentVersionUploadResponse, _>(
-                            )?;
+                                .deserialize::<InitiateDocumentVersionUploadResponse, _>();
 
                             result
                         })
@@ -6721,13 +6663,10 @@ impl Workdocs for WorkdocsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(InitiateDocumentVersionUploadError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<InitiateDocumentVersionUploadError>())
+                            .and_then(|response| {
+                                Err(InitiateDocumentVersionUploadError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6755,8 +6694,9 @@ impl Workdocs for WorkdocsClient {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| RemoveAllResourcePermissionsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -6768,13 +6708,10 @@ impl Workdocs for WorkdocsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(RemoveAllResourcePermissionsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<RemoveAllResourcePermissionsError>())
+                            .and_then(|response| {
+                                Err(RemoveAllResourcePermissionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6808,8 +6745,9 @@ impl Workdocs for WorkdocsClient {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| RemoveResourcePermissionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -6821,13 +6759,10 @@ impl Workdocs for WorkdocsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(RemoveResourcePermissionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<RemoveResourcePermissionError>())
+                            .and_then(|response| {
+                                Err(RemoveResourcePermissionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6858,8 +6793,9 @@ impl Workdocs for WorkdocsClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| UpdateDocumentError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -6871,11 +6807,8 @@ impl Workdocs for WorkdocsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateDocumentError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateDocumentError>())
+                            .and_then(|response| Err(UpdateDocumentError::from_response(response)))
                     })
                     .boxed()
             }
@@ -6907,8 +6840,9 @@ impl Workdocs for WorkdocsClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| UpdateDocumentVersionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -6920,11 +6854,10 @@ impl Workdocs for WorkdocsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateDocumentVersionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateDocumentVersionError>())
+                            .and_then(|response| {
+                                Err(UpdateDocumentVersionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6949,8 +6882,9 @@ impl Workdocs for WorkdocsClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| UpdateFolderError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -6962,11 +6896,8 @@ impl Workdocs for WorkdocsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateFolderError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateFolderError>())
+                            .and_then(|response| Err(UpdateFolderError::from_response(response)))
                     })
                     .boxed()
             }
@@ -6994,10 +6925,11 @@ impl Workdocs for WorkdocsClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| UpdateUserError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateUserResponse, _>()?;
+                                .deserialize::<UpdateUserResponse, _>();
 
                             result
                         })
@@ -7008,11 +6940,8 @@ impl Workdocs for WorkdocsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateUserError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateUserError>())
+                            .and_then(|response| Err(UpdateUserError::from_response(response)))
                     })
                     .boxed()
             }

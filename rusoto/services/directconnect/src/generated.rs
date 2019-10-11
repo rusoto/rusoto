@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -4523,16 +4523,22 @@ impl DirectConnect for DirectConnectClient {
 
         self.client.sign_and_dispatch(request, |response| {
                         if response.status.is_success() {
-                            response.buffer().map(|try_response| {
-                try_response.and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<AcceptDirectConnectGatewayAssociationProposalResult, _>()
-                })
-            }).boxed()
+                            response.buffer()
+                .map_err(|e| AcceptDirectConnectGatewayAssociationProposalError::from(e))
+                .map(|try_response| {
+                    try_response
+                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<AcceptDirectConnectGatewayAssociationProposalError>)
+                    .and_then(|response| {
+                        proto::json::ResponsePayload::new(&response).deserialize::<AcceptDirectConnectGatewayAssociationProposalResult, _>()
+                    })
+                }).boxed()
                         } else {
                             response.buffer().map(|try_response| {
-                                try_response.map_or_else(|e| e, |response| {
-                                    Err(AcceptDirectConnectGatewayAssociationProposalError::from_response(response))
-                                }).boxed()
+                                try_response
+                                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<AcceptDirectConnectGatewayAssociationProposalError>)
+                                    .and_then(|response| {
+                                        Err(AcceptDirectConnectGatewayAssociationProposalError::from_response(response))
+                                    })
                             }).boxed()
                         }
                     })
@@ -4557,11 +4563,17 @@ impl DirectConnect for DirectConnectClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AllocateConnectionOnInterconnectError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<Connection, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AllocateConnectionOnInterconnectError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<Connection, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4569,15 +4581,15 @@ impl DirectConnect for DirectConnectClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(AllocateConnectionOnInterconnectError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AllocateConnectionOnInterconnectError>
+                            })
+                            .and_then(|response| {
+                                Err(AllocateConnectionOnInterconnectError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -4600,11 +4612,17 @@ impl DirectConnect for DirectConnectClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AllocateHostedConnectionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<Connection, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AllocateHostedConnectionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<Connection, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4612,13 +4630,13 @@ impl DirectConnect for DirectConnectClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(AllocateHostedConnectionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AllocateHostedConnectionError>
+                            })
+                            .and_then(|response| {
+                                Err(AllocateHostedConnectionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4644,11 +4662,17 @@ impl DirectConnect for DirectConnectClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AllocatePrivateVirtualInterfaceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<VirtualInterface, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AllocatePrivateVirtualInterfaceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<VirtualInterface, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4656,15 +4680,15 @@ impl DirectConnect for DirectConnectClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(AllocatePrivateVirtualInterfaceError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AllocatePrivateVirtualInterfaceError>
+                            })
+                            .and_then(|response| {
+                                Err(AllocatePrivateVirtualInterfaceError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -4690,11 +4714,17 @@ impl DirectConnect for DirectConnectClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AllocatePublicVirtualInterfaceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<VirtualInterface, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AllocatePublicVirtualInterfaceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<VirtualInterface, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4702,15 +4732,13 @@ impl DirectConnect for DirectConnectClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(AllocatePublicVirtualInterfaceError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AllocatePublicVirtualInterfaceError>
+                            })
+                            .and_then(|response| {
+                                Err(AllocatePublicVirtualInterfaceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4737,11 +4765,17 @@ impl DirectConnect for DirectConnectClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AllocateTransitVirtualInterfaceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AllocateTransitVirtualInterfaceResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AllocateTransitVirtualInterfaceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AllocateTransitVirtualInterfaceResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4749,15 +4783,15 @@ impl DirectConnect for DirectConnectClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(AllocateTransitVirtualInterfaceError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AllocateTransitVirtualInterfaceError>
+                            })
+                            .and_then(|response| {
+                                Err(AllocateTransitVirtualInterfaceError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -4780,11 +4814,17 @@ impl DirectConnect for DirectConnectClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AssociateConnectionWithLagError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<Connection, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AssociateConnectionWithLagError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<Connection, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4792,13 +4832,13 @@ impl DirectConnect for DirectConnectClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(AssociateConnectionWithLagError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AssociateConnectionWithLagError>
+                            })
+                            .and_then(|response| {
+                                Err(AssociateConnectionWithLagError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4821,11 +4861,17 @@ impl DirectConnect for DirectConnectClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AssociateHostedConnectionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<Connection, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AssociateHostedConnectionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<Connection, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4833,13 +4879,13 @@ impl DirectConnect for DirectConnectClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(AssociateHostedConnectionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AssociateHostedConnectionError>
+                            })
+                            .and_then(|response| {
+                                Err(AssociateHostedConnectionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4862,11 +4908,17 @@ impl DirectConnect for DirectConnectClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AssociateVirtualInterfaceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<VirtualInterface, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AssociateVirtualInterfaceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<VirtualInterface, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4874,13 +4926,13 @@ impl DirectConnect for DirectConnectClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(AssociateVirtualInterfaceError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AssociateVirtualInterfaceError>
+                            })
+                            .and_then(|response| {
+                                Err(AssociateVirtualInterfaceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4903,11 +4955,16 @@ impl DirectConnect for DirectConnectClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ConfirmConnectionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ConfirmConnectionResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ConfirmConnectionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ConfirmConnectionResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4915,11 +4972,12 @@ impl DirectConnect for DirectConnectClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ConfirmConnectionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ConfirmConnectionError>
+                            })
+                            .and_then(|response| {
+                                Err(ConfirmConnectionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4946,11 +5004,17 @@ impl DirectConnect for DirectConnectClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ConfirmPrivateVirtualInterfaceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ConfirmPrivateVirtualInterfaceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ConfirmPrivateVirtualInterfaceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ConfirmPrivateVirtualInterfaceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4958,15 +5022,13 @@ impl DirectConnect for DirectConnectClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ConfirmPrivateVirtualInterfaceError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ConfirmPrivateVirtualInterfaceError>
+                            })
+                            .and_then(|response| {
+                                Err(ConfirmPrivateVirtualInterfaceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4993,11 +5055,17 @@ impl DirectConnect for DirectConnectClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ConfirmPublicVirtualInterfaceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ConfirmPublicVirtualInterfaceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ConfirmPublicVirtualInterfaceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ConfirmPublicVirtualInterfaceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5005,13 +5073,13 @@ impl DirectConnect for DirectConnectClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ConfirmPublicVirtualInterfaceError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ConfirmPublicVirtualInterfaceError>
+                            })
+                            .and_then(|response| {
+                                Err(ConfirmPublicVirtualInterfaceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5038,11 +5106,17 @@ impl DirectConnect for DirectConnectClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ConfirmTransitVirtualInterfaceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ConfirmTransitVirtualInterfaceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ConfirmTransitVirtualInterfaceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ConfirmTransitVirtualInterfaceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5050,15 +5124,13 @@ impl DirectConnect for DirectConnectClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ConfirmTransitVirtualInterfaceError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ConfirmTransitVirtualInterfaceError>
+                            })
+                            .and_then(|response| {
+                                Err(ConfirmTransitVirtualInterfaceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5081,11 +5153,16 @@ impl DirectConnect for DirectConnectClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateBGPPeerError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateBGPPeerResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateBGPPeerError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateBGPPeerResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5093,11 +5170,10 @@ impl DirectConnect for DirectConnectClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateBGPPeerError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateBGPPeerError>
+                            })
+                            .and_then(|response| Err(CreateBGPPeerError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5120,11 +5196,16 @@ impl DirectConnect for DirectConnectClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateConnectionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<Connection, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateConnectionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<Connection, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5132,11 +5213,12 @@ impl DirectConnect for DirectConnectClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateConnectionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateConnectionError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateConnectionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5159,11 +5241,17 @@ impl DirectConnect for DirectConnectClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateDirectConnectGatewayError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateDirectConnectGatewayResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateDirectConnectGatewayError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateDirectConnectGatewayResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5171,13 +5259,13 @@ impl DirectConnect for DirectConnectClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(CreateDirectConnectGatewayError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateDirectConnectGatewayError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateDirectConnectGatewayError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5206,11 +5294,17 @@ impl DirectConnect for DirectConnectClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateDirectConnectGatewayAssociationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateDirectConnectGatewayAssociationResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateDirectConnectGatewayAssociationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateDirectConnectGatewayAssociationResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5218,15 +5312,15 @@ impl DirectConnect for DirectConnectClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(CreateDirectConnectGatewayAssociationError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateDirectConnectGatewayAssociationError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateDirectConnectGatewayAssociationError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -5253,16 +5347,22 @@ impl DirectConnect for DirectConnectClient {
 
         self.client.sign_and_dispatch(request, |response| {
                         if response.status.is_success() {
-                            response.buffer().map(|try_response| {
-                try_response.and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<CreateDirectConnectGatewayAssociationProposalResult, _>()
-                })
-            }).boxed()
+                            response.buffer()
+                .map_err(|e| CreateDirectConnectGatewayAssociationProposalError::from(e))
+                .map(|try_response| {
+                    try_response
+                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<CreateDirectConnectGatewayAssociationProposalError>)
+                    .and_then(|response| {
+                        proto::json::ResponsePayload::new(&response).deserialize::<CreateDirectConnectGatewayAssociationProposalResult, _>()
+                    })
+                }).boxed()
                         } else {
                             response.buffer().map(|try_response| {
-                                try_response.map_or_else(|e| e, |response| {
-                                    Err(CreateDirectConnectGatewayAssociationProposalError::from_response(response))
-                                }).boxed()
+                                try_response
+                                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<CreateDirectConnectGatewayAssociationProposalError>)
+                                    .and_then(|response| {
+                                        Err(CreateDirectConnectGatewayAssociationProposalError::from_response(response))
+                                    })
                             }).boxed()
                         }
                     })
@@ -5284,11 +5384,16 @@ impl DirectConnect for DirectConnectClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateInterconnectError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<Interconnect, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateInterconnectError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<Interconnect, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5296,11 +5401,12 @@ impl DirectConnect for DirectConnectClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateInterconnectError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateInterconnectError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateInterconnectError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5320,10 +5426,15 @@ impl DirectConnect for DirectConnectClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateLagError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response).deserialize::<Lag, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateLagError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response).deserialize::<Lag, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5331,11 +5442,10 @@ impl DirectConnect for DirectConnectClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateLagError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateLagError>
+                            })
+                            .and_then(|response| Err(CreateLagError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5361,11 +5471,17 @@ impl DirectConnect for DirectConnectClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreatePrivateVirtualInterfaceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<VirtualInterface, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreatePrivateVirtualInterfaceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<VirtualInterface, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5373,13 +5489,13 @@ impl DirectConnect for DirectConnectClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(CreatePrivateVirtualInterfaceError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreatePrivateVirtualInterfaceError>
+                            })
+                            .and_then(|response| {
+                                Err(CreatePrivateVirtualInterfaceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5405,11 +5521,17 @@ impl DirectConnect for DirectConnectClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreatePublicVirtualInterfaceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<VirtualInterface, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreatePublicVirtualInterfaceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<VirtualInterface, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5417,13 +5539,13 @@ impl DirectConnect for DirectConnectClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(CreatePublicVirtualInterfaceError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreatePublicVirtualInterfaceError>
+                            })
+                            .and_then(|response| {
+                                Err(CreatePublicVirtualInterfaceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5449,11 +5571,17 @@ impl DirectConnect for DirectConnectClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateTransitVirtualInterfaceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateTransitVirtualInterfaceResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateTransitVirtualInterfaceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateTransitVirtualInterfaceResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5461,13 +5589,13 @@ impl DirectConnect for DirectConnectClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(CreateTransitVirtualInterfaceError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateTransitVirtualInterfaceError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateTransitVirtualInterfaceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5490,11 +5618,16 @@ impl DirectConnect for DirectConnectClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteBGPPeerError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteBGPPeerResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteBGPPeerError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteBGPPeerResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5502,11 +5635,10 @@ impl DirectConnect for DirectConnectClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteBGPPeerError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteBGPPeerError>
+                            })
+                            .and_then(|response| Err(DeleteBGPPeerError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5529,11 +5661,16 @@ impl DirectConnect for DirectConnectClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteConnectionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<Connection, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteConnectionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<Connection, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5541,11 +5678,12 @@ impl DirectConnect for DirectConnectClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteConnectionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteConnectionError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteConnectionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5568,11 +5706,17 @@ impl DirectConnect for DirectConnectClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteDirectConnectGatewayError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteDirectConnectGatewayResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteDirectConnectGatewayError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteDirectConnectGatewayResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5580,13 +5724,13 @@ impl DirectConnect for DirectConnectClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DeleteDirectConnectGatewayError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteDirectConnectGatewayError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteDirectConnectGatewayError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5615,11 +5759,17 @@ impl DirectConnect for DirectConnectClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteDirectConnectGatewayAssociationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteDirectConnectGatewayAssociationResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteDirectConnectGatewayAssociationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteDirectConnectGatewayAssociationResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5627,15 +5777,15 @@ impl DirectConnect for DirectConnectClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DeleteDirectConnectGatewayAssociationError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteDirectConnectGatewayAssociationError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteDirectConnectGatewayAssociationError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -5662,16 +5812,22 @@ impl DirectConnect for DirectConnectClient {
 
         self.client.sign_and_dispatch(request, |response| {
                         if response.status.is_success() {
-                            response.buffer().map(|try_response| {
-                try_response.and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<DeleteDirectConnectGatewayAssociationProposalResult, _>()
-                })
-            }).boxed()
+                            response.buffer()
+                .map_err(|e| DeleteDirectConnectGatewayAssociationProposalError::from(e))
+                .map(|try_response| {
+                    try_response
+                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<DeleteDirectConnectGatewayAssociationProposalError>)
+                    .and_then(|response| {
+                        proto::json::ResponsePayload::new(&response).deserialize::<DeleteDirectConnectGatewayAssociationProposalResult, _>()
+                    })
+                }).boxed()
                         } else {
                             response.buffer().map(|try_response| {
-                                try_response.map_or_else(|e| e, |response| {
-                                    Err(DeleteDirectConnectGatewayAssociationProposalError::from_response(response))
-                                }).boxed()
+                                try_response
+                                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<DeleteDirectConnectGatewayAssociationProposalError>)
+                                    .and_then(|response| {
+                                        Err(DeleteDirectConnectGatewayAssociationProposalError::from_response(response))
+                                    })
                             }).boxed()
                         }
                     })
@@ -5693,11 +5849,16 @@ impl DirectConnect for DirectConnectClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteInterconnectError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteInterconnectResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteInterconnectError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteInterconnectResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5705,11 +5866,12 @@ impl DirectConnect for DirectConnectClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteInterconnectError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteInterconnectError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteInterconnectError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5729,10 +5891,15 @@ impl DirectConnect for DirectConnectClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteLagError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response).deserialize::<Lag, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteLagError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response).deserialize::<Lag, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5740,11 +5907,10 @@ impl DirectConnect for DirectConnectClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteLagError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteLagError>
+                            })
+                            .and_then(|response| Err(DeleteLagError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5767,11 +5933,17 @@ impl DirectConnect for DirectConnectClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteVirtualInterfaceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteVirtualInterfaceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteVirtualInterfaceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteVirtualInterfaceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5779,13 +5951,13 @@ impl DirectConnect for DirectConnectClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DeleteVirtualInterfaceError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteVirtualInterfaceError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteVirtualInterfaceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5808,11 +5980,17 @@ impl DirectConnect for DirectConnectClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeConnectionLoaError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeConnectionLoaResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeConnectionLoaError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeConnectionLoaResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5820,11 +5998,13 @@ impl DirectConnect for DirectConnectClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeConnectionLoaError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeConnectionLoaError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeConnectionLoaError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5847,11 +6027,17 @@ impl DirectConnect for DirectConnectClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeConnectionsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<Connections, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeConnectionsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<Connections, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5859,11 +6045,13 @@ impl DirectConnect for DirectConnectClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeConnectionsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeConnectionsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeConnectionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5889,11 +6077,17 @@ impl DirectConnect for DirectConnectClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeConnectionsOnInterconnectError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<Connections, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeConnectionsOnInterconnectError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<Connections, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5901,15 +6095,15 @@ impl DirectConnect for DirectConnectClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeConnectionsOnInterconnectError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeConnectionsOnInterconnectError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeConnectionsOnInterconnectError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -5936,16 +6130,22 @@ impl DirectConnect for DirectConnectClient {
 
         self.client.sign_and_dispatch(request, |response| {
                         if response.status.is_success() {
-                            response.buffer().map(|try_response| {
-                try_response.and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<DescribeDirectConnectGatewayAssociationProposalsResult, _>()
-                })
-            }).boxed()
+                            response.buffer()
+                .map_err(|e| DescribeDirectConnectGatewayAssociationProposalsError::from(e))
+                .map(|try_response| {
+                    try_response
+                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<DescribeDirectConnectGatewayAssociationProposalsError>)
+                    .and_then(|response| {
+                        proto::json::ResponsePayload::new(&response).deserialize::<DescribeDirectConnectGatewayAssociationProposalsResult, _>()
+                    })
+                }).boxed()
                         } else {
                             response.buffer().map(|try_response| {
-                                try_response.map_or_else(|e| e, |response| {
-                                    Err(DescribeDirectConnectGatewayAssociationProposalsError::from_response(response))
-                                }).boxed()
+                                try_response
+                                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<DescribeDirectConnectGatewayAssociationProposalsError>)
+                                    .and_then(|response| {
+                                        Err(DescribeDirectConnectGatewayAssociationProposalsError::from_response(response))
+                                    })
                             }).boxed()
                         }
                     })
@@ -5971,16 +6171,22 @@ impl DirectConnect for DirectConnectClient {
 
         self.client.sign_and_dispatch(request, |response| {
                         if response.status.is_success() {
-                            response.buffer().map(|try_response| {
-                try_response.and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<DescribeDirectConnectGatewayAssociationsResult, _>()
-                })
-            }).boxed()
+                            response.buffer()
+                .map_err(|e| DescribeDirectConnectGatewayAssociationsError::from(e))
+                .map(|try_response| {
+                    try_response
+                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<DescribeDirectConnectGatewayAssociationsError>)
+                    .and_then(|response| {
+                        proto::json::ResponsePayload::new(&response).deserialize::<DescribeDirectConnectGatewayAssociationsResult, _>()
+                    })
+                }).boxed()
                         } else {
                             response.buffer().map(|try_response| {
-                                try_response.map_or_else(|e| e, |response| {
-                                    Err(DescribeDirectConnectGatewayAssociationsError::from_response(response))
-                                }).boxed()
+                                try_response
+                                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<DescribeDirectConnectGatewayAssociationsError>)
+                                    .and_then(|response| {
+                                        Err(DescribeDirectConnectGatewayAssociationsError::from_response(response))
+                                    })
                             }).boxed()
                         }
                     })
@@ -6006,16 +6212,22 @@ impl DirectConnect for DirectConnectClient {
 
         self.client.sign_and_dispatch(request, |response| {
                         if response.status.is_success() {
-                            response.buffer().map(|try_response| {
-                try_response.and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<DescribeDirectConnectGatewayAttachmentsResult, _>()
-                })
-            }).boxed()
+                            response.buffer()
+                .map_err(|e| DescribeDirectConnectGatewayAttachmentsError::from(e))
+                .map(|try_response| {
+                    try_response
+                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<DescribeDirectConnectGatewayAttachmentsError>)
+                    .and_then(|response| {
+                        proto::json::ResponsePayload::new(&response).deserialize::<DescribeDirectConnectGatewayAttachmentsResult, _>()
+                    })
+                }).boxed()
                         } else {
                             response.buffer().map(|try_response| {
-                                try_response.map_or_else(|e| e, |response| {
-                                    Err(DescribeDirectConnectGatewayAttachmentsError::from_response(response))
-                                }).boxed()
+                                try_response
+                                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<DescribeDirectConnectGatewayAttachmentsError>)
+                                    .and_then(|response| {
+                                        Err(DescribeDirectConnectGatewayAttachmentsError::from_response(response))
+                                    })
                             }).boxed()
                         }
                     })
@@ -6040,11 +6252,17 @@ impl DirectConnect for DirectConnectClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeDirectConnectGatewaysError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeDirectConnectGatewaysResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeDirectConnectGatewaysError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeDirectConnectGatewaysResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6052,13 +6270,13 @@ impl DirectConnect for DirectConnectClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeDirectConnectGatewaysError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeDirectConnectGatewaysError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeDirectConnectGatewaysError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6081,11 +6299,17 @@ impl DirectConnect for DirectConnectClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeHostedConnectionsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<Connections, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeHostedConnectionsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<Connections, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6093,13 +6317,13 @@ impl DirectConnect for DirectConnectClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeHostedConnectionsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeHostedConnectionsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeHostedConnectionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6122,11 +6346,17 @@ impl DirectConnect for DirectConnectClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeInterconnectLoaError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeInterconnectLoaResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeInterconnectLoaError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeInterconnectLoaResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6134,13 +6364,13 @@ impl DirectConnect for DirectConnectClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeInterconnectLoaError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeInterconnectLoaError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeInterconnectLoaError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6163,11 +6393,17 @@ impl DirectConnect for DirectConnectClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeInterconnectsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<Interconnects, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeInterconnectsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<Interconnects, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6175,11 +6411,13 @@ impl DirectConnect for DirectConnectClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeInterconnectsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeInterconnectsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeInterconnectsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6199,10 +6437,16 @@ impl DirectConnect for DirectConnectClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeLagsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response).deserialize::<Lags, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeLagsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<Lags, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6210,11 +6454,10 @@ impl DirectConnect for DirectConnectClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeLagsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeLagsError>
+                            })
+                            .and_then(|response| Err(DescribeLagsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -6234,10 +6477,15 @@ impl DirectConnect for DirectConnectClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeLoaError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response).deserialize::<Loa, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeLoaError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response).deserialize::<Loa, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6245,11 +6493,10 @@ impl DirectConnect for DirectConnectClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeLoaError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeLoaError>
+                            })
+                            .and_then(|response| Err(DescribeLoaError::from_response(response)))
                     })
                     .boxed()
             }
@@ -6268,11 +6515,16 @@ impl DirectConnect for DirectConnectClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeLocationsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<Locations, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeLocationsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<Locations, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6280,11 +6532,12 @@ impl DirectConnect for DirectConnectClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeLocationsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeLocationsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeLocationsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6307,11 +6560,16 @@ impl DirectConnect for DirectConnectClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeTagsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeTagsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeTagsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeTagsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6319,11 +6577,10 @@ impl DirectConnect for DirectConnectClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeTagsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeTagsError>
+                            })
+                            .and_then(|response| Err(DescribeTagsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -6344,11 +6601,17 @@ impl DirectConnect for DirectConnectClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeVirtualGatewaysError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<VirtualGateways, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeVirtualGatewaysError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<VirtualGateways, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6356,13 +6619,13 @@ impl DirectConnect for DirectConnectClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeVirtualGatewaysError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeVirtualGatewaysError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeVirtualGatewaysError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6385,11 +6648,17 @@ impl DirectConnect for DirectConnectClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeVirtualInterfacesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<VirtualInterfaces, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeVirtualInterfacesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<VirtualInterfaces, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6397,13 +6666,13 @@ impl DirectConnect for DirectConnectClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeVirtualInterfacesError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeVirtualInterfacesError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeVirtualInterfacesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6429,11 +6698,17 @@ impl DirectConnect for DirectConnectClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DisassociateConnectionFromLagError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<Connection, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DisassociateConnectionFromLagError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<Connection, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6441,13 +6716,13 @@ impl DirectConnect for DirectConnectClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DisassociateConnectionFromLagError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DisassociateConnectionFromLagError>
+                            })
+                            .and_then(|response| {
+                                Err(DisassociateConnectionFromLagError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6470,11 +6745,16 @@ impl DirectConnect for DirectConnectClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| TagResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<TagResourceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<TagResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<TagResourceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6482,11 +6762,10 @@ impl DirectConnect for DirectConnectClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(TagResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<TagResourceError>
+                            })
+                            .and_then(|response| Err(TagResourceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -6509,11 +6788,16 @@ impl DirectConnect for DirectConnectClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UntagResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UntagResourceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UntagResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UntagResourceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6521,11 +6805,10 @@ impl DirectConnect for DirectConnectClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UntagResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UntagResourceError>
+                            })
+                            .and_then(|response| Err(UntagResourceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -6554,11 +6837,17 @@ impl DirectConnect for DirectConnectClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateDirectConnectGatewayAssociationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateDirectConnectGatewayAssociationResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateDirectConnectGatewayAssociationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateDirectConnectGatewayAssociationResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6566,15 +6855,15 @@ impl DirectConnect for DirectConnectClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(UpdateDirectConnectGatewayAssociationError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateDirectConnectGatewayAssociationError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateDirectConnectGatewayAssociationError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -6594,10 +6883,15 @@ impl DirectConnect for DirectConnectClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateLagError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response).deserialize::<Lag, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateLagError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response).deserialize::<Lag, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6605,11 +6899,10 @@ impl DirectConnect for DirectConnectClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateLagError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateLagError>
+                            })
+                            .and_then(|response| Err(UpdateLagError::from_response(response)))
                     })
                     .boxed()
             }
@@ -6635,11 +6928,17 @@ impl DirectConnect for DirectConnectClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateVirtualInterfaceAttributesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<VirtualInterface, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateVirtualInterfaceAttributesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<VirtualInterface, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6647,15 +6946,15 @@ impl DirectConnect for DirectConnectClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(UpdateVirtualInterfaceAttributesError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateVirtualInterfaceAttributesError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateVirtualInterfaceAttributesError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }

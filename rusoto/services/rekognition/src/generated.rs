@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -4815,11 +4815,16 @@ impl Rekognition for RekognitionClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CompareFacesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CompareFacesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CompareFacesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CompareFacesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4827,11 +4832,10 @@ impl Rekognition for RekognitionClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CompareFacesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CompareFacesError>
+                            })
+                            .and_then(|response| Err(CompareFacesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4854,11 +4858,16 @@ impl Rekognition for RekognitionClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateCollectionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateCollectionResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateCollectionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateCollectionResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4866,11 +4875,12 @@ impl Rekognition for RekognitionClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateCollectionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateCollectionError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateCollectionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4893,11 +4903,17 @@ impl Rekognition for RekognitionClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateStreamProcessorError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateStreamProcessorResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateStreamProcessorError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateStreamProcessorResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4905,11 +4921,13 @@ impl Rekognition for RekognitionClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateStreamProcessorError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateStreamProcessorError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateStreamProcessorError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4932,11 +4950,16 @@ impl Rekognition for RekognitionClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteCollectionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteCollectionResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteCollectionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteCollectionResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4944,11 +4967,12 @@ impl Rekognition for RekognitionClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteCollectionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteCollectionError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteCollectionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4971,11 +4995,16 @@ impl Rekognition for RekognitionClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteFacesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteFacesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteFacesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteFacesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4983,11 +5012,10 @@ impl Rekognition for RekognitionClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteFacesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteFacesError>
+                            })
+                            .and_then(|response| Err(DeleteFacesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5010,11 +5038,17 @@ impl Rekognition for RekognitionClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteStreamProcessorError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteStreamProcessorResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteStreamProcessorError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteStreamProcessorResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5022,11 +5056,13 @@ impl Rekognition for RekognitionClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteStreamProcessorError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteStreamProcessorError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteStreamProcessorError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5049,11 +5085,16 @@ impl Rekognition for RekognitionClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeCollectionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeCollectionResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeCollectionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeCollectionResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5061,11 +5102,12 @@ impl Rekognition for RekognitionClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeCollectionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeCollectionError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeCollectionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5088,11 +5130,17 @@ impl Rekognition for RekognitionClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeStreamProcessorError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeStreamProcessorResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeStreamProcessorError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeStreamProcessorResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5100,13 +5148,13 @@ impl Rekognition for RekognitionClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeStreamProcessorError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeStreamProcessorError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeStreamProcessorError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5129,11 +5177,16 @@ impl Rekognition for RekognitionClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DetectFacesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DetectFacesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DetectFacesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DetectFacesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5141,11 +5194,10 @@ impl Rekognition for RekognitionClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DetectFacesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DetectFacesError>
+                            })
+                            .and_then(|response| Err(DetectFacesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5168,11 +5220,16 @@ impl Rekognition for RekognitionClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DetectLabelsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DetectLabelsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DetectLabelsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DetectLabelsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5180,11 +5237,10 @@ impl Rekognition for RekognitionClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DetectLabelsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DetectLabelsError>
+                            })
+                            .and_then(|response| Err(DetectLabelsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5207,11 +5263,17 @@ impl Rekognition for RekognitionClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DetectModerationLabelsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DetectModerationLabelsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DetectModerationLabelsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DetectModerationLabelsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5219,13 +5281,13 @@ impl Rekognition for RekognitionClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DetectModerationLabelsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DetectModerationLabelsError>
+                            })
+                            .and_then(|response| {
+                                Err(DetectModerationLabelsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5248,11 +5310,16 @@ impl Rekognition for RekognitionClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DetectTextError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DetectTextResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DetectTextError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DetectTextResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5260,11 +5327,10 @@ impl Rekognition for RekognitionClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DetectTextError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DetectTextError>
+                            })
+                            .and_then(|response| Err(DetectTextError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5287,11 +5353,16 @@ impl Rekognition for RekognitionClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetCelebrityInfoError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetCelebrityInfoResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetCelebrityInfoError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetCelebrityInfoResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5299,11 +5370,12 @@ impl Rekognition for RekognitionClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetCelebrityInfoError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetCelebrityInfoError>
+                            })
+                            .and_then(|response| {
+                                Err(GetCelebrityInfoError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5326,11 +5398,17 @@ impl Rekognition for RekognitionClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetCelebrityRecognitionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetCelebrityRecognitionResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetCelebrityRecognitionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetCelebrityRecognitionResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5338,13 +5416,13 @@ impl Rekognition for RekognitionClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(GetCelebrityRecognitionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetCelebrityRecognitionError>
+                            })
+                            .and_then(|response| {
+                                Err(GetCelebrityRecognitionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5367,11 +5445,17 @@ impl Rekognition for RekognitionClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetContentModerationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetContentModerationResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetContentModerationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetContentModerationResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5379,11 +5463,13 @@ impl Rekognition for RekognitionClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetContentModerationError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetContentModerationError>
+                            })
+                            .and_then(|response| {
+                                Err(GetContentModerationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5406,11 +5492,16 @@ impl Rekognition for RekognitionClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetFaceDetectionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetFaceDetectionResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetFaceDetectionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetFaceDetectionResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5418,11 +5509,12 @@ impl Rekognition for RekognitionClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetFaceDetectionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetFaceDetectionError>
+                            })
+                            .and_then(|response| {
+                                Err(GetFaceDetectionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5445,11 +5537,16 @@ impl Rekognition for RekognitionClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetFaceSearchError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetFaceSearchResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetFaceSearchError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetFaceSearchResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5457,11 +5554,10 @@ impl Rekognition for RekognitionClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetFaceSearchError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetFaceSearchError>
+                            })
+                            .and_then(|response| Err(GetFaceSearchError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5484,11 +5580,16 @@ impl Rekognition for RekognitionClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetLabelDetectionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetLabelDetectionResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetLabelDetectionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetLabelDetectionResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5496,11 +5597,12 @@ impl Rekognition for RekognitionClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetLabelDetectionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetLabelDetectionError>
+                            })
+                            .and_then(|response| {
+                                Err(GetLabelDetectionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5523,11 +5625,16 @@ impl Rekognition for RekognitionClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetPersonTrackingError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetPersonTrackingResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetPersonTrackingError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetPersonTrackingResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5535,11 +5642,12 @@ impl Rekognition for RekognitionClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetPersonTrackingError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetPersonTrackingError>
+                            })
+                            .and_then(|response| {
+                                Err(GetPersonTrackingError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5562,11 +5670,16 @@ impl Rekognition for RekognitionClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| IndexFacesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<IndexFacesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<IndexFacesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<IndexFacesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5574,11 +5687,10 @@ impl Rekognition for RekognitionClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(IndexFacesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<IndexFacesError>
+                            })
+                            .and_then(|response| Err(IndexFacesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5601,11 +5713,16 @@ impl Rekognition for RekognitionClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListCollectionsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListCollectionsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListCollectionsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListCollectionsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5613,11 +5730,10 @@ impl Rekognition for RekognitionClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListCollectionsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListCollectionsError>
+                            })
+                            .and_then(|response| Err(ListCollectionsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5640,11 +5756,16 @@ impl Rekognition for RekognitionClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListFacesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListFacesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListFacesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListFacesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5652,11 +5773,10 @@ impl Rekognition for RekognitionClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListFacesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListFacesError>
+                            })
+                            .and_then(|response| Err(ListFacesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5679,11 +5799,17 @@ impl Rekognition for RekognitionClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListStreamProcessorsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListStreamProcessorsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListStreamProcessorsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListStreamProcessorsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5691,11 +5817,13 @@ impl Rekognition for RekognitionClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListStreamProcessorsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListStreamProcessorsError>
+                            })
+                            .and_then(|response| {
+                                Err(ListStreamProcessorsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5718,11 +5846,17 @@ impl Rekognition for RekognitionClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| RecognizeCelebritiesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RecognizeCelebritiesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<RecognizeCelebritiesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<RecognizeCelebritiesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5730,11 +5864,13 @@ impl Rekognition for RekognitionClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(RecognizeCelebritiesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<RecognizeCelebritiesError>
+                            })
+                            .and_then(|response| {
+                                Err(RecognizeCelebritiesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5757,11 +5893,16 @@ impl Rekognition for RekognitionClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| SearchFacesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<SearchFacesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<SearchFacesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<SearchFacesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5769,11 +5910,10 @@ impl Rekognition for RekognitionClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(SearchFacesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<SearchFacesError>
+                            })
+                            .and_then(|response| Err(SearchFacesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5796,11 +5936,16 @@ impl Rekognition for RekognitionClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| SearchFacesByImageError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<SearchFacesByImageResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<SearchFacesByImageError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<SearchFacesByImageResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5808,11 +5953,12 @@ impl Rekognition for RekognitionClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(SearchFacesByImageError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<SearchFacesByImageError>
+                            })
+                            .and_then(|response| {
+                                Err(SearchFacesByImageError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5838,11 +5984,17 @@ impl Rekognition for RekognitionClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StartCelebrityRecognitionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StartCelebrityRecognitionResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StartCelebrityRecognitionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StartCelebrityRecognitionResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5850,13 +6002,13 @@ impl Rekognition for RekognitionClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(StartCelebrityRecognitionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StartCelebrityRecognitionError>
+                            })
+                            .and_then(|response| {
+                                Err(StartCelebrityRecognitionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5879,11 +6031,17 @@ impl Rekognition for RekognitionClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StartContentModerationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StartContentModerationResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StartContentModerationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StartContentModerationResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5891,13 +6049,13 @@ impl Rekognition for RekognitionClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(StartContentModerationError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StartContentModerationError>
+                            })
+                            .and_then(|response| {
+                                Err(StartContentModerationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5920,11 +6078,16 @@ impl Rekognition for RekognitionClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StartFaceDetectionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StartFaceDetectionResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StartFaceDetectionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StartFaceDetectionResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5932,11 +6095,12 @@ impl Rekognition for RekognitionClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(StartFaceDetectionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StartFaceDetectionError>
+                            })
+                            .and_then(|response| {
+                                Err(StartFaceDetectionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5959,11 +6123,16 @@ impl Rekognition for RekognitionClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StartFaceSearchError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StartFaceSearchResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StartFaceSearchError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StartFaceSearchResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5971,11 +6140,10 @@ impl Rekognition for RekognitionClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(StartFaceSearchError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StartFaceSearchError>
+                            })
+                            .and_then(|response| Err(StartFaceSearchError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5998,11 +6166,17 @@ impl Rekognition for RekognitionClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StartLabelDetectionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StartLabelDetectionResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StartLabelDetectionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StartLabelDetectionResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6010,11 +6184,13 @@ impl Rekognition for RekognitionClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(StartLabelDetectionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StartLabelDetectionError>
+                            })
+                            .and_then(|response| {
+                                Err(StartLabelDetectionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6037,11 +6213,17 @@ impl Rekognition for RekognitionClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StartPersonTrackingError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StartPersonTrackingResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StartPersonTrackingError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StartPersonTrackingResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6049,11 +6231,13 @@ impl Rekognition for RekognitionClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(StartPersonTrackingError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StartPersonTrackingError>
+                            })
+                            .and_then(|response| {
+                                Err(StartPersonTrackingError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6076,11 +6260,17 @@ impl Rekognition for RekognitionClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StartStreamProcessorError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StartStreamProcessorResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StartStreamProcessorError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StartStreamProcessorResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6088,11 +6278,13 @@ impl Rekognition for RekognitionClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(StartStreamProcessorError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StartStreamProcessorError>
+                            })
+                            .and_then(|response| {
+                                Err(StartStreamProcessorError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6115,11 +6307,17 @@ impl Rekognition for RekognitionClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StopStreamProcessorError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StopStreamProcessorResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StopStreamProcessorError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StopStreamProcessorResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6127,11 +6325,13 @@ impl Rekognition for RekognitionClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(StopStreamProcessorError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StopStreamProcessorError>
+                            })
+                            .and_then(|response| {
+                                Err(StopStreamProcessorError::from_response(response))
+                            })
                     })
                     .boxed()
             }

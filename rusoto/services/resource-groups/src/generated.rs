@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
@@ -1275,10 +1275,11 @@ impl ResourceGroups for ResourceGroupsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateGroupError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateGroupOutput, _>()?;
+                                .deserialize::<CreateGroupOutput, _>();
 
                             result
                         })
@@ -1289,11 +1290,8 @@ impl ResourceGroups for ResourceGroupsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateGroupError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateGroupError>())
+                            .and_then(|response| Err(CreateGroupError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1315,10 +1313,11 @@ impl ResourceGroups for ResourceGroupsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteGroupError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteGroupOutput, _>()?;
+                                .deserialize::<DeleteGroupOutput, _>();
 
                             result
                         })
@@ -1329,11 +1328,8 @@ impl ResourceGroups for ResourceGroupsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteGroupError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteGroupError>())
+                            .and_then(|response| Err(DeleteGroupError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1351,10 +1347,11 @@ impl ResourceGroups for ResourceGroupsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetGroupError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetGroupOutput, _>()?;
+                                .deserialize::<GetGroupOutput, _>();
 
                             result
                         })
@@ -1365,11 +1362,8 @@ impl ResourceGroups for ResourceGroupsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetGroupError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetGroupError>())
+                            .and_then(|response| Err(GetGroupError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1390,10 +1384,11 @@ impl ResourceGroups for ResourceGroupsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetGroupQueryError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetGroupQueryOutput, _>()?;
+                                .deserialize::<GetGroupQueryOutput, _>();
 
                             result
                         })
@@ -1404,11 +1399,8 @@ impl ResourceGroups for ResourceGroupsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetGroupQueryError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetGroupQueryError>())
+                            .and_then(|response| Err(GetGroupQueryError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1426,10 +1418,11 @@ impl ResourceGroups for ResourceGroupsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetTagsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetTagsOutput, _>()?;
+                                .deserialize::<GetTagsOutput, _>();
 
                             result
                         })
@@ -1440,11 +1433,8 @@ impl ResourceGroups for ResourceGroupsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetTagsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetTagsError>())
+                            .and_then(|response| Err(GetTagsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1480,10 +1470,11 @@ impl ResourceGroups for ResourceGroupsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListGroupResourcesError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListGroupResourcesOutput, _>()?;
+                                .deserialize::<ListGroupResourcesOutput, _>();
 
                             result
                         })
@@ -1494,11 +1485,10 @@ impl ResourceGroups for ResourceGroupsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListGroupResourcesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListGroupResourcesError>())
+                            .and_then(|response| {
+                                Err(ListGroupResourcesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1531,10 +1521,11 @@ impl ResourceGroups for ResourceGroupsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListGroupsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListGroupsOutput, _>()?;
+                                .deserialize::<ListGroupsOutput, _>();
 
                             result
                         })
@@ -1545,11 +1536,8 @@ impl ResourceGroups for ResourceGroupsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListGroupsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListGroupsError>())
+                            .and_then(|response| Err(ListGroupsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1573,10 +1561,11 @@ impl ResourceGroups for ResourceGroupsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| SearchResourcesError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<SearchResourcesOutput, _>()?;
+                                .deserialize::<SearchResourcesOutput, _>();
 
                             result
                         })
@@ -1587,11 +1576,8 @@ impl ResourceGroups for ResourceGroupsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(SearchResourcesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<SearchResourcesError>())
+                            .and_then(|response| Err(SearchResourcesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1612,10 +1598,11 @@ impl ResourceGroups for ResourceGroupsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| TagError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<TagOutput, _>()?;
+                                .deserialize::<TagOutput, _>();
 
                             result
                         })
@@ -1626,11 +1613,8 @@ impl ResourceGroups for ResourceGroupsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(TagError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<TagError>())
+                            .and_then(|response| Err(TagError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1652,10 +1636,11 @@ impl ResourceGroups for ResourceGroupsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UntagError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UntagOutput, _>()?;
+                                .deserialize::<UntagOutput, _>();
 
                             result
                         })
@@ -1666,11 +1651,8 @@ impl ResourceGroups for ResourceGroupsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UntagError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UntagError>())
+                            .and_then(|response| Err(UntagError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1694,10 +1676,11 @@ impl ResourceGroups for ResourceGroupsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateGroupError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateGroupOutput, _>()?;
+                                .deserialize::<UpdateGroupOutput, _>();
 
                             result
                         })
@@ -1708,11 +1691,8 @@ impl ResourceGroups for ResourceGroupsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateGroupError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateGroupError>())
+                            .and_then(|response| Err(UpdateGroupError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1736,10 +1716,11 @@ impl ResourceGroups for ResourceGroupsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateGroupQueryError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateGroupQueryOutput, _>()?;
+                                .deserialize::<UpdateGroupQueryOutput, _>();
 
                             result
                         })
@@ -1750,11 +1731,10 @@ impl ResourceGroups for ResourceGroupsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateGroupQueryError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateGroupQueryError>())
+                            .and_then(|response| {
+                                Err(UpdateGroupQueryError::from_response(response))
+                            })
                     })
                     .boxed()
             }

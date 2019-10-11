@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -6382,19 +6382,19 @@ impl CodeDeploy for CodeDeployClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(AddTagsToOnPremisesInstancesError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AddTagsToOnPremisesInstancesError>
+                            })
+                            .and_then(|response| {
+                                Err(AddTagsToOnPremisesInstancesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6420,11 +6420,17 @@ impl CodeDeploy for CodeDeployClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| BatchGetApplicationRevisionsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<BatchGetApplicationRevisionsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<BatchGetApplicationRevisionsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<BatchGetApplicationRevisionsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6432,13 +6438,13 @@ impl CodeDeploy for CodeDeployClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(BatchGetApplicationRevisionsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<BatchGetApplicationRevisionsError>
+                            })
+                            .and_then(|response| {
+                                Err(BatchGetApplicationRevisionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6461,11 +6467,17 @@ impl CodeDeploy for CodeDeployClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| BatchGetApplicationsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<BatchGetApplicationsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<BatchGetApplicationsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<BatchGetApplicationsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6473,11 +6485,13 @@ impl CodeDeploy for CodeDeployClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(BatchGetApplicationsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<BatchGetApplicationsError>
+                            })
+                            .and_then(|response| {
+                                Err(BatchGetApplicationsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6503,11 +6517,17 @@ impl CodeDeploy for CodeDeployClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| BatchGetDeploymentGroupsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<BatchGetDeploymentGroupsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<BatchGetDeploymentGroupsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<BatchGetDeploymentGroupsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6515,13 +6535,13 @@ impl CodeDeploy for CodeDeployClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(BatchGetDeploymentGroupsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<BatchGetDeploymentGroupsError>
+                            })
+                            .and_then(|response| {
+                                Err(BatchGetDeploymentGroupsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6547,11 +6567,17 @@ impl CodeDeploy for CodeDeployClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| BatchGetDeploymentInstancesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<BatchGetDeploymentInstancesOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<BatchGetDeploymentInstancesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<BatchGetDeploymentInstancesOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6559,13 +6585,13 @@ impl CodeDeploy for CodeDeployClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(BatchGetDeploymentInstancesError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<BatchGetDeploymentInstancesError>
+                            })
+                            .and_then(|response| {
+                                Err(BatchGetDeploymentInstancesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6591,11 +6617,17 @@ impl CodeDeploy for CodeDeployClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| BatchGetDeploymentTargetsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<BatchGetDeploymentTargetsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<BatchGetDeploymentTargetsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<BatchGetDeploymentTargetsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6603,13 +6635,13 @@ impl CodeDeploy for CodeDeployClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(BatchGetDeploymentTargetsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<BatchGetDeploymentTargetsError>
+                            })
+                            .and_then(|response| {
+                                Err(BatchGetDeploymentTargetsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6632,11 +6664,17 @@ impl CodeDeploy for CodeDeployClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| BatchGetDeploymentsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<BatchGetDeploymentsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<BatchGetDeploymentsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<BatchGetDeploymentsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6644,11 +6682,13 @@ impl CodeDeploy for CodeDeployClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(BatchGetDeploymentsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<BatchGetDeploymentsError>
+                            })
+                            .and_then(|response| {
+                                Err(BatchGetDeploymentsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6674,11 +6714,17 @@ impl CodeDeploy for CodeDeployClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| BatchGetOnPremisesInstancesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<BatchGetOnPremisesInstancesOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<BatchGetOnPremisesInstancesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<BatchGetOnPremisesInstancesOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6686,13 +6732,13 @@ impl CodeDeploy for CodeDeployClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(BatchGetOnPremisesInstancesError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<BatchGetOnPremisesInstancesError>
+                            })
+                            .and_then(|response| {
+                                Err(BatchGetOnPremisesInstancesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6713,17 +6759,18 @@ impl CodeDeploy for CodeDeployClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ContinueDeploymentError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ContinueDeploymentError>
+                            })
+                            .and_then(|response| {
+                                Err(ContinueDeploymentError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6746,11 +6793,16 @@ impl CodeDeploy for CodeDeployClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateApplicationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateApplicationOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateApplicationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateApplicationOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6758,11 +6810,12 @@ impl CodeDeploy for CodeDeployClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateApplicationError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateApplicationError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateApplicationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6785,11 +6838,16 @@ impl CodeDeploy for CodeDeployClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateDeploymentError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateDeploymentOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateDeploymentError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateDeploymentOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6797,11 +6855,12 @@ impl CodeDeploy for CodeDeployClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateDeploymentError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateDeploymentError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateDeploymentError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6824,11 +6883,17 @@ impl CodeDeploy for CodeDeployClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateDeploymentConfigError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateDeploymentConfigOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateDeploymentConfigError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateDeploymentConfigOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6836,13 +6901,13 @@ impl CodeDeploy for CodeDeployClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(CreateDeploymentConfigError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateDeploymentConfigError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateDeploymentConfigError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6865,11 +6930,17 @@ impl CodeDeploy for CodeDeployClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateDeploymentGroupError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateDeploymentGroupOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateDeploymentGroupError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateDeploymentGroupOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6877,11 +6948,13 @@ impl CodeDeploy for CodeDeployClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateDeploymentGroupError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateDeploymentGroupError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateDeploymentGroupError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6902,17 +6975,18 @@ impl CodeDeploy for CodeDeployClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteApplicationError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteApplicationError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteApplicationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6933,19 +7007,19 @@ impl CodeDeploy for CodeDeployClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DeleteDeploymentConfigError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteDeploymentConfigError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteDeploymentConfigError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6968,11 +7042,17 @@ impl CodeDeploy for CodeDeployClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteDeploymentGroupError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteDeploymentGroupOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteDeploymentGroupError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteDeploymentGroupOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6980,11 +7060,13 @@ impl CodeDeploy for CodeDeployClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteDeploymentGroupError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteDeploymentGroupError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteDeploymentGroupError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7010,11 +7092,17 @@ impl CodeDeploy for CodeDeployClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteGitHubAccountTokenError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteGitHubAccountTokenOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteGitHubAccountTokenError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteGitHubAccountTokenOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7022,13 +7110,13 @@ impl CodeDeploy for CodeDeployClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DeleteGitHubAccountTokenError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteGitHubAccountTokenError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteGitHubAccountTokenError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7052,19 +7140,19 @@ impl CodeDeploy for CodeDeployClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DeregisterOnPremisesInstanceError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeregisterOnPremisesInstanceError>
+                            })
+                            .and_then(|response| {
+                                Err(DeregisterOnPremisesInstanceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7087,11 +7175,16 @@ impl CodeDeploy for CodeDeployClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetApplicationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetApplicationOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetApplicationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetApplicationOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7099,11 +7192,10 @@ impl CodeDeploy for CodeDeployClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetApplicationError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetApplicationError>
+                            })
+                            .and_then(|response| Err(GetApplicationError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7126,11 +7218,17 @@ impl CodeDeploy for CodeDeployClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetApplicationRevisionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetApplicationRevisionOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetApplicationRevisionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetApplicationRevisionOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7138,13 +7236,13 @@ impl CodeDeploy for CodeDeployClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(GetApplicationRevisionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetApplicationRevisionError>
+                            })
+                            .and_then(|response| {
+                                Err(GetApplicationRevisionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7167,11 +7265,16 @@ impl CodeDeploy for CodeDeployClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetDeploymentError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetDeploymentOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetDeploymentError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetDeploymentOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7179,11 +7282,10 @@ impl CodeDeploy for CodeDeployClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetDeploymentError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetDeploymentError>
+                            })
+                            .and_then(|response| Err(GetDeploymentError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7206,11 +7308,17 @@ impl CodeDeploy for CodeDeployClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetDeploymentConfigError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetDeploymentConfigOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetDeploymentConfigError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetDeploymentConfigOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7218,11 +7326,13 @@ impl CodeDeploy for CodeDeployClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetDeploymentConfigError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetDeploymentConfigError>
+                            })
+                            .and_then(|response| {
+                                Err(GetDeploymentConfigError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7245,11 +7355,16 @@ impl CodeDeploy for CodeDeployClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetDeploymentGroupError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetDeploymentGroupOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetDeploymentGroupError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetDeploymentGroupOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7257,11 +7372,12 @@ impl CodeDeploy for CodeDeployClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetDeploymentGroupError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetDeploymentGroupError>
+                            })
+                            .and_then(|response| {
+                                Err(GetDeploymentGroupError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7284,11 +7400,17 @@ impl CodeDeploy for CodeDeployClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetDeploymentInstanceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetDeploymentInstanceOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetDeploymentInstanceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetDeploymentInstanceOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7296,11 +7418,13 @@ impl CodeDeploy for CodeDeployClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetDeploymentInstanceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetDeploymentInstanceError>
+                            })
+                            .and_then(|response| {
+                                Err(GetDeploymentInstanceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7323,11 +7447,17 @@ impl CodeDeploy for CodeDeployClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetDeploymentTargetError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetDeploymentTargetOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetDeploymentTargetError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetDeploymentTargetOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7335,11 +7465,13 @@ impl CodeDeploy for CodeDeployClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetDeploymentTargetError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetDeploymentTargetError>
+                            })
+                            .and_then(|response| {
+                                Err(GetDeploymentTargetError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7362,11 +7494,17 @@ impl CodeDeploy for CodeDeployClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetOnPremisesInstanceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetOnPremisesInstanceOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetOnPremisesInstanceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetOnPremisesInstanceOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7374,11 +7512,13 @@ impl CodeDeploy for CodeDeployClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetOnPremisesInstanceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetOnPremisesInstanceError>
+                            })
+                            .and_then(|response| {
+                                Err(GetOnPremisesInstanceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7404,11 +7544,17 @@ impl CodeDeploy for CodeDeployClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListApplicationRevisionsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListApplicationRevisionsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListApplicationRevisionsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListApplicationRevisionsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7416,13 +7562,13 @@ impl CodeDeploy for CodeDeployClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ListApplicationRevisionsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListApplicationRevisionsError>
+                            })
+                            .and_then(|response| {
+                                Err(ListApplicationRevisionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7445,11 +7591,16 @@ impl CodeDeploy for CodeDeployClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListApplicationsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListApplicationsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListApplicationsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListApplicationsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7457,11 +7608,12 @@ impl CodeDeploy for CodeDeployClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListApplicationsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListApplicationsError>
+                            })
+                            .and_then(|response| {
+                                Err(ListApplicationsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7484,11 +7636,17 @@ impl CodeDeploy for CodeDeployClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListDeploymentConfigsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListDeploymentConfigsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListDeploymentConfigsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListDeploymentConfigsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7496,11 +7654,13 @@ impl CodeDeploy for CodeDeployClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListDeploymentConfigsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListDeploymentConfigsError>
+                            })
+                            .and_then(|response| {
+                                Err(ListDeploymentConfigsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7523,11 +7683,17 @@ impl CodeDeploy for CodeDeployClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListDeploymentGroupsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListDeploymentGroupsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListDeploymentGroupsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListDeploymentGroupsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7535,11 +7701,13 @@ impl CodeDeploy for CodeDeployClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListDeploymentGroupsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListDeploymentGroupsError>
+                            })
+                            .and_then(|response| {
+                                Err(ListDeploymentGroupsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7565,11 +7733,17 @@ impl CodeDeploy for CodeDeployClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListDeploymentInstancesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListDeploymentInstancesOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListDeploymentInstancesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListDeploymentInstancesOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7577,13 +7751,13 @@ impl CodeDeploy for CodeDeployClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ListDeploymentInstancesError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListDeploymentInstancesError>
+                            })
+                            .and_then(|response| {
+                                Err(ListDeploymentInstancesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7606,11 +7780,17 @@ impl CodeDeploy for CodeDeployClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListDeploymentTargetsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListDeploymentTargetsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListDeploymentTargetsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListDeploymentTargetsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7618,11 +7798,13 @@ impl CodeDeploy for CodeDeployClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListDeploymentTargetsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListDeploymentTargetsError>
+                            })
+                            .and_then(|response| {
+                                Err(ListDeploymentTargetsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7645,11 +7827,16 @@ impl CodeDeploy for CodeDeployClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListDeploymentsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListDeploymentsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListDeploymentsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListDeploymentsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7657,11 +7844,10 @@ impl CodeDeploy for CodeDeployClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListDeploymentsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListDeploymentsError>
+                            })
+                            .and_then(|response| Err(ListDeploymentsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7687,11 +7873,17 @@ impl CodeDeploy for CodeDeployClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListGitHubAccountTokenNamesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListGitHubAccountTokenNamesOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListGitHubAccountTokenNamesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListGitHubAccountTokenNamesOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7699,13 +7891,13 @@ impl CodeDeploy for CodeDeployClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ListGitHubAccountTokenNamesError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListGitHubAccountTokenNamesError>
+                            })
+                            .and_then(|response| {
+                                Err(ListGitHubAccountTokenNamesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7731,11 +7923,17 @@ impl CodeDeploy for CodeDeployClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListOnPremisesInstancesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListOnPremisesInstancesOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListOnPremisesInstancesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListOnPremisesInstancesOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7743,13 +7941,13 @@ impl CodeDeploy for CodeDeployClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ListOnPremisesInstancesError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListOnPremisesInstancesError>
+                            })
+                            .and_then(|response| {
+                                Err(ListOnPremisesInstancesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7772,11 +7970,17 @@ impl CodeDeploy for CodeDeployClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListTagsForResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListTagsForResourceOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListTagsForResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListTagsForResourceOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7784,11 +7988,13 @@ impl CodeDeploy for CodeDeployClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListTagsForResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListTagsForResourceError>
+                            })
+                            .and_then(|response| {
+                                Err(ListTagsForResourceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7817,11 +8023,17 @@ impl CodeDeploy for CodeDeployClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| PutLifecycleEventHookExecutionStatusError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PutLifecycleEventHookExecutionStatusOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<PutLifecycleEventHookExecutionStatusError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<PutLifecycleEventHookExecutionStatusOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7829,15 +8041,15 @@ impl CodeDeploy for CodeDeployClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(PutLifecycleEventHookExecutionStatusError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<PutLifecycleEventHookExecutionStatusError>
+                            })
+                            .and_then(|response| {
+                                Err(PutLifecycleEventHookExecutionStatusError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -7861,19 +8073,19 @@ impl CodeDeploy for CodeDeployClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(RegisterApplicationRevisionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<RegisterApplicationRevisionError>
+                            })
+                            .and_then(|response| {
+                                Err(RegisterApplicationRevisionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7897,19 +8109,19 @@ impl CodeDeploy for CodeDeployClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(RegisterOnPremisesInstanceError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<RegisterOnPremisesInstanceError>
+                            })
+                            .and_then(|response| {
+                                Err(RegisterOnPremisesInstanceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7933,21 +8145,21 @@ impl CodeDeploy for CodeDeployClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(RemoveTagsFromOnPremisesInstancesError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<RemoveTagsFromOnPremisesInstancesError>
+                            })
+                            .and_then(|response| {
+                                Err(RemoveTagsFromOnPremisesInstancesError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -7971,21 +8183,21 @@ impl CodeDeploy for CodeDeployClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(SkipWaitTimeForInstanceTerminationError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<SkipWaitTimeForInstanceTerminationError>
+                            })
+                            .and_then(|response| {
+                                Err(SkipWaitTimeForInstanceTerminationError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -8008,11 +8220,16 @@ impl CodeDeploy for CodeDeployClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StopDeploymentError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StopDeploymentOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StopDeploymentError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StopDeploymentOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8020,11 +8237,10 @@ impl CodeDeploy for CodeDeployClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(StopDeploymentError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StopDeploymentError>
+                            })
+                            .and_then(|response| Err(StopDeploymentError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8047,11 +8263,16 @@ impl CodeDeploy for CodeDeployClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| TagResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<TagResourceOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<TagResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<TagResourceOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8059,11 +8280,10 @@ impl CodeDeploy for CodeDeployClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(TagResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<TagResourceError>
+                            })
+                            .and_then(|response| Err(TagResourceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8086,11 +8306,16 @@ impl CodeDeploy for CodeDeployClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UntagResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UntagResourceOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UntagResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UntagResourceOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8098,11 +8323,10 @@ impl CodeDeploy for CodeDeployClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UntagResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UntagResourceError>
+                            })
+                            .and_then(|response| Err(UntagResourceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8123,17 +8347,18 @@ impl CodeDeploy for CodeDeployClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateApplicationError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateApplicationError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateApplicationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8156,11 +8381,17 @@ impl CodeDeploy for CodeDeployClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateDeploymentGroupError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateDeploymentGroupOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateDeploymentGroupError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateDeploymentGroupOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8168,11 +8399,13 @@ impl CodeDeploy for CodeDeployClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateDeploymentGroupError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateDeploymentGroupError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateDeploymentGroupError::from_response(response))
+                            })
                     })
                     .boxed()
             }

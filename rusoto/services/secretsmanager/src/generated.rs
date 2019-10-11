@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -1895,11 +1895,16 @@ impl SecretsManager for SecretsManagerClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CancelRotateSecretError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CancelRotateSecretResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CancelRotateSecretError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CancelRotateSecretResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1907,11 +1912,12 @@ impl SecretsManager for SecretsManagerClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CancelRotateSecretError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CancelRotateSecretError>
+                            })
+                            .and_then(|response| {
+                                Err(CancelRotateSecretError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1934,11 +1940,16 @@ impl SecretsManager for SecretsManagerClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateSecretError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateSecretResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateSecretError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateSecretResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1946,11 +1957,10 @@ impl SecretsManager for SecretsManagerClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateSecretError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateSecretError>
+                            })
+                            .and_then(|response| Err(CreateSecretError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1973,11 +1983,17 @@ impl SecretsManager for SecretsManagerClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteResourcePolicyError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteResourcePolicyResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteResourcePolicyError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteResourcePolicyResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1985,11 +2001,13 @@ impl SecretsManager for SecretsManagerClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteResourcePolicyError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteResourcePolicyError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteResourcePolicyError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2012,11 +2030,16 @@ impl SecretsManager for SecretsManagerClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteSecretError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteSecretResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteSecretError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteSecretResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2024,11 +2047,10 @@ impl SecretsManager for SecretsManagerClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteSecretError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteSecretError>
+                            })
+                            .and_then(|response| Err(DeleteSecretError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2051,11 +2073,16 @@ impl SecretsManager for SecretsManagerClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeSecretError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeSecretResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeSecretError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeSecretResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2063,11 +2090,10 @@ impl SecretsManager for SecretsManagerClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeSecretError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeSecretError>
+                            })
+                            .and_then(|response| Err(DescribeSecretError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2090,11 +2116,16 @@ impl SecretsManager for SecretsManagerClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetRandomPasswordError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetRandomPasswordResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetRandomPasswordError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetRandomPasswordResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2102,11 +2133,12 @@ impl SecretsManager for SecretsManagerClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetRandomPasswordError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetRandomPasswordError>
+                            })
+                            .and_then(|response| {
+                                Err(GetRandomPasswordError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2129,11 +2161,16 @@ impl SecretsManager for SecretsManagerClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetResourcePolicyError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetResourcePolicyResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetResourcePolicyError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetResourcePolicyResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2141,11 +2178,12 @@ impl SecretsManager for SecretsManagerClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetResourcePolicyError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetResourcePolicyError>
+                            })
+                            .and_then(|response| {
+                                Err(GetResourcePolicyError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2168,11 +2206,16 @@ impl SecretsManager for SecretsManagerClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetSecretValueError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetSecretValueResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetSecretValueError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetSecretValueResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2180,11 +2223,10 @@ impl SecretsManager for SecretsManagerClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetSecretValueError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetSecretValueError>
+                            })
+                            .and_then(|response| Err(GetSecretValueError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2207,11 +2249,17 @@ impl SecretsManager for SecretsManagerClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListSecretVersionIdsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListSecretVersionIdsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListSecretVersionIdsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListSecretVersionIdsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2219,11 +2267,13 @@ impl SecretsManager for SecretsManagerClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListSecretVersionIdsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListSecretVersionIdsError>
+                            })
+                            .and_then(|response| {
+                                Err(ListSecretVersionIdsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2246,11 +2296,16 @@ impl SecretsManager for SecretsManagerClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListSecretsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListSecretsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListSecretsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListSecretsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2258,11 +2313,10 @@ impl SecretsManager for SecretsManagerClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListSecretsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListSecretsError>
+                            })
+                            .and_then(|response| Err(ListSecretsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2285,11 +2339,16 @@ impl SecretsManager for SecretsManagerClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| PutResourcePolicyError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PutResourcePolicyResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<PutResourcePolicyError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<PutResourcePolicyResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2297,11 +2356,12 @@ impl SecretsManager for SecretsManagerClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(PutResourcePolicyError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<PutResourcePolicyError>
+                            })
+                            .and_then(|response| {
+                                Err(PutResourcePolicyError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2324,11 +2384,16 @@ impl SecretsManager for SecretsManagerClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| PutSecretValueError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PutSecretValueResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<PutSecretValueError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<PutSecretValueResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2336,11 +2401,10 @@ impl SecretsManager for SecretsManagerClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(PutSecretValueError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<PutSecretValueError>
+                            })
+                            .and_then(|response| Err(PutSecretValueError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2363,11 +2427,16 @@ impl SecretsManager for SecretsManagerClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| RestoreSecretError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RestoreSecretResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<RestoreSecretError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<RestoreSecretResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2375,11 +2444,10 @@ impl SecretsManager for SecretsManagerClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(RestoreSecretError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<RestoreSecretError>
+                            })
+                            .and_then(|response| Err(RestoreSecretError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2402,11 +2470,16 @@ impl SecretsManager for SecretsManagerClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| RotateSecretError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RotateSecretResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<RotateSecretError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<RotateSecretResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2414,11 +2487,10 @@ impl SecretsManager for SecretsManagerClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(RotateSecretError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<RotateSecretError>
+                            })
+                            .and_then(|response| Err(RotateSecretError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2436,17 +2508,16 @@ impl SecretsManager for SecretsManagerClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(TagResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<TagResourceError>
+                            })
+                            .and_then(|response| Err(TagResourceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2464,17 +2535,16 @@ impl SecretsManager for SecretsManagerClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UntagResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UntagResourceError>
+                            })
+                            .and_then(|response| Err(UntagResourceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2497,11 +2567,16 @@ impl SecretsManager for SecretsManagerClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateSecretError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateSecretResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateSecretError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateSecretResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2509,11 +2584,10 @@ impl SecretsManager for SecretsManagerClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateSecretError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateSecretError>
+                            })
+                            .and_then(|response| Err(UpdateSecretError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2536,11 +2610,17 @@ impl SecretsManager for SecretsManagerClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateSecretVersionStageError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateSecretVersionStageResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateSecretVersionStageError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateSecretVersionStageResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2548,13 +2628,13 @@ impl SecretsManager for SecretsManagerClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(UpdateSecretVersionStageError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateSecretVersionStageError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateSecretVersionStageError::from_response(response))
+                            })
                     })
                     .boxed()
             }

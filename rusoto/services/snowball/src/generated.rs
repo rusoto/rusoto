@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -1809,11 +1809,16 @@ impl Snowball for SnowballClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CancelClusterError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CancelClusterResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CancelClusterError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CancelClusterResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1821,11 +1826,10 @@ impl Snowball for SnowballClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CancelClusterError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CancelClusterError>
+                            })
+                            .and_then(|response| Err(CancelClusterError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1848,11 +1852,16 @@ impl Snowball for SnowballClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CancelJobError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CancelJobResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CancelJobError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CancelJobResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1860,11 +1869,10 @@ impl Snowball for SnowballClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CancelJobError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CancelJobError>
+                            })
+                            .and_then(|response| Err(CancelJobError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1890,11 +1898,16 @@ impl Snowball for SnowballClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateAddressError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateAddressResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateAddressError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateAddressResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1902,11 +1915,10 @@ impl Snowball for SnowballClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateAddressError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateAddressError>
+                            })
+                            .and_then(|response| Err(CreateAddressError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1932,11 +1944,16 @@ impl Snowball for SnowballClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateClusterError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateClusterResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateClusterError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateClusterResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1944,11 +1961,10 @@ impl Snowball for SnowballClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateClusterError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateClusterError>
+                            })
+                            .and_then(|response| Err(CreateClusterError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1971,11 +1987,16 @@ impl Snowball for SnowballClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateJobError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateJobResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateJobError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateJobResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1983,11 +2004,10 @@ impl Snowball for SnowballClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateJobError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateJobError>
+                            })
+                            .and_then(|response| Err(CreateJobError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2013,11 +2033,16 @@ impl Snowball for SnowballClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeAddressError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeAddressResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeAddressError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeAddressResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2025,11 +2050,10 @@ impl Snowball for SnowballClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeAddressError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeAddressError>
+                            })
+                            .and_then(|response| Err(DescribeAddressError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2055,11 +2079,16 @@ impl Snowball for SnowballClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeAddressesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeAddressesResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeAddressesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeAddressesResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2067,11 +2096,12 @@ impl Snowball for SnowballClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeAddressesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeAddressesError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeAddressesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2097,11 +2127,16 @@ impl Snowball for SnowballClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeClusterError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeClusterResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeClusterError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeClusterResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2109,11 +2144,10 @@ impl Snowball for SnowballClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeClusterError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeClusterError>
+                            })
+                            .and_then(|response| Err(DescribeClusterError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2139,11 +2173,16 @@ impl Snowball for SnowballClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeJobError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeJobResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeJobError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeJobResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2151,11 +2190,10 @@ impl Snowball for SnowballClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeJobError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeJobError>
+                            })
+                            .and_then(|response| Err(DescribeJobError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2181,11 +2219,16 @@ impl Snowball for SnowballClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetJobManifestError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetJobManifestResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetJobManifestError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetJobManifestResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2193,11 +2236,10 @@ impl Snowball for SnowballClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetJobManifestError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetJobManifestError>
+                            })
+                            .and_then(|response| Err(GetJobManifestError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2223,11 +2265,16 @@ impl Snowball for SnowballClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetJobUnlockCodeError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetJobUnlockCodeResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetJobUnlockCodeError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetJobUnlockCodeResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2235,11 +2282,12 @@ impl Snowball for SnowballClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetJobUnlockCodeError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetJobUnlockCodeError>
+                            })
+                            .and_then(|response| {
+                                Err(GetJobUnlockCodeError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2261,11 +2309,16 @@ impl Snowball for SnowballClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetSnowballUsageError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetSnowballUsageResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetSnowballUsageError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetSnowballUsageResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2273,11 +2326,12 @@ impl Snowball for SnowballClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetSnowballUsageError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetSnowballUsageError>
+                            })
+                            .and_then(|response| {
+                                Err(GetSnowballUsageError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2303,11 +2357,16 @@ impl Snowball for SnowballClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListClusterJobsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListClusterJobsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListClusterJobsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListClusterJobsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2315,11 +2374,10 @@ impl Snowball for SnowballClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListClusterJobsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListClusterJobsError>
+                            })
+                            .and_then(|response| Err(ListClusterJobsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2345,11 +2403,16 @@ impl Snowball for SnowballClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListClustersError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListClustersResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListClustersError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListClustersResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2357,11 +2420,10 @@ impl Snowball for SnowballClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListClustersError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListClustersError>
+                            })
+                            .and_then(|response| Err(ListClustersError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2387,11 +2449,17 @@ impl Snowball for SnowballClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListCompatibleImagesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListCompatibleImagesResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListCompatibleImagesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListCompatibleImagesResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2399,11 +2467,13 @@ impl Snowball for SnowballClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListCompatibleImagesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListCompatibleImagesError>
+                            })
+                            .and_then(|response| {
+                                Err(ListCompatibleImagesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2423,11 +2493,14 @@ impl Snowball for SnowballClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListJobsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListJobsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<ListJobsError>)
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListJobsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2435,11 +2508,8 @@ impl Snowball for SnowballClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListJobsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<ListJobsError>)
+                            .and_then(|response| Err(ListJobsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2465,11 +2535,16 @@ impl Snowball for SnowballClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateClusterError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateClusterResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateClusterError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateClusterResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2477,11 +2552,10 @@ impl Snowball for SnowballClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateClusterError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateClusterError>
+                            })
+                            .and_then(|response| Err(UpdateClusterError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2504,11 +2578,16 @@ impl Snowball for SnowballClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateJobError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateJobResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateJobError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateJobResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2516,11 +2595,10 @@ impl Snowball for SnowballClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateJobError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateJobError>
+                            })
+                            .and_then(|response| Err(UpdateJobError::from_response(response)))
                     })
                     .boxed()
             }

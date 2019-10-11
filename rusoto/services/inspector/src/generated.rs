@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -3856,11 +3856,17 @@ impl Inspector for InspectorClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AddAttributesToFindingsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AddAttributesToFindingsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AddAttributesToFindingsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AddAttributesToFindingsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3868,13 +3874,13 @@ impl Inspector for InspectorClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(AddAttributesToFindingsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AddAttributesToFindingsError>
+                            })
+                            .and_then(|response| {
+                                Err(AddAttributesToFindingsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3897,11 +3903,17 @@ impl Inspector for InspectorClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateAssessmentTargetError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateAssessmentTargetResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateAssessmentTargetError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateAssessmentTargetResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3909,13 +3921,13 @@ impl Inspector for InspectorClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(CreateAssessmentTargetError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateAssessmentTargetError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateAssessmentTargetError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3938,11 +3950,17 @@ impl Inspector for InspectorClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateAssessmentTemplateError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateAssessmentTemplateResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateAssessmentTemplateError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateAssessmentTemplateResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3950,13 +3968,13 @@ impl Inspector for InspectorClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(CreateAssessmentTemplateError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateAssessmentTemplateError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateAssessmentTemplateError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3979,11 +3997,17 @@ impl Inspector for InspectorClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateExclusionsPreviewError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateExclusionsPreviewResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateExclusionsPreviewError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateExclusionsPreviewResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3991,13 +4015,13 @@ impl Inspector for InspectorClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(CreateExclusionsPreviewError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateExclusionsPreviewError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateExclusionsPreviewError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4020,11 +4044,17 @@ impl Inspector for InspectorClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateResourceGroupError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateResourceGroupResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateResourceGroupError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateResourceGroupResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4032,11 +4062,13 @@ impl Inspector for InspectorClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateResourceGroupError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateResourceGroupError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateResourceGroupError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4057,17 +4089,19 @@ impl Inspector for InspectorClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteAssessmentRunError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteAssessmentRunError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteAssessmentRunError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4088,19 +4122,19 @@ impl Inspector for InspectorClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DeleteAssessmentTargetError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteAssessmentTargetError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteAssessmentTargetError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4121,19 +4155,19 @@ impl Inspector for InspectorClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DeleteAssessmentTemplateError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteAssessmentTemplateError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteAssessmentTemplateError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4156,11 +4190,17 @@ impl Inspector for InspectorClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeAssessmentRunsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeAssessmentRunsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeAssessmentRunsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeAssessmentRunsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4168,13 +4208,13 @@ impl Inspector for InspectorClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeAssessmentRunsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeAssessmentRunsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeAssessmentRunsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4197,11 +4237,17 @@ impl Inspector for InspectorClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeAssessmentTargetsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeAssessmentTargetsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeAssessmentTargetsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeAssessmentTargetsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4209,13 +4255,13 @@ impl Inspector for InspectorClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeAssessmentTargetsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeAssessmentTargetsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeAssessmentTargetsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4241,11 +4287,17 @@ impl Inspector for InspectorClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeAssessmentTemplatesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeAssessmentTemplatesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeAssessmentTemplatesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeAssessmentTemplatesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4253,13 +4305,13 @@ impl Inspector for InspectorClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeAssessmentTemplatesError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeAssessmentTemplatesError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeAssessmentTemplatesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4284,11 +4336,17 @@ impl Inspector for InspectorClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeCrossAccountAccessRoleError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeCrossAccountAccessRoleResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeCrossAccountAccessRoleError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeCrossAccountAccessRoleResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4296,15 +4354,13 @@ impl Inspector for InspectorClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeCrossAccountAccessRoleError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeCrossAccountAccessRoleError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeCrossAccountAccessRoleError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4327,11 +4383,16 @@ impl Inspector for InspectorClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeExclusionsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeExclusionsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeExclusionsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeExclusionsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4339,11 +4400,12 @@ impl Inspector for InspectorClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeExclusionsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeExclusionsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeExclusionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4366,11 +4428,16 @@ impl Inspector for InspectorClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeFindingsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeFindingsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeFindingsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeFindingsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4378,11 +4445,12 @@ impl Inspector for InspectorClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeFindingsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeFindingsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeFindingsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4405,11 +4473,17 @@ impl Inspector for InspectorClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeResourceGroupsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeResourceGroupsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeResourceGroupsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeResourceGroupsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4417,13 +4491,13 @@ impl Inspector for InspectorClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeResourceGroupsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeResourceGroupsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeResourceGroupsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4446,11 +4520,17 @@ impl Inspector for InspectorClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeRulesPackagesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeRulesPackagesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeRulesPackagesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeRulesPackagesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4458,11 +4538,13 @@ impl Inspector for InspectorClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeRulesPackagesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeRulesPackagesError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeRulesPackagesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4485,11 +4567,17 @@ impl Inspector for InspectorClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetAssessmentReportError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetAssessmentReportResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetAssessmentReportError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetAssessmentReportResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4497,11 +4585,13 @@ impl Inspector for InspectorClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetAssessmentReportError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetAssessmentReportError>
+                            })
+                            .and_then(|response| {
+                                Err(GetAssessmentReportError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4524,11 +4614,17 @@ impl Inspector for InspectorClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetExclusionsPreviewError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetExclusionsPreviewResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetExclusionsPreviewError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetExclusionsPreviewResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4536,11 +4632,13 @@ impl Inspector for InspectorClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetExclusionsPreviewError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetExclusionsPreviewError>
+                            })
+                            .and_then(|response| {
+                                Err(GetExclusionsPreviewError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4563,11 +4661,17 @@ impl Inspector for InspectorClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetTelemetryMetadataError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetTelemetryMetadataResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetTelemetryMetadataError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetTelemetryMetadataResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4575,11 +4679,13 @@ impl Inspector for InspectorClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetTelemetryMetadataError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetTelemetryMetadataError>
+                            })
+                            .and_then(|response| {
+                                Err(GetTelemetryMetadataError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4602,11 +4708,17 @@ impl Inspector for InspectorClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListAssessmentRunAgentsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListAssessmentRunAgentsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListAssessmentRunAgentsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListAssessmentRunAgentsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4614,13 +4726,13 @@ impl Inspector for InspectorClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ListAssessmentRunAgentsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListAssessmentRunAgentsError>
+                            })
+                            .and_then(|response| {
+                                Err(ListAssessmentRunAgentsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4643,11 +4755,16 @@ impl Inspector for InspectorClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListAssessmentRunsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListAssessmentRunsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListAssessmentRunsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListAssessmentRunsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4655,11 +4772,12 @@ impl Inspector for InspectorClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListAssessmentRunsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListAssessmentRunsError>
+                            })
+                            .and_then(|response| {
+                                Err(ListAssessmentRunsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4682,11 +4800,17 @@ impl Inspector for InspectorClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListAssessmentTargetsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListAssessmentTargetsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListAssessmentTargetsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListAssessmentTargetsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4694,11 +4818,13 @@ impl Inspector for InspectorClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListAssessmentTargetsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListAssessmentTargetsError>
+                            })
+                            .and_then(|response| {
+                                Err(ListAssessmentTargetsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4721,11 +4847,17 @@ impl Inspector for InspectorClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListAssessmentTemplatesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListAssessmentTemplatesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListAssessmentTemplatesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListAssessmentTemplatesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4733,13 +4865,13 @@ impl Inspector for InspectorClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ListAssessmentTemplatesError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListAssessmentTemplatesError>
+                            })
+                            .and_then(|response| {
+                                Err(ListAssessmentTemplatesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4762,11 +4894,17 @@ impl Inspector for InspectorClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListEventSubscriptionsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListEventSubscriptionsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListEventSubscriptionsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListEventSubscriptionsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4774,13 +4912,13 @@ impl Inspector for InspectorClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ListEventSubscriptionsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListEventSubscriptionsError>
+                            })
+                            .and_then(|response| {
+                                Err(ListEventSubscriptionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4803,11 +4941,16 @@ impl Inspector for InspectorClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListExclusionsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListExclusionsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListExclusionsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListExclusionsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4815,11 +4958,10 @@ impl Inspector for InspectorClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListExclusionsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListExclusionsError>
+                            })
+                            .and_then(|response| Err(ListExclusionsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4842,11 +4984,16 @@ impl Inspector for InspectorClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListFindingsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListFindingsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListFindingsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListFindingsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4854,11 +5001,10 @@ impl Inspector for InspectorClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListFindingsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListFindingsError>
+                            })
+                            .and_then(|response| Err(ListFindingsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4881,11 +5027,16 @@ impl Inspector for InspectorClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListRulesPackagesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListRulesPackagesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListRulesPackagesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListRulesPackagesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4893,11 +5044,12 @@ impl Inspector for InspectorClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListRulesPackagesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListRulesPackagesError>
+                            })
+                            .and_then(|response| {
+                                Err(ListRulesPackagesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4920,11 +5072,17 @@ impl Inspector for InspectorClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListTagsForResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListTagsForResourceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListTagsForResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListTagsForResourceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4932,11 +5090,13 @@ impl Inspector for InspectorClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListTagsForResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListTagsForResourceError>
+                            })
+                            .and_then(|response| {
+                                Err(ListTagsForResourceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4959,11 +5119,16 @@ impl Inspector for InspectorClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| PreviewAgentsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PreviewAgentsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<PreviewAgentsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<PreviewAgentsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4971,11 +5136,10 @@ impl Inspector for InspectorClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(PreviewAgentsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<PreviewAgentsError>
+                            })
+                            .and_then(|response| Err(PreviewAgentsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4999,21 +5163,19 @@ impl Inspector for InspectorClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(RegisterCrossAccountAccessRoleError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<RegisterCrossAccountAccessRoleError>
+                            })
+                            .and_then(|response| {
+                                Err(RegisterCrossAccountAccessRoleError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5039,11 +5201,17 @@ impl Inspector for InspectorClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| RemoveAttributesFromFindingsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RemoveAttributesFromFindingsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<RemoveAttributesFromFindingsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<RemoveAttributesFromFindingsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5051,13 +5219,13 @@ impl Inspector for InspectorClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(RemoveAttributesFromFindingsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<RemoveAttributesFromFindingsError>
+                            })
+                            .and_then(|response| {
+                                Err(RemoveAttributesFromFindingsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5078,17 +5246,18 @@ impl Inspector for InspectorClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(SetTagsForResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<SetTagsForResourceError>
+                            })
+                            .and_then(|response| {
+                                Err(SetTagsForResourceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5111,11 +5280,16 @@ impl Inspector for InspectorClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StartAssessmentRunError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StartAssessmentRunResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StartAssessmentRunError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StartAssessmentRunResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5123,11 +5297,12 @@ impl Inspector for InspectorClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(StartAssessmentRunError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StartAssessmentRunError>
+                            })
+                            .and_then(|response| {
+                                Err(StartAssessmentRunError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5148,17 +5323,18 @@ impl Inspector for InspectorClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(StopAssessmentRunError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StopAssessmentRunError>
+                            })
+                            .and_then(|response| {
+                                Err(StopAssessmentRunError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5179,17 +5355,18 @@ impl Inspector for InspectorClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(SubscribeToEventError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<SubscribeToEventError>
+                            })
+                            .and_then(|response| {
+                                Err(SubscribeToEventError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5210,17 +5387,19 @@ impl Inspector for InspectorClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UnsubscribeFromEventError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UnsubscribeFromEventError>
+                            })
+                            .and_then(|response| {
+                                Err(UnsubscribeFromEventError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5241,19 +5420,19 @@ impl Inspector for InspectorClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(UpdateAssessmentTargetError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateAssessmentTargetError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateAssessmentTargetError::from_response(response))
+                            })
                     })
                     .boxed()
             }

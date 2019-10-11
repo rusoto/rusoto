@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
@@ -2461,10 +2461,11 @@ impl MQ for MQClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| CreateBrokerError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateBrokerResponse, _>()?;
+                                .deserialize::<CreateBrokerResponse, _>();
 
                             result
                         })
@@ -2475,11 +2476,8 @@ impl MQ for MQClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateBrokerError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateBrokerError>())
+                            .and_then(|response| Err(CreateBrokerError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2503,10 +2501,11 @@ impl MQ for MQClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| CreateConfigurationError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateConfigurationResponse, _>()?;
+                                .deserialize::<CreateConfigurationResponse, _>();
 
                             result
                         })
@@ -2517,11 +2516,10 @@ impl MQ for MQClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateConfigurationError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateConfigurationError>())
+                            .and_then(|response| {
+                                Err(CreateConfigurationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2542,8 +2540,9 @@ impl MQ for MQClient {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| CreateTagsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -2555,11 +2554,8 @@ impl MQ for MQClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateTagsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateTagsError>())
+                            .and_then(|response| Err(CreateTagsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2587,10 +2583,11 @@ impl MQ for MQClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| CreateUserError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateUserResponse, _>()?;
+                                .deserialize::<CreateUserResponse, _>();
 
                             result
                         })
@@ -2601,11 +2598,8 @@ impl MQ for MQClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateUserError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateUserError>())
+                            .and_then(|response| Err(CreateUserError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2626,10 +2620,11 @@ impl MQ for MQClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteBrokerError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteBrokerResponse, _>()?;
+                                .deserialize::<DeleteBrokerResponse, _>();
 
                             result
                         })
@@ -2640,11 +2635,8 @@ impl MQ for MQClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteBrokerError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteBrokerError>())
+                            .and_then(|response| Err(DeleteBrokerError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2668,8 +2660,9 @@ impl MQ for MQClient {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteTagsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -2681,11 +2674,8 @@ impl MQ for MQClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteTagsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteTagsError>())
+                            .and_then(|response| Err(DeleteTagsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2710,10 +2700,11 @@ impl MQ for MQClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteUserError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteUserResponse, _>()?;
+                                .deserialize::<DeleteUserResponse, _>();
 
                             result
                         })
@@ -2724,11 +2715,8 @@ impl MQ for MQClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteUserError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteUserError>())
+                            .and_then(|response| Err(DeleteUserError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2749,10 +2737,11 @@ impl MQ for MQClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| DescribeBrokerError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeBrokerResponse, _>()?;
+                                .deserialize::<DescribeBrokerResponse, _>();
 
                             result
                         })
@@ -2763,11 +2752,8 @@ impl MQ for MQClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DescribeBrokerError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeBrokerError>())
+                            .and_then(|response| Err(DescribeBrokerError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2800,10 +2786,11 @@ impl MQ for MQClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| DescribeBrokerEngineTypesError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeBrokerEngineTypesResponse, _>()?;
+                                .deserialize::<DescribeBrokerEngineTypesResponse, _>();
 
                             result
                         })
@@ -2814,13 +2801,10 @@ impl MQ for MQClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(DescribeBrokerEngineTypesError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeBrokerEngineTypesError>())
+                            .and_then(|response| {
+                                Err(DescribeBrokerEngineTypesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2857,11 +2841,11 @@ impl MQ for MQClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| DescribeBrokerInstanceOptionsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeBrokerInstanceOptionsResponse, _>(
-                            )?;
+                                .deserialize::<DescribeBrokerInstanceOptionsResponse, _>();
 
                             result
                         })
@@ -2872,13 +2856,10 @@ impl MQ for MQClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(DescribeBrokerInstanceOptionsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeBrokerInstanceOptionsError>())
+                            .and_then(|response| {
+                                Err(DescribeBrokerInstanceOptionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2902,10 +2883,11 @@ impl MQ for MQClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| DescribeConfigurationError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeConfigurationResponse, _>()?;
+                                .deserialize::<DescribeConfigurationResponse, _>();
 
                             result
                         })
@@ -2916,11 +2898,10 @@ impl MQ for MQClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DescribeConfigurationError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeConfigurationError>())
+                            .and_then(|response| {
+                                Err(DescribeConfigurationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2946,11 +2927,11 @@ impl MQ for MQClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| DescribeConfigurationRevisionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeConfigurationRevisionResponse, _>(
-                            )?;
+                                .deserialize::<DescribeConfigurationRevisionResponse, _>();
 
                             result
                         })
@@ -2961,13 +2942,10 @@ impl MQ for MQClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(DescribeConfigurationRevisionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeConfigurationRevisionError>())
+                            .and_then(|response| {
+                                Err(DescribeConfigurationRevisionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2992,10 +2970,11 @@ impl MQ for MQClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| DescribeUserError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeUserResponse, _>()?;
+                                .deserialize::<DescribeUserResponse, _>();
 
                             result
                         })
@@ -3006,11 +2985,8 @@ impl MQ for MQClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DescribeUserError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeUserError>())
+                            .and_then(|response| Err(DescribeUserError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3040,10 +3016,11 @@ impl MQ for MQClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListBrokersError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListBrokersResponse, _>()?;
+                                .deserialize::<ListBrokersResponse, _>();
 
                             result
                         })
@@ -3054,11 +3031,8 @@ impl MQ for MQClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListBrokersError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListBrokersError>())
+                            .and_then(|response| Err(ListBrokersError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3091,10 +3065,11 @@ impl MQ for MQClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListConfigurationRevisionsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListConfigurationRevisionsResponse, _>()?;
+                                .deserialize::<ListConfigurationRevisionsResponse, _>();
 
                             result
                         })
@@ -3105,13 +3080,10 @@ impl MQ for MQClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(ListConfigurationRevisionsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListConfigurationRevisionsError>())
+                            .and_then(|response| {
+                                Err(ListConfigurationRevisionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3141,10 +3113,11 @@ impl MQ for MQClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListConfigurationsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListConfigurationsResponse, _>()?;
+                                .deserialize::<ListConfigurationsResponse, _>();
 
                             result
                         })
@@ -3155,11 +3128,10 @@ impl MQ for MQClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListConfigurationsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListConfigurationsError>())
+                            .and_then(|response| {
+                                Err(ListConfigurationsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3177,10 +3149,11 @@ impl MQ for MQClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListTagsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListTagsResponse, _>()?;
+                                .deserialize::<ListTagsResponse, _>();
 
                             result
                         })
@@ -3191,11 +3164,8 @@ impl MQ for MQClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListTagsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListTagsError>())
+                            .and_then(|response| Err(ListTagsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3225,10 +3195,11 @@ impl MQ for MQClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListUsersError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListUsersResponse, _>()?;
+                                .deserialize::<ListUsersResponse, _>();
 
                             result
                         })
@@ -3239,11 +3210,8 @@ impl MQ for MQClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListUsersError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListUsersError>())
+                            .and_then(|response| Err(ListUsersError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3267,10 +3235,11 @@ impl MQ for MQClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| RebootBrokerError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RebootBrokerResponse, _>()?;
+                                .deserialize::<RebootBrokerResponse, _>();
 
                             result
                         })
@@ -3281,11 +3250,8 @@ impl MQ for MQClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(RebootBrokerError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<RebootBrokerError>())
+                            .and_then(|response| Err(RebootBrokerError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3309,10 +3275,11 @@ impl MQ for MQClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| UpdateBrokerError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateBrokerResponse, _>()?;
+                                .deserialize::<UpdateBrokerResponse, _>();
 
                             result
                         })
@@ -3323,11 +3290,8 @@ impl MQ for MQClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateBrokerError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateBrokerError>())
+                            .and_then(|response| Err(UpdateBrokerError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3354,10 +3318,11 @@ impl MQ for MQClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| UpdateConfigurationError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateConfigurationResponse, _>()?;
+                                .deserialize::<UpdateConfigurationResponse, _>();
 
                             result
                         })
@@ -3368,11 +3333,10 @@ impl MQ for MQClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateConfigurationError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateConfigurationError>())
+                            .and_then(|response| {
+                                Err(UpdateConfigurationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3400,10 +3364,11 @@ impl MQ for MQClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| UpdateUserError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateUserResponse, _>()?;
+                                .deserialize::<UpdateUserResponse, _>();
 
                             result
                         })
@@ -3414,11 +3379,8 @@ impl MQ for MQClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateUserError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateUserError>())
+                            .and_then(|response| Err(UpdateUserError::from_response(response)))
                     })
                     .boxed()
             }

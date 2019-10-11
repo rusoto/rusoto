@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -2999,10 +2999,11 @@ impl Worklink for WorklinkClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AssociateDomainError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AssociateDomainResponse, _>()?;
+                                .deserialize::<AssociateDomainResponse, _>();
 
                             result
                         })
@@ -3013,11 +3014,8 @@ impl Worklink for WorklinkClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(AssociateDomainError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<AssociateDomainError>())
+                            .and_then(|response| Err(AssociateDomainError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3044,11 +3042,12 @@ impl Worklink for WorklinkClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AssociateWebsiteAuthorizationProviderError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
                                 .deserialize::<AssociateWebsiteAuthorizationProviderResponse, _>(
-                            )?;
+                            );
 
                             result
                         })
@@ -3059,15 +3058,12 @@ impl Worklink for WorklinkClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(AssociateWebsiteAuthorizationProviderError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<AssociateWebsiteAuthorizationProviderError>())
+                            .and_then(|response| {
+                                Err(AssociateWebsiteAuthorizationProviderError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -3094,11 +3090,12 @@ impl Worklink for WorklinkClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AssociateWebsiteCertificateAuthorityError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
                                 .deserialize::<AssociateWebsiteCertificateAuthorityResponse, _>(
-                            )?;
+                            );
 
                             result
                         })
@@ -3109,15 +3106,12 @@ impl Worklink for WorklinkClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(AssociateWebsiteCertificateAuthorityError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<AssociateWebsiteCertificateAuthorityError>())
+                            .and_then(|response| {
+                                Err(AssociateWebsiteCertificateAuthorityError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -3141,10 +3135,11 @@ impl Worklink for WorklinkClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateFleetError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateFleetResponse, _>()?;
+                                .deserialize::<CreateFleetResponse, _>();
 
                             result
                         })
@@ -3155,11 +3150,8 @@ impl Worklink for WorklinkClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateFleetError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateFleetError>())
+                            .and_then(|response| Err(CreateFleetError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3183,10 +3175,11 @@ impl Worklink for WorklinkClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteFleetError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteFleetResponse, _>()?;
+                                .deserialize::<DeleteFleetResponse, _>();
 
                             result
                         })
@@ -3197,11 +3190,8 @@ impl Worklink for WorklinkClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteFleetError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteFleetError>())
+                            .and_then(|response| Err(DeleteFleetError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3226,11 +3216,12 @@ impl Worklink for WorklinkClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeAuditStreamConfigurationError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
                                 .deserialize::<DescribeAuditStreamConfigurationResponse, _>(
-                            )?;
+                            );
 
                             result
                         })
@@ -3241,15 +3232,12 @@ impl Worklink for WorklinkClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(DescribeAuditStreamConfigurationError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeAuditStreamConfigurationError>())
+                            .and_then(|response| {
+                                Err(DescribeAuditStreamConfigurationError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -3276,11 +3264,12 @@ impl Worklink for WorklinkClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeCompanyNetworkConfigurationError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
                                 .deserialize::<DescribeCompanyNetworkConfigurationResponse, _>(
-                            )?;
+                            );
 
                             result
                         })
@@ -3291,15 +3280,12 @@ impl Worklink for WorklinkClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(DescribeCompanyNetworkConfigurationError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeCompanyNetworkConfigurationError>())
+                            .and_then(|response| {
+                                Err(DescribeCompanyNetworkConfigurationError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -3323,10 +3309,11 @@ impl Worklink for WorklinkClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeDeviceError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeDeviceResponse, _>()?;
+                                .deserialize::<DescribeDeviceResponse, _>();
 
                             result
                         })
@@ -3337,11 +3324,8 @@ impl Worklink for WorklinkClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DescribeDeviceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeDeviceError>())
+                            .and_then(|response| Err(DescribeDeviceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3368,11 +3352,12 @@ impl Worklink for WorklinkClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeDevicePolicyConfigurationError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
                                 .deserialize::<DescribeDevicePolicyConfigurationResponse, _>(
-                            )?;
+                            );
 
                             result
                         })
@@ -3383,15 +3368,12 @@ impl Worklink for WorklinkClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(DescribeDevicePolicyConfigurationError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeDevicePolicyConfigurationError>())
+                            .and_then(|response| {
+                                Err(DescribeDevicePolicyConfigurationError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -3415,10 +3397,11 @@ impl Worklink for WorklinkClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeDomainError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeDomainResponse, _>()?;
+                                .deserialize::<DescribeDomainResponse, _>();
 
                             result
                         })
@@ -3429,11 +3412,8 @@ impl Worklink for WorklinkClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DescribeDomainError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeDomainError>())
+                            .and_then(|response| Err(DescribeDomainError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3457,10 +3437,11 @@ impl Worklink for WorklinkClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeFleetMetadataError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeFleetMetadataResponse, _>()?;
+                                .deserialize::<DescribeFleetMetadataResponse, _>();
 
                             result
                         })
@@ -3471,11 +3452,10 @@ impl Worklink for WorklinkClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DescribeFleetMetadataError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeFleetMetadataError>())
+                            .and_then(|response| {
+                                Err(DescribeFleetMetadataError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3502,11 +3482,12 @@ impl Worklink for WorklinkClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeIdentityProviderConfigurationError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
                                 .deserialize::<DescribeIdentityProviderConfigurationResponse, _>(
-                            )?;
+                            );
 
                             result
                         })
@@ -3517,15 +3498,12 @@ impl Worklink for WorklinkClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(DescribeIdentityProviderConfigurationError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeIdentityProviderConfigurationError>())
+                            .and_then(|response| {
+                                Err(DescribeIdentityProviderConfigurationError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -3552,11 +3530,12 @@ impl Worklink for WorklinkClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeWebsiteCertificateAuthorityError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
                                 .deserialize::<DescribeWebsiteCertificateAuthorityResponse, _>(
-                            )?;
+                            );
 
                             result
                         })
@@ -3567,15 +3546,12 @@ impl Worklink for WorklinkClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(DescribeWebsiteCertificateAuthorityError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeWebsiteCertificateAuthorityError>())
+                            .and_then(|response| {
+                                Err(DescribeWebsiteCertificateAuthorityError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -3599,10 +3575,11 @@ impl Worklink for WorklinkClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DisassociateDomainError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DisassociateDomainResponse, _>()?;
+                                .deserialize::<DisassociateDomainResponse, _>();
 
                             result
                         })
@@ -3613,11 +3590,10 @@ impl Worklink for WorklinkClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DisassociateDomainError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DisassociateDomainError>())
+                            .and_then(|response| {
+                                Err(DisassociateDomainError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3641,23 +3617,37 @@ impl Worklink for WorklinkClient {
         request.set_payload(encoded);
 
         self.client.sign_and_dispatch(request, |response| {
-                        if response.status.is_success() {
-                            response.buffer().map(|try_response| {
-                                try_response.map(|response| {
-                                    let  result = proto::json::ResponsePayload::new(&response).deserialize::<DisassociateWebsiteAuthorizationProviderResponse, _>()?;
-                                    
-                                    
-                                    result
-                                })
-                            }).boxed()
-                        } else {
-                            response.buffer().map(|try_response| {
-                                try_response.map_or_else(|e| Err(e), |response| {
-                                    Err(DisassociateWebsiteAuthorizationProviderError::from_response(response))
-                                }).boxed()
-                            }).boxed()
-                        }
+            if response.status.is_success() {
+                response
+                    .buffer()
+                    .map_err(|e| DisassociateWebsiteAuthorizationProviderError::from(e))
+                    .map(|try_response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
+                            let result = proto::json::ResponsePayload::new(&response)
+                                .deserialize::<DisassociateWebsiteAuthorizationProviderResponse, _>(
+                            );
+
+                            result
+                        })
                     })
+                    .boxed()
+            } else {
+                response
+                    .buffer()
+                    .map(|try_response| {
+                        try_response
+                            .map_err(|e| e.into::<DisassociateWebsiteAuthorizationProviderError>())
+                            .and_then(|response| {
+                                Err(
+                                    DisassociateWebsiteAuthorizationProviderError::from_response(
+                                        response,
+                                    ),
+                                )
+                            })
+                    })
+                    .boxed()
+            }
+        })
     }
 
     /// <p>Removes a certificate authority (CA).</p>
@@ -3680,11 +3670,12 @@ impl Worklink for WorklinkClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DisassociateWebsiteCertificateAuthorityError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
                                 .deserialize::<DisassociateWebsiteCertificateAuthorityResponse, _>(
-                            )?;
+                            );
 
                             result
                         })
@@ -3695,17 +3686,12 @@ impl Worklink for WorklinkClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(
-                                        DisassociateWebsiteCertificateAuthorityError::from_response(
-                                            response,
-                                        ),
-                                    )
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DisassociateWebsiteCertificateAuthorityError>())
+                            .and_then(|response| {
+                                Err(DisassociateWebsiteCertificateAuthorityError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -3729,10 +3715,11 @@ impl Worklink for WorklinkClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListDevicesError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListDevicesResponse, _>()?;
+                                .deserialize::<ListDevicesResponse, _>();
 
                             result
                         })
@@ -3743,11 +3730,8 @@ impl Worklink for WorklinkClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListDevicesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListDevicesError>())
+                            .and_then(|response| Err(ListDevicesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3771,10 +3755,11 @@ impl Worklink for WorklinkClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListDomainsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListDomainsResponse, _>()?;
+                                .deserialize::<ListDomainsResponse, _>();
 
                             result
                         })
@@ -3785,11 +3770,8 @@ impl Worklink for WorklinkClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListDomainsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListDomainsError>())
+                            .and_then(|response| Err(ListDomainsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3813,10 +3795,11 @@ impl Worklink for WorklinkClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListFleetsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListFleetsResponse, _>()?;
+                                .deserialize::<ListFleetsResponse, _>();
 
                             result
                         })
@@ -3827,11 +3810,8 @@ impl Worklink for WorklinkClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListFleetsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListFleetsError>())
+                            .and_then(|response| Err(ListFleetsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3858,11 +3838,12 @@ impl Worklink for WorklinkClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListWebsiteAuthorizationProvidersError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
                                 .deserialize::<ListWebsiteAuthorizationProvidersResponse, _>(
-                            )?;
+                            );
 
                             result
                         })
@@ -3873,15 +3854,12 @@ impl Worklink for WorklinkClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(ListWebsiteAuthorizationProvidersError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListWebsiteAuthorizationProvidersError>())
+                            .and_then(|response| {
+                                Err(ListWebsiteAuthorizationProvidersError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -3908,11 +3886,12 @@ impl Worklink for WorklinkClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListWebsiteCertificateAuthoritiesError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
                                 .deserialize::<ListWebsiteCertificateAuthoritiesResponse, _>(
-                            )?;
+                            );
 
                             result
                         })
@@ -3923,15 +3902,12 @@ impl Worklink for WorklinkClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(ListWebsiteCertificateAuthoritiesError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListWebsiteCertificateAuthoritiesError>())
+                            .and_then(|response| {
+                                Err(ListWebsiteCertificateAuthoritiesError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -3955,10 +3931,11 @@ impl Worklink for WorklinkClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| RestoreDomainAccessError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RestoreDomainAccessResponse, _>()?;
+                                .deserialize::<RestoreDomainAccessResponse, _>();
 
                             result
                         })
@@ -3969,11 +3946,10 @@ impl Worklink for WorklinkClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(RestoreDomainAccessError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<RestoreDomainAccessError>())
+                            .and_then(|response| {
+                                Err(RestoreDomainAccessError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3997,10 +3973,11 @@ impl Worklink for WorklinkClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| RevokeDomainAccessError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RevokeDomainAccessResponse, _>()?;
+                                .deserialize::<RevokeDomainAccessResponse, _>();
 
                             result
                         })
@@ -4011,11 +3988,10 @@ impl Worklink for WorklinkClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(RevokeDomainAccessError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<RevokeDomainAccessError>())
+                            .and_then(|response| {
+                                Err(RevokeDomainAccessError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4039,10 +4015,11 @@ impl Worklink for WorklinkClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| SignOutUserError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<SignOutUserResponse, _>()?;
+                                .deserialize::<SignOutUserResponse, _>();
 
                             result
                         })
@@ -4053,11 +4030,8 @@ impl Worklink for WorklinkClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(SignOutUserError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<SignOutUserError>())
+                            .and_then(|response| Err(SignOutUserError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4082,11 +4056,12 @@ impl Worklink for WorklinkClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateAuditStreamConfigurationError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
                                 .deserialize::<UpdateAuditStreamConfigurationResponse, _>(
-                            )?;
+                            );
 
                             result
                         })
@@ -4097,15 +4072,10 @@ impl Worklink for WorklinkClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(UpdateAuditStreamConfigurationError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateAuditStreamConfigurationError>())
+                            .and_then(|response| {
+                                Err(UpdateAuditStreamConfigurationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4132,11 +4102,12 @@ impl Worklink for WorklinkClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateCompanyNetworkConfigurationError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
                                 .deserialize::<UpdateCompanyNetworkConfigurationResponse, _>(
-                            )?;
+                            );
 
                             result
                         })
@@ -4147,15 +4118,12 @@ impl Worklink for WorklinkClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(UpdateCompanyNetworkConfigurationError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateCompanyNetworkConfigurationError>())
+                            .and_then(|response| {
+                                Err(UpdateCompanyNetworkConfigurationError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -4180,11 +4148,12 @@ impl Worklink for WorklinkClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateDevicePolicyConfigurationError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
                                 .deserialize::<UpdateDevicePolicyConfigurationResponse, _>(
-                            )?;
+                            );
 
                             result
                         })
@@ -4195,15 +4164,12 @@ impl Worklink for WorklinkClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(UpdateDevicePolicyConfigurationError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateDevicePolicyConfigurationError>())
+                            .and_then(|response| {
+                                Err(UpdateDevicePolicyConfigurationError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -4227,10 +4193,11 @@ impl Worklink for WorklinkClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateDomainMetadataError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateDomainMetadataResponse, _>()?;
+                                .deserialize::<UpdateDomainMetadataResponse, _>();
 
                             result
                         })
@@ -4241,11 +4208,10 @@ impl Worklink for WorklinkClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateDomainMetadataError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateDomainMetadataError>())
+                            .and_then(|response| {
+                                Err(UpdateDomainMetadataError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4269,10 +4235,11 @@ impl Worklink for WorklinkClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateFleetMetadataError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateFleetMetadataResponse, _>()?;
+                                .deserialize::<UpdateFleetMetadataResponse, _>();
 
                             result
                         })
@@ -4283,11 +4250,10 @@ impl Worklink for WorklinkClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateFleetMetadataError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateFleetMetadataError>())
+                            .and_then(|response| {
+                                Err(UpdateFleetMetadataError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4314,11 +4280,12 @@ impl Worklink for WorklinkClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateIdentityProviderConfigurationError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
                                 .deserialize::<UpdateIdentityProviderConfigurationResponse, _>(
-                            )?;
+                            );
 
                             result
                         })
@@ -4329,15 +4296,12 @@ impl Worklink for WorklinkClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(UpdateIdentityProviderConfigurationError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateIdentityProviderConfigurationError>())
+                            .and_then(|response| {
+                                Err(UpdateIdentityProviderConfigurationError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }

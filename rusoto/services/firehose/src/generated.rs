@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -2126,11 +2126,17 @@ impl KinesisFirehose for KinesisFirehoseClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateDeliveryStreamError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateDeliveryStreamOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateDeliveryStreamError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateDeliveryStreamOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2138,11 +2144,13 @@ impl KinesisFirehose for KinesisFirehoseClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateDeliveryStreamError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateDeliveryStreamError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateDeliveryStreamError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2165,11 +2173,17 @@ impl KinesisFirehose for KinesisFirehoseClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteDeliveryStreamError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteDeliveryStreamOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteDeliveryStreamError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteDeliveryStreamOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2177,11 +2191,13 @@ impl KinesisFirehose for KinesisFirehoseClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteDeliveryStreamError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteDeliveryStreamError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteDeliveryStreamError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2204,11 +2220,17 @@ impl KinesisFirehose for KinesisFirehoseClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeDeliveryStreamError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeDeliveryStreamOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeDeliveryStreamError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeDeliveryStreamOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2216,13 +2238,13 @@ impl KinesisFirehose for KinesisFirehoseClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeDeliveryStreamError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeDeliveryStreamError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeDeliveryStreamError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2245,11 +2267,17 @@ impl KinesisFirehose for KinesisFirehoseClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListDeliveryStreamsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListDeliveryStreamsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListDeliveryStreamsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListDeliveryStreamsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2257,11 +2285,13 @@ impl KinesisFirehose for KinesisFirehoseClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListDeliveryStreamsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListDeliveryStreamsError>
+                            })
+                            .and_then(|response| {
+                                Err(ListDeliveryStreamsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2287,11 +2317,17 @@ impl KinesisFirehose for KinesisFirehoseClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListTagsForDeliveryStreamError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListTagsForDeliveryStreamOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListTagsForDeliveryStreamError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListTagsForDeliveryStreamOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2299,13 +2335,13 @@ impl KinesisFirehose for KinesisFirehoseClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ListTagsForDeliveryStreamError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListTagsForDeliveryStreamError>
+                            })
+                            .and_then(|response| {
+                                Err(ListTagsForDeliveryStreamError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2325,11 +2361,16 @@ impl KinesisFirehose for KinesisFirehoseClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| PutRecordError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PutRecordOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<PutRecordError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<PutRecordOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2337,11 +2378,10 @@ impl KinesisFirehose for KinesisFirehoseClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(PutRecordError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<PutRecordError>
+                            })
+                            .and_then(|response| Err(PutRecordError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2364,11 +2404,16 @@ impl KinesisFirehose for KinesisFirehoseClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| PutRecordBatchError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PutRecordBatchOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<PutRecordBatchError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<PutRecordBatchOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2376,11 +2421,10 @@ impl KinesisFirehose for KinesisFirehoseClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(PutRecordBatchError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<PutRecordBatchError>
+                            })
+                            .and_then(|response| Err(PutRecordBatchError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2406,11 +2450,17 @@ impl KinesisFirehose for KinesisFirehoseClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StartDeliveryStreamEncryptionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StartDeliveryStreamEncryptionOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StartDeliveryStreamEncryptionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StartDeliveryStreamEncryptionOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2418,13 +2468,13 @@ impl KinesisFirehose for KinesisFirehoseClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(StartDeliveryStreamEncryptionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StartDeliveryStreamEncryptionError>
+                            })
+                            .and_then(|response| {
+                                Err(StartDeliveryStreamEncryptionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2450,11 +2500,17 @@ impl KinesisFirehose for KinesisFirehoseClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StopDeliveryStreamEncryptionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StopDeliveryStreamEncryptionOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StopDeliveryStreamEncryptionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StopDeliveryStreamEncryptionOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2462,13 +2518,13 @@ impl KinesisFirehose for KinesisFirehoseClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(StopDeliveryStreamEncryptionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StopDeliveryStreamEncryptionError>
+                            })
+                            .and_then(|response| {
+                                Err(StopDeliveryStreamEncryptionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2491,11 +2547,16 @@ impl KinesisFirehose for KinesisFirehoseClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| TagDeliveryStreamError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<TagDeliveryStreamOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<TagDeliveryStreamError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<TagDeliveryStreamOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2503,11 +2564,12 @@ impl KinesisFirehose for KinesisFirehoseClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(TagDeliveryStreamError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<TagDeliveryStreamError>
+                            })
+                            .and_then(|response| {
+                                Err(TagDeliveryStreamError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2530,11 +2592,17 @@ impl KinesisFirehose for KinesisFirehoseClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UntagDeliveryStreamError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UntagDeliveryStreamOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UntagDeliveryStreamError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UntagDeliveryStreamOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2542,11 +2610,13 @@ impl KinesisFirehose for KinesisFirehoseClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UntagDeliveryStreamError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UntagDeliveryStreamError>
+                            })
+                            .and_then(|response| {
+                                Err(UntagDeliveryStreamError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2569,11 +2639,16 @@ impl KinesisFirehose for KinesisFirehoseClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateDestinationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateDestinationOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateDestinationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateDestinationOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2581,11 +2656,12 @@ impl KinesisFirehose for KinesisFirehoseClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateDestinationError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateDestinationError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateDestinationError::from_response(response))
+                            })
                     })
                     .boxed()
             }

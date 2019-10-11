@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -2884,11 +2884,16 @@ impl Workspaces for WorkspacesClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AssociateIpGroupsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AssociateIpGroupsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<AssociateIpGroupsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AssociateIpGroupsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2896,11 +2901,12 @@ impl Workspaces for WorkspacesClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(AssociateIpGroupsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<AssociateIpGroupsError>
+                            })
+                            .and_then(|response| {
+                                Err(AssociateIpGroupsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2923,11 +2929,16 @@ impl Workspaces for WorkspacesClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AuthorizeIpRulesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AuthorizeIpRulesResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<AuthorizeIpRulesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AuthorizeIpRulesResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2935,11 +2946,12 @@ impl Workspaces for WorkspacesClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(AuthorizeIpRulesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<AuthorizeIpRulesError>
+                            })
+                            .and_then(|response| {
+                                Err(AuthorizeIpRulesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2962,11 +2974,16 @@ impl Workspaces for WorkspacesClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateIpGroupError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateIpGroupResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateIpGroupError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateIpGroupResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2974,11 +2991,10 @@ impl Workspaces for WorkspacesClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateIpGroupError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateIpGroupError>
+                            })
+                            .and_then(|response| Err(CreateIpGroupError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3001,11 +3017,16 @@ impl Workspaces for WorkspacesClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateTagsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateTagsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateTagsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateTagsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3013,11 +3034,10 @@ impl Workspaces for WorkspacesClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateTagsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateTagsError>
+                            })
+                            .and_then(|response| Err(CreateTagsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3040,11 +3060,16 @@ impl Workspaces for WorkspacesClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateWorkspacesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateWorkspacesResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateWorkspacesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateWorkspacesResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3052,11 +3077,12 @@ impl Workspaces for WorkspacesClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateWorkspacesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateWorkspacesError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateWorkspacesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3079,11 +3105,16 @@ impl Workspaces for WorkspacesClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteIpGroupError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteIpGroupResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteIpGroupError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteIpGroupResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3091,11 +3122,10 @@ impl Workspaces for WorkspacesClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteIpGroupError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteIpGroupError>
+                            })
+                            .and_then(|response| Err(DeleteIpGroupError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3118,11 +3148,16 @@ impl Workspaces for WorkspacesClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteTagsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteTagsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteTagsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteTagsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3130,11 +3165,10 @@ impl Workspaces for WorkspacesClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteTagsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteTagsError>
+                            })
+                            .and_then(|response| Err(DeleteTagsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3157,11 +3191,17 @@ impl Workspaces for WorkspacesClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteWorkspaceImageError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteWorkspaceImageResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteWorkspaceImageError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteWorkspaceImageResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3169,11 +3209,13 @@ impl Workspaces for WorkspacesClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteWorkspaceImageError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteWorkspaceImageError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteWorkspaceImageError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3192,11 +3234,16 @@ impl Workspaces for WorkspacesClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeAccountError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeAccountResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeAccountError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeAccountResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3204,11 +3251,10 @@ impl Workspaces for WorkspacesClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeAccountError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeAccountError>
+                            })
+                            .and_then(|response| Err(DescribeAccountError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3234,11 +3280,17 @@ impl Workspaces for WorkspacesClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeAccountModificationsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeAccountModificationsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeAccountModificationsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeAccountModificationsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3246,13 +3298,13 @@ impl Workspaces for WorkspacesClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeAccountModificationsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeAccountModificationsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeAccountModificationsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3275,11 +3327,17 @@ impl Workspaces for WorkspacesClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeClientPropertiesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeClientPropertiesResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeClientPropertiesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeClientPropertiesResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3287,13 +3345,13 @@ impl Workspaces for WorkspacesClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeClientPropertiesError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeClientPropertiesError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeClientPropertiesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3316,11 +3374,16 @@ impl Workspaces for WorkspacesClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeIpGroupsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeIpGroupsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeIpGroupsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeIpGroupsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3328,11 +3391,12 @@ impl Workspaces for WorkspacesClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeIpGroupsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeIpGroupsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeIpGroupsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3355,11 +3419,16 @@ impl Workspaces for WorkspacesClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeTagsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeTagsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeTagsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeTagsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3367,11 +3436,10 @@ impl Workspaces for WorkspacesClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeTagsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeTagsError>
+                            })
+                            .and_then(|response| Err(DescribeTagsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3394,11 +3462,17 @@ impl Workspaces for WorkspacesClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeWorkspaceBundlesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeWorkspaceBundlesResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeWorkspaceBundlesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeWorkspaceBundlesResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3406,13 +3480,13 @@ impl Workspaces for WorkspacesClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeWorkspaceBundlesError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeWorkspaceBundlesError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeWorkspaceBundlesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3438,11 +3512,17 @@ impl Workspaces for WorkspacesClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeWorkspaceDirectoriesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeWorkspaceDirectoriesResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeWorkspaceDirectoriesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeWorkspaceDirectoriesResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3450,13 +3530,13 @@ impl Workspaces for WorkspacesClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeWorkspaceDirectoriesError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeWorkspaceDirectoriesError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeWorkspaceDirectoriesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3479,11 +3559,17 @@ impl Workspaces for WorkspacesClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeWorkspaceImagesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeWorkspaceImagesResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeWorkspaceImagesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeWorkspaceImagesResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3491,13 +3577,13 @@ impl Workspaces for WorkspacesClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeWorkspaceImagesError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeWorkspaceImagesError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeWorkspaceImagesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3520,11 +3606,16 @@ impl Workspaces for WorkspacesClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeWorkspacesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeWorkspacesResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeWorkspacesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeWorkspacesResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3532,11 +3623,12 @@ impl Workspaces for WorkspacesClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeWorkspacesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeWorkspacesError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeWorkspacesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3565,11 +3657,17 @@ impl Workspaces for WorkspacesClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeWorkspacesConnectionStatusError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeWorkspacesConnectionStatusResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeWorkspacesConnectionStatusError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeWorkspacesConnectionStatusResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3577,15 +3675,15 @@ impl Workspaces for WorkspacesClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeWorkspacesConnectionStatusError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeWorkspacesConnectionStatusError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeWorkspacesConnectionStatusError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -3608,11 +3706,17 @@ impl Workspaces for WorkspacesClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DisassociateIpGroupsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DisassociateIpGroupsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DisassociateIpGroupsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DisassociateIpGroupsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3620,11 +3724,13 @@ impl Workspaces for WorkspacesClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DisassociateIpGroupsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DisassociateIpGroupsError>
+                            })
+                            .and_then(|response| {
+                                Err(DisassociateIpGroupsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3647,11 +3753,17 @@ impl Workspaces for WorkspacesClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ImportWorkspaceImageError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ImportWorkspaceImageResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ImportWorkspaceImageError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ImportWorkspaceImageResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3659,11 +3771,13 @@ impl Workspaces for WorkspacesClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ImportWorkspaceImageError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ImportWorkspaceImageError>
+                            })
+                            .and_then(|response| {
+                                Err(ImportWorkspaceImageError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3690,11 +3804,17 @@ impl Workspaces for WorkspacesClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListAvailableManagementCidrRangesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListAvailableManagementCidrRangesResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListAvailableManagementCidrRangesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListAvailableManagementCidrRangesResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3702,15 +3822,15 @@ impl Workspaces for WorkspacesClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ListAvailableManagementCidrRangesError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListAvailableManagementCidrRangesError>
+                            })
+                            .and_then(|response| {
+                                Err(ListAvailableManagementCidrRangesError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -3733,11 +3853,16 @@ impl Workspaces for WorkspacesClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ModifyAccountError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ModifyAccountResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ModifyAccountError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ModifyAccountResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3745,11 +3870,10 @@ impl Workspaces for WorkspacesClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ModifyAccountError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ModifyAccountError>
+                            })
+                            .and_then(|response| Err(ModifyAccountError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3772,11 +3896,17 @@ impl Workspaces for WorkspacesClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ModifyClientPropertiesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ModifyClientPropertiesResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ModifyClientPropertiesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ModifyClientPropertiesResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3784,13 +3914,13 @@ impl Workspaces for WorkspacesClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ModifyClientPropertiesError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ModifyClientPropertiesError>
+                            })
+                            .and_then(|response| {
+                                Err(ModifyClientPropertiesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3816,11 +3946,17 @@ impl Workspaces for WorkspacesClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ModifyWorkspacePropertiesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ModifyWorkspacePropertiesResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ModifyWorkspacePropertiesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ModifyWorkspacePropertiesResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3828,13 +3964,13 @@ impl Workspaces for WorkspacesClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ModifyWorkspacePropertiesError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ModifyWorkspacePropertiesError>
+                            })
+                            .and_then(|response| {
+                                Err(ModifyWorkspacePropertiesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3857,11 +3993,17 @@ impl Workspaces for WorkspacesClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ModifyWorkspaceStateError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ModifyWorkspaceStateResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ModifyWorkspaceStateError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ModifyWorkspaceStateResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3869,11 +4011,13 @@ impl Workspaces for WorkspacesClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ModifyWorkspaceStateError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ModifyWorkspaceStateError>
+                            })
+                            .and_then(|response| {
+                                Err(ModifyWorkspaceStateError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3896,11 +4040,16 @@ impl Workspaces for WorkspacesClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| RebootWorkspacesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RebootWorkspacesResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<RebootWorkspacesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<RebootWorkspacesResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3908,11 +4057,12 @@ impl Workspaces for WorkspacesClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(RebootWorkspacesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<RebootWorkspacesError>
+                            })
+                            .and_then(|response| {
+                                Err(RebootWorkspacesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3935,11 +4085,16 @@ impl Workspaces for WorkspacesClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| RebuildWorkspacesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RebuildWorkspacesResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<RebuildWorkspacesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<RebuildWorkspacesResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3947,11 +4102,12 @@ impl Workspaces for WorkspacesClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(RebuildWorkspacesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<RebuildWorkspacesError>
+                            })
+                            .and_then(|response| {
+                                Err(RebuildWorkspacesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3974,11 +4130,16 @@ impl Workspaces for WorkspacesClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| RevokeIpRulesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RevokeIpRulesResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<RevokeIpRulesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<RevokeIpRulesResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3986,11 +4147,10 @@ impl Workspaces for WorkspacesClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(RevokeIpRulesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<RevokeIpRulesError>
+                            })
+                            .and_then(|response| Err(RevokeIpRulesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4013,11 +4173,16 @@ impl Workspaces for WorkspacesClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StartWorkspacesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StartWorkspacesResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StartWorkspacesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StartWorkspacesResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4025,11 +4190,10 @@ impl Workspaces for WorkspacesClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(StartWorkspacesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StartWorkspacesError>
+                            })
+                            .and_then(|response| Err(StartWorkspacesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4052,11 +4216,16 @@ impl Workspaces for WorkspacesClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StopWorkspacesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StopWorkspacesResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StopWorkspacesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StopWorkspacesResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4064,11 +4233,10 @@ impl Workspaces for WorkspacesClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(StopWorkspacesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StopWorkspacesError>
+                            })
+                            .and_then(|response| Err(StopWorkspacesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4091,11 +4259,17 @@ impl Workspaces for WorkspacesClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| TerminateWorkspacesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<TerminateWorkspacesResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<TerminateWorkspacesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<TerminateWorkspacesResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4103,11 +4277,13 @@ impl Workspaces for WorkspacesClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(TerminateWorkspacesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<TerminateWorkspacesError>
+                            })
+                            .and_then(|response| {
+                                Err(TerminateWorkspacesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4130,11 +4306,17 @@ impl Workspaces for WorkspacesClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateRulesOfIpGroupError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateRulesOfIpGroupResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateRulesOfIpGroupError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateRulesOfIpGroupResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4142,11 +4324,13 @@ impl Workspaces for WorkspacesClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateRulesOfIpGroupError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateRulesOfIpGroupError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateRulesOfIpGroupError::from_response(response))
+                            })
                     })
                     .boxed()
             }

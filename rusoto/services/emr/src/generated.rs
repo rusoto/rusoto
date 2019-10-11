@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -3605,11 +3605,16 @@ impl Emr for EmrClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AddInstanceFleetError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AddInstanceFleetOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<AddInstanceFleetError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AddInstanceFleetOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3617,11 +3622,12 @@ impl Emr for EmrClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(AddInstanceFleetError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<AddInstanceFleetError>
+                            })
+                            .and_then(|response| {
+                                Err(AddInstanceFleetError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3644,11 +3650,16 @@ impl Emr for EmrClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AddInstanceGroupsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AddInstanceGroupsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<AddInstanceGroupsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AddInstanceGroupsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3656,11 +3667,12 @@ impl Emr for EmrClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(AddInstanceGroupsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<AddInstanceGroupsError>
+                            })
+                            .and_then(|response| {
+                                Err(AddInstanceGroupsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3683,11 +3695,16 @@ impl Emr for EmrClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AddJobFlowStepsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AddJobFlowStepsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<AddJobFlowStepsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AddJobFlowStepsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3695,11 +3712,10 @@ impl Emr for EmrClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(AddJobFlowStepsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<AddJobFlowStepsError>
+                            })
+                            .and_then(|response| Err(AddJobFlowStepsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3719,11 +3735,14 @@ impl Emr for EmrClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AddTagsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AddTagsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<AddTagsError>)
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AddTagsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3731,11 +3750,8 @@ impl Emr for EmrClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(AddTagsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<AddTagsError>)
+                            .and_then(|response| Err(AddTagsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3758,11 +3774,16 @@ impl Emr for EmrClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CancelStepsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CancelStepsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CancelStepsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CancelStepsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3770,11 +3791,10 @@ impl Emr for EmrClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CancelStepsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CancelStepsError>
+                            })
+                            .and_then(|response| Err(CancelStepsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3800,11 +3820,17 @@ impl Emr for EmrClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateSecurityConfigurationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateSecurityConfigurationOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateSecurityConfigurationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateSecurityConfigurationOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3812,13 +3838,13 @@ impl Emr for EmrClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(CreateSecurityConfigurationError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateSecurityConfigurationError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateSecurityConfigurationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3844,11 +3870,17 @@ impl Emr for EmrClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteSecurityConfigurationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteSecurityConfigurationOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteSecurityConfigurationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteSecurityConfigurationOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3856,13 +3888,13 @@ impl Emr for EmrClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DeleteSecurityConfigurationError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteSecurityConfigurationError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteSecurityConfigurationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3885,11 +3917,16 @@ impl Emr for EmrClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeClusterError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeClusterOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeClusterError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeClusterOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3897,11 +3934,10 @@ impl Emr for EmrClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeClusterError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeClusterError>
+                            })
+                            .and_then(|response| Err(DescribeClusterError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3924,11 +3960,16 @@ impl Emr for EmrClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeJobFlowsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeJobFlowsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeJobFlowsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeJobFlowsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3936,11 +3977,12 @@ impl Emr for EmrClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeJobFlowsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeJobFlowsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeJobFlowsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3966,11 +4008,17 @@ impl Emr for EmrClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeSecurityConfigurationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeSecurityConfigurationOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeSecurityConfigurationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeSecurityConfigurationOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3978,13 +4026,13 @@ impl Emr for EmrClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeSecurityConfigurationError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeSecurityConfigurationError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeSecurityConfigurationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4007,11 +4055,16 @@ impl Emr for EmrClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeStepError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeStepOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeStepError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeStepOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4019,11 +4072,10 @@ impl Emr for EmrClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeStepError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeStepError>
+                            })
+                            .and_then(|response| Err(DescribeStepError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4046,11 +4098,17 @@ impl Emr for EmrClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListBootstrapActionsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListBootstrapActionsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListBootstrapActionsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListBootstrapActionsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4058,11 +4116,13 @@ impl Emr for EmrClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListBootstrapActionsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListBootstrapActionsError>
+                            })
+                            .and_then(|response| {
+                                Err(ListBootstrapActionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4085,11 +4145,16 @@ impl Emr for EmrClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListClustersError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListClustersOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListClustersError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListClustersOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4097,11 +4162,10 @@ impl Emr for EmrClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListClustersError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListClustersError>
+                            })
+                            .and_then(|response| Err(ListClustersError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4124,11 +4188,16 @@ impl Emr for EmrClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListInstanceFleetsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListInstanceFleetsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListInstanceFleetsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListInstanceFleetsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4136,11 +4205,12 @@ impl Emr for EmrClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListInstanceFleetsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListInstanceFleetsError>
+                            })
+                            .and_then(|response| {
+                                Err(ListInstanceFleetsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4163,11 +4233,16 @@ impl Emr for EmrClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListInstanceGroupsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListInstanceGroupsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListInstanceGroupsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListInstanceGroupsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4175,11 +4250,12 @@ impl Emr for EmrClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListInstanceGroupsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListInstanceGroupsError>
+                            })
+                            .and_then(|response| {
+                                Err(ListInstanceGroupsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4202,11 +4278,16 @@ impl Emr for EmrClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListInstancesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListInstancesOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListInstancesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListInstancesOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4214,11 +4295,10 @@ impl Emr for EmrClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListInstancesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListInstancesError>
+                            })
+                            .and_then(|response| Err(ListInstancesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4244,11 +4324,17 @@ impl Emr for EmrClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListSecurityConfigurationsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListSecurityConfigurationsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListSecurityConfigurationsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListSecurityConfigurationsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4256,13 +4342,13 @@ impl Emr for EmrClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ListSecurityConfigurationsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListSecurityConfigurationsError>
+                            })
+                            .and_then(|response| {
+                                Err(ListSecurityConfigurationsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4282,11 +4368,16 @@ impl Emr for EmrClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListStepsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListStepsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListStepsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListStepsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4294,11 +4385,10 @@ impl Emr for EmrClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListStepsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListStepsError>
+                            })
+                            .and_then(|response| Err(ListStepsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4319,17 +4409,19 @@ impl Emr for EmrClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ModifyInstanceFleetError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ModifyInstanceFleetError>
+                            })
+                            .and_then(|response| {
+                                Err(ModifyInstanceFleetError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4350,17 +4442,19 @@ impl Emr for EmrClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ModifyInstanceGroupsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ModifyInstanceGroupsError>
+                            })
+                            .and_then(|response| {
+                                Err(ModifyInstanceGroupsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4383,11 +4477,17 @@ impl Emr for EmrClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| PutAutoScalingPolicyError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PutAutoScalingPolicyOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<PutAutoScalingPolicyError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<PutAutoScalingPolicyOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4395,11 +4495,13 @@ impl Emr for EmrClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(PutAutoScalingPolicyError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<PutAutoScalingPolicyError>
+                            })
+                            .and_then(|response| {
+                                Err(PutAutoScalingPolicyError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4422,11 +4524,17 @@ impl Emr for EmrClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| RemoveAutoScalingPolicyError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RemoveAutoScalingPolicyOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<RemoveAutoScalingPolicyError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<RemoveAutoScalingPolicyOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4434,13 +4542,13 @@ impl Emr for EmrClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(RemoveAutoScalingPolicyError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<RemoveAutoScalingPolicyError>
+                            })
+                            .and_then(|response| {
+                                Err(RemoveAutoScalingPolicyError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4463,11 +4571,16 @@ impl Emr for EmrClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| RemoveTagsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RemoveTagsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<RemoveTagsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<RemoveTagsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4475,11 +4588,10 @@ impl Emr for EmrClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(RemoveTagsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<RemoveTagsError>
+                            })
+                            .and_then(|response| Err(RemoveTagsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4502,11 +4614,16 @@ impl Emr for EmrClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| RunJobFlowError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RunJobFlowOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<RunJobFlowError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<RunJobFlowOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4514,11 +4631,10 @@ impl Emr for EmrClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(RunJobFlowError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<RunJobFlowError>
+                            })
+                            .and_then(|response| Err(RunJobFlowError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4539,19 +4655,19 @@ impl Emr for EmrClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(SetTerminationProtectionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<SetTerminationProtectionError>
+                            })
+                            .and_then(|response| {
+                                Err(SetTerminationProtectionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4572,17 +4688,19 @@ impl Emr for EmrClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(SetVisibleToAllUsersError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<SetVisibleToAllUsersError>
+                            })
+                            .and_then(|response| {
+                                Err(SetVisibleToAllUsersError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4603,17 +4721,18 @@ impl Emr for EmrClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(TerminateJobFlowsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<TerminateJobFlowsError>
+                            })
+                            .and_then(|response| {
+                                Err(TerminateJobFlowsError::from_response(response))
+                            })
                     })
                     .boxed()
             }

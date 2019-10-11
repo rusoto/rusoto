@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -2678,16 +2678,22 @@ impl KinesisAnalytics for KinesisAnalyticsClient {
 
         self.client.sign_and_dispatch(request, |response| {
                         if response.status.is_success() {
-                            response.buffer().map(|try_response| {
-                try_response.and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<AddApplicationCloudWatchLoggingOptionResponse, _>()
-                })
-            }).boxed()
+                            response.buffer()
+                .map_err(|e| AddApplicationCloudWatchLoggingOptionError::from(e))
+                .map(|try_response| {
+                    try_response
+                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<AddApplicationCloudWatchLoggingOptionError>)
+                    .and_then(|response| {
+                        proto::json::ResponsePayload::new(&response).deserialize::<AddApplicationCloudWatchLoggingOptionResponse, _>()
+                    })
+                }).boxed()
                         } else {
                             response.buffer().map(|try_response| {
-                                try_response.map_or_else(|e| e, |response| {
-                                    Err(AddApplicationCloudWatchLoggingOptionError::from_response(response))
-                                }).boxed()
+                                try_response
+                                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<AddApplicationCloudWatchLoggingOptionError>)
+                                    .and_then(|response| {
+                                        Err(AddApplicationCloudWatchLoggingOptionError::from_response(response))
+                                    })
                             }).boxed()
                         }
                     })
@@ -2712,11 +2718,17 @@ impl KinesisAnalytics for KinesisAnalyticsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AddApplicationInputError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AddApplicationInputResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AddApplicationInputError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AddApplicationInputResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2724,11 +2736,13 @@ impl KinesisAnalytics for KinesisAnalyticsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(AddApplicationInputError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AddApplicationInputError>
+                            })
+                            .and_then(|response| {
+                                Err(AddApplicationInputError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2755,16 +2769,22 @@ impl KinesisAnalytics for KinesisAnalyticsClient {
 
         self.client.sign_and_dispatch(request, |response| {
                         if response.status.is_success() {
-                            response.buffer().map(|try_response| {
-                try_response.and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<AddApplicationInputProcessingConfigurationResponse, _>()
-                })
-            }).boxed()
+                            response.buffer()
+                .map_err(|e| AddApplicationInputProcessingConfigurationError::from(e))
+                .map(|try_response| {
+                    try_response
+                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<AddApplicationInputProcessingConfigurationError>)
+                    .and_then(|response| {
+                        proto::json::ResponsePayload::new(&response).deserialize::<AddApplicationInputProcessingConfigurationResponse, _>()
+                    })
+                }).boxed()
                         } else {
                             response.buffer().map(|try_response| {
-                                try_response.map_or_else(|e| e, |response| {
-                                    Err(AddApplicationInputProcessingConfigurationError::from_response(response))
-                                }).boxed()
+                                try_response
+                                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<AddApplicationInputProcessingConfigurationError>)
+                                    .and_then(|response| {
+                                        Err(AddApplicationInputProcessingConfigurationError::from_response(response))
+                                    })
                             }).boxed()
                         }
                     })
@@ -2789,11 +2809,17 @@ impl KinesisAnalytics for KinesisAnalyticsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AddApplicationOutputError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AddApplicationOutputResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AddApplicationOutputError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AddApplicationOutputResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2801,11 +2827,13 @@ impl KinesisAnalytics for KinesisAnalyticsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(AddApplicationOutputError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AddApplicationOutputError>
+                            })
+                            .and_then(|response| {
+                                Err(AddApplicationOutputError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2834,11 +2862,17 @@ impl KinesisAnalytics for KinesisAnalyticsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AddApplicationReferenceDataSourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AddApplicationReferenceDataSourceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AddApplicationReferenceDataSourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AddApplicationReferenceDataSourceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2846,15 +2880,15 @@ impl KinesisAnalytics for KinesisAnalyticsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(AddApplicationReferenceDataSourceError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AddApplicationReferenceDataSourceError>
+                            })
+                            .and_then(|response| {
+                                Err(AddApplicationReferenceDataSourceError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -2880,11 +2914,16 @@ impl KinesisAnalytics for KinesisAnalyticsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateApplicationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateApplicationResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateApplicationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateApplicationResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2892,11 +2931,12 @@ impl KinesisAnalytics for KinesisAnalyticsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateApplicationError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateApplicationError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateApplicationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2922,11 +2962,16 @@ impl KinesisAnalytics for KinesisAnalyticsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteApplicationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteApplicationResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteApplicationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteApplicationResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2934,11 +2979,12 @@ impl KinesisAnalytics for KinesisAnalyticsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteApplicationError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteApplicationError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteApplicationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2965,16 +3011,22 @@ impl KinesisAnalytics for KinesisAnalyticsClient {
 
         self.client.sign_and_dispatch(request, |response| {
                         if response.status.is_success() {
-                            response.buffer().map(|try_response| {
-                try_response.and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<DeleteApplicationCloudWatchLoggingOptionResponse, _>()
-                })
-            }).boxed()
+                            response.buffer()
+                .map_err(|e| DeleteApplicationCloudWatchLoggingOptionError::from(e))
+                .map(|try_response| {
+                    try_response
+                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<DeleteApplicationCloudWatchLoggingOptionError>)
+                    .and_then(|response| {
+                        proto::json::ResponsePayload::new(&response).deserialize::<DeleteApplicationCloudWatchLoggingOptionResponse, _>()
+                    })
+                }).boxed()
                         } else {
                             response.buffer().map(|try_response| {
-                                try_response.map_or_else(|e| e, |response| {
-                                    Err(DeleteApplicationCloudWatchLoggingOptionError::from_response(response))
-                                }).boxed()
+                                try_response
+                                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<DeleteApplicationCloudWatchLoggingOptionError>)
+                                    .and_then(|response| {
+                                        Err(DeleteApplicationCloudWatchLoggingOptionError::from_response(response))
+                                    })
                             }).boxed()
                         }
                     })
@@ -3000,16 +3052,22 @@ impl KinesisAnalytics for KinesisAnalyticsClient {
 
         self.client.sign_and_dispatch(request, |response| {
                         if response.status.is_success() {
-                            response.buffer().map(|try_response| {
-                try_response.and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<DeleteApplicationInputProcessingConfigurationResponse, _>()
-                })
-            }).boxed()
+                            response.buffer()
+                .map_err(|e| DeleteApplicationInputProcessingConfigurationError::from(e))
+                .map(|try_response| {
+                    try_response
+                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<DeleteApplicationInputProcessingConfigurationError>)
+                    .and_then(|response| {
+                        proto::json::ResponsePayload::new(&response).deserialize::<DeleteApplicationInputProcessingConfigurationResponse, _>()
+                    })
+                }).boxed()
                         } else {
                             response.buffer().map(|try_response| {
-                                try_response.map_or_else(|e| e, |response| {
-                                    Err(DeleteApplicationInputProcessingConfigurationError::from_response(response))
-                                }).boxed()
+                                try_response
+                                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<DeleteApplicationInputProcessingConfigurationError>)
+                                    .and_then(|response| {
+                                        Err(DeleteApplicationInputProcessingConfigurationError::from_response(response))
+                                    })
                             }).boxed()
                         }
                     })
@@ -3034,11 +3092,17 @@ impl KinesisAnalytics for KinesisAnalyticsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteApplicationOutputError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteApplicationOutputResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteApplicationOutputError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteApplicationOutputResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3046,13 +3110,13 @@ impl KinesisAnalytics for KinesisAnalyticsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DeleteApplicationOutputError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteApplicationOutputError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteApplicationOutputError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3079,16 +3143,22 @@ impl KinesisAnalytics for KinesisAnalyticsClient {
 
         self.client.sign_and_dispatch(request, |response| {
                         if response.status.is_success() {
-                            response.buffer().map(|try_response| {
-                try_response.and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<DeleteApplicationReferenceDataSourceResponse, _>()
-                })
-            }).boxed()
+                            response.buffer()
+                .map_err(|e| DeleteApplicationReferenceDataSourceError::from(e))
+                .map(|try_response| {
+                    try_response
+                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<DeleteApplicationReferenceDataSourceError>)
+                    .and_then(|response| {
+                        proto::json::ResponsePayload::new(&response).deserialize::<DeleteApplicationReferenceDataSourceResponse, _>()
+                    })
+                }).boxed()
                         } else {
                             response.buffer().map(|try_response| {
-                                try_response.map_or_else(|e| e, |response| {
-                                    Err(DeleteApplicationReferenceDataSourceError::from_response(response))
-                                }).boxed()
+                                try_response
+                                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<DeleteApplicationReferenceDataSourceError>)
+                                    .and_then(|response| {
+                                        Err(DeleteApplicationReferenceDataSourceError::from_response(response))
+                                    })
                             }).boxed()
                         }
                     })
@@ -3113,11 +3183,17 @@ impl KinesisAnalytics for KinesisAnalyticsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeApplicationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeApplicationResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeApplicationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeApplicationResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3125,11 +3201,13 @@ impl KinesisAnalytics for KinesisAnalyticsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeApplicationError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeApplicationError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeApplicationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3155,11 +3233,17 @@ impl KinesisAnalytics for KinesisAnalyticsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DiscoverInputSchemaError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DiscoverInputSchemaResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DiscoverInputSchemaError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DiscoverInputSchemaResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3167,11 +3251,13 @@ impl KinesisAnalytics for KinesisAnalyticsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DiscoverInputSchemaError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DiscoverInputSchemaError>
+                            })
+                            .and_then(|response| {
+                                Err(DiscoverInputSchemaError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3194,11 +3280,16 @@ impl KinesisAnalytics for KinesisAnalyticsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListApplicationsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListApplicationsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListApplicationsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListApplicationsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3206,11 +3297,12 @@ impl KinesisAnalytics for KinesisAnalyticsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListApplicationsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListApplicationsError>
+                            })
+                            .and_then(|response| {
+                                Err(ListApplicationsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3236,11 +3328,17 @@ impl KinesisAnalytics for KinesisAnalyticsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListTagsForResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListTagsForResourceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListTagsForResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListTagsForResourceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3248,11 +3346,13 @@ impl KinesisAnalytics for KinesisAnalyticsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListTagsForResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListTagsForResourceError>
+                            })
+                            .and_then(|response| {
+                                Err(ListTagsForResourceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3275,11 +3375,16 @@ impl KinesisAnalytics for KinesisAnalyticsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StartApplicationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StartApplicationResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StartApplicationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StartApplicationResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3287,11 +3392,12 @@ impl KinesisAnalytics for KinesisAnalyticsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(StartApplicationError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StartApplicationError>
+                            })
+                            .and_then(|response| {
+                                Err(StartApplicationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3314,11 +3420,16 @@ impl KinesisAnalytics for KinesisAnalyticsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StopApplicationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StopApplicationResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StopApplicationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StopApplicationResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3326,11 +3437,10 @@ impl KinesisAnalytics for KinesisAnalyticsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(StopApplicationError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StopApplicationError>
+                            })
+                            .and_then(|response| Err(StopApplicationError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3353,11 +3463,16 @@ impl KinesisAnalytics for KinesisAnalyticsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| TagResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<TagResourceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<TagResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<TagResourceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3365,11 +3480,10 @@ impl KinesisAnalytics for KinesisAnalyticsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(TagResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<TagResourceError>
+                            })
+                            .and_then(|response| Err(TagResourceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3392,11 +3506,16 @@ impl KinesisAnalytics for KinesisAnalyticsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UntagResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UntagResourceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UntagResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UntagResourceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3404,11 +3523,10 @@ impl KinesisAnalytics for KinesisAnalyticsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UntagResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UntagResourceError>
+                            })
+                            .and_then(|response| Err(UntagResourceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3434,11 +3552,16 @@ impl KinesisAnalytics for KinesisAnalyticsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateApplicationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateApplicationResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateApplicationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateApplicationResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3446,11 +3569,12 @@ impl KinesisAnalytics for KinesisAnalyticsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateApplicationError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateApplicationError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateApplicationError::from_response(response))
+                            })
                     })
                     .boxed()
             }

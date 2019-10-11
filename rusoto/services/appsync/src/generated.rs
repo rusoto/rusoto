@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
@@ -3660,10 +3660,11 @@ impl AppSync for AppSyncClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateApiKeyError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateApiKeyResponse, _>()?;
+                                .deserialize::<CreateApiKeyResponse, _>();
 
                             result
                         })
@@ -3674,11 +3675,8 @@ impl AppSync for AppSyncClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateApiKeyError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateApiKeyError>())
+                            .and_then(|response| Err(CreateApiKeyError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3702,10 +3700,11 @@ impl AppSync for AppSyncClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateDataSourceError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateDataSourceResponse, _>()?;
+                                .deserialize::<CreateDataSourceResponse, _>();
 
                             result
                         })
@@ -3716,11 +3715,10 @@ impl AppSync for AppSyncClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateDataSourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateDataSourceError>())
+                            .and_then(|response| {
+                                Err(CreateDataSourceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3744,10 +3742,11 @@ impl AppSync for AppSyncClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateFunctionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateFunctionResponse, _>()?;
+                                .deserialize::<CreateFunctionResponse, _>();
 
                             result
                         })
@@ -3758,11 +3757,8 @@ impl AppSync for AppSyncClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateFunctionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateFunctionError>())
+                            .and_then(|response| Err(CreateFunctionError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3786,10 +3782,11 @@ impl AppSync for AppSyncClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateGraphqlApiError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateGraphqlApiResponse, _>()?;
+                                .deserialize::<CreateGraphqlApiResponse, _>();
 
                             result
                         })
@@ -3800,11 +3797,10 @@ impl AppSync for AppSyncClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateGraphqlApiError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateGraphqlApiError>())
+                            .and_then(|response| {
+                                Err(CreateGraphqlApiError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3832,10 +3828,11 @@ impl AppSync for AppSyncClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateResolverError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateResolverResponse, _>()?;
+                                .deserialize::<CreateResolverResponse, _>();
 
                             result
                         })
@@ -3846,11 +3843,8 @@ impl AppSync for AppSyncClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateResolverError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateResolverError>())
+                            .and_then(|response| Err(CreateResolverError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3874,10 +3868,11 @@ impl AppSync for AppSyncClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateTypeError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateTypeResponse, _>()?;
+                                .deserialize::<CreateTypeResponse, _>();
 
                             result
                         })
@@ -3888,11 +3883,8 @@ impl AppSync for AppSyncClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateTypeError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateTypeError>())
+                            .and_then(|response| Err(CreateTypeError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3917,10 +3909,11 @@ impl AppSync for AppSyncClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteApiKeyError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteApiKeyResponse, _>()?;
+                                .deserialize::<DeleteApiKeyResponse, _>();
 
                             result
                         })
@@ -3931,11 +3924,8 @@ impl AppSync for AppSyncClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteApiKeyError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteApiKeyError>())
+                            .and_then(|response| Err(DeleteApiKeyError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3960,10 +3950,11 @@ impl AppSync for AppSyncClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteDataSourceError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteDataSourceResponse, _>()?;
+                                .deserialize::<DeleteDataSourceResponse, _>();
 
                             result
                         })
@@ -3974,11 +3965,10 @@ impl AppSync for AppSyncClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteDataSourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteDataSourceError>())
+                            .and_then(|response| {
+                                Err(DeleteDataSourceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4003,10 +3993,11 @@ impl AppSync for AppSyncClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteFunctionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteFunctionResponse, _>()?;
+                                .deserialize::<DeleteFunctionResponse, _>();
 
                             result
                         })
@@ -4017,11 +4008,8 @@ impl AppSync for AppSyncClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteFunctionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteFunctionError>())
+                            .and_then(|response| Err(DeleteFunctionError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4042,10 +4030,11 @@ impl AppSync for AppSyncClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteGraphqlApiError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteGraphqlApiResponse, _>()?;
+                                .deserialize::<DeleteGraphqlApiResponse, _>();
 
                             result
                         })
@@ -4056,11 +4045,10 @@ impl AppSync for AppSyncClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteGraphqlApiError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteGraphqlApiError>())
+                            .and_then(|response| {
+                                Err(DeleteGraphqlApiError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4086,10 +4074,11 @@ impl AppSync for AppSyncClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteResolverError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteResolverResponse, _>()?;
+                                .deserialize::<DeleteResolverResponse, _>();
 
                             result
                         })
@@ -4100,11 +4089,8 @@ impl AppSync for AppSyncClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteResolverError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteResolverError>())
+                            .and_then(|response| Err(DeleteResolverError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4129,10 +4115,11 @@ impl AppSync for AppSyncClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteTypeError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteTypeResponse, _>()?;
+                                .deserialize::<DeleteTypeResponse, _>();
 
                             result
                         })
@@ -4143,11 +4130,8 @@ impl AppSync for AppSyncClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteTypeError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteTypeError>())
+                            .and_then(|response| Err(DeleteTypeError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4172,10 +4156,11 @@ impl AppSync for AppSyncClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetDataSourceError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetDataSourceResponse, _>()?;
+                                .deserialize::<GetDataSourceResponse, _>();
 
                             result
                         })
@@ -4186,11 +4171,8 @@ impl AppSync for AppSyncClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetDataSourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetDataSourceError>())
+                            .and_then(|response| Err(GetDataSourceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4215,10 +4197,11 @@ impl AppSync for AppSyncClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetFunctionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetFunctionResponse, _>()?;
+                                .deserialize::<GetFunctionResponse, _>();
 
                             result
                         })
@@ -4229,11 +4212,8 @@ impl AppSync for AppSyncClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetFunctionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetFunctionError>())
+                            .and_then(|response| Err(GetFunctionError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4254,10 +4234,11 @@ impl AppSync for AppSyncClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetGraphqlApiError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetGraphqlApiResponse, _>()?;
+                                .deserialize::<GetGraphqlApiResponse, _>();
 
                             result
                         })
@@ -4268,11 +4249,8 @@ impl AppSync for AppSyncClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetGraphqlApiError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetGraphqlApiError>())
+                            .and_then(|response| Err(GetGraphqlApiError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4300,8 +4278,9 @@ impl AppSync for AppSyncClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetIntrospectionSchemaError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let mut result = GetIntrospectionSchemaResponse::default();
                             result.schema = Some(response.body);
 
@@ -4314,13 +4293,10 @@ impl AppSync for AppSyncClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(GetIntrospectionSchemaError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetIntrospectionSchemaError>())
+                            .and_then(|response| {
+                                Err(GetIntrospectionSchemaError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4346,10 +4322,11 @@ impl AppSync for AppSyncClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetResolverError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetResolverResponse, _>()?;
+                                .deserialize::<GetResolverResponse, _>();
 
                             result
                         })
@@ -4360,11 +4337,8 @@ impl AppSync for AppSyncClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetResolverError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetResolverError>())
+                            .and_then(|response| Err(GetResolverError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4385,10 +4359,11 @@ impl AppSync for AppSyncClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetSchemaCreationStatusError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetSchemaCreationStatusResponse, _>()?;
+                                .deserialize::<GetSchemaCreationStatusResponse, _>();
 
                             result
                         })
@@ -4399,13 +4374,10 @@ impl AppSync for AppSyncClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(GetSchemaCreationStatusError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetSchemaCreationStatusError>())
+                            .and_then(|response| {
+                                Err(GetSchemaCreationStatusError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4431,10 +4403,11 @@ impl AppSync for AppSyncClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetTypeError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetTypeResponse, _>()?;
+                                .deserialize::<GetTypeResponse, _>();
 
                             result
                         })
@@ -4445,11 +4418,8 @@ impl AppSync for AppSyncClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetTypeError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetTypeError>())
+                            .and_then(|response| Err(GetTypeError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4479,10 +4449,11 @@ impl AppSync for AppSyncClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListApiKeysError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListApiKeysResponse, _>()?;
+                                .deserialize::<ListApiKeysResponse, _>();
 
                             result
                         })
@@ -4493,11 +4464,8 @@ impl AppSync for AppSyncClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListApiKeysError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListApiKeysError>())
+                            .and_then(|response| Err(ListApiKeysError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4527,10 +4495,11 @@ impl AppSync for AppSyncClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListDataSourcesError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListDataSourcesResponse, _>()?;
+                                .deserialize::<ListDataSourcesResponse, _>();
 
                             result
                         })
@@ -4541,11 +4510,8 @@ impl AppSync for AppSyncClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListDataSourcesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListDataSourcesError>())
+                            .and_then(|response| Err(ListDataSourcesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4575,10 +4541,11 @@ impl AppSync for AppSyncClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListFunctionsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListFunctionsResponse, _>()?;
+                                .deserialize::<ListFunctionsResponse, _>();
 
                             result
                         })
@@ -4589,11 +4556,8 @@ impl AppSync for AppSyncClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListFunctionsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListFunctionsError>())
+                            .and_then(|response| Err(ListFunctionsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4623,10 +4587,11 @@ impl AppSync for AppSyncClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListGraphqlApisError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListGraphqlApisResponse, _>()?;
+                                .deserialize::<ListGraphqlApisResponse, _>();
 
                             result
                         })
@@ -4637,11 +4602,8 @@ impl AppSync for AppSyncClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListGraphqlApisError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListGraphqlApisError>())
+                            .and_then(|response| Err(ListGraphqlApisError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4675,10 +4637,11 @@ impl AppSync for AppSyncClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListResolversError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListResolversResponse, _>()?;
+                                .deserialize::<ListResolversResponse, _>();
 
                             result
                         })
@@ -4689,11 +4652,8 @@ impl AppSync for AppSyncClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListResolversError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListResolversError>())
+                            .and_then(|response| Err(ListResolversError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4727,10 +4687,11 @@ impl AppSync for AppSyncClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListResolversByFunctionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListResolversByFunctionResponse, _>()?;
+                                .deserialize::<ListResolversByFunctionResponse, _>();
 
                             result
                         })
@@ -4741,13 +4702,10 @@ impl AppSync for AppSyncClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(ListResolversByFunctionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListResolversByFunctionError>())
+                            .and_then(|response| {
+                                Err(ListResolversByFunctionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4768,10 +4726,11 @@ impl AppSync for AppSyncClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListTagsForResourceError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListTagsForResourceResponse, _>()?;
+                                .deserialize::<ListTagsForResourceResponse, _>();
 
                             result
                         })
@@ -4782,11 +4741,10 @@ impl AppSync for AppSyncClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListTagsForResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListTagsForResourceError>())
+                            .and_then(|response| {
+                                Err(ListTagsForResourceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4817,10 +4775,11 @@ impl AppSync for AppSyncClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListTypesError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListTypesResponse, _>()?;
+                                .deserialize::<ListTypesResponse, _>();
 
                             result
                         })
@@ -4831,11 +4790,8 @@ impl AppSync for AppSyncClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListTypesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListTypesError>())
+                            .and_then(|response| Err(ListTypesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4859,10 +4815,11 @@ impl AppSync for AppSyncClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StartSchemaCreationError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StartSchemaCreationResponse, _>()?;
+                                .deserialize::<StartSchemaCreationResponse, _>();
 
                             result
                         })
@@ -4873,11 +4830,10 @@ impl AppSync for AppSyncClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(StartSchemaCreationError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<StartSchemaCreationError>())
+                            .and_then(|response| {
+                                Err(StartSchemaCreationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4901,10 +4857,11 @@ impl AppSync for AppSyncClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| TagResourceError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<TagResourceResponse, _>()?;
+                                .deserialize::<TagResourceResponse, _>();
 
                             result
                         })
@@ -4915,11 +4872,8 @@ impl AppSync for AppSyncClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(TagResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<TagResourceError>())
+                            .and_then(|response| Err(TagResourceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4946,10 +4900,11 @@ impl AppSync for AppSyncClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UntagResourceError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UntagResourceResponse, _>()?;
+                                .deserialize::<UntagResourceResponse, _>();
 
                             result
                         })
@@ -4960,11 +4915,8 @@ impl AppSync for AppSyncClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UntagResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UntagResourceError>())
+                            .and_then(|response| Err(UntagResourceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4992,10 +4944,11 @@ impl AppSync for AppSyncClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateApiKeyError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateApiKeyResponse, _>()?;
+                                .deserialize::<UpdateApiKeyResponse, _>();
 
                             result
                         })
@@ -5006,11 +4959,8 @@ impl AppSync for AppSyncClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateApiKeyError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateApiKeyError>())
+                            .and_then(|response| Err(UpdateApiKeyError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5038,10 +4988,11 @@ impl AppSync for AppSyncClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateDataSourceError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateDataSourceResponse, _>()?;
+                                .deserialize::<UpdateDataSourceResponse, _>();
 
                             result
                         })
@@ -5052,11 +5003,10 @@ impl AppSync for AppSyncClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateDataSourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateDataSourceError>())
+                            .and_then(|response| {
+                                Err(UpdateDataSourceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5084,10 +5034,11 @@ impl AppSync for AppSyncClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateFunctionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateFunctionResponse, _>()?;
+                                .deserialize::<UpdateFunctionResponse, _>();
 
                             result
                         })
@@ -5098,11 +5049,8 @@ impl AppSync for AppSyncClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateFunctionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateFunctionError>())
+                            .and_then(|response| Err(UpdateFunctionError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5126,10 +5074,11 @@ impl AppSync for AppSyncClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateGraphqlApiError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateGraphqlApiResponse, _>()?;
+                                .deserialize::<UpdateGraphqlApiResponse, _>();
 
                             result
                         })
@@ -5140,11 +5089,10 @@ impl AppSync for AppSyncClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateGraphqlApiError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateGraphqlApiError>())
+                            .and_then(|response| {
+                                Err(UpdateGraphqlApiError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5173,10 +5121,11 @@ impl AppSync for AppSyncClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateResolverError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateResolverResponse, _>()?;
+                                .deserialize::<UpdateResolverResponse, _>();
 
                             result
                         })
@@ -5187,11 +5136,8 @@ impl AppSync for AppSyncClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateResolverError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateResolverError>())
+                            .and_then(|response| Err(UpdateResolverError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5219,10 +5165,11 @@ impl AppSync for AppSyncClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateTypeError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateTypeResponse, _>()?;
+                                .deserialize::<UpdateTypeResponse, _>();
 
                             result
                         })
@@ -5233,11 +5180,8 @@ impl AppSync for AppSyncClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateTypeError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateTypeError>())
+                            .and_then(|response| Err(UpdateTypeError::from_response(response)))
                     })
                     .boxed()
             }

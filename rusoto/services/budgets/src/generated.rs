@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -1474,11 +1474,16 @@ impl Budgets for BudgetsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateBudgetError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateBudgetResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateBudgetError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateBudgetResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1486,11 +1491,10 @@ impl Budgets for BudgetsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateBudgetError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateBudgetError>
+                            })
+                            .and_then(|response| Err(CreateBudgetError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1513,11 +1517,16 @@ impl Budgets for BudgetsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateNotificationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateNotificationResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateNotificationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateNotificationResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1525,11 +1534,12 @@ impl Budgets for BudgetsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateNotificationError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateNotificationError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateNotificationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1552,11 +1562,16 @@ impl Budgets for BudgetsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateSubscriberError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateSubscriberResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateSubscriberError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateSubscriberResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1564,11 +1579,12 @@ impl Budgets for BudgetsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateSubscriberError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateSubscriberError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateSubscriberError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1591,11 +1607,16 @@ impl Budgets for BudgetsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteBudgetError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteBudgetResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteBudgetError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteBudgetResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1603,11 +1624,10 @@ impl Budgets for BudgetsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteBudgetError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteBudgetError>
+                            })
+                            .and_then(|response| Err(DeleteBudgetError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1630,11 +1650,16 @@ impl Budgets for BudgetsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteNotificationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteNotificationResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteNotificationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteNotificationResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1642,11 +1667,12 @@ impl Budgets for BudgetsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteNotificationError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteNotificationError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteNotificationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1669,11 +1695,16 @@ impl Budgets for BudgetsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteSubscriberError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteSubscriberResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteSubscriberError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteSubscriberResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1681,11 +1712,12 @@ impl Budgets for BudgetsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteSubscriberError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteSubscriberError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteSubscriberError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1708,11 +1740,16 @@ impl Budgets for BudgetsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeBudgetError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeBudgetResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeBudgetError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeBudgetResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1720,11 +1757,10 @@ impl Budgets for BudgetsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeBudgetError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeBudgetError>
+                            })
+                            .and_then(|response| Err(DescribeBudgetError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1751,11 +1787,17 @@ impl Budgets for BudgetsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeBudgetPerformanceHistoryError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeBudgetPerformanceHistoryResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeBudgetPerformanceHistoryError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeBudgetPerformanceHistoryResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1763,15 +1805,15 @@ impl Budgets for BudgetsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeBudgetPerformanceHistoryError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeBudgetPerformanceHistoryError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeBudgetPerformanceHistoryError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -1794,11 +1836,16 @@ impl Budgets for BudgetsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeBudgetsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeBudgetsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeBudgetsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeBudgetsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1806,11 +1853,10 @@ impl Budgets for BudgetsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeBudgetsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeBudgetsError>
+                            })
+                            .and_then(|response| Err(DescribeBudgetsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1837,11 +1883,17 @@ impl Budgets for BudgetsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeNotificationsForBudgetError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeNotificationsForBudgetResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeNotificationsForBudgetError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeNotificationsForBudgetResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1849,15 +1901,13 @@ impl Budgets for BudgetsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeNotificationsForBudgetError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeNotificationsForBudgetError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeNotificationsForBudgetError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1886,11 +1936,17 @@ impl Budgets for BudgetsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeSubscribersForNotificationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeSubscribersForNotificationResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeSubscribersForNotificationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeSubscribersForNotificationResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1898,15 +1954,15 @@ impl Budgets for BudgetsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeSubscribersForNotificationError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeSubscribersForNotificationError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeSubscribersForNotificationError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -1929,11 +1985,16 @@ impl Budgets for BudgetsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateBudgetError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateBudgetResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateBudgetError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateBudgetResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1941,11 +2002,10 @@ impl Budgets for BudgetsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateBudgetError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateBudgetError>
+                            })
+                            .and_then(|response| Err(UpdateBudgetError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1968,11 +2028,16 @@ impl Budgets for BudgetsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateNotificationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateNotificationResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateNotificationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateNotificationResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1980,11 +2045,12 @@ impl Budgets for BudgetsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateNotificationError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateNotificationError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateNotificationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2007,11 +2073,16 @@ impl Budgets for BudgetsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateSubscriberError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateSubscriberResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateSubscriberError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateSubscriberResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2019,11 +2090,12 @@ impl Budgets for BudgetsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateSubscriberError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateSubscriberError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateSubscriberError::from_response(response))
+                            })
                     })
                     .boxed()
             }

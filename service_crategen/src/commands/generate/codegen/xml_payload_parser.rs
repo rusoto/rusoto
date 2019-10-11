@@ -43,7 +43,7 @@ pub fn generate_response_parser(
     parse_non_payload: &str,
 ) -> String {
     if operation.output.is_none() {
-        return "futures::future::ready(::std::mem::drop(response)).boxed()".to_string();
+        return "futures::future::ready(Ok(std::mem::drop(response))).boxed()".to_string();
     }
 
     let shape_name = &operation
@@ -170,27 +170,27 @@ fn xml_body_parser(
     let deserialize = match *result_wrapper {
         Some(ref tag_name) => format!(
             "start_element(&actual_tag_name, &mut stack)?;
-                     result = {output_shape}Deserializer::deserialize(\"{tag_name}\", &mut stack)?;
+                     result = {output_shape}Deserializer::deserialize(\"{tag_name}\", &mut stack);
                      skip_tree(&mut stack);
                      end_element(&actual_tag_name, &mut stack)?;",
             output_shape = output_shape,
             tag_name = tag_name
         ),
         None => format!(
-            "result = {output_shape}Deserializer::deserialize(&actual_tag_name, &mut stack)?;",
+            "result = {output_shape}Deserializer::deserialize(&actual_tag_name, &mut stack);",
             output_shape = output_shape
         ),
     };
 
     format!(
-        "Box::new(response.buffer().from_err().and_then(move |response| {{
+        "response.buffer().and_then(move |xml_response| {{
             {let_result}
 
-            if response.body.is_empty() {{
-                result = {output_shape}::default();
+            if xml_response.body.is_empty() {{
+                result = Ok({output_shape}::default());
             }} else {{
                 let reader = EventReader::new_with_config(
-                    response.body.as_ref(),
+                    xml_response.body.as_ref(),
                     ParserConfig::new().trim_whitespace(true)
                 );
                 let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -199,8 +199,8 @@ fn xml_body_parser(
                 {deserialize}
             }}
             {parse_non_payload} // parse non-payload
-            Ok(result)
-        }}))",
+            futures::future::ready(Ok(result))
+        }}).boxed()",
         let_result = let_result,
         output_shape = output_shape,
         deserialize = deserialize,

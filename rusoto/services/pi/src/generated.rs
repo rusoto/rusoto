@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -409,11 +409,17 @@ impl PerformanceInsights for PerformanceInsightsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeDimensionKeysError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeDimensionKeysResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeDimensionKeysError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeDimensionKeysResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -421,11 +427,13 @@ impl PerformanceInsights for PerformanceInsightsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeDimensionKeysError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeDimensionKeysError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeDimensionKeysError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -451,11 +459,16 @@ impl PerformanceInsights for PerformanceInsightsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetResourceMetricsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetResourceMetricsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetResourceMetricsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetResourceMetricsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -463,11 +476,12 @@ impl PerformanceInsights for PerformanceInsightsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetResourceMetricsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetResourceMetricsError>
+                            })
+                            .and_then(|response| {
+                                Err(GetResourceMetricsError::from_response(response))
+                            })
                     })
                     .boxed()
             }

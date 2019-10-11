@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -5201,11 +5201,17 @@ impl DirectoryService for DirectoryServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AcceptSharedDirectoryError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AcceptSharedDirectoryResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AcceptSharedDirectoryError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AcceptSharedDirectoryResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5213,11 +5219,13 @@ impl DirectoryService for DirectoryServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(AcceptSharedDirectoryError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AcceptSharedDirectoryError>
+                            })
+                            .and_then(|response| {
+                                Err(AcceptSharedDirectoryError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5240,11 +5248,16 @@ impl DirectoryService for DirectoryServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AddIpRoutesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AddIpRoutesResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<AddIpRoutesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AddIpRoutesResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5252,11 +5265,10 @@ impl DirectoryService for DirectoryServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(AddIpRoutesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<AddIpRoutesError>
+                            })
+                            .and_then(|response| Err(AddIpRoutesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5282,11 +5294,16 @@ impl DirectoryService for DirectoryServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AddTagsToResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AddTagsToResourceResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<AddTagsToResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AddTagsToResourceResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5294,11 +5311,12 @@ impl DirectoryService for DirectoryServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(AddTagsToResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<AddTagsToResourceError>
+                            })
+                            .and_then(|response| {
+                                Err(AddTagsToResourceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5324,11 +5342,17 @@ impl DirectoryService for DirectoryServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CancelSchemaExtensionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CancelSchemaExtensionResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CancelSchemaExtensionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CancelSchemaExtensionResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5336,11 +5360,13 @@ impl DirectoryService for DirectoryServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CancelSchemaExtensionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CancelSchemaExtensionError>
+                            })
+                            .and_then(|response| {
+                                Err(CancelSchemaExtensionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5363,11 +5389,16 @@ impl DirectoryService for DirectoryServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ConnectDirectoryError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ConnectDirectoryResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ConnectDirectoryError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ConnectDirectoryResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5375,11 +5406,12 @@ impl DirectoryService for DirectoryServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ConnectDirectoryError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ConnectDirectoryError>
+                            })
+                            .and_then(|response| {
+                                Err(ConnectDirectoryError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5402,11 +5434,16 @@ impl DirectoryService for DirectoryServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateAliasError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateAliasResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateAliasError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateAliasResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5414,11 +5451,10 @@ impl DirectoryService for DirectoryServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateAliasError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateAliasError>
+                            })
+                            .and_then(|response| Err(CreateAliasError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5441,11 +5477,16 @@ impl DirectoryService for DirectoryServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateComputerError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateComputerResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateComputerError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateComputerResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5453,11 +5494,10 @@ impl DirectoryService for DirectoryServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateComputerError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateComputerError>
+                            })
+                            .and_then(|response| Err(CreateComputerError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5483,11 +5523,17 @@ impl DirectoryService for DirectoryServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateConditionalForwarderError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateConditionalForwarderResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateConditionalForwarderError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateConditionalForwarderResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5495,13 +5541,13 @@ impl DirectoryService for DirectoryServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(CreateConditionalForwarderError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateConditionalForwarderError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateConditionalForwarderError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5524,11 +5570,16 @@ impl DirectoryService for DirectoryServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateDirectoryError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateDirectoryResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateDirectoryError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateDirectoryResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5536,11 +5587,10 @@ impl DirectoryService for DirectoryServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateDirectoryError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateDirectoryError>
+                            })
+                            .and_then(|response| Err(CreateDirectoryError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5566,11 +5616,17 @@ impl DirectoryService for DirectoryServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateLogSubscriptionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateLogSubscriptionResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateLogSubscriptionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateLogSubscriptionResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5578,11 +5634,13 @@ impl DirectoryService for DirectoryServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateLogSubscriptionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateLogSubscriptionError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateLogSubscriptionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5608,11 +5666,16 @@ impl DirectoryService for DirectoryServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateMicrosoftADError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateMicrosoftADResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateMicrosoftADError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateMicrosoftADResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5620,11 +5683,12 @@ impl DirectoryService for DirectoryServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateMicrosoftADError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateMicrosoftADError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateMicrosoftADError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5647,11 +5711,16 @@ impl DirectoryService for DirectoryServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateSnapshotError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateSnapshotResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateSnapshotError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateSnapshotResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5659,11 +5728,10 @@ impl DirectoryService for DirectoryServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateSnapshotError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateSnapshotError>
+                            })
+                            .and_then(|response| Err(CreateSnapshotError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5686,11 +5754,16 @@ impl DirectoryService for DirectoryServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateTrustError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateTrustResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateTrustError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateTrustResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5698,11 +5771,10 @@ impl DirectoryService for DirectoryServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateTrustError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateTrustError>
+                            })
+                            .and_then(|response| Err(CreateTrustError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5728,11 +5800,17 @@ impl DirectoryService for DirectoryServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteConditionalForwarderError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteConditionalForwarderResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteConditionalForwarderError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteConditionalForwarderResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5740,13 +5818,13 @@ impl DirectoryService for DirectoryServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DeleteConditionalForwarderError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteConditionalForwarderError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteConditionalForwarderError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5769,11 +5847,16 @@ impl DirectoryService for DirectoryServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteDirectoryError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteDirectoryResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteDirectoryError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteDirectoryResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5781,11 +5864,10 @@ impl DirectoryService for DirectoryServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteDirectoryError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteDirectoryError>
+                            })
+                            .and_then(|response| Err(DeleteDirectoryError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5811,11 +5893,17 @@ impl DirectoryService for DirectoryServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteLogSubscriptionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteLogSubscriptionResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteLogSubscriptionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteLogSubscriptionResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5823,11 +5911,13 @@ impl DirectoryService for DirectoryServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteLogSubscriptionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteLogSubscriptionError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteLogSubscriptionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5850,11 +5940,16 @@ impl DirectoryService for DirectoryServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteSnapshotError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteSnapshotResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteSnapshotError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteSnapshotResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5862,11 +5957,10 @@ impl DirectoryService for DirectoryServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteSnapshotError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteSnapshotError>
+                            })
+                            .and_then(|response| Err(DeleteSnapshotError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5889,11 +5983,16 @@ impl DirectoryService for DirectoryServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteTrustError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteTrustResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteTrustError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteTrustResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5901,11 +6000,10 @@ impl DirectoryService for DirectoryServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteTrustError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteTrustError>
+                            })
+                            .and_then(|response| Err(DeleteTrustError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5931,11 +6029,17 @@ impl DirectoryService for DirectoryServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeregisterEventTopicError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeregisterEventTopicResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeregisterEventTopicError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeregisterEventTopicResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5943,11 +6047,13 @@ impl DirectoryService for DirectoryServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeregisterEventTopicError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeregisterEventTopicError>
+                            })
+                            .and_then(|response| {
+                                Err(DeregisterEventTopicError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5973,11 +6079,17 @@ impl DirectoryService for DirectoryServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeConditionalForwardersError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeConditionalForwardersResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeConditionalForwardersError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeConditionalForwardersResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5985,13 +6097,13 @@ impl DirectoryService for DirectoryServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeConditionalForwardersError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeConditionalForwardersError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeConditionalForwardersError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6017,11 +6129,17 @@ impl DirectoryService for DirectoryServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeDirectoriesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeDirectoriesResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeDirectoriesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeDirectoriesResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6029,11 +6147,13 @@ impl DirectoryService for DirectoryServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeDirectoriesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeDirectoriesError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeDirectoriesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6059,11 +6179,17 @@ impl DirectoryService for DirectoryServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeDomainControllersError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeDomainControllersResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeDomainControllersError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeDomainControllersResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6071,13 +6197,13 @@ impl DirectoryService for DirectoryServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeDomainControllersError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeDomainControllersError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeDomainControllersError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6103,11 +6229,17 @@ impl DirectoryService for DirectoryServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeEventTopicsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeEventTopicsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeEventTopicsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeEventTopicsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6115,11 +6247,13 @@ impl DirectoryService for DirectoryServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeEventTopicsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeEventTopicsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeEventTopicsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6145,11 +6279,17 @@ impl DirectoryService for DirectoryServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeSharedDirectoriesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeSharedDirectoriesResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeSharedDirectoriesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeSharedDirectoriesResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6157,13 +6297,13 @@ impl DirectoryService for DirectoryServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeSharedDirectoriesError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeSharedDirectoriesError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeSharedDirectoriesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6189,11 +6329,16 @@ impl DirectoryService for DirectoryServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeSnapshotsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeSnapshotsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeSnapshotsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeSnapshotsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6201,11 +6346,12 @@ impl DirectoryService for DirectoryServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeSnapshotsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeSnapshotsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeSnapshotsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6228,11 +6374,16 @@ impl DirectoryService for DirectoryServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeTrustsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeTrustsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeTrustsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeTrustsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6240,11 +6391,10 @@ impl DirectoryService for DirectoryServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeTrustsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeTrustsError>
+                            })
+                            .and_then(|response| Err(DescribeTrustsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -6267,11 +6417,16 @@ impl DirectoryService for DirectoryServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DisableRadiusError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DisableRadiusResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DisableRadiusError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DisableRadiusResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6279,11 +6434,10 @@ impl DirectoryService for DirectoryServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DisableRadiusError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DisableRadiusError>
+                            })
+                            .and_then(|response| Err(DisableRadiusError::from_response(response)))
                     })
                     .boxed()
             }
@@ -6306,11 +6460,16 @@ impl DirectoryService for DirectoryServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DisableSsoError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DisableSsoResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DisableSsoError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DisableSsoResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6318,11 +6477,10 @@ impl DirectoryService for DirectoryServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DisableSsoError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DisableSsoError>
+                            })
+                            .and_then(|response| Err(DisableSsoError::from_response(response)))
                     })
                     .boxed()
             }
@@ -6345,11 +6503,16 @@ impl DirectoryService for DirectoryServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| EnableRadiusError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<EnableRadiusResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<EnableRadiusError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<EnableRadiusResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6357,11 +6520,10 @@ impl DirectoryService for DirectoryServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(EnableRadiusError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<EnableRadiusError>
+                            })
+                            .and_then(|response| Err(EnableRadiusError::from_response(response)))
                     })
                     .boxed()
             }
@@ -6381,11 +6543,16 @@ impl DirectoryService for DirectoryServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| EnableSsoError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<EnableSsoResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<EnableSsoError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<EnableSsoResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6393,11 +6560,10 @@ impl DirectoryService for DirectoryServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(EnableSsoError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<EnableSsoError>
+                            })
+                            .and_then(|response| Err(EnableSsoError::from_response(response)))
                     })
                     .boxed()
             }
@@ -6421,11 +6587,16 @@ impl DirectoryService for DirectoryServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetDirectoryLimitsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetDirectoryLimitsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetDirectoryLimitsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetDirectoryLimitsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6433,11 +6604,12 @@ impl DirectoryService for DirectoryServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetDirectoryLimitsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetDirectoryLimitsError>
+                            })
+                            .and_then(|response| {
+                                Err(GetDirectoryLimitsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6463,11 +6635,16 @@ impl DirectoryService for DirectoryServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetSnapshotLimitsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetSnapshotLimitsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetSnapshotLimitsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetSnapshotLimitsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6475,11 +6652,12 @@ impl DirectoryService for DirectoryServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetSnapshotLimitsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetSnapshotLimitsError>
+                            })
+                            .and_then(|response| {
+                                Err(GetSnapshotLimitsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6502,11 +6680,16 @@ impl DirectoryService for DirectoryServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListIpRoutesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListIpRoutesResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListIpRoutesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListIpRoutesResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6514,11 +6697,10 @@ impl DirectoryService for DirectoryServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListIpRoutesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListIpRoutesError>
+                            })
+                            .and_then(|response| Err(ListIpRoutesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -6544,11 +6726,17 @@ impl DirectoryService for DirectoryServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListLogSubscriptionsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListLogSubscriptionsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListLogSubscriptionsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListLogSubscriptionsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6556,11 +6744,13 @@ impl DirectoryService for DirectoryServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListLogSubscriptionsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListLogSubscriptionsError>
+                            })
+                            .and_then(|response| {
+                                Err(ListLogSubscriptionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6586,11 +6776,17 @@ impl DirectoryService for DirectoryServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListSchemaExtensionsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListSchemaExtensionsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListSchemaExtensionsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListSchemaExtensionsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6598,11 +6794,13 @@ impl DirectoryService for DirectoryServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListSchemaExtensionsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListSchemaExtensionsError>
+                            })
+                            .and_then(|response| {
+                                Err(ListSchemaExtensionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6628,11 +6826,17 @@ impl DirectoryService for DirectoryServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListTagsForResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListTagsForResourceResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListTagsForResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListTagsForResourceResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6640,11 +6844,13 @@ impl DirectoryService for DirectoryServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListTagsForResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListTagsForResourceError>
+                            })
+                            .and_then(|response| {
+                                Err(ListTagsForResourceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6670,11 +6876,16 @@ impl DirectoryService for DirectoryServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| RegisterEventTopicError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RegisterEventTopicResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<RegisterEventTopicError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<RegisterEventTopicResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6682,11 +6893,12 @@ impl DirectoryService for DirectoryServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(RegisterEventTopicError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<RegisterEventTopicError>
+                            })
+                            .and_then(|response| {
+                                Err(RegisterEventTopicError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6712,11 +6924,17 @@ impl DirectoryService for DirectoryServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| RejectSharedDirectoryError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RejectSharedDirectoryResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<RejectSharedDirectoryError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<RejectSharedDirectoryResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6724,11 +6942,13 @@ impl DirectoryService for DirectoryServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(RejectSharedDirectoryError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<RejectSharedDirectoryError>
+                            })
+                            .and_then(|response| {
+                                Err(RejectSharedDirectoryError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6751,11 +6971,16 @@ impl DirectoryService for DirectoryServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| RemoveIpRoutesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RemoveIpRoutesResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<RemoveIpRoutesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<RemoveIpRoutesResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6763,11 +6988,10 @@ impl DirectoryService for DirectoryServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(RemoveIpRoutesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<RemoveIpRoutesError>
+                            })
+                            .and_then(|response| Err(RemoveIpRoutesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -6793,11 +7017,17 @@ impl DirectoryService for DirectoryServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| RemoveTagsFromResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RemoveTagsFromResourceResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<RemoveTagsFromResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<RemoveTagsFromResourceResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6805,13 +7035,13 @@ impl DirectoryService for DirectoryServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(RemoveTagsFromResourceError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<RemoveTagsFromResourceError>
+                            })
+                            .and_then(|response| {
+                                Err(RemoveTagsFromResourceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6837,11 +7067,16 @@ impl DirectoryService for DirectoryServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ResetUserPasswordError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ResetUserPasswordResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ResetUserPasswordError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ResetUserPasswordResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6849,11 +7084,12 @@ impl DirectoryService for DirectoryServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ResetUserPasswordError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ResetUserPasswordError>
+                            })
+                            .and_then(|response| {
+                                Err(ResetUserPasswordError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6879,11 +7115,17 @@ impl DirectoryService for DirectoryServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| RestoreFromSnapshotError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RestoreFromSnapshotResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<RestoreFromSnapshotError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<RestoreFromSnapshotResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6891,11 +7133,13 @@ impl DirectoryService for DirectoryServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(RestoreFromSnapshotError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<RestoreFromSnapshotError>
+                            })
+                            .and_then(|response| {
+                                Err(RestoreFromSnapshotError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6918,11 +7162,16 @@ impl DirectoryService for DirectoryServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ShareDirectoryError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ShareDirectoryResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ShareDirectoryError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ShareDirectoryResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6930,11 +7179,10 @@ impl DirectoryService for DirectoryServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ShareDirectoryError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ShareDirectoryError>
+                            })
+                            .and_then(|response| Err(ShareDirectoryError::from_response(response)))
                     })
                     .boxed()
             }
@@ -6960,11 +7208,17 @@ impl DirectoryService for DirectoryServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StartSchemaExtensionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StartSchemaExtensionResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StartSchemaExtensionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StartSchemaExtensionResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6972,11 +7226,13 @@ impl DirectoryService for DirectoryServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(StartSchemaExtensionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StartSchemaExtensionError>
+                            })
+                            .and_then(|response| {
+                                Err(StartSchemaExtensionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6999,11 +7255,16 @@ impl DirectoryService for DirectoryServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UnshareDirectoryError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UnshareDirectoryResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UnshareDirectoryError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UnshareDirectoryResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7011,11 +7272,12 @@ impl DirectoryService for DirectoryServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UnshareDirectoryError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UnshareDirectoryError>
+                            })
+                            .and_then(|response| {
+                                Err(UnshareDirectoryError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7041,11 +7303,17 @@ impl DirectoryService for DirectoryServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateConditionalForwarderError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateConditionalForwarderResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateConditionalForwarderError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateConditionalForwarderResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7053,13 +7321,13 @@ impl DirectoryService for DirectoryServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(UpdateConditionalForwarderError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateConditionalForwarderError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateConditionalForwarderError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7086,11 +7354,17 @@ impl DirectoryService for DirectoryServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateNumberOfDomainControllersError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateNumberOfDomainControllersResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateNumberOfDomainControllersError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateNumberOfDomainControllersResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7098,15 +7372,15 @@ impl DirectoryService for DirectoryServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(UpdateNumberOfDomainControllersError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateNumberOfDomainControllersError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateNumberOfDomainControllersError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -7129,11 +7403,16 @@ impl DirectoryService for DirectoryServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateRadiusError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateRadiusResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateRadiusError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateRadiusResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7141,11 +7420,10 @@ impl DirectoryService for DirectoryServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateRadiusError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateRadiusError>
+                            })
+                            .and_then(|response| Err(UpdateRadiusError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7168,11 +7446,16 @@ impl DirectoryService for DirectoryServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateTrustError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateTrustResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateTrustError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateTrustResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7180,11 +7463,10 @@ impl DirectoryService for DirectoryServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateTrustError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateTrustError>
+                            })
+                            .and_then(|response| Err(UpdateTrustError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7207,11 +7489,16 @@ impl DirectoryService for DirectoryServiceClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| VerifyTrustError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<VerifyTrustResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<VerifyTrustError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<VerifyTrustResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7219,11 +7506,10 @@ impl DirectoryService for DirectoryServiceClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(VerifyTrustError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<VerifyTrustError>
+                            })
+                            .and_then(|response| Err(VerifyTrustError::from_response(response)))
                     })
                     .boxed()
             }

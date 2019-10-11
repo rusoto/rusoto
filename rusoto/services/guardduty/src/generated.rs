@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
@@ -3605,10 +3605,11 @@ impl GuardDuty for GuardDutyClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| AcceptInvitationError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AcceptInvitationResponse, _>()?;
+                                .deserialize::<AcceptInvitationResponse, _>();
 
                             result
                         })
@@ -3619,11 +3620,10 @@ impl GuardDuty for GuardDutyClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(AcceptInvitationError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<AcceptInvitationError>())
+                            .and_then(|response| {
+                                Err(AcceptInvitationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3650,10 +3650,11 @@ impl GuardDuty for GuardDutyClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ArchiveFindingsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ArchiveFindingsResponse, _>()?;
+                                .deserialize::<ArchiveFindingsResponse, _>();
 
                             result
                         })
@@ -3664,11 +3665,8 @@ impl GuardDuty for GuardDutyClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ArchiveFindingsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ArchiveFindingsError>())
+                            .and_then(|response| Err(ArchiveFindingsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3692,10 +3690,11 @@ impl GuardDuty for GuardDutyClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| CreateDetectorError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateDetectorResponse, _>()?;
+                                .deserialize::<CreateDetectorResponse, _>();
 
                             result
                         })
@@ -3706,11 +3705,8 @@ impl GuardDuty for GuardDutyClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateDetectorError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateDetectorError>())
+                            .and_then(|response| Err(CreateDetectorError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3737,10 +3733,11 @@ impl GuardDuty for GuardDutyClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| CreateFilterError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateFilterResponse, _>()?;
+                                .deserialize::<CreateFilterResponse, _>();
 
                             result
                         })
@@ -3751,11 +3748,8 @@ impl GuardDuty for GuardDutyClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateFilterError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateFilterError>())
+                            .and_then(|response| Err(CreateFilterError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3782,10 +3776,11 @@ impl GuardDuty for GuardDutyClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| CreateIPSetError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateIPSetResponse, _>()?;
+                                .deserialize::<CreateIPSetResponse, _>();
 
                             result
                         })
@@ -3796,11 +3791,8 @@ impl GuardDuty for GuardDutyClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateIPSetError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateIPSetError>())
+                            .and_then(|response| Err(CreateIPSetError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3827,10 +3819,11 @@ impl GuardDuty for GuardDutyClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| CreateMembersError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateMembersResponse, _>()?;
+                                .deserialize::<CreateMembersResponse, _>();
 
                             result
                         })
@@ -3841,11 +3834,8 @@ impl GuardDuty for GuardDutyClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateMembersError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateMembersError>())
+                            .and_then(|response| Err(CreateMembersError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3872,10 +3862,11 @@ impl GuardDuty for GuardDutyClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| CreateSampleFindingsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateSampleFindingsResponse, _>()?;
+                                .deserialize::<CreateSampleFindingsResponse, _>();
 
                             result
                         })
@@ -3886,11 +3877,10 @@ impl GuardDuty for GuardDutyClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateSampleFindingsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateSampleFindingsError>())
+                            .and_then(|response| {
+                                Err(CreateSampleFindingsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3917,10 +3907,11 @@ impl GuardDuty for GuardDutyClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| CreateThreatIntelSetError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateThreatIntelSetResponse, _>()?;
+                                .deserialize::<CreateThreatIntelSetResponse, _>();
 
                             result
                         })
@@ -3931,11 +3922,10 @@ impl GuardDuty for GuardDutyClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateThreatIntelSetError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateThreatIntelSetError>())
+                            .and_then(|response| {
+                                Err(CreateThreatIntelSetError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3959,10 +3949,11 @@ impl GuardDuty for GuardDutyClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| DeclineInvitationsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeclineInvitationsResponse, _>()?;
+                                .deserialize::<DeclineInvitationsResponse, _>();
 
                             result
                         })
@@ -3973,11 +3964,10 @@ impl GuardDuty for GuardDutyClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeclineInvitationsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeclineInvitationsError>())
+                            .and_then(|response| {
+                                Err(DeclineInvitationsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3998,10 +3988,11 @@ impl GuardDuty for GuardDutyClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteDetectorError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteDetectorResponse, _>()?;
+                                .deserialize::<DeleteDetectorResponse, _>();
 
                             result
                         })
@@ -4012,11 +4003,8 @@ impl GuardDuty for GuardDutyClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteDetectorError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteDetectorError>())
+                            .and_then(|response| Err(DeleteDetectorError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4041,10 +4029,11 @@ impl GuardDuty for GuardDutyClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteFilterError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteFilterResponse, _>()?;
+                                .deserialize::<DeleteFilterResponse, _>();
 
                             result
                         })
@@ -4055,11 +4044,8 @@ impl GuardDuty for GuardDutyClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteFilterError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteFilterError>())
+                            .and_then(|response| Err(DeleteFilterError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4084,10 +4070,11 @@ impl GuardDuty for GuardDutyClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteIPSetError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteIPSetResponse, _>()?;
+                                .deserialize::<DeleteIPSetResponse, _>();
 
                             result
                         })
@@ -4098,11 +4085,8 @@ impl GuardDuty for GuardDutyClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteIPSetError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteIPSetError>())
+                            .and_then(|response| Err(DeleteIPSetError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4126,10 +4110,11 @@ impl GuardDuty for GuardDutyClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteInvitationsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteInvitationsResponse, _>()?;
+                                .deserialize::<DeleteInvitationsResponse, _>();
 
                             result
                         })
@@ -4140,11 +4125,10 @@ impl GuardDuty for GuardDutyClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteInvitationsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteInvitationsError>())
+                            .and_then(|response| {
+                                Err(DeleteInvitationsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4171,10 +4155,11 @@ impl GuardDuty for GuardDutyClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteMembersError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteMembersResponse, _>()?;
+                                .deserialize::<DeleteMembersResponse, _>();
 
                             result
                         })
@@ -4185,11 +4170,8 @@ impl GuardDuty for GuardDutyClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteMembersError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteMembersError>())
+                            .and_then(|response| Err(DeleteMembersError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4214,10 +4196,11 @@ impl GuardDuty for GuardDutyClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteThreatIntelSetError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteThreatIntelSetResponse, _>()?;
+                                .deserialize::<DeleteThreatIntelSetResponse, _>();
 
                             result
                         })
@@ -4228,11 +4211,10 @@ impl GuardDuty for GuardDutyClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteThreatIntelSetError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteThreatIntelSetError>())
+                            .and_then(|response| {
+                                Err(DeleteThreatIntelSetError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4257,11 +4239,11 @@ impl GuardDuty for GuardDutyClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| DisassociateFromMasterAccountError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DisassociateFromMasterAccountResponse, _>(
-                            )?;
+                                .deserialize::<DisassociateFromMasterAccountResponse, _>();
 
                             result
                         })
@@ -4272,13 +4254,10 @@ impl GuardDuty for GuardDutyClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(DisassociateFromMasterAccountError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DisassociateFromMasterAccountError>())
+                            .and_then(|response| {
+                                Err(DisassociateFromMasterAccountError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4305,10 +4284,11 @@ impl GuardDuty for GuardDutyClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| DisassociateMembersError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DisassociateMembersResponse, _>()?;
+                                .deserialize::<DisassociateMembersResponse, _>();
 
                             result
                         })
@@ -4319,11 +4299,10 @@ impl GuardDuty for GuardDutyClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DisassociateMembersError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DisassociateMembersError>())
+                            .and_then(|response| {
+                                Err(DisassociateMembersError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4344,10 +4323,11 @@ impl GuardDuty for GuardDutyClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetDetectorError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetDetectorResponse, _>()?;
+                                .deserialize::<GetDetectorResponse, _>();
 
                             result
                         })
@@ -4358,11 +4338,8 @@ impl GuardDuty for GuardDutyClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetDetectorError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetDetectorError>())
+                            .and_then(|response| Err(GetDetectorError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4387,10 +4364,11 @@ impl GuardDuty for GuardDutyClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetFilterError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetFilterResponse, _>()?;
+                                .deserialize::<GetFilterResponse, _>();
 
                             result
                         })
@@ -4401,11 +4379,8 @@ impl GuardDuty for GuardDutyClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetFilterError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetFilterError>())
+                            .and_then(|response| Err(GetFilterError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4432,10 +4407,11 @@ impl GuardDuty for GuardDutyClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetFindingsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetFindingsResponse, _>()?;
+                                .deserialize::<GetFindingsResponse, _>();
 
                             result
                         })
@@ -4446,11 +4422,8 @@ impl GuardDuty for GuardDutyClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetFindingsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetFindingsError>())
+                            .and_then(|response| Err(GetFindingsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4477,10 +4450,11 @@ impl GuardDuty for GuardDutyClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetFindingsStatisticsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetFindingsStatisticsResponse, _>()?;
+                                .deserialize::<GetFindingsStatisticsResponse, _>();
 
                             result
                         })
@@ -4491,11 +4465,10 @@ impl GuardDuty for GuardDutyClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetFindingsStatisticsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetFindingsStatisticsError>())
+                            .and_then(|response| {
+                                Err(GetFindingsStatisticsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4517,10 +4490,11 @@ impl GuardDuty for GuardDutyClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetIPSetError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetIPSetResponse, _>()?;
+                                .deserialize::<GetIPSetResponse, _>();
 
                             result
                         })
@@ -4531,11 +4505,8 @@ impl GuardDuty for GuardDutyClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetIPSetError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetIPSetError>())
+                            .and_then(|response| Err(GetIPSetError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4555,10 +4526,11 @@ impl GuardDuty for GuardDutyClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetInvitationsCountError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetInvitationsCountResponse, _>()?;
+                                .deserialize::<GetInvitationsCountResponse, _>();
 
                             result
                         })
@@ -4569,11 +4541,10 @@ impl GuardDuty for GuardDutyClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetInvitationsCountError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetInvitationsCountError>())
+                            .and_then(|response| {
+                                Err(GetInvitationsCountError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4597,10 +4568,11 @@ impl GuardDuty for GuardDutyClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetMasterAccountError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetMasterAccountResponse, _>()?;
+                                .deserialize::<GetMasterAccountResponse, _>();
 
                             result
                         })
@@ -4611,11 +4583,10 @@ impl GuardDuty for GuardDutyClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetMasterAccountError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetMasterAccountError>())
+                            .and_then(|response| {
+                                Err(GetMasterAccountError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4642,10 +4613,11 @@ impl GuardDuty for GuardDutyClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetMembersError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetMembersResponse, _>()?;
+                                .deserialize::<GetMembersResponse, _>();
 
                             result
                         })
@@ -4656,11 +4628,8 @@ impl GuardDuty for GuardDutyClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetMembersError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetMembersError>())
+                            .and_then(|response| Err(GetMembersError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4685,10 +4654,11 @@ impl GuardDuty for GuardDutyClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetThreatIntelSetError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetThreatIntelSetResponse, _>()?;
+                                .deserialize::<GetThreatIntelSetResponse, _>();
 
                             result
                         })
@@ -4699,11 +4669,10 @@ impl GuardDuty for GuardDutyClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetThreatIntelSetError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetThreatIntelSetError>())
+                            .and_then(|response| {
+                                Err(GetThreatIntelSetError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4730,10 +4699,11 @@ impl GuardDuty for GuardDutyClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| InviteMembersError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<InviteMembersResponse, _>()?;
+                                .deserialize::<InviteMembersResponse, _>();
 
                             result
                         })
@@ -4744,11 +4714,8 @@ impl GuardDuty for GuardDutyClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(InviteMembersError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<InviteMembersError>())
+                            .and_then(|response| Err(InviteMembersError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4778,10 +4745,11 @@ impl GuardDuty for GuardDutyClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListDetectorsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListDetectorsResponse, _>()?;
+                                .deserialize::<ListDetectorsResponse, _>();
 
                             result
                         })
@@ -4792,11 +4760,8 @@ impl GuardDuty for GuardDutyClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListDetectorsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListDetectorsError>())
+                            .and_then(|response| Err(ListDetectorsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4829,10 +4794,11 @@ impl GuardDuty for GuardDutyClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListFiltersError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListFiltersResponse, _>()?;
+                                .deserialize::<ListFiltersResponse, _>();
 
                             result
                         })
@@ -4843,11 +4809,8 @@ impl GuardDuty for GuardDutyClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListFiltersError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListFiltersError>())
+                            .and_then(|response| Err(ListFiltersError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4874,10 +4837,11 @@ impl GuardDuty for GuardDutyClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListFindingsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListFindingsResponse, _>()?;
+                                .deserialize::<ListFindingsResponse, _>();
 
                             result
                         })
@@ -4888,11 +4852,8 @@ impl GuardDuty for GuardDutyClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListFindingsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListFindingsError>())
+                            .and_then(|response| Err(ListFindingsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4925,10 +4886,11 @@ impl GuardDuty for GuardDutyClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListIPSetsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListIPSetsResponse, _>()?;
+                                .deserialize::<ListIPSetsResponse, _>();
 
                             result
                         })
@@ -4939,11 +4901,8 @@ impl GuardDuty for GuardDutyClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListIPSetsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListIPSetsError>())
+                            .and_then(|response| Err(ListIPSetsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4973,10 +4932,11 @@ impl GuardDuty for GuardDutyClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListInvitationsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListInvitationsResponse, _>()?;
+                                .deserialize::<ListInvitationsResponse, _>();
 
                             result
                         })
@@ -4987,11 +4947,8 @@ impl GuardDuty for GuardDutyClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListInvitationsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListInvitationsError>())
+                            .and_then(|response| Err(ListInvitationsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5027,10 +4984,11 @@ impl GuardDuty for GuardDutyClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListMembersError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListMembersResponse, _>()?;
+                                .deserialize::<ListMembersResponse, _>();
 
                             result
                         })
@@ -5041,11 +4999,8 @@ impl GuardDuty for GuardDutyClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListMembersError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListMembersError>())
+                            .and_then(|response| Err(ListMembersError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5078,10 +5033,11 @@ impl GuardDuty for GuardDutyClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListThreatIntelSetsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListThreatIntelSetsResponse, _>()?;
+                                .deserialize::<ListThreatIntelSetsResponse, _>();
 
                             result
                         })
@@ -5092,11 +5048,10 @@ impl GuardDuty for GuardDutyClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListThreatIntelSetsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListThreatIntelSetsError>())
+                            .and_then(|response| {
+                                Err(ListThreatIntelSetsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5123,10 +5078,11 @@ impl GuardDuty for GuardDutyClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| StartMonitoringMembersError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StartMonitoringMembersResponse, _>()?;
+                                .deserialize::<StartMonitoringMembersResponse, _>();
 
                             result
                         })
@@ -5137,13 +5093,10 @@ impl GuardDuty for GuardDutyClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(StartMonitoringMembersError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<StartMonitoringMembersError>())
+                            .and_then(|response| {
+                                Err(StartMonitoringMembersError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5170,10 +5123,11 @@ impl GuardDuty for GuardDutyClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| StopMonitoringMembersError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StopMonitoringMembersResponse, _>()?;
+                                .deserialize::<StopMonitoringMembersResponse, _>();
 
                             result
                         })
@@ -5184,11 +5138,10 @@ impl GuardDuty for GuardDutyClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(StopMonitoringMembersError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<StopMonitoringMembersError>())
+                            .and_then(|response| {
+                                Err(StopMonitoringMembersError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5215,10 +5168,11 @@ impl GuardDuty for GuardDutyClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| UnarchiveFindingsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UnarchiveFindingsResponse, _>()?;
+                                .deserialize::<UnarchiveFindingsResponse, _>();
 
                             result
                         })
@@ -5229,11 +5183,10 @@ impl GuardDuty for GuardDutyClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UnarchiveFindingsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UnarchiveFindingsError>())
+                            .and_then(|response| {
+                                Err(UnarchiveFindingsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5257,10 +5210,11 @@ impl GuardDuty for GuardDutyClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| UpdateDetectorError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateDetectorResponse, _>()?;
+                                .deserialize::<UpdateDetectorResponse, _>();
 
                             result
                         })
@@ -5271,11 +5225,8 @@ impl GuardDuty for GuardDutyClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateDetectorError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateDetectorError>())
+                            .and_then(|response| Err(UpdateDetectorError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5303,10 +5254,11 @@ impl GuardDuty for GuardDutyClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| UpdateFilterError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateFilterResponse, _>()?;
+                                .deserialize::<UpdateFilterResponse, _>();
 
                             result
                         })
@@ -5317,11 +5269,8 @@ impl GuardDuty for GuardDutyClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateFilterError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateFilterError>())
+                            .and_then(|response| Err(UpdateFilterError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5348,10 +5297,11 @@ impl GuardDuty for GuardDutyClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| UpdateFindingsFeedbackError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateFindingsFeedbackResponse, _>()?;
+                                .deserialize::<UpdateFindingsFeedbackResponse, _>();
 
                             result
                         })
@@ -5362,13 +5312,10 @@ impl GuardDuty for GuardDutyClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(UpdateFindingsFeedbackError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateFindingsFeedbackError>())
+                            .and_then(|response| {
+                                Err(UpdateFindingsFeedbackError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5396,10 +5343,11 @@ impl GuardDuty for GuardDutyClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| UpdateIPSetError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateIPSetResponse, _>()?;
+                                .deserialize::<UpdateIPSetResponse, _>();
 
                             result
                         })
@@ -5410,11 +5358,8 @@ impl GuardDuty for GuardDutyClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateIPSetError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateIPSetError>())
+                            .and_then(|response| Err(UpdateIPSetError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5442,10 +5387,11 @@ impl GuardDuty for GuardDutyClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| UpdateThreatIntelSetError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateThreatIntelSetResponse, _>()?;
+                                .deserialize::<UpdateThreatIntelSetResponse, _>();
 
                             result
                         })
@@ -5456,11 +5402,10 @@ impl GuardDuty for GuardDutyClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateThreatIntelSetError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateThreatIntelSetError>())
+                            .and_then(|response| {
+                                Err(UpdateThreatIntelSetError::from_response(response))
+                            })
                     })
                     .boxed()
             }

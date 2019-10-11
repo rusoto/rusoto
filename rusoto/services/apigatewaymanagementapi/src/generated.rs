@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -152,8 +152,9 @@ impl ApiGatewayManagementApi for ApiGatewayManagementApiClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| PostToConnectionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -165,11 +166,10 @@ impl ApiGatewayManagementApi for ApiGatewayManagementApiClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(PostToConnectionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<PostToConnectionError>())
+                            .and_then(|response| {
+                                Err(PostToConnectionError::from_response(response))
+                            })
                     })
                     .boxed()
             }

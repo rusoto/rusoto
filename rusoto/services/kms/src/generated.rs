@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -4086,11 +4086,16 @@ impl Kms for KmsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CancelKeyDeletionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CancelKeyDeletionResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CancelKeyDeletionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CancelKeyDeletionResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4098,11 +4103,12 @@ impl Kms for KmsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CancelKeyDeletionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CancelKeyDeletionError>
+                            })
+                            .and_then(|response| {
+                                Err(CancelKeyDeletionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4125,11 +4131,17 @@ impl Kms for KmsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ConnectCustomKeyStoreError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ConnectCustomKeyStoreResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ConnectCustomKeyStoreError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ConnectCustomKeyStoreResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4137,11 +4149,13 @@ impl Kms for KmsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ConnectCustomKeyStoreError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ConnectCustomKeyStoreError>
+                            })
+                            .and_then(|response| {
+                                Err(ConnectCustomKeyStoreError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4159,17 +4173,16 @@ impl Kms for KmsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateAliasError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateAliasError>
+                            })
+                            .and_then(|response| Err(CreateAliasError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4192,11 +4205,17 @@ impl Kms for KmsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateCustomKeyStoreError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateCustomKeyStoreResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateCustomKeyStoreError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateCustomKeyStoreResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4204,11 +4223,13 @@ impl Kms for KmsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateCustomKeyStoreError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateCustomKeyStoreError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateCustomKeyStoreError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4231,11 +4252,16 @@ impl Kms for KmsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateGrantError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateGrantResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateGrantError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateGrantResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4243,11 +4269,10 @@ impl Kms for KmsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateGrantError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateGrantError>
+                            })
+                            .and_then(|response| Err(CreateGrantError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4270,11 +4295,16 @@ impl Kms for KmsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateKeyError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateKeyResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateKeyError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateKeyResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4282,11 +4312,10 @@ impl Kms for KmsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateKeyError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateKeyError>
+                            })
+                            .and_then(|response| Err(CreateKeyError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4306,11 +4335,14 @@ impl Kms for KmsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DecryptError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DecryptResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<DecryptError>)
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DecryptResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4318,11 +4350,8 @@ impl Kms for KmsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DecryptError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<DecryptError>)
+                            .and_then(|response| Err(DecryptError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4340,17 +4369,16 @@ impl Kms for KmsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteAliasError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteAliasError>
+                            })
+                            .and_then(|response| Err(DeleteAliasError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4373,11 +4401,17 @@ impl Kms for KmsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteCustomKeyStoreError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteCustomKeyStoreResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteCustomKeyStoreError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteCustomKeyStoreResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4385,11 +4419,13 @@ impl Kms for KmsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteCustomKeyStoreError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteCustomKeyStoreError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteCustomKeyStoreError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4410,19 +4446,19 @@ impl Kms for KmsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DeleteImportedKeyMaterialError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteImportedKeyMaterialError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteImportedKeyMaterialError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4445,11 +4481,17 @@ impl Kms for KmsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeCustomKeyStoresError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeCustomKeyStoresResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeCustomKeyStoresError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeCustomKeyStoresResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4457,13 +4499,13 @@ impl Kms for KmsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeCustomKeyStoresError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeCustomKeyStoresError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeCustomKeyStoresError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4486,11 +4528,16 @@ impl Kms for KmsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeKeyError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeKeyResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeKeyError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeKeyResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4498,11 +4545,10 @@ impl Kms for KmsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeKeyError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeKeyError>
+                            })
+                            .and_then(|response| Err(DescribeKeyError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4520,17 +4566,16 @@ impl Kms for KmsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DisableKeyError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DisableKeyError>
+                            })
+                            .and_then(|response| Err(DisableKeyError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4551,17 +4596,18 @@ impl Kms for KmsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DisableKeyRotationError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DisableKeyRotationError>
+                            })
+                            .and_then(|response| {
+                                Err(DisableKeyRotationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4584,11 +4630,17 @@ impl Kms for KmsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DisconnectCustomKeyStoreError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DisconnectCustomKeyStoreResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DisconnectCustomKeyStoreError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DisconnectCustomKeyStoreResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4596,13 +4648,13 @@ impl Kms for KmsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DisconnectCustomKeyStoreError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DisconnectCustomKeyStoreError>
+                            })
+                            .and_then(|response| {
+                                Err(DisconnectCustomKeyStoreError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4620,17 +4672,16 @@ impl Kms for KmsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(EnableKeyError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<EnableKeyError>
+                            })
+                            .and_then(|response| Err(EnableKeyError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4651,17 +4702,18 @@ impl Kms for KmsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(EnableKeyRotationError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<EnableKeyRotationError>
+                            })
+                            .and_then(|response| {
+                                Err(EnableKeyRotationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4681,11 +4733,14 @@ impl Kms for KmsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| EncryptError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<EncryptResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<EncryptError>)
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<EncryptResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4693,11 +4748,8 @@ impl Kms for KmsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(EncryptError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<EncryptError>)
+                            .and_then(|response| Err(EncryptError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4720,11 +4772,16 @@ impl Kms for KmsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GenerateDataKeyError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GenerateDataKeyResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GenerateDataKeyError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GenerateDataKeyResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4732,11 +4789,10 @@ impl Kms for KmsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GenerateDataKeyError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GenerateDataKeyError>
+                            })
+                            .and_then(|response| Err(GenerateDataKeyError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4763,11 +4819,17 @@ impl Kms for KmsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GenerateDataKeyWithoutPlaintextError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GenerateDataKeyWithoutPlaintextResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GenerateDataKeyWithoutPlaintextError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GenerateDataKeyWithoutPlaintextResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4775,15 +4837,15 @@ impl Kms for KmsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(GenerateDataKeyWithoutPlaintextError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GenerateDataKeyWithoutPlaintextError>
+                            })
+                            .and_then(|response| {
+                                Err(GenerateDataKeyWithoutPlaintextError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -4806,11 +4868,16 @@ impl Kms for KmsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GenerateRandomError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GenerateRandomResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GenerateRandomError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GenerateRandomResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4818,11 +4885,10 @@ impl Kms for KmsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GenerateRandomError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GenerateRandomError>
+                            })
+                            .and_then(|response| Err(GenerateRandomError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4845,11 +4911,16 @@ impl Kms for KmsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetKeyPolicyError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetKeyPolicyResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetKeyPolicyError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetKeyPolicyResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4857,11 +4928,10 @@ impl Kms for KmsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetKeyPolicyError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetKeyPolicyError>
+                            })
+                            .and_then(|response| Err(GetKeyPolicyError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4884,11 +4954,17 @@ impl Kms for KmsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetKeyRotationStatusError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetKeyRotationStatusResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetKeyRotationStatusError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetKeyRotationStatusResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4896,11 +4972,13 @@ impl Kms for KmsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetKeyRotationStatusError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetKeyRotationStatusError>
+                            })
+                            .and_then(|response| {
+                                Err(GetKeyRotationStatusError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4923,11 +5001,17 @@ impl Kms for KmsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetParametersForImportError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetParametersForImportResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetParametersForImportError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetParametersForImportResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4935,13 +5019,13 @@ impl Kms for KmsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(GetParametersForImportError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetParametersForImportError>
+                            })
+                            .and_then(|response| {
+                                Err(GetParametersForImportError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4964,11 +5048,16 @@ impl Kms for KmsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ImportKeyMaterialError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ImportKeyMaterialResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ImportKeyMaterialError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ImportKeyMaterialResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4976,11 +5065,12 @@ impl Kms for KmsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ImportKeyMaterialError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ImportKeyMaterialError>
+                            })
+                            .and_then(|response| {
+                                Err(ImportKeyMaterialError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5003,11 +5093,16 @@ impl Kms for KmsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListAliasesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListAliasesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListAliasesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListAliasesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5015,11 +5110,10 @@ impl Kms for KmsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListAliasesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListAliasesError>
+                            })
+                            .and_then(|response| Err(ListAliasesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5042,11 +5136,16 @@ impl Kms for KmsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListGrantsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListGrantsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListGrantsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListGrantsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5054,11 +5153,10 @@ impl Kms for KmsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListGrantsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListGrantsError>
+                            })
+                            .and_then(|response| Err(ListGrantsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5081,11 +5179,16 @@ impl Kms for KmsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListKeyPoliciesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListKeyPoliciesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListKeyPoliciesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListKeyPoliciesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5093,11 +5196,10 @@ impl Kms for KmsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListKeyPoliciesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListKeyPoliciesError>
+                            })
+                            .and_then(|response| Err(ListKeyPoliciesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5117,11 +5219,14 @@ impl Kms for KmsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListKeysError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListKeysResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<ListKeysError>)
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListKeysResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5129,11 +5234,8 @@ impl Kms for KmsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListKeysError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<ListKeysError>)
+                            .and_then(|response| Err(ListKeysError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5156,11 +5258,16 @@ impl Kms for KmsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListResourceTagsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListResourceTagsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListResourceTagsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListResourceTagsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5168,11 +5275,12 @@ impl Kms for KmsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListResourceTagsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListResourceTagsError>
+                            })
+                            .and_then(|response| {
+                                Err(ListResourceTagsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5195,11 +5303,17 @@ impl Kms for KmsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListRetirableGrantsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListGrantsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListRetirableGrantsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListGrantsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5207,11 +5321,13 @@ impl Kms for KmsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListRetirableGrantsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListRetirableGrantsError>
+                            })
+                            .and_then(|response| {
+                                Err(ListRetirableGrantsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5229,17 +5345,16 @@ impl Kms for KmsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(PutKeyPolicyError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<PutKeyPolicyError>
+                            })
+                            .and_then(|response| Err(PutKeyPolicyError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5262,11 +5377,16 @@ impl Kms for KmsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ReEncryptError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ReEncryptResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ReEncryptError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ReEncryptResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5274,11 +5394,10 @@ impl Kms for KmsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ReEncryptError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ReEncryptError>
+                            })
+                            .and_then(|response| Err(ReEncryptError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5296,17 +5415,16 @@ impl Kms for KmsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(RetireGrantError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<RetireGrantError>
+                            })
+                            .and_then(|response| Err(RetireGrantError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5324,17 +5442,16 @@ impl Kms for KmsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(RevokeGrantError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<RevokeGrantError>
+                            })
+                            .and_then(|response| Err(RevokeGrantError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5357,11 +5474,17 @@ impl Kms for KmsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ScheduleKeyDeletionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ScheduleKeyDeletionResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ScheduleKeyDeletionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ScheduleKeyDeletionResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5369,11 +5492,13 @@ impl Kms for KmsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ScheduleKeyDeletionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ScheduleKeyDeletionError>
+                            })
+                            .and_then(|response| {
+                                Err(ScheduleKeyDeletionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5391,17 +5516,16 @@ impl Kms for KmsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(TagResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<TagResourceError>
+                            })
+                            .and_then(|response| Err(TagResourceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5419,17 +5543,16 @@ impl Kms for KmsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UntagResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UntagResourceError>
+                            })
+                            .and_then(|response| Err(UntagResourceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5447,17 +5570,16 @@ impl Kms for KmsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateAliasError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateAliasError>
+                            })
+                            .and_then(|response| Err(UpdateAliasError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5480,11 +5602,17 @@ impl Kms for KmsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateCustomKeyStoreError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateCustomKeyStoreResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateCustomKeyStoreError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateCustomKeyStoreResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5492,11 +5620,13 @@ impl Kms for KmsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateCustomKeyStoreError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateCustomKeyStoreError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateCustomKeyStoreError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5517,17 +5647,19 @@ impl Kms for KmsClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateKeyDescriptionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateKeyDescriptionError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateKeyDescriptionError::from_response(response))
+                            })
                     })
                     .boxed()
             }

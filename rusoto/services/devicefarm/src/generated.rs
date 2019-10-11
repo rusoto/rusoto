@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -6865,11 +6865,16 @@ impl DeviceFarm for DeviceFarmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateDevicePoolError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateDevicePoolResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateDevicePoolError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateDevicePoolResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6877,11 +6882,12 @@ impl DeviceFarm for DeviceFarmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateDevicePoolError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateDevicePoolError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateDevicePoolError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6904,11 +6910,17 @@ impl DeviceFarm for DeviceFarmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateInstanceProfileError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateInstanceProfileResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateInstanceProfileError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateInstanceProfileResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6916,11 +6928,13 @@ impl DeviceFarm for DeviceFarmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateInstanceProfileError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateInstanceProfileError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateInstanceProfileError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6943,11 +6957,17 @@ impl DeviceFarm for DeviceFarmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateNetworkProfileError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateNetworkProfileResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateNetworkProfileError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateNetworkProfileResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6955,11 +6975,13 @@ impl DeviceFarm for DeviceFarmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateNetworkProfileError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateNetworkProfileError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateNetworkProfileError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -6982,11 +7004,16 @@ impl DeviceFarm for DeviceFarmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateProjectError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateProjectResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateProjectError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateProjectResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -6994,11 +7021,10 @@ impl DeviceFarm for DeviceFarmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateProjectError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateProjectError>
+                            })
+                            .and_then(|response| Err(CreateProjectError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7024,11 +7050,17 @@ impl DeviceFarm for DeviceFarmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateRemoteAccessSessionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateRemoteAccessSessionResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateRemoteAccessSessionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateRemoteAccessSessionResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7036,13 +7068,13 @@ impl DeviceFarm for DeviceFarmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(CreateRemoteAccessSessionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateRemoteAccessSessionError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateRemoteAccessSessionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7065,11 +7097,16 @@ impl DeviceFarm for DeviceFarmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateUploadError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateUploadResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateUploadError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateUploadResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7077,11 +7114,10 @@ impl DeviceFarm for DeviceFarmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateUploadError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateUploadError>
+                            })
+                            .and_then(|response| Err(CreateUploadError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7107,11 +7143,17 @@ impl DeviceFarm for DeviceFarmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateVPCEConfigurationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateVPCEConfigurationResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateVPCEConfigurationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateVPCEConfigurationResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7119,13 +7161,13 @@ impl DeviceFarm for DeviceFarmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(CreateVPCEConfigurationError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateVPCEConfigurationError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateVPCEConfigurationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7148,11 +7190,16 @@ impl DeviceFarm for DeviceFarmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteDevicePoolError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteDevicePoolResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteDevicePoolError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteDevicePoolResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7160,11 +7207,12 @@ impl DeviceFarm for DeviceFarmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteDevicePoolError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteDevicePoolError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteDevicePoolError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7187,11 +7235,17 @@ impl DeviceFarm for DeviceFarmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteInstanceProfileError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteInstanceProfileResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteInstanceProfileError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteInstanceProfileResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7199,11 +7253,13 @@ impl DeviceFarm for DeviceFarmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteInstanceProfileError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteInstanceProfileError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteInstanceProfileError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7226,11 +7282,17 @@ impl DeviceFarm for DeviceFarmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteNetworkProfileError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteNetworkProfileResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteNetworkProfileError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteNetworkProfileResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7238,11 +7300,13 @@ impl DeviceFarm for DeviceFarmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteNetworkProfileError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteNetworkProfileError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteNetworkProfileError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7265,11 +7329,16 @@ impl DeviceFarm for DeviceFarmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteProjectError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteProjectResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteProjectError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteProjectResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7277,11 +7346,10 @@ impl DeviceFarm for DeviceFarmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteProjectError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteProjectError>
+                            })
+                            .and_then(|response| Err(DeleteProjectError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7307,11 +7375,17 @@ impl DeviceFarm for DeviceFarmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteRemoteAccessSessionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteRemoteAccessSessionResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteRemoteAccessSessionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteRemoteAccessSessionResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7319,13 +7393,13 @@ impl DeviceFarm for DeviceFarmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DeleteRemoteAccessSessionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteRemoteAccessSessionError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteRemoteAccessSessionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7345,11 +7419,16 @@ impl DeviceFarm for DeviceFarmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteRunError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteRunResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteRunError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteRunResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7357,11 +7436,10 @@ impl DeviceFarm for DeviceFarmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteRunError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteRunError>
+                            })
+                            .and_then(|response| Err(DeleteRunError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7384,11 +7462,16 @@ impl DeviceFarm for DeviceFarmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteUploadError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteUploadResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteUploadError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteUploadResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7396,11 +7479,10 @@ impl DeviceFarm for DeviceFarmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteUploadError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteUploadError>
+                            })
+                            .and_then(|response| Err(DeleteUploadError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7426,11 +7508,17 @@ impl DeviceFarm for DeviceFarmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteVPCEConfigurationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteVPCEConfigurationResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteVPCEConfigurationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteVPCEConfigurationResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7438,13 +7526,13 @@ impl DeviceFarm for DeviceFarmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DeleteVPCEConfigurationError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteVPCEConfigurationError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteVPCEConfigurationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7465,11 +7553,16 @@ impl DeviceFarm for DeviceFarmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetAccountSettingsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetAccountSettingsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetAccountSettingsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetAccountSettingsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7477,11 +7570,12 @@ impl DeviceFarm for DeviceFarmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetAccountSettingsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetAccountSettingsError>
+                            })
+                            .and_then(|response| {
+                                Err(GetAccountSettingsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7501,11 +7595,16 @@ impl DeviceFarm for DeviceFarmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetDeviceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetDeviceResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetDeviceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetDeviceResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7513,11 +7612,10 @@ impl DeviceFarm for DeviceFarmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetDeviceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetDeviceError>
+                            })
+                            .and_then(|response| Err(GetDeviceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7540,11 +7638,16 @@ impl DeviceFarm for DeviceFarmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetDeviceInstanceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetDeviceInstanceResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetDeviceInstanceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetDeviceInstanceResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7552,11 +7655,12 @@ impl DeviceFarm for DeviceFarmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetDeviceInstanceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetDeviceInstanceError>
+                            })
+                            .and_then(|response| {
+                                Err(GetDeviceInstanceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7579,11 +7683,16 @@ impl DeviceFarm for DeviceFarmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetDevicePoolError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetDevicePoolResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetDevicePoolError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetDevicePoolResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7591,11 +7700,10 @@ impl DeviceFarm for DeviceFarmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetDevicePoolError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetDevicePoolError>
+                            })
+                            .and_then(|response| Err(GetDevicePoolError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7621,11 +7729,17 @@ impl DeviceFarm for DeviceFarmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetDevicePoolCompatibilityError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetDevicePoolCompatibilityResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetDevicePoolCompatibilityError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetDevicePoolCompatibilityResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7633,13 +7747,13 @@ impl DeviceFarm for DeviceFarmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(GetDevicePoolCompatibilityError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetDevicePoolCompatibilityError>
+                            })
+                            .and_then(|response| {
+                                Err(GetDevicePoolCompatibilityError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7662,11 +7776,16 @@ impl DeviceFarm for DeviceFarmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetInstanceProfileError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetInstanceProfileResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetInstanceProfileError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetInstanceProfileResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7674,11 +7793,12 @@ impl DeviceFarm for DeviceFarmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetInstanceProfileError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetInstanceProfileError>
+                            })
+                            .and_then(|response| {
+                                Err(GetInstanceProfileError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7698,11 +7818,14 @@ impl DeviceFarm for DeviceFarmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetJobError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetJobResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<GetJobError>)
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetJobResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7710,11 +7833,8 @@ impl DeviceFarm for DeviceFarmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetJobError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<GetJobError>)
+                            .and_then(|response| Err(GetJobError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7737,11 +7857,16 @@ impl DeviceFarm for DeviceFarmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetNetworkProfileError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetNetworkProfileResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetNetworkProfileError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetNetworkProfileResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7749,11 +7874,12 @@ impl DeviceFarm for DeviceFarmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetNetworkProfileError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetNetworkProfileError>
+                            })
+                            .and_then(|response| {
+                                Err(GetNetworkProfileError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7776,11 +7902,16 @@ impl DeviceFarm for DeviceFarmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetOfferingStatusError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetOfferingStatusResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetOfferingStatusError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetOfferingStatusResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7788,11 +7919,12 @@ impl DeviceFarm for DeviceFarmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetOfferingStatusError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetOfferingStatusError>
+                            })
+                            .and_then(|response| {
+                                Err(GetOfferingStatusError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7815,11 +7947,16 @@ impl DeviceFarm for DeviceFarmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetProjectError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetProjectResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetProjectError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetProjectResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7827,11 +7964,10 @@ impl DeviceFarm for DeviceFarmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetProjectError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetProjectError>
+                            })
+                            .and_then(|response| Err(GetProjectError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7854,11 +7990,17 @@ impl DeviceFarm for DeviceFarmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetRemoteAccessSessionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetRemoteAccessSessionResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetRemoteAccessSessionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetRemoteAccessSessionResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7866,13 +8008,13 @@ impl DeviceFarm for DeviceFarmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(GetRemoteAccessSessionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetRemoteAccessSessionError>
+                            })
+                            .and_then(|response| {
+                                Err(GetRemoteAccessSessionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7892,11 +8034,14 @@ impl DeviceFarm for DeviceFarmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetRunError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetRunResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<GetRunError>)
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetRunResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7904,11 +8049,8 @@ impl DeviceFarm for DeviceFarmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetRunError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<GetRunError>)
+                            .and_then(|response| Err(GetRunError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7928,11 +8070,14 @@ impl DeviceFarm for DeviceFarmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetSuiteError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetSuiteResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<GetSuiteError>)
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetSuiteResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7940,11 +8085,8 @@ impl DeviceFarm for DeviceFarmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetSuiteError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<GetSuiteError>)
+                            .and_then(|response| Err(GetSuiteError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7964,11 +8106,14 @@ impl DeviceFarm for DeviceFarmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetTestError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetTestResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<GetTestError>)
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetTestResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7976,11 +8121,8 @@ impl DeviceFarm for DeviceFarmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetTestError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<GetTestError>)
+                            .and_then(|response| Err(GetTestError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8000,11 +8142,16 @@ impl DeviceFarm for DeviceFarmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetUploadError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetUploadResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetUploadError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetUploadResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8012,11 +8159,10 @@ impl DeviceFarm for DeviceFarmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetUploadError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetUploadError>
+                            })
+                            .and_then(|response| Err(GetUploadError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8039,11 +8185,17 @@ impl DeviceFarm for DeviceFarmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetVPCEConfigurationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetVPCEConfigurationResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetVPCEConfigurationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetVPCEConfigurationResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8051,11 +8203,13 @@ impl DeviceFarm for DeviceFarmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetVPCEConfigurationError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetVPCEConfigurationError>
+                            })
+                            .and_then(|response| {
+                                Err(GetVPCEConfigurationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8081,11 +8235,17 @@ impl DeviceFarm for DeviceFarmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| InstallToRemoteAccessSessionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<InstallToRemoteAccessSessionResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<InstallToRemoteAccessSessionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<InstallToRemoteAccessSessionResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8093,13 +8253,13 @@ impl DeviceFarm for DeviceFarmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(InstallToRemoteAccessSessionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<InstallToRemoteAccessSessionError>
+                            })
+                            .and_then(|response| {
+                                Err(InstallToRemoteAccessSessionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8122,11 +8282,16 @@ impl DeviceFarm for DeviceFarmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListArtifactsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListArtifactsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListArtifactsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListArtifactsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8134,11 +8299,10 @@ impl DeviceFarm for DeviceFarmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListArtifactsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListArtifactsError>
+                            })
+                            .and_then(|response| Err(ListArtifactsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8161,11 +8325,17 @@ impl DeviceFarm for DeviceFarmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListDeviceInstancesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListDeviceInstancesResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListDeviceInstancesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListDeviceInstancesResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8173,11 +8343,13 @@ impl DeviceFarm for DeviceFarmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListDeviceInstancesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListDeviceInstancesError>
+                            })
+                            .and_then(|response| {
+                                Err(ListDeviceInstancesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8200,11 +8372,16 @@ impl DeviceFarm for DeviceFarmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListDevicePoolsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListDevicePoolsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListDevicePoolsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListDevicePoolsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8212,11 +8389,10 @@ impl DeviceFarm for DeviceFarmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListDevicePoolsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListDevicePoolsError>
+                            })
+                            .and_then(|response| Err(ListDevicePoolsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8239,11 +8415,16 @@ impl DeviceFarm for DeviceFarmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListDevicesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListDevicesResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListDevicesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListDevicesResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8251,11 +8432,10 @@ impl DeviceFarm for DeviceFarmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListDevicesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListDevicesError>
+                            })
+                            .and_then(|response| Err(ListDevicesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8278,11 +8458,17 @@ impl DeviceFarm for DeviceFarmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListInstanceProfilesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListInstanceProfilesResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListInstanceProfilesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListInstanceProfilesResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8290,11 +8476,13 @@ impl DeviceFarm for DeviceFarmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListInstanceProfilesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListInstanceProfilesError>
+                            })
+                            .and_then(|response| {
+                                Err(ListInstanceProfilesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8314,11 +8502,14 @@ impl DeviceFarm for DeviceFarmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListJobsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListJobsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<ListJobsError>)
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListJobsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8326,11 +8517,8 @@ impl DeviceFarm for DeviceFarmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListJobsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<ListJobsError>)
+                            .and_then(|response| Err(ListJobsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8353,11 +8541,17 @@ impl DeviceFarm for DeviceFarmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListNetworkProfilesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListNetworkProfilesResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListNetworkProfilesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListNetworkProfilesResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8365,11 +8559,13 @@ impl DeviceFarm for DeviceFarmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListNetworkProfilesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListNetworkProfilesError>
+                            })
+                            .and_then(|response| {
+                                Err(ListNetworkProfilesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8392,11 +8588,17 @@ impl DeviceFarm for DeviceFarmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListOfferingPromotionsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListOfferingPromotionsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListOfferingPromotionsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListOfferingPromotionsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8404,13 +8606,13 @@ impl DeviceFarm for DeviceFarmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ListOfferingPromotionsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListOfferingPromotionsError>
+                            })
+                            .and_then(|response| {
+                                Err(ListOfferingPromotionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8436,11 +8638,17 @@ impl DeviceFarm for DeviceFarmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListOfferingTransactionsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListOfferingTransactionsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListOfferingTransactionsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListOfferingTransactionsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8448,13 +8656,13 @@ impl DeviceFarm for DeviceFarmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ListOfferingTransactionsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListOfferingTransactionsError>
+                            })
+                            .and_then(|response| {
+                                Err(ListOfferingTransactionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8477,11 +8685,16 @@ impl DeviceFarm for DeviceFarmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListOfferingsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListOfferingsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListOfferingsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListOfferingsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8489,11 +8702,10 @@ impl DeviceFarm for DeviceFarmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListOfferingsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListOfferingsError>
+                            })
+                            .and_then(|response| Err(ListOfferingsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8516,11 +8728,16 @@ impl DeviceFarm for DeviceFarmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListProjectsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListProjectsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListProjectsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListProjectsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8528,11 +8745,10 @@ impl DeviceFarm for DeviceFarmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListProjectsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListProjectsError>
+                            })
+                            .and_then(|response| Err(ListProjectsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8558,11 +8774,17 @@ impl DeviceFarm for DeviceFarmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListRemoteAccessSessionsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListRemoteAccessSessionsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListRemoteAccessSessionsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListRemoteAccessSessionsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8570,13 +8792,13 @@ impl DeviceFarm for DeviceFarmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ListRemoteAccessSessionsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListRemoteAccessSessionsError>
+                            })
+                            .and_then(|response| {
+                                Err(ListRemoteAccessSessionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8596,11 +8818,14 @@ impl DeviceFarm for DeviceFarmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListRunsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListRunsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<ListRunsError>)
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListRunsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8608,11 +8833,8 @@ impl DeviceFarm for DeviceFarmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListRunsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<ListRunsError>)
+                            .and_then(|response| Err(ListRunsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8635,11 +8857,16 @@ impl DeviceFarm for DeviceFarmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListSamplesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListSamplesResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListSamplesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListSamplesResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8647,11 +8874,10 @@ impl DeviceFarm for DeviceFarmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListSamplesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListSamplesError>
+                            })
+                            .and_then(|response| Err(ListSamplesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8674,11 +8900,16 @@ impl DeviceFarm for DeviceFarmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListSuitesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListSuitesResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListSuitesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListSuitesResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8686,11 +8917,10 @@ impl DeviceFarm for DeviceFarmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListSuitesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListSuitesError>
+                            })
+                            .and_then(|response| Err(ListSuitesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8713,11 +8943,17 @@ impl DeviceFarm for DeviceFarmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListTagsForResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListTagsForResourceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListTagsForResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListTagsForResourceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8725,11 +8961,13 @@ impl DeviceFarm for DeviceFarmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListTagsForResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListTagsForResourceError>
+                            })
+                            .and_then(|response| {
+                                Err(ListTagsForResourceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8749,11 +8987,16 @@ impl DeviceFarm for DeviceFarmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListTestsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListTestsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListTestsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListTestsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8761,11 +9004,10 @@ impl DeviceFarm for DeviceFarmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListTestsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListTestsError>
+                            })
+                            .and_then(|response| Err(ListTestsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8788,11 +9030,16 @@ impl DeviceFarm for DeviceFarmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListUniqueProblemsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListUniqueProblemsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListUniqueProblemsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListUniqueProblemsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8800,11 +9047,12 @@ impl DeviceFarm for DeviceFarmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListUniqueProblemsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListUniqueProblemsError>
+                            })
+                            .and_then(|response| {
+                                Err(ListUniqueProblemsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8827,11 +9075,16 @@ impl DeviceFarm for DeviceFarmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListUploadsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListUploadsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListUploadsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListUploadsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8839,11 +9092,10 @@ impl DeviceFarm for DeviceFarmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListUploadsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListUploadsError>
+                            })
+                            .and_then(|response| Err(ListUploadsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8866,11 +9118,17 @@ impl DeviceFarm for DeviceFarmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListVPCEConfigurationsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListVPCEConfigurationsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListVPCEConfigurationsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListVPCEConfigurationsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8878,13 +9136,13 @@ impl DeviceFarm for DeviceFarmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ListVPCEConfigurationsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListVPCEConfigurationsError>
+                            })
+                            .and_then(|response| {
+                                Err(ListVPCEConfigurationsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8907,11 +9165,16 @@ impl DeviceFarm for DeviceFarmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| PurchaseOfferingError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PurchaseOfferingResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<PurchaseOfferingError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<PurchaseOfferingResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8919,11 +9182,12 @@ impl DeviceFarm for DeviceFarmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(PurchaseOfferingError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<PurchaseOfferingError>
+                            })
+                            .and_then(|response| {
+                                Err(PurchaseOfferingError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8946,11 +9210,16 @@ impl DeviceFarm for DeviceFarmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| RenewOfferingError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RenewOfferingResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<RenewOfferingError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<RenewOfferingResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8958,11 +9227,10 @@ impl DeviceFarm for DeviceFarmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(RenewOfferingError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<RenewOfferingError>
+                            })
+                            .and_then(|response| Err(RenewOfferingError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8985,11 +9253,16 @@ impl DeviceFarm for DeviceFarmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ScheduleRunError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ScheduleRunResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ScheduleRunError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ScheduleRunResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8997,11 +9270,10 @@ impl DeviceFarm for DeviceFarmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ScheduleRunError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ScheduleRunError>
+                            })
+                            .and_then(|response| Err(ScheduleRunError::from_response(response)))
                     })
                     .boxed()
             }
@@ -9021,11 +9293,14 @@ impl DeviceFarm for DeviceFarmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StopJobError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StopJobResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<StopJobError>)
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StopJobResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9033,11 +9308,8 @@ impl DeviceFarm for DeviceFarmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(StopJobError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<StopJobError>)
+                            .and_then(|response| Err(StopJobError::from_response(response)))
                     })
                     .boxed()
             }
@@ -9063,11 +9335,17 @@ impl DeviceFarm for DeviceFarmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StopRemoteAccessSessionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StopRemoteAccessSessionResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StopRemoteAccessSessionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StopRemoteAccessSessionResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9075,13 +9353,13 @@ impl DeviceFarm for DeviceFarmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(StopRemoteAccessSessionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StopRemoteAccessSessionError>
+                            })
+                            .and_then(|response| {
+                                Err(StopRemoteAccessSessionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9101,11 +9379,14 @@ impl DeviceFarm for DeviceFarmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StopRunError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StopRunResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<StopRunError>)
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StopRunResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9113,11 +9394,8 @@ impl DeviceFarm for DeviceFarmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(StopRunError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<StopRunError>)
+                            .and_then(|response| Err(StopRunError::from_response(response)))
                     })
                     .boxed()
             }
@@ -9140,11 +9418,16 @@ impl DeviceFarm for DeviceFarmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| TagResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<TagResourceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<TagResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<TagResourceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9152,11 +9435,10 @@ impl DeviceFarm for DeviceFarmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(TagResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<TagResourceError>
+                            })
+                            .and_then(|response| Err(TagResourceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -9179,11 +9461,16 @@ impl DeviceFarm for DeviceFarmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UntagResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UntagResourceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UntagResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UntagResourceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9191,11 +9478,10 @@ impl DeviceFarm for DeviceFarmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UntagResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UntagResourceError>
+                            })
+                            .and_then(|response| Err(UntagResourceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -9218,11 +9504,17 @@ impl DeviceFarm for DeviceFarmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateDeviceInstanceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateDeviceInstanceResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateDeviceInstanceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateDeviceInstanceResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9230,11 +9522,13 @@ impl DeviceFarm for DeviceFarmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateDeviceInstanceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateDeviceInstanceError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateDeviceInstanceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9257,11 +9551,16 @@ impl DeviceFarm for DeviceFarmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateDevicePoolError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateDevicePoolResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateDevicePoolError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateDevicePoolResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9269,11 +9568,12 @@ impl DeviceFarm for DeviceFarmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateDevicePoolError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateDevicePoolError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateDevicePoolError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9296,11 +9596,17 @@ impl DeviceFarm for DeviceFarmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateInstanceProfileError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateInstanceProfileResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateInstanceProfileError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateInstanceProfileResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9308,11 +9614,13 @@ impl DeviceFarm for DeviceFarmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateInstanceProfileError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateInstanceProfileError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateInstanceProfileError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9335,11 +9643,17 @@ impl DeviceFarm for DeviceFarmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateNetworkProfileError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateNetworkProfileResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateNetworkProfileError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateNetworkProfileResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9347,11 +9661,13 @@ impl DeviceFarm for DeviceFarmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateNetworkProfileError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateNetworkProfileError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateNetworkProfileError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9374,11 +9690,16 @@ impl DeviceFarm for DeviceFarmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateProjectError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateProjectResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateProjectError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateProjectResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9386,11 +9707,10 @@ impl DeviceFarm for DeviceFarmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateProjectError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateProjectError>
+                            })
+                            .and_then(|response| Err(UpdateProjectError::from_response(response)))
                     })
                     .boxed()
             }
@@ -9413,11 +9733,16 @@ impl DeviceFarm for DeviceFarmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateUploadError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateUploadResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateUploadError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateUploadResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9425,11 +9750,10 @@ impl DeviceFarm for DeviceFarmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateUploadError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateUploadError>
+                            })
+                            .and_then(|response| Err(UpdateUploadError::from_response(response)))
                     })
                     .boxed()
             }
@@ -9455,11 +9779,17 @@ impl DeviceFarm for DeviceFarmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateVPCEConfigurationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateVPCEConfigurationResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateVPCEConfigurationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateVPCEConfigurationResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -9467,13 +9797,13 @@ impl DeviceFarm for DeviceFarmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(UpdateVPCEConfigurationError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateVPCEConfigurationError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateVPCEConfigurationError::from_response(response))
+                            })
                     })
                     .boxed()
             }

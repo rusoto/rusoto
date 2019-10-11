@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -656,19 +656,19 @@ impl Macie for MacieClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(AssociateMemberAccountError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AssociateMemberAccountError>
+                            })
+                            .and_then(|response| {
+                                Err(AssociateMemberAccountError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -691,11 +691,17 @@ impl Macie for MacieClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AssociateS3ResourcesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AssociateS3ResourcesResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AssociateS3ResourcesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AssociateS3ResourcesResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -703,11 +709,13 @@ impl Macie for MacieClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(AssociateS3ResourcesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AssociateS3ResourcesError>
+                            })
+                            .and_then(|response| {
+                                Err(AssociateS3ResourcesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -728,19 +736,19 @@ impl Macie for MacieClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DisassociateMemberAccountError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DisassociateMemberAccountError>
+                            })
+                            .and_then(|response| {
+                                Err(DisassociateMemberAccountError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -763,11 +771,17 @@ impl Macie for MacieClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DisassociateS3ResourcesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DisassociateS3ResourcesResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DisassociateS3ResourcesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DisassociateS3ResourcesResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -775,13 +789,13 @@ impl Macie for MacieClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DisassociateS3ResourcesError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DisassociateS3ResourcesError>
+                            })
+                            .and_then(|response| {
+                                Err(DisassociateS3ResourcesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -804,11 +818,16 @@ impl Macie for MacieClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListMemberAccountsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListMemberAccountsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListMemberAccountsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListMemberAccountsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -816,11 +835,12 @@ impl Macie for MacieClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListMemberAccountsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListMemberAccountsError>
+                            })
+                            .and_then(|response| {
+                                Err(ListMemberAccountsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -843,11 +863,16 @@ impl Macie for MacieClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListS3ResourcesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListS3ResourcesResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListS3ResourcesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListS3ResourcesResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -855,11 +880,10 @@ impl Macie for MacieClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListS3ResourcesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListS3ResourcesError>
+                            })
+                            .and_then(|response| Err(ListS3ResourcesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -882,11 +906,16 @@ impl Macie for MacieClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateS3ResourcesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateS3ResourcesResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateS3ResourcesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateS3ResourcesResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -894,11 +923,12 @@ impl Macie for MacieClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateS3ResourcesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateS3ResourcesError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateS3ResourcesError::from_response(response))
+                            })
                     })
                     .boxed()
             }

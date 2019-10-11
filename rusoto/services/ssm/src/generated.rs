@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -14913,11 +14913,16 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AddTagsToResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AddTagsToResourceResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<AddTagsToResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AddTagsToResourceResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -14925,11 +14930,12 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(AddTagsToResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<AddTagsToResourceError>
+                            })
+                            .and_then(|response| {
+                                Err(AddTagsToResourceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -14952,11 +14958,16 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CancelCommandError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CancelCommandResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CancelCommandError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CancelCommandResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -14964,11 +14975,10 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CancelCommandError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CancelCommandError>
+                            })
+                            .and_then(|response| Err(CancelCommandError::from_response(response)))
                     })
                     .boxed()
             }
@@ -14992,11 +15002,17 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CancelMaintenanceWindowExecutionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CancelMaintenanceWindowExecutionResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CancelMaintenanceWindowExecutionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CancelMaintenanceWindowExecutionResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -15004,15 +15020,15 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(CancelMaintenanceWindowExecutionError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CancelMaintenanceWindowExecutionError>
+                            })
+                            .and_then(|response| {
+                                Err(CancelMaintenanceWindowExecutionError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -15035,11 +15051,16 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateActivationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateActivationResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateActivationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateActivationResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -15047,11 +15068,12 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateActivationError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateActivationError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateActivationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -15074,11 +15096,16 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateAssociationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateAssociationResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateAssociationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateAssociationResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -15086,11 +15113,12 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateAssociationError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateAssociationError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateAssociationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -15113,11 +15141,17 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateAssociationBatchError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateAssociationBatchResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateAssociationBatchError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateAssociationBatchResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -15125,13 +15159,13 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(CreateAssociationBatchError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateAssociationBatchError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateAssociationBatchError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -15154,11 +15188,16 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateDocumentError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateDocumentResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateDocumentError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateDocumentResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -15166,11 +15205,10 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateDocumentError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateDocumentError>
+                            })
+                            .and_then(|response| Err(CreateDocumentError::from_response(response)))
                     })
                     .boxed()
             }
@@ -15193,11 +15231,17 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateMaintenanceWindowError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateMaintenanceWindowResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateMaintenanceWindowError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateMaintenanceWindowResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -15205,13 +15249,13 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(CreateMaintenanceWindowError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateMaintenanceWindowError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateMaintenanceWindowError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -15234,11 +15278,16 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateOpsItemError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateOpsItemResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateOpsItemError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateOpsItemResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -15246,11 +15295,10 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateOpsItemError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateOpsItemError>
+                            })
+                            .and_then(|response| Err(CreateOpsItemError::from_response(response)))
                     })
                     .boxed()
             }
@@ -15273,11 +15321,17 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreatePatchBaselineError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreatePatchBaselineResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreatePatchBaselineError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreatePatchBaselineResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -15285,11 +15339,13 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreatePatchBaselineError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreatePatchBaselineError>
+                            })
+                            .and_then(|response| {
+                                Err(CreatePatchBaselineError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -15312,11 +15368,17 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateResourceDataSyncError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateResourceDataSyncResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateResourceDataSyncError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateResourceDataSyncResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -15324,13 +15386,13 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(CreateResourceDataSyncError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateResourceDataSyncError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateResourceDataSyncError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -15353,11 +15415,16 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteActivationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteActivationResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteActivationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteActivationResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -15365,11 +15432,12 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteActivationError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteActivationError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteActivationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -15392,11 +15460,16 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteAssociationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteAssociationResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteAssociationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteAssociationResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -15404,11 +15477,12 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteAssociationError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteAssociationError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteAssociationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -15431,11 +15505,16 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteDocumentError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteDocumentResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteDocumentError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteDocumentResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -15443,11 +15522,10 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteDocumentError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteDocumentError>
+                            })
+                            .and_then(|response| Err(DeleteDocumentError::from_response(response)))
                     })
                     .boxed()
             }
@@ -15470,11 +15548,16 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteInventoryError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteInventoryResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteInventoryError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteInventoryResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -15482,11 +15565,10 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteInventoryError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteInventoryError>
+                            })
+                            .and_then(|response| Err(DeleteInventoryError::from_response(response)))
                     })
                     .boxed()
             }
@@ -15509,11 +15591,17 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteMaintenanceWindowError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteMaintenanceWindowResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteMaintenanceWindowError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteMaintenanceWindowResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -15521,13 +15609,13 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DeleteMaintenanceWindowError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteMaintenanceWindowError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteMaintenanceWindowError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -15550,11 +15638,16 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteParameterError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteParameterResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteParameterError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteParameterResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -15562,11 +15655,10 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteParameterError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteParameterError>
+                            })
+                            .and_then(|response| Err(DeleteParameterError::from_response(response)))
                     })
                     .boxed()
             }
@@ -15589,11 +15681,16 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteParametersError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteParametersResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteParametersError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteParametersResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -15601,11 +15698,12 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteParametersError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteParametersError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteParametersError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -15628,11 +15726,17 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeletePatchBaselineError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeletePatchBaselineResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeletePatchBaselineError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeletePatchBaselineResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -15640,11 +15744,13 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeletePatchBaselineError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeletePatchBaselineError>
+                            })
+                            .and_then(|response| {
+                                Err(DeletePatchBaselineError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -15667,11 +15773,17 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteResourceDataSyncError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteResourceDataSyncResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteResourceDataSyncError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteResourceDataSyncResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -15679,13 +15791,13 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DeleteResourceDataSyncError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteResourceDataSyncError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteResourceDataSyncError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -15708,11 +15820,17 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeregisterManagedInstanceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeregisterManagedInstanceResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeregisterManagedInstanceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeregisterManagedInstanceResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -15720,13 +15838,13 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DeregisterManagedInstanceError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeregisterManagedInstanceError>
+                            })
+                            .and_then(|response| {
+                                Err(DeregisterManagedInstanceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -15755,11 +15873,17 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeregisterPatchBaselineForPatchGroupError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeregisterPatchBaselineForPatchGroupResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeregisterPatchBaselineForPatchGroupError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeregisterPatchBaselineForPatchGroupResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -15767,15 +15891,15 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DeregisterPatchBaselineForPatchGroupError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeregisterPatchBaselineForPatchGroupError>
+                            })
+                            .and_then(|response| {
+                                Err(DeregisterPatchBaselineForPatchGroupError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -15804,11 +15928,17 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeregisterTargetFromMaintenanceWindowError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeregisterTargetFromMaintenanceWindowResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeregisterTargetFromMaintenanceWindowError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeregisterTargetFromMaintenanceWindowResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -15816,15 +15946,15 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DeregisterTargetFromMaintenanceWindowError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeregisterTargetFromMaintenanceWindowError>
+                            })
+                            .and_then(|response| {
+                                Err(DeregisterTargetFromMaintenanceWindowError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -15853,11 +15983,17 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeregisterTaskFromMaintenanceWindowError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeregisterTaskFromMaintenanceWindowResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeregisterTaskFromMaintenanceWindowError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeregisterTaskFromMaintenanceWindowResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -15865,15 +16001,15 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DeregisterTaskFromMaintenanceWindowError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeregisterTaskFromMaintenanceWindowError>
+                            })
+                            .and_then(|response| {
+                                Err(DeregisterTaskFromMaintenanceWindowError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -15896,11 +16032,17 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeActivationsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeActivationsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeActivationsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeActivationsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -15908,11 +16050,13 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeActivationsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeActivationsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeActivationsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -15935,11 +16079,17 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeAssociationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeAssociationResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeAssociationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeAssociationResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -15947,11 +16097,13 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeAssociationError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeAssociationError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeAssociationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -15980,11 +16132,17 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeAssociationExecutionTargetsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeAssociationExecutionTargetsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeAssociationExecutionTargetsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeAssociationExecutionTargetsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -15992,15 +16150,15 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeAssociationExecutionTargetsError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeAssociationExecutionTargetsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeAssociationExecutionTargetsError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -16023,11 +16181,17 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeAssociationExecutionsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeAssociationExecutionsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeAssociationExecutionsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeAssociationExecutionsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -16035,13 +16199,13 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeAssociationExecutionsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeAssociationExecutionsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeAssociationExecutionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -16064,11 +16228,17 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeAutomationExecutionsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeAutomationExecutionsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeAutomationExecutionsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeAutomationExecutionsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -16076,13 +16246,13 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeAutomationExecutionsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeAutomationExecutionsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeAutomationExecutionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -16106,11 +16276,17 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeAutomationStepExecutionsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeAutomationStepExecutionsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeAutomationStepExecutionsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeAutomationStepExecutionsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -16118,15 +16294,15 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeAutomationStepExecutionsError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeAutomationStepExecutionsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeAutomationStepExecutionsError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -16149,11 +16325,17 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeAvailablePatchesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeAvailablePatchesResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeAvailablePatchesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeAvailablePatchesResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -16161,13 +16343,13 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeAvailablePatchesError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeAvailablePatchesError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeAvailablePatchesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -16190,11 +16372,16 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeDocumentError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeDocumentResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeDocumentError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeDocumentResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -16202,11 +16389,12 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeDocumentError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeDocumentError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeDocumentError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -16229,11 +16417,17 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeDocumentPermissionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeDocumentPermissionResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeDocumentPermissionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeDocumentPermissionResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -16241,13 +16435,13 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeDocumentPermissionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeDocumentPermissionError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeDocumentPermissionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -16276,11 +16470,17 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeEffectiveInstanceAssociationsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeEffectiveInstanceAssociationsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeEffectiveInstanceAssociationsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeEffectiveInstanceAssociationsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -16288,15 +16488,15 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeEffectiveInstanceAssociationsError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeEffectiveInstanceAssociationsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeEffectiveInstanceAssociationsError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -16323,16 +16523,22 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
                         if response.status.is_success() {
-                            response.buffer().map(|try_response| {
-                try_response.and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<DescribeEffectivePatchesForPatchBaselineResult, _>()
-                })
-            }).boxed()
+                            response.buffer()
+                .map_err(|e| DescribeEffectivePatchesForPatchBaselineError::from(e))
+                .map(|try_response| {
+                    try_response
+                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<DescribeEffectivePatchesForPatchBaselineError>)
+                    .and_then(|response| {
+                        proto::json::ResponsePayload::new(&response).deserialize::<DescribeEffectivePatchesForPatchBaselineResult, _>()
+                    })
+                }).boxed()
                         } else {
                             response.buffer().map(|try_response| {
-                                try_response.map_or_else(|e| e, |response| {
-                                    Err(DescribeEffectivePatchesForPatchBaselineError::from_response(response))
-                                }).boxed()
+                                try_response
+                                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<DescribeEffectivePatchesForPatchBaselineError>)
+                                    .and_then(|response| {
+                                        Err(DescribeEffectivePatchesForPatchBaselineError::from_response(response))
+                                    })
                             }).boxed()
                         }
                     })
@@ -16360,11 +16566,17 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeInstanceAssociationsStatusError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeInstanceAssociationsStatusResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeInstanceAssociationsStatusError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeInstanceAssociationsStatusResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -16372,15 +16584,15 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeInstanceAssociationsStatusError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeInstanceAssociationsStatusError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeInstanceAssociationsStatusError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -16403,11 +16615,17 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeInstanceInformationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeInstanceInformationResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeInstanceInformationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeInstanceInformationResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -16415,13 +16633,13 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeInstanceInformationError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeInstanceInformationError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeInstanceInformationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -16444,11 +16662,17 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeInstancePatchStatesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeInstancePatchStatesResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeInstancePatchStatesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeInstancePatchStatesResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -16456,13 +16680,13 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeInstancePatchStatesError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeInstancePatchStatesError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeInstancePatchStatesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -16489,16 +16713,22 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
                         if response.status.is_success() {
-                            response.buffer().map(|try_response| {
-                try_response.and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<DescribeInstancePatchStatesForPatchGroupResult, _>()
-                })
-            }).boxed()
+                            response.buffer()
+                .map_err(|e| DescribeInstancePatchStatesForPatchGroupError::from(e))
+                .map(|try_response| {
+                    try_response
+                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<DescribeInstancePatchStatesForPatchGroupError>)
+                    .and_then(|response| {
+                        proto::json::ResponsePayload::new(&response).deserialize::<DescribeInstancePatchStatesForPatchGroupResult, _>()
+                    })
+                }).boxed()
                         } else {
                             response.buffer().map(|try_response| {
-                                try_response.map_or_else(|e| e, |response| {
-                                    Err(DescribeInstancePatchStatesForPatchGroupError::from_response(response))
-                                }).boxed()
+                                try_response
+                                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<DescribeInstancePatchStatesForPatchGroupError>)
+                                    .and_then(|response| {
+                                        Err(DescribeInstancePatchStatesForPatchGroupError::from_response(response))
+                                    })
                             }).boxed()
                         }
                     })
@@ -16520,11 +16750,17 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeInstancePatchesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeInstancePatchesResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeInstancePatchesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeInstancePatchesResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -16532,13 +16768,13 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeInstancePatchesError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeInstancePatchesError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeInstancePatchesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -16561,11 +16797,17 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeInventoryDeletionsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeInventoryDeletionsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeInventoryDeletionsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeInventoryDeletionsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -16573,13 +16815,13 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeInventoryDeletionsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeInventoryDeletionsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeInventoryDeletionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -16606,16 +16848,22 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
                         if response.status.is_success() {
-                            response.buffer().map(|try_response| {
-                try_response.and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<DescribeMaintenanceWindowExecutionTaskInvocationsResult, _>()
-                })
-            }).boxed()
+                            response.buffer()
+                .map_err(|e| DescribeMaintenanceWindowExecutionTaskInvocationsError::from(e))
+                .map(|try_response| {
+                    try_response
+                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<DescribeMaintenanceWindowExecutionTaskInvocationsError>)
+                    .and_then(|response| {
+                        proto::json::ResponsePayload::new(&response).deserialize::<DescribeMaintenanceWindowExecutionTaskInvocationsResult, _>()
+                    })
+                }).boxed()
                         } else {
                             response.buffer().map(|try_response| {
-                                try_response.map_or_else(|e| e, |response| {
-                                    Err(DescribeMaintenanceWindowExecutionTaskInvocationsError::from_response(response))
-                                }).boxed()
+                                try_response
+                                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<DescribeMaintenanceWindowExecutionTaskInvocationsError>)
+                                    .and_then(|response| {
+                                        Err(DescribeMaintenanceWindowExecutionTaskInvocationsError::from_response(response))
+                                    })
                             }).boxed()
                         }
                     })
@@ -16641,16 +16889,22 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
                         if response.status.is_success() {
-                            response.buffer().map(|try_response| {
-                try_response.and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<DescribeMaintenanceWindowExecutionTasksResult, _>()
-                })
-            }).boxed()
+                            response.buffer()
+                .map_err(|e| DescribeMaintenanceWindowExecutionTasksError::from(e))
+                .map(|try_response| {
+                    try_response
+                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<DescribeMaintenanceWindowExecutionTasksError>)
+                    .and_then(|response| {
+                        proto::json::ResponsePayload::new(&response).deserialize::<DescribeMaintenanceWindowExecutionTasksResult, _>()
+                    })
+                }).boxed()
                         } else {
                             response.buffer().map(|try_response| {
-                                try_response.map_or_else(|e| e, |response| {
-                                    Err(DescribeMaintenanceWindowExecutionTasksError::from_response(response))
-                                }).boxed()
+                                try_response
+                                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<DescribeMaintenanceWindowExecutionTasksError>)
+                                    .and_then(|response| {
+                                        Err(DescribeMaintenanceWindowExecutionTasksError::from_response(response))
+                                    })
                             }).boxed()
                         }
                     })
@@ -16678,11 +16932,17 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeMaintenanceWindowExecutionsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeMaintenanceWindowExecutionsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeMaintenanceWindowExecutionsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeMaintenanceWindowExecutionsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -16690,15 +16950,15 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeMaintenanceWindowExecutionsError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeMaintenanceWindowExecutionsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeMaintenanceWindowExecutionsError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -16725,11 +16985,17 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeMaintenanceWindowScheduleError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeMaintenanceWindowScheduleResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeMaintenanceWindowScheduleError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeMaintenanceWindowScheduleResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -16737,15 +17003,15 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeMaintenanceWindowScheduleError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeMaintenanceWindowScheduleError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeMaintenanceWindowScheduleError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -16769,11 +17035,17 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeMaintenanceWindowTargetsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeMaintenanceWindowTargetsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeMaintenanceWindowTargetsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeMaintenanceWindowTargetsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -16781,15 +17053,15 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeMaintenanceWindowTargetsError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeMaintenanceWindowTargetsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeMaintenanceWindowTargetsError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -16813,11 +17085,17 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeMaintenanceWindowTasksError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeMaintenanceWindowTasksResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeMaintenanceWindowTasksError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeMaintenanceWindowTasksResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -16825,15 +17103,13 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeMaintenanceWindowTasksError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeMaintenanceWindowTasksError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeMaintenanceWindowTasksError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -16856,11 +17132,17 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeMaintenanceWindowsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeMaintenanceWindowsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeMaintenanceWindowsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeMaintenanceWindowsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -16868,13 +17150,13 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeMaintenanceWindowsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeMaintenanceWindowsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeMaintenanceWindowsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -16903,11 +17185,17 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeMaintenanceWindowsForTargetError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeMaintenanceWindowsForTargetResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeMaintenanceWindowsForTargetError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeMaintenanceWindowsForTargetResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -16915,15 +17203,15 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeMaintenanceWindowsForTargetError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeMaintenanceWindowsForTargetError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeMaintenanceWindowsForTargetError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -16946,11 +17234,16 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeOpsItemsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeOpsItemsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeOpsItemsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeOpsItemsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -16958,11 +17251,12 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeOpsItemsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeOpsItemsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeOpsItemsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -16985,11 +17279,16 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeParametersError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeParametersResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeParametersError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeParametersResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -16997,11 +17296,12 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeParametersError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeParametersError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeParametersError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -17024,11 +17324,17 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribePatchBaselinesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribePatchBaselinesResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribePatchBaselinesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribePatchBaselinesResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -17036,13 +17342,13 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribePatchBaselinesError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribePatchBaselinesError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribePatchBaselinesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -17065,11 +17371,17 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribePatchGroupStateError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribePatchGroupStateResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribePatchGroupStateError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribePatchGroupStateResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -17077,13 +17389,13 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribePatchGroupStateError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribePatchGroupStateError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribePatchGroupStateError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -17106,11 +17418,17 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribePatchGroupsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribePatchGroupsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribePatchGroupsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribePatchGroupsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -17118,11 +17436,13 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribePatchGroupsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribePatchGroupsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribePatchGroupsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -17145,11 +17465,17 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribePatchPropertiesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribePatchPropertiesResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribePatchPropertiesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribePatchPropertiesResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -17157,13 +17483,13 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribePatchPropertiesError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribePatchPropertiesError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribePatchPropertiesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -17186,11 +17512,16 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeSessionsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeSessionsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeSessionsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeSessionsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -17198,11 +17529,12 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeSessionsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeSessionsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeSessionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -17225,11 +17557,17 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetAutomationExecutionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetAutomationExecutionResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetAutomationExecutionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetAutomationExecutionResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -17237,13 +17575,13 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(GetAutomationExecutionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetAutomationExecutionError>
+                            })
+                            .and_then(|response| {
+                                Err(GetAutomationExecutionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -17266,11 +17604,17 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetCommandInvocationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetCommandInvocationResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetCommandInvocationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetCommandInvocationResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -17278,11 +17622,13 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetCommandInvocationError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetCommandInvocationError>
+                            })
+                            .and_then(|response| {
+                                Err(GetCommandInvocationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -17305,11 +17651,17 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetConnectionStatusError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetConnectionStatusResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetConnectionStatusError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetConnectionStatusResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -17317,11 +17669,13 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetConnectionStatusError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetConnectionStatusError>
+                            })
+                            .and_then(|response| {
+                                Err(GetConnectionStatusError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -17344,11 +17698,17 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetDefaultPatchBaselineError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetDefaultPatchBaselineResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetDefaultPatchBaselineError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetDefaultPatchBaselineResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -17356,13 +17716,13 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(GetDefaultPatchBaselineError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetDefaultPatchBaselineError>
+                            })
+                            .and_then(|response| {
+                                Err(GetDefaultPatchBaselineError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -17391,11 +17751,17 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetDeployablePatchSnapshotForInstanceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetDeployablePatchSnapshotForInstanceResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetDeployablePatchSnapshotForInstanceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetDeployablePatchSnapshotForInstanceResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -17403,15 +17769,15 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(GetDeployablePatchSnapshotForInstanceError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetDeployablePatchSnapshotForInstanceError>
+                            })
+                            .and_then(|response| {
+                                Err(GetDeployablePatchSnapshotForInstanceError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -17434,11 +17800,16 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetDocumentError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetDocumentResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetDocumentError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetDocumentResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -17446,11 +17817,10 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetDocumentError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetDocumentError>
+                            })
+                            .and_then(|response| Err(GetDocumentError::from_response(response)))
                     })
                     .boxed()
             }
@@ -17473,11 +17843,16 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetInventoryError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetInventoryResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetInventoryError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetInventoryResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -17485,11 +17860,10 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetInventoryError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetInventoryError>
+                            })
+                            .and_then(|response| Err(GetInventoryError::from_response(response)))
                     })
                     .boxed()
             }
@@ -17512,11 +17886,16 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetInventorySchemaError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetInventorySchemaResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetInventorySchemaError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetInventorySchemaResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -17524,11 +17903,12 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetInventorySchemaError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetInventorySchemaError>
+                            })
+                            .and_then(|response| {
+                                Err(GetInventorySchemaError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -17551,11 +17931,17 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetMaintenanceWindowError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetMaintenanceWindowResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetMaintenanceWindowError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetMaintenanceWindowResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -17563,11 +17949,13 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetMaintenanceWindowError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetMaintenanceWindowError>
+                            })
+                            .and_then(|response| {
+                                Err(GetMaintenanceWindowError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -17590,11 +17978,17 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetMaintenanceWindowExecutionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetMaintenanceWindowExecutionResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetMaintenanceWindowExecutionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetMaintenanceWindowExecutionResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -17602,13 +17996,13 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(GetMaintenanceWindowExecutionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetMaintenanceWindowExecutionError>
+                            })
+                            .and_then(|response| {
+                                Err(GetMaintenanceWindowExecutionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -17635,11 +18029,17 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetMaintenanceWindowExecutionTaskError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetMaintenanceWindowExecutionTaskResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetMaintenanceWindowExecutionTaskError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetMaintenanceWindowExecutionTaskResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -17647,15 +18047,15 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(GetMaintenanceWindowExecutionTaskError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetMaintenanceWindowExecutionTaskError>
+                            })
+                            .and_then(|response| {
+                                Err(GetMaintenanceWindowExecutionTaskError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -17682,16 +18082,22 @@ impl Ssm for SsmClient {
 
         self.client.sign_and_dispatch(request, |response| {
                         if response.status.is_success() {
-                            response.buffer().map(|try_response| {
-                try_response.and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<GetMaintenanceWindowExecutionTaskInvocationResult, _>()
-                })
-            }).boxed()
+                            response.buffer()
+                .map_err(|e| GetMaintenanceWindowExecutionTaskInvocationError::from(e))
+                .map(|try_response| {
+                    try_response
+                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<GetMaintenanceWindowExecutionTaskInvocationError>)
+                    .and_then(|response| {
+                        proto::json::ResponsePayload::new(&response).deserialize::<GetMaintenanceWindowExecutionTaskInvocationResult, _>()
+                    })
+                }).boxed()
                         } else {
                             response.buffer().map(|try_response| {
-                                try_response.map_or_else(|e| e, |response| {
-                                    Err(GetMaintenanceWindowExecutionTaskInvocationError::from_response(response))
-                                }).boxed()
+                                try_response
+                                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<GetMaintenanceWindowExecutionTaskInvocationError>)
+                                    .and_then(|response| {
+                                        Err(GetMaintenanceWindowExecutionTaskInvocationError::from_response(response))
+                                    })
                             }).boxed()
                         }
                     })
@@ -17713,11 +18119,17 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetMaintenanceWindowTaskError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetMaintenanceWindowTaskResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetMaintenanceWindowTaskError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetMaintenanceWindowTaskResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -17725,13 +18137,13 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(GetMaintenanceWindowTaskError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetMaintenanceWindowTaskError>
+                            })
+                            .and_then(|response| {
+                                Err(GetMaintenanceWindowTaskError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -17754,11 +18166,16 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetOpsItemError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetOpsItemResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetOpsItemError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetOpsItemResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -17766,11 +18183,10 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetOpsItemError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetOpsItemError>
+                            })
+                            .and_then(|response| Err(GetOpsItemError::from_response(response)))
                     })
                     .boxed()
             }
@@ -17793,11 +18209,16 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetOpsSummaryError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetOpsSummaryResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetOpsSummaryError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetOpsSummaryResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -17805,11 +18226,10 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetOpsSummaryError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetOpsSummaryError>
+                            })
+                            .and_then(|response| Err(GetOpsSummaryError::from_response(response)))
                     })
                     .boxed()
             }
@@ -17832,11 +18252,16 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetParameterError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetParameterResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetParameterError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetParameterResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -17844,11 +18269,10 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetParameterError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetParameterError>
+                            })
+                            .and_then(|response| Err(GetParameterError::from_response(response)))
                     })
                     .boxed()
             }
@@ -17871,11 +18295,17 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetParameterHistoryError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetParameterHistoryResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetParameterHistoryError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetParameterHistoryResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -17883,11 +18313,13 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetParameterHistoryError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetParameterHistoryError>
+                            })
+                            .and_then(|response| {
+                                Err(GetParameterHistoryError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -17910,11 +18342,16 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetParametersError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetParametersResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetParametersError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetParametersResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -17922,11 +18359,10 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetParametersError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetParametersError>
+                            })
+                            .and_then(|response| Err(GetParametersError::from_response(response)))
                     })
                     .boxed()
             }
@@ -17949,11 +18385,17 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetParametersByPathError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetParametersByPathResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetParametersByPathError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetParametersByPathResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -17961,11 +18403,13 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetParametersByPathError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetParametersByPathError>
+                            })
+                            .and_then(|response| {
+                                Err(GetParametersByPathError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -17988,11 +18432,16 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetPatchBaselineError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetPatchBaselineResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetPatchBaselineError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetPatchBaselineResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -18000,11 +18449,12 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetPatchBaselineError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetPatchBaselineError>
+                            })
+                            .and_then(|response| {
+                                Err(GetPatchBaselineError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -18027,11 +18477,17 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetPatchBaselineForPatchGroupError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetPatchBaselineForPatchGroupResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetPatchBaselineForPatchGroupError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetPatchBaselineForPatchGroupResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -18039,13 +18495,13 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(GetPatchBaselineForPatchGroupError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetPatchBaselineForPatchGroupError>
+                            })
+                            .and_then(|response| {
+                                Err(GetPatchBaselineForPatchGroupError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -18068,11 +18524,16 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetServiceSettingError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetServiceSettingResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetServiceSettingError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetServiceSettingResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -18080,11 +18541,12 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetServiceSettingError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetServiceSettingError>
+                            })
+                            .and_then(|response| {
+                                Err(GetServiceSettingError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -18107,11 +18569,17 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| LabelParameterVersionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<LabelParameterVersionResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<LabelParameterVersionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<LabelParameterVersionResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -18119,11 +18587,13 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(LabelParameterVersionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<LabelParameterVersionError>
+                            })
+                            .and_then(|response| {
+                                Err(LabelParameterVersionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -18146,11 +18616,17 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListAssociationVersionsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListAssociationVersionsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListAssociationVersionsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListAssociationVersionsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -18158,13 +18634,13 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ListAssociationVersionsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListAssociationVersionsError>
+                            })
+                            .and_then(|response| {
+                                Err(ListAssociationVersionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -18187,11 +18663,16 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListAssociationsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListAssociationsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListAssociationsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListAssociationsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -18199,11 +18680,12 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListAssociationsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListAssociationsError>
+                            })
+                            .and_then(|response| {
+                                Err(ListAssociationsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -18226,11 +18708,17 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListCommandInvocationsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListCommandInvocationsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListCommandInvocationsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListCommandInvocationsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -18238,13 +18726,13 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ListCommandInvocationsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListCommandInvocationsError>
+                            })
+                            .and_then(|response| {
+                                Err(ListCommandInvocationsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -18267,11 +18755,16 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListCommandsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListCommandsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListCommandsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListCommandsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -18279,11 +18772,10 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListCommandsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListCommandsError>
+                            })
+                            .and_then(|response| Err(ListCommandsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -18306,11 +18798,17 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListComplianceItemsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListComplianceItemsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListComplianceItemsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListComplianceItemsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -18318,11 +18816,13 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListComplianceItemsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListComplianceItemsError>
+                            })
+                            .and_then(|response| {
+                                Err(ListComplianceItemsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -18345,11 +18845,17 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListComplianceSummariesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListComplianceSummariesResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListComplianceSummariesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListComplianceSummariesResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -18357,13 +18863,13 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ListComplianceSummariesError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListComplianceSummariesError>
+                            })
+                            .and_then(|response| {
+                                Err(ListComplianceSummariesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -18386,11 +18892,17 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListDocumentVersionsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListDocumentVersionsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListDocumentVersionsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListDocumentVersionsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -18398,11 +18910,13 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListDocumentVersionsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListDocumentVersionsError>
+                            })
+                            .and_then(|response| {
+                                Err(ListDocumentVersionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -18425,11 +18939,16 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListDocumentsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListDocumentsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListDocumentsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListDocumentsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -18437,11 +18956,10 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListDocumentsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListDocumentsError>
+                            })
+                            .and_then(|response| Err(ListDocumentsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -18464,11 +18982,17 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListInventoryEntriesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListInventoryEntriesResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListInventoryEntriesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListInventoryEntriesResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -18476,11 +19000,13 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListInventoryEntriesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListInventoryEntriesError>
+                            })
+                            .and_then(|response| {
+                                Err(ListInventoryEntriesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -18504,11 +19030,17 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListResourceComplianceSummariesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListResourceComplianceSummariesResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListResourceComplianceSummariesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListResourceComplianceSummariesResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -18516,15 +19048,15 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ListResourceComplianceSummariesError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListResourceComplianceSummariesError>
+                            })
+                            .and_then(|response| {
+                                Err(ListResourceComplianceSummariesError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -18547,11 +19079,17 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListResourceDataSyncError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListResourceDataSyncResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListResourceDataSyncError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListResourceDataSyncResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -18559,11 +19097,13 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListResourceDataSyncError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListResourceDataSyncError>
+                            })
+                            .and_then(|response| {
+                                Err(ListResourceDataSyncError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -18586,11 +19126,17 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListTagsForResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListTagsForResourceResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListTagsForResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListTagsForResourceResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -18598,11 +19144,13 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListTagsForResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListTagsForResourceError>
+                            })
+                            .and_then(|response| {
+                                Err(ListTagsForResourceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -18625,11 +19173,17 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ModifyDocumentPermissionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ModifyDocumentPermissionResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ModifyDocumentPermissionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ModifyDocumentPermissionResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -18637,13 +19191,13 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ModifyDocumentPermissionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ModifyDocumentPermissionError>
+                            })
+                            .and_then(|response| {
+                                Err(ModifyDocumentPermissionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -18666,11 +19220,16 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| PutComplianceItemsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PutComplianceItemsResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<PutComplianceItemsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<PutComplianceItemsResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -18678,11 +19237,12 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(PutComplianceItemsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<PutComplianceItemsError>
+                            })
+                            .and_then(|response| {
+                                Err(PutComplianceItemsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -18705,11 +19265,16 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| PutInventoryError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PutInventoryResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<PutInventoryError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<PutInventoryResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -18717,11 +19282,10 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(PutInventoryError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<PutInventoryError>
+                            })
+                            .and_then(|response| Err(PutInventoryError::from_response(response)))
                     })
                     .boxed()
             }
@@ -18744,11 +19308,16 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| PutParameterError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PutParameterResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<PutParameterError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<PutParameterResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -18756,11 +19325,10 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(PutParameterError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<PutParameterError>
+                            })
+                            .and_then(|response| Err(PutParameterError::from_response(response)))
                     })
                     .boxed()
             }
@@ -18783,11 +19351,17 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| RegisterDefaultPatchBaselineError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RegisterDefaultPatchBaselineResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<RegisterDefaultPatchBaselineError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<RegisterDefaultPatchBaselineResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -18795,13 +19369,13 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(RegisterDefaultPatchBaselineError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<RegisterDefaultPatchBaselineError>
+                            })
+                            .and_then(|response| {
+                                Err(RegisterDefaultPatchBaselineError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -18830,11 +19404,17 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| RegisterPatchBaselineForPatchGroupError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RegisterPatchBaselineForPatchGroupResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<RegisterPatchBaselineForPatchGroupError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<RegisterPatchBaselineForPatchGroupResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -18842,15 +19422,15 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(RegisterPatchBaselineForPatchGroupError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<RegisterPatchBaselineForPatchGroupError>
+                            })
+                            .and_then(|response| {
+                                Err(RegisterPatchBaselineForPatchGroupError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -18879,11 +19459,17 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| RegisterTargetWithMaintenanceWindowError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RegisterTargetWithMaintenanceWindowResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<RegisterTargetWithMaintenanceWindowError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<RegisterTargetWithMaintenanceWindowResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -18891,15 +19477,15 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(RegisterTargetWithMaintenanceWindowError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<RegisterTargetWithMaintenanceWindowError>
+                            })
+                            .and_then(|response| {
+                                Err(RegisterTargetWithMaintenanceWindowError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -18926,11 +19512,17 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| RegisterTaskWithMaintenanceWindowError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RegisterTaskWithMaintenanceWindowResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<RegisterTaskWithMaintenanceWindowError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<RegisterTaskWithMaintenanceWindowResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -18938,15 +19530,15 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(RegisterTaskWithMaintenanceWindowError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<RegisterTaskWithMaintenanceWindowError>
+                            })
+                            .and_then(|response| {
+                                Err(RegisterTaskWithMaintenanceWindowError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -18969,11 +19561,17 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| RemoveTagsFromResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RemoveTagsFromResourceResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<RemoveTagsFromResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<RemoveTagsFromResourceResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -18981,13 +19579,13 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(RemoveTagsFromResourceError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<RemoveTagsFromResourceError>
+                            })
+                            .and_then(|response| {
+                                Err(RemoveTagsFromResourceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -19010,11 +19608,17 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ResetServiceSettingError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ResetServiceSettingResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ResetServiceSettingError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ResetServiceSettingResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -19022,11 +19626,13 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ResetServiceSettingError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ResetServiceSettingError>
+                            })
+                            .and_then(|response| {
+                                Err(ResetServiceSettingError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -19049,11 +19655,16 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ResumeSessionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ResumeSessionResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ResumeSessionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ResumeSessionResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -19061,11 +19672,10 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ResumeSessionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ResumeSessionError>
+                            })
+                            .and_then(|response| Err(ResumeSessionError::from_response(response)))
                     })
                     .boxed()
             }
@@ -19088,11 +19698,17 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| SendAutomationSignalError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<SendAutomationSignalResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<SendAutomationSignalError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<SendAutomationSignalResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -19100,11 +19716,13 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(SendAutomationSignalError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<SendAutomationSignalError>
+                            })
+                            .and_then(|response| {
+                                Err(SendAutomationSignalError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -19127,11 +19745,16 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| SendCommandError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<SendCommandResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<SendCommandError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<SendCommandResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -19139,11 +19762,10 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(SendCommandError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<SendCommandError>
+                            })
+                            .and_then(|response| Err(SendCommandError::from_response(response)))
                     })
                     .boxed()
             }
@@ -19166,11 +19788,17 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StartAssociationsOnceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StartAssociationsOnceResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StartAssociationsOnceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StartAssociationsOnceResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -19178,11 +19806,13 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(StartAssociationsOnceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StartAssociationsOnceError>
+                            })
+                            .and_then(|response| {
+                                Err(StartAssociationsOnceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -19205,11 +19835,17 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StartAutomationExecutionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StartAutomationExecutionResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StartAutomationExecutionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StartAutomationExecutionResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -19217,13 +19853,13 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(StartAutomationExecutionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StartAutomationExecutionError>
+                            })
+                            .and_then(|response| {
+                                Err(StartAutomationExecutionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -19246,11 +19882,16 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StartSessionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StartSessionResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StartSessionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StartSessionResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -19258,11 +19899,10 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(StartSessionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<StartSessionError>
+                            })
+                            .and_then(|response| Err(StartSessionError::from_response(response)))
                     })
                     .boxed()
             }
@@ -19285,11 +19925,17 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StopAutomationExecutionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StopAutomationExecutionResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StopAutomationExecutionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StopAutomationExecutionResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -19297,13 +19943,13 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(StopAutomationExecutionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StopAutomationExecutionError>
+                            })
+                            .and_then(|response| {
+                                Err(StopAutomationExecutionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -19326,11 +19972,16 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| TerminateSessionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<TerminateSessionResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<TerminateSessionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<TerminateSessionResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -19338,11 +19989,12 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(TerminateSessionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<TerminateSessionError>
+                            })
+                            .and_then(|response| {
+                                Err(TerminateSessionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -19365,11 +20017,16 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateAssociationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateAssociationResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateAssociationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateAssociationResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -19377,11 +20034,12 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateAssociationError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateAssociationError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateAssociationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -19404,11 +20062,17 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateAssociationStatusError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateAssociationStatusResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateAssociationStatusError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateAssociationStatusResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -19416,13 +20080,13 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(UpdateAssociationStatusError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateAssociationStatusError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateAssociationStatusError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -19445,11 +20109,16 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateDocumentError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateDocumentResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateDocumentError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateDocumentResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -19457,11 +20126,10 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateDocumentError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateDocumentError>
+                            })
+                            .and_then(|response| Err(UpdateDocumentError::from_response(response)))
                     })
                     .boxed()
             }
@@ -19484,11 +20152,17 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateDocumentDefaultVersionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateDocumentDefaultVersionResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateDocumentDefaultVersionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateDocumentDefaultVersionResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -19496,13 +20170,13 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(UpdateDocumentDefaultVersionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateDocumentDefaultVersionError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateDocumentDefaultVersionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -19525,11 +20199,17 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateMaintenanceWindowError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateMaintenanceWindowResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateMaintenanceWindowError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateMaintenanceWindowResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -19537,13 +20217,13 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(UpdateMaintenanceWindowError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateMaintenanceWindowError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateMaintenanceWindowError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -19566,11 +20246,17 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateMaintenanceWindowTargetError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateMaintenanceWindowTargetResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateMaintenanceWindowTargetError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateMaintenanceWindowTargetResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -19578,13 +20264,13 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(UpdateMaintenanceWindowTargetError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateMaintenanceWindowTargetError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateMaintenanceWindowTargetError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -19607,11 +20293,17 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateMaintenanceWindowTaskError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateMaintenanceWindowTaskResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateMaintenanceWindowTaskError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateMaintenanceWindowTaskResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -19619,13 +20311,13 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(UpdateMaintenanceWindowTaskError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateMaintenanceWindowTaskError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateMaintenanceWindowTaskError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -19648,11 +20340,17 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateManagedInstanceRoleError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateManagedInstanceRoleResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateManagedInstanceRoleError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateManagedInstanceRoleResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -19660,13 +20358,13 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(UpdateManagedInstanceRoleError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateManagedInstanceRoleError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateManagedInstanceRoleError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -19689,11 +20387,16 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateOpsItemError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateOpsItemResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateOpsItemError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateOpsItemResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -19701,11 +20404,10 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateOpsItemError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateOpsItemError>
+                            })
+                            .and_then(|response| Err(UpdateOpsItemError::from_response(response)))
                     })
                     .boxed()
             }
@@ -19728,11 +20430,17 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdatePatchBaselineError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdatePatchBaselineResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdatePatchBaselineError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdatePatchBaselineResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -19740,11 +20448,13 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdatePatchBaselineError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdatePatchBaselineError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdatePatchBaselineError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -19767,11 +20477,17 @@ impl Ssm for SsmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateServiceSettingError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateServiceSettingResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateServiceSettingError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateServiceSettingResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -19779,11 +20495,13 @@ impl Ssm for SsmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateServiceSettingError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateServiceSettingError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateServiceSettingError::from_response(response))
+                            })
                     })
                     .boxed()
             }

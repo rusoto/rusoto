@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -1645,11 +1645,17 @@ impl Shield for ShieldClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AssociateDRTLogBucketError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AssociateDRTLogBucketResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AssociateDRTLogBucketError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AssociateDRTLogBucketResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1657,11 +1663,13 @@ impl Shield for ShieldClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(AssociateDRTLogBucketError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AssociateDRTLogBucketError>
+                            })
+                            .and_then(|response| {
+                                Err(AssociateDRTLogBucketError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1684,11 +1692,16 @@ impl Shield for ShieldClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AssociateDRTRoleError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AssociateDRTRoleResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<AssociateDRTRoleError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AssociateDRTRoleResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1696,11 +1709,12 @@ impl Shield for ShieldClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(AssociateDRTRoleError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<AssociateDRTRoleError>
+                            })
+                            .and_then(|response| {
+                                Err(AssociateDRTRoleError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1723,11 +1737,16 @@ impl Shield for ShieldClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateProtectionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateProtectionResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateProtectionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateProtectionResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1735,11 +1754,12 @@ impl Shield for ShieldClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateProtectionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateProtectionError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateProtectionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1760,11 +1780,16 @@ impl Shield for ShieldClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateSubscriptionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateSubscriptionResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateSubscriptionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateSubscriptionResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1772,11 +1797,12 @@ impl Shield for ShieldClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateSubscriptionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateSubscriptionError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateSubscriptionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1799,11 +1825,16 @@ impl Shield for ShieldClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteProtectionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteProtectionResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteProtectionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteProtectionResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1811,11 +1842,12 @@ impl Shield for ShieldClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteProtectionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteProtectionError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteProtectionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1836,11 +1868,16 @@ impl Shield for ShieldClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteSubscriptionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteSubscriptionResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteSubscriptionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteSubscriptionResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1848,11 +1885,12 @@ impl Shield for ShieldClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteSubscriptionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteSubscriptionError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteSubscriptionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1875,11 +1913,16 @@ impl Shield for ShieldClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeAttackError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeAttackResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeAttackError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeAttackResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1887,11 +1930,10 @@ impl Shield for ShieldClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeAttackError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeAttackError>
+                            })
+                            .and_then(|response| Err(DescribeAttackError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1912,11 +1954,16 @@ impl Shield for ShieldClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeDRTAccessError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeDRTAccessResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeDRTAccessError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeDRTAccessResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1924,11 +1971,12 @@ impl Shield for ShieldClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeDRTAccessError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeDRTAccessError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeDRTAccessError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1953,11 +2001,17 @@ impl Shield for ShieldClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeEmergencyContactSettingsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeEmergencyContactSettingsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeEmergencyContactSettingsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeEmergencyContactSettingsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1965,15 +2019,15 @@ impl Shield for ShieldClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeEmergencyContactSettingsError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeEmergencyContactSettingsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeEmergencyContactSettingsError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -1996,11 +2050,16 @@ impl Shield for ShieldClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeProtectionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeProtectionResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeProtectionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeProtectionResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2008,11 +2067,12 @@ impl Shield for ShieldClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeProtectionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeProtectionError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeProtectionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2033,11 +2093,17 @@ impl Shield for ShieldClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeSubscriptionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeSubscriptionResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeSubscriptionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeSubscriptionResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2045,11 +2111,13 @@ impl Shield for ShieldClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeSubscriptionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeSubscriptionError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeSubscriptionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2075,11 +2143,17 @@ impl Shield for ShieldClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DisassociateDRTLogBucketError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DisassociateDRTLogBucketResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DisassociateDRTLogBucketError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DisassociateDRTLogBucketResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2087,13 +2161,13 @@ impl Shield for ShieldClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DisassociateDRTLogBucketError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DisassociateDRTLogBucketError>
+                            })
+                            .and_then(|response| {
+                                Err(DisassociateDRTLogBucketError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2114,11 +2188,17 @@ impl Shield for ShieldClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DisassociateDRTRoleError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DisassociateDRTRoleResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DisassociateDRTRoleError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DisassociateDRTRoleResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2126,11 +2206,13 @@ impl Shield for ShieldClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DisassociateDRTRoleError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DisassociateDRTRoleError>
+                            })
+                            .and_then(|response| {
+                                Err(DisassociateDRTRoleError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2151,11 +2233,17 @@ impl Shield for ShieldClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetSubscriptionStateError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetSubscriptionStateResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetSubscriptionStateError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetSubscriptionStateResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2163,11 +2251,13 @@ impl Shield for ShieldClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetSubscriptionStateError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetSubscriptionStateError>
+                            })
+                            .and_then(|response| {
+                                Err(GetSubscriptionStateError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2190,11 +2280,16 @@ impl Shield for ShieldClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListAttacksError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListAttacksResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListAttacksError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListAttacksResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2202,11 +2297,10 @@ impl Shield for ShieldClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListAttacksError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListAttacksError>
+                            })
+                            .and_then(|response| Err(ListAttacksError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2229,11 +2323,16 @@ impl Shield for ShieldClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListProtectionsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListProtectionsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListProtectionsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListProtectionsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2241,11 +2340,10 @@ impl Shield for ShieldClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListProtectionsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListProtectionsError>
+                            })
+                            .and_then(|response| Err(ListProtectionsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2272,11 +2370,17 @@ impl Shield for ShieldClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateEmergencyContactSettingsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateEmergencyContactSettingsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateEmergencyContactSettingsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateEmergencyContactSettingsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2284,15 +2388,13 @@ impl Shield for ShieldClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(UpdateEmergencyContactSettingsError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateEmergencyContactSettingsError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateEmergencyContactSettingsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2315,11 +2417,16 @@ impl Shield for ShieldClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateSubscriptionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateSubscriptionResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateSubscriptionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateSubscriptionResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2327,11 +2434,12 @@ impl Shield for ShieldClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateSubscriptionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateSubscriptionError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateSubscriptionError::from_response(response))
+                            })
                     })
                     .boxed()
             }

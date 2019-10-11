@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -239,11 +239,16 @@ impl MarketplaceCommerceAnalytics for MarketplaceCommerceAnalyticsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GenerateDataSetError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GenerateDataSetResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GenerateDataSetError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GenerateDataSetResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -251,11 +256,10 @@ impl MarketplaceCommerceAnalytics for MarketplaceCommerceAnalyticsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GenerateDataSetError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GenerateDataSetError>
+                            })
+                            .and_then(|response| Err(GenerateDataSetError::from_response(response)))
                     })
                     .boxed()
             }
@@ -282,11 +286,17 @@ impl MarketplaceCommerceAnalytics for MarketplaceCommerceAnalyticsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StartSupportDataExportError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StartSupportDataExportResult, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StartSupportDataExportError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StartSupportDataExportResult, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -294,13 +304,13 @@ impl MarketplaceCommerceAnalytics for MarketplaceCommerceAnalyticsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(StartSupportDataExportError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StartSupportDataExportError>
+                            })
+                            .and_then(|response| {
+                                Err(StartSupportDataExportError::from_response(response))
+                            })
                     })
                     .boxed()
             }

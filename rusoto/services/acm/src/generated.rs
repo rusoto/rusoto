@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -1260,17 +1260,19 @@ impl Acm for AcmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(AddTagsToCertificateError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AddTagsToCertificateError>
+                            })
+                            .and_then(|response| {
+                                Err(AddTagsToCertificateError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1291,17 +1293,18 @@ impl Acm for AcmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteCertificateError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteCertificateError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteCertificateError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1324,11 +1327,17 @@ impl Acm for AcmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeCertificateError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeCertificateResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeCertificateError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeCertificateResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1336,11 +1345,13 @@ impl Acm for AcmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeCertificateError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeCertificateError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeCertificateError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1363,11 +1374,16 @@ impl Acm for AcmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ExportCertificateError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ExportCertificateResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ExportCertificateError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ExportCertificateResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1375,11 +1391,12 @@ impl Acm for AcmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ExportCertificateError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ExportCertificateError>
+                            })
+                            .and_then(|response| {
+                                Err(ExportCertificateError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1402,11 +1419,16 @@ impl Acm for AcmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetCertificateError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetCertificateResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetCertificateError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetCertificateResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1414,11 +1436,10 @@ impl Acm for AcmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetCertificateError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetCertificateError>
+                            })
+                            .and_then(|response| Err(GetCertificateError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1441,11 +1462,16 @@ impl Acm for AcmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ImportCertificateError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ImportCertificateResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ImportCertificateError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ImportCertificateResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1453,11 +1479,12 @@ impl Acm for AcmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ImportCertificateError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ImportCertificateError>
+                            })
+                            .and_then(|response| {
+                                Err(ImportCertificateError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1480,11 +1507,16 @@ impl Acm for AcmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListCertificatesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListCertificatesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListCertificatesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListCertificatesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1492,11 +1524,12 @@ impl Acm for AcmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListCertificatesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListCertificatesError>
+                            })
+                            .and_then(|response| {
+                                Err(ListCertificatesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1519,11 +1552,17 @@ impl Acm for AcmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListTagsForCertificateError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListTagsForCertificateResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListTagsForCertificateError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListTagsForCertificateResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1531,13 +1570,13 @@ impl Acm for AcmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ListTagsForCertificateError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListTagsForCertificateError>
+                            })
+                            .and_then(|response| {
+                                Err(ListTagsForCertificateError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1561,19 +1600,19 @@ impl Acm for AcmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(RemoveTagsFromCertificateError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<RemoveTagsFromCertificateError>
+                            })
+                            .and_then(|response| {
+                                Err(RemoveTagsFromCertificateError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1594,17 +1633,18 @@ impl Acm for AcmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(RenewCertificateError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<RenewCertificateError>
+                            })
+                            .and_then(|response| {
+                                Err(RenewCertificateError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1627,11 +1667,16 @@ impl Acm for AcmClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| RequestCertificateError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RequestCertificateResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<RequestCertificateError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<RequestCertificateResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1639,11 +1684,12 @@ impl Acm for AcmClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(RequestCertificateError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<RequestCertificateError>
+                            })
+                            .and_then(|response| {
+                                Err(RequestCertificateError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1664,17 +1710,19 @@ impl Acm for AcmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ResendValidationEmailError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ResendValidationEmailError>
+                            })
+                            .and_then(|response| {
+                                Err(ResendValidationEmailError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1698,19 +1746,19 @@ impl Acm for AcmClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(UpdateCertificateOptionsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateCertificateOptionsError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateCertificateOptionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }

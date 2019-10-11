@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -2600,11 +2600,17 @@ impl Ecr for EcrClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| BatchCheckLayerAvailabilityError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<BatchCheckLayerAvailabilityResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<BatchCheckLayerAvailabilityError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<BatchCheckLayerAvailabilityResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2612,13 +2618,13 @@ impl Ecr for EcrClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(BatchCheckLayerAvailabilityError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<BatchCheckLayerAvailabilityError>
+                            })
+                            .and_then(|response| {
+                                Err(BatchCheckLayerAvailabilityError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2644,11 +2650,16 @@ impl Ecr for EcrClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| BatchDeleteImageError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<BatchDeleteImageResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<BatchDeleteImageError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<BatchDeleteImageResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2656,11 +2667,12 @@ impl Ecr for EcrClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(BatchDeleteImageError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<BatchDeleteImageError>
+                            })
+                            .and_then(|response| {
+                                Err(BatchDeleteImageError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2686,11 +2698,16 @@ impl Ecr for EcrClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| BatchGetImageError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<BatchGetImageResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<BatchGetImageError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<BatchGetImageResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2698,11 +2715,10 @@ impl Ecr for EcrClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(BatchGetImageError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<BatchGetImageError>
+                            })
+                            .and_then(|response| Err(BatchGetImageError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2728,11 +2744,17 @@ impl Ecr for EcrClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CompleteLayerUploadError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CompleteLayerUploadResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CompleteLayerUploadError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CompleteLayerUploadResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2740,11 +2762,13 @@ impl Ecr for EcrClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CompleteLayerUploadError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CompleteLayerUploadError>
+                            })
+                            .and_then(|response| {
+                                Err(CompleteLayerUploadError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2770,11 +2794,16 @@ impl Ecr for EcrClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateRepositoryError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateRepositoryResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateRepositoryError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateRepositoryResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2782,11 +2811,12 @@ impl Ecr for EcrClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateRepositoryError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateRepositoryError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateRepositoryError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2812,11 +2842,17 @@ impl Ecr for EcrClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteLifecyclePolicyError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteLifecyclePolicyResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteLifecyclePolicyError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteLifecyclePolicyResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2824,11 +2860,13 @@ impl Ecr for EcrClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteLifecyclePolicyError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteLifecyclePolicyError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteLifecyclePolicyError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2854,11 +2892,16 @@ impl Ecr for EcrClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteRepositoryError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteRepositoryResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteRepositoryError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteRepositoryResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2866,11 +2909,12 @@ impl Ecr for EcrClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteRepositoryError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteRepositoryError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteRepositoryError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2896,11 +2940,17 @@ impl Ecr for EcrClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteRepositoryPolicyError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteRepositoryPolicyResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteRepositoryPolicyError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteRepositoryPolicyResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2908,13 +2958,13 @@ impl Ecr for EcrClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DeleteRepositoryPolicyError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteRepositoryPolicyError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteRepositoryPolicyError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2940,11 +2990,16 @@ impl Ecr for EcrClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeImagesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeImagesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeImagesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeImagesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2952,11 +3007,10 @@ impl Ecr for EcrClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeImagesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DescribeImagesError>
+                            })
+                            .and_then(|response| Err(DescribeImagesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2982,11 +3036,17 @@ impl Ecr for EcrClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeRepositoriesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeRepositoriesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeRepositoriesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeRepositoriesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2994,11 +3054,13 @@ impl Ecr for EcrClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeRepositoriesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeRepositoriesError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeRepositoriesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3024,11 +3086,17 @@ impl Ecr for EcrClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetAuthorizationTokenError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetAuthorizationTokenResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetAuthorizationTokenError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetAuthorizationTokenResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3036,11 +3104,13 @@ impl Ecr for EcrClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetAuthorizationTokenError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetAuthorizationTokenError>
+                            })
+                            .and_then(|response| {
+                                Err(GetAuthorizationTokenError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3066,11 +3136,17 @@ impl Ecr for EcrClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetDownloadUrlForLayerError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetDownloadUrlForLayerResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetDownloadUrlForLayerError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetDownloadUrlForLayerResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3078,13 +3154,13 @@ impl Ecr for EcrClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(GetDownloadUrlForLayerError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetDownloadUrlForLayerError>
+                            })
+                            .and_then(|response| {
+                                Err(GetDownloadUrlForLayerError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3110,11 +3186,16 @@ impl Ecr for EcrClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetLifecyclePolicyError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetLifecyclePolicyResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetLifecyclePolicyError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetLifecyclePolicyResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3122,11 +3203,12 @@ impl Ecr for EcrClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetLifecyclePolicyError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetLifecyclePolicyError>
+                            })
+                            .and_then(|response| {
+                                Err(GetLifecyclePolicyError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3152,11 +3234,17 @@ impl Ecr for EcrClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetLifecyclePolicyPreviewError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetLifecyclePolicyPreviewResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetLifecyclePolicyPreviewError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetLifecyclePolicyPreviewResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3164,13 +3252,13 @@ impl Ecr for EcrClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(GetLifecyclePolicyPreviewError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetLifecyclePolicyPreviewError>
+                            })
+                            .and_then(|response| {
+                                Err(GetLifecyclePolicyPreviewError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3196,11 +3284,17 @@ impl Ecr for EcrClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetRepositoryPolicyError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetRepositoryPolicyResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetRepositoryPolicyError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetRepositoryPolicyResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3208,11 +3302,13 @@ impl Ecr for EcrClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetRepositoryPolicyError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetRepositoryPolicyError>
+                            })
+                            .and_then(|response| {
+                                Err(GetRepositoryPolicyError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3238,11 +3334,17 @@ impl Ecr for EcrClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| InitiateLayerUploadError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<InitiateLayerUploadResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<InitiateLayerUploadError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<InitiateLayerUploadResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3250,11 +3352,13 @@ impl Ecr for EcrClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(InitiateLayerUploadError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<InitiateLayerUploadError>
+                            })
+                            .and_then(|response| {
+                                Err(InitiateLayerUploadError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3280,11 +3384,16 @@ impl Ecr for EcrClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListImagesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListImagesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListImagesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListImagesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3292,11 +3401,10 @@ impl Ecr for EcrClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListImagesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListImagesError>
+                            })
+                            .and_then(|response| Err(ListImagesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3322,11 +3430,17 @@ impl Ecr for EcrClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListTagsForResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListTagsForResourceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListTagsForResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListTagsForResourceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3334,11 +3448,13 @@ impl Ecr for EcrClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListTagsForResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListTagsForResourceError>
+                            })
+                            .and_then(|response| {
+                                Err(ListTagsForResourceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3361,11 +3477,14 @@ impl Ecr for EcrClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| PutImageError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PutImageResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<PutImageError>)
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<PutImageResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3373,11 +3492,8 @@ impl Ecr for EcrClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(PutImageError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<PutImageError>)
+                            .and_then(|response| Err(PutImageError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3403,11 +3519,16 @@ impl Ecr for EcrClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| PutLifecyclePolicyError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PutLifecyclePolicyResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<PutLifecyclePolicyError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<PutLifecyclePolicyResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3415,11 +3536,12 @@ impl Ecr for EcrClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(PutLifecyclePolicyError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<PutLifecyclePolicyError>
+                            })
+                            .and_then(|response| {
+                                Err(PutLifecyclePolicyError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3445,11 +3567,17 @@ impl Ecr for EcrClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| SetRepositoryPolicyError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<SetRepositoryPolicyResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<SetRepositoryPolicyError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<SetRepositoryPolicyResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3457,11 +3585,13 @@ impl Ecr for EcrClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(SetRepositoryPolicyError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<SetRepositoryPolicyError>
+                            })
+                            .and_then(|response| {
+                                Err(SetRepositoryPolicyError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3487,11 +3617,17 @@ impl Ecr for EcrClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StartLifecyclePolicyPreviewError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StartLifecyclePolicyPreviewResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StartLifecyclePolicyPreviewError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<StartLifecyclePolicyPreviewResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3499,13 +3635,13 @@ impl Ecr for EcrClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(StartLifecyclePolicyPreviewError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<StartLifecyclePolicyPreviewError>
+                            })
+                            .and_then(|response| {
+                                Err(StartLifecyclePolicyPreviewError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3531,11 +3667,16 @@ impl Ecr for EcrClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| TagResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<TagResourceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<TagResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<TagResourceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3543,11 +3684,10 @@ impl Ecr for EcrClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(TagResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<TagResourceError>
+                            })
+                            .and_then(|response| Err(TagResourceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3573,11 +3713,16 @@ impl Ecr for EcrClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UntagResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UntagResourceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UntagResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UntagResourceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3585,11 +3730,10 @@ impl Ecr for EcrClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UntagResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UntagResourceError>
+                            })
+                            .and_then(|response| Err(UntagResourceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3615,11 +3759,16 @@ impl Ecr for EcrClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UploadLayerPartError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UploadLayerPartResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UploadLayerPartError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UploadLayerPartResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3627,11 +3776,10 @@ impl Ecr for EcrClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UploadLayerPartError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UploadLayerPartError>
+                            })
+                            .and_then(|response| Err(UploadLayerPartError::from_response(response)))
                     })
                     .boxed()
             }

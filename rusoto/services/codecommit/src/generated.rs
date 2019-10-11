@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -7409,11 +7409,17 @@ impl CodeCommit for CodeCommitClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| BatchGetRepositoriesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<BatchGetRepositoriesOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<BatchGetRepositoriesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<BatchGetRepositoriesOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7421,11 +7427,13 @@ impl CodeCommit for CodeCommitClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(BatchGetRepositoriesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<BatchGetRepositoriesError>
+                            })
+                            .and_then(|response| {
+                                Err(BatchGetRepositoriesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7443,17 +7451,16 @@ impl CodeCommit for CodeCommitClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateBranchError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateBranchError>
+                            })
+                            .and_then(|response| Err(CreateBranchError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7476,11 +7483,16 @@ impl CodeCommit for CodeCommitClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateCommitError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateCommitOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateCommitError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateCommitOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7488,11 +7500,10 @@ impl CodeCommit for CodeCommitClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateCommitError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateCommitError>
+                            })
+                            .and_then(|response| Err(CreateCommitError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7515,11 +7526,16 @@ impl CodeCommit for CodeCommitClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreatePullRequestError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreatePullRequestOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreatePullRequestError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreatePullRequestOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7527,11 +7543,12 @@ impl CodeCommit for CodeCommitClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreatePullRequestError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreatePullRequestError>
+                            })
+                            .and_then(|response| {
+                                Err(CreatePullRequestError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7554,11 +7571,16 @@ impl CodeCommit for CodeCommitClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateRepositoryError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateRepositoryOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateRepositoryError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateRepositoryOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7566,11 +7588,12 @@ impl CodeCommit for CodeCommitClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateRepositoryError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateRepositoryError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateRepositoryError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7593,11 +7616,16 @@ impl CodeCommit for CodeCommitClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteBranchError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteBranchOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteBranchError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteBranchOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7605,11 +7633,10 @@ impl CodeCommit for CodeCommitClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteBranchError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteBranchError>
+                            })
+                            .and_then(|response| Err(DeleteBranchError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7632,11 +7659,17 @@ impl CodeCommit for CodeCommitClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteCommentContentError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteCommentContentOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteCommentContentError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteCommentContentOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7644,11 +7677,13 @@ impl CodeCommit for CodeCommitClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteCommentContentError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteCommentContentError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteCommentContentError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7671,11 +7706,16 @@ impl CodeCommit for CodeCommitClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteFileError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteFileOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteFileError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteFileOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7683,11 +7723,10 @@ impl CodeCommit for CodeCommitClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteFileError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteFileError>
+                            })
+                            .and_then(|response| Err(DeleteFileError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7710,11 +7749,16 @@ impl CodeCommit for CodeCommitClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteRepositoryError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteRepositoryOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteRepositoryError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteRepositoryOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7722,11 +7766,12 @@ impl CodeCommit for CodeCommitClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteRepositoryError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteRepositoryError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteRepositoryError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7752,11 +7797,17 @@ impl CodeCommit for CodeCommitClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribePullRequestEventsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribePullRequestEventsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribePullRequestEventsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribePullRequestEventsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7764,13 +7815,13 @@ impl CodeCommit for CodeCommitClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribePullRequestEventsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribePullRequestEventsError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribePullRequestEventsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7790,11 +7841,14 @@ impl CodeCommit for CodeCommitClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetBlobError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetBlobOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<GetBlobError>)
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetBlobOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7802,11 +7856,8 @@ impl CodeCommit for CodeCommitClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetBlobError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<GetBlobError>)
+                            .and_then(|response| Err(GetBlobError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7826,11 +7877,16 @@ impl CodeCommit for CodeCommitClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetBranchError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetBranchOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetBranchError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetBranchOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7838,11 +7894,10 @@ impl CodeCommit for CodeCommitClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetBranchError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetBranchError>
+                            })
+                            .and_then(|response| Err(GetBranchError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7865,11 +7920,16 @@ impl CodeCommit for CodeCommitClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetCommentError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetCommentOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetCommentError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetCommentOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7877,11 +7937,10 @@ impl CodeCommit for CodeCommitClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetCommentError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetCommentError>
+                            })
+                            .and_then(|response| Err(GetCommentError::from_response(response)))
                     })
                     .boxed()
             }
@@ -7907,11 +7966,17 @@ impl CodeCommit for CodeCommitClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetCommentsForComparedCommitError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetCommentsForComparedCommitOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetCommentsForComparedCommitError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetCommentsForComparedCommitOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7919,13 +7984,13 @@ impl CodeCommit for CodeCommitClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(GetCommentsForComparedCommitError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetCommentsForComparedCommitError>
+                            })
+                            .and_then(|response| {
+                                Err(GetCommentsForComparedCommitError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7951,11 +8016,17 @@ impl CodeCommit for CodeCommitClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetCommentsForPullRequestError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetCommentsForPullRequestOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetCommentsForPullRequestError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetCommentsForPullRequestOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -7963,13 +8034,13 @@ impl CodeCommit for CodeCommitClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(GetCommentsForPullRequestError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetCommentsForPullRequestError>
+                            })
+                            .and_then(|response| {
+                                Err(GetCommentsForPullRequestError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -7989,11 +8060,16 @@ impl CodeCommit for CodeCommitClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetCommitError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetCommitOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetCommitError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetCommitOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8001,11 +8077,10 @@ impl CodeCommit for CodeCommitClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetCommitError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetCommitError>
+                            })
+                            .and_then(|response| Err(GetCommitError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8028,11 +8103,16 @@ impl CodeCommit for CodeCommitClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetDifferencesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetDifferencesOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetDifferencesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetDifferencesOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8040,11 +8120,10 @@ impl CodeCommit for CodeCommitClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetDifferencesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetDifferencesError>
+                            })
+                            .and_then(|response| Err(GetDifferencesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8064,11 +8143,14 @@ impl CodeCommit for CodeCommitClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetFileError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetFileOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<GetFileError>)
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetFileOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8076,11 +8158,8 @@ impl CodeCommit for CodeCommitClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetFileError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<GetFileError>)
+                            .and_then(|response| Err(GetFileError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8100,11 +8179,16 @@ impl CodeCommit for CodeCommitClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetFolderError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetFolderOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetFolderError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetFolderOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8112,11 +8196,10 @@ impl CodeCommit for CodeCommitClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetFolderError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetFolderError>
+                            })
+                            .and_then(|response| Err(GetFolderError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8139,11 +8222,16 @@ impl CodeCommit for CodeCommitClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetMergeConflictsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetMergeConflictsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetMergeConflictsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetMergeConflictsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8151,11 +8239,12 @@ impl CodeCommit for CodeCommitClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetMergeConflictsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetMergeConflictsError>
+                            })
+                            .and_then(|response| {
+                                Err(GetMergeConflictsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8178,11 +8267,16 @@ impl CodeCommit for CodeCommitClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetPullRequestError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetPullRequestOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetPullRequestError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetPullRequestOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8190,11 +8284,10 @@ impl CodeCommit for CodeCommitClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetPullRequestError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetPullRequestError>
+                            })
+                            .and_then(|response| Err(GetPullRequestError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8217,11 +8310,16 @@ impl CodeCommit for CodeCommitClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetRepositoryError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetRepositoryOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetRepositoryError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetRepositoryOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8229,11 +8327,10 @@ impl CodeCommit for CodeCommitClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetRepositoryError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetRepositoryError>
+                            })
+                            .and_then(|response| Err(GetRepositoryError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8256,11 +8353,17 @@ impl CodeCommit for CodeCommitClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetRepositoryTriggersError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetRepositoryTriggersOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetRepositoryTriggersError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetRepositoryTriggersOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8268,11 +8371,13 @@ impl CodeCommit for CodeCommitClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetRepositoryTriggersError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetRepositoryTriggersError>
+                            })
+                            .and_then(|response| {
+                                Err(GetRepositoryTriggersError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8295,11 +8400,16 @@ impl CodeCommit for CodeCommitClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListBranchesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListBranchesOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListBranchesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListBranchesOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8307,11 +8417,10 @@ impl CodeCommit for CodeCommitClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListBranchesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListBranchesError>
+                            })
+                            .and_then(|response| Err(ListBranchesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8334,11 +8443,16 @@ impl CodeCommit for CodeCommitClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListPullRequestsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListPullRequestsOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListPullRequestsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListPullRequestsOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8346,11 +8460,12 @@ impl CodeCommit for CodeCommitClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListPullRequestsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListPullRequestsError>
+                            })
+                            .and_then(|response| {
+                                Err(ListPullRequestsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8373,11 +8488,16 @@ impl CodeCommit for CodeCommitClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListRepositoriesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListRepositoriesOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListRepositoriesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListRepositoriesOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8385,11 +8505,12 @@ impl CodeCommit for CodeCommitClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListRepositoriesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListRepositoriesError>
+                            })
+                            .and_then(|response| {
+                                Err(ListRepositoriesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8412,11 +8533,17 @@ impl CodeCommit for CodeCommitClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListTagsForResourceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListTagsForResourceOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListTagsForResourceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListTagsForResourceOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8424,11 +8551,13 @@ impl CodeCommit for CodeCommitClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListTagsForResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListTagsForResourceError>
+                            })
+                            .and_then(|response| {
+                                Err(ListTagsForResourceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8454,11 +8583,17 @@ impl CodeCommit for CodeCommitClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| MergePullRequestByFastForwardError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<MergePullRequestByFastForwardOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<MergePullRequestByFastForwardError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<MergePullRequestByFastForwardOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8466,13 +8601,13 @@ impl CodeCommit for CodeCommitClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(MergePullRequestByFastForwardError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<MergePullRequestByFastForwardError>
+                            })
+                            .and_then(|response| {
+                                Err(MergePullRequestByFastForwardError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8498,11 +8633,17 @@ impl CodeCommit for CodeCommitClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| PostCommentForComparedCommitError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PostCommentForComparedCommitOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<PostCommentForComparedCommitError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<PostCommentForComparedCommitOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8510,13 +8651,13 @@ impl CodeCommit for CodeCommitClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(PostCommentForComparedCommitError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<PostCommentForComparedCommitError>
+                            })
+                            .and_then(|response| {
+                                Err(PostCommentForComparedCommitError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8542,11 +8683,17 @@ impl CodeCommit for CodeCommitClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| PostCommentForPullRequestError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PostCommentForPullRequestOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<PostCommentForPullRequestError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<PostCommentForPullRequestOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8554,13 +8701,13 @@ impl CodeCommit for CodeCommitClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(PostCommentForPullRequestError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<PostCommentForPullRequestError>
+                            })
+                            .and_then(|response| {
+                                Err(PostCommentForPullRequestError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8583,11 +8730,16 @@ impl CodeCommit for CodeCommitClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| PostCommentReplyError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PostCommentReplyOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<PostCommentReplyError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<PostCommentReplyOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8595,11 +8747,12 @@ impl CodeCommit for CodeCommitClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(PostCommentReplyError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<PostCommentReplyError>
+                            })
+                            .and_then(|response| {
+                                Err(PostCommentReplyError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8619,11 +8772,14 @@ impl CodeCommit for CodeCommitClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| PutFileError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PutFileOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<PutFileError>)
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<PutFileOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8631,11 +8787,8 @@ impl CodeCommit for CodeCommitClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(PutFileError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<PutFileError>)
+                            .and_then(|response| Err(PutFileError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8658,11 +8811,17 @@ impl CodeCommit for CodeCommitClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| PutRepositoryTriggersError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<PutRepositoryTriggersOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<PutRepositoryTriggersError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<PutRepositoryTriggersOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8670,11 +8829,13 @@ impl CodeCommit for CodeCommitClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(PutRepositoryTriggersError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<PutRepositoryTriggersError>
+                            })
+                            .and_then(|response| {
+                                Err(PutRepositoryTriggersError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8692,17 +8853,16 @@ impl CodeCommit for CodeCommitClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(TagResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<TagResourceError>
+                            })
+                            .and_then(|response| Err(TagResourceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8725,11 +8885,17 @@ impl CodeCommit for CodeCommitClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| TestRepositoryTriggersError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<TestRepositoryTriggersOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<TestRepositoryTriggersError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<TestRepositoryTriggersOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8737,13 +8903,13 @@ impl CodeCommit for CodeCommitClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(TestRepositoryTriggersError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<TestRepositoryTriggersError>
+                            })
+                            .and_then(|response| {
+                                Err(TestRepositoryTriggersError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8761,17 +8927,16 @@ impl CodeCommit for CodeCommitClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UntagResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UntagResourceError>
+                            })
+                            .and_then(|response| Err(UntagResourceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8794,11 +8959,16 @@ impl CodeCommit for CodeCommitClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateCommentError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateCommentOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateCommentError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateCommentOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8806,11 +8976,10 @@ impl CodeCommit for CodeCommitClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateCommentError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateCommentError>
+                            })
+                            .and_then(|response| Err(UpdateCommentError::from_response(response)))
                     })
                     .boxed()
             }
@@ -8831,17 +9000,19 @@ impl CodeCommit for CodeCommitClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateDefaultBranchError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateDefaultBranchError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateDefaultBranchError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8867,11 +9038,17 @@ impl CodeCommit for CodeCommitClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdatePullRequestDescriptionError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdatePullRequestDescriptionOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdatePullRequestDescriptionError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdatePullRequestDescriptionOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8879,13 +9056,13 @@ impl CodeCommit for CodeCommitClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(UpdatePullRequestDescriptionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdatePullRequestDescriptionError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdatePullRequestDescriptionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8911,11 +9088,17 @@ impl CodeCommit for CodeCommitClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdatePullRequestStatusError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdatePullRequestStatusOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdatePullRequestStatusError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdatePullRequestStatusOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8923,13 +9106,13 @@ impl CodeCommit for CodeCommitClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(UpdatePullRequestStatusError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdatePullRequestStatusError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdatePullRequestStatusError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8952,11 +9135,17 @@ impl CodeCommit for CodeCommitClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdatePullRequestTitleError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdatePullRequestTitleOutput, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdatePullRequestTitleError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdatePullRequestTitleOutput, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -8964,13 +9153,13 @@ impl CodeCommit for CodeCommitClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(UpdatePullRequestTitleError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdatePullRequestTitleError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdatePullRequestTitleError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -8994,19 +9183,19 @@ impl CodeCommit for CodeCommitClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(UpdateRepositoryDescriptionError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateRepositoryDescriptionError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateRepositoryDescriptionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -9027,17 +9216,19 @@ impl CodeCommit for CodeCommitClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateRepositoryNameError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateRepositoryNameError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateRepositoryNameError::from_response(response))
+                            })
                     })
                     .boxed()
             }

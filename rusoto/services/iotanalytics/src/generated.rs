@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
@@ -3998,10 +3998,11 @@ impl IotAnalytics for IotAnalyticsClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| BatchPutMessageError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<BatchPutMessageResponse, _>()?;
+                                .deserialize::<BatchPutMessageResponse, _>();
 
                             result
                         })
@@ -4012,11 +4013,8 @@ impl IotAnalytics for IotAnalyticsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(BatchPutMessageError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<BatchPutMessageError>())
+                            .and_then(|response| Err(BatchPutMessageError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4041,10 +4039,11 @@ impl IotAnalytics for IotAnalyticsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CancelPipelineReprocessingError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CancelPipelineReprocessingResponse, _>()?;
+                                .deserialize::<CancelPipelineReprocessingResponse, _>();
 
                             result
                         })
@@ -4055,13 +4054,10 @@ impl IotAnalytics for IotAnalyticsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(CancelPipelineReprocessingError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CancelPipelineReprocessingError>())
+                            .and_then(|response| {
+                                Err(CancelPipelineReprocessingError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4085,10 +4081,11 @@ impl IotAnalytics for IotAnalyticsClient {
             if response.status.as_u16() == 201 {
                 response
                     .buffer()
+                    .map_err(|e| CreateChannelError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateChannelResponse, _>()?;
+                                .deserialize::<CreateChannelResponse, _>();
 
                             result
                         })
@@ -4099,11 +4096,8 @@ impl IotAnalytics for IotAnalyticsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateChannelError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateChannelError>())
+                            .and_then(|response| Err(CreateChannelError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4127,10 +4121,11 @@ impl IotAnalytics for IotAnalyticsClient {
             if response.status.as_u16() == 201 {
                 response
                     .buffer()
+                    .map_err(|e| CreateDatasetError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateDatasetResponse, _>()?;
+                                .deserialize::<CreateDatasetResponse, _>();
 
                             result
                         })
@@ -4141,11 +4136,8 @@ impl IotAnalytics for IotAnalyticsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateDatasetError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateDatasetError>())
+                            .and_then(|response| Err(CreateDatasetError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4169,10 +4161,11 @@ impl IotAnalytics for IotAnalyticsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateDatasetContentError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateDatasetContentResponse, _>()?;
+                                .deserialize::<CreateDatasetContentResponse, _>();
 
                             result
                         })
@@ -4183,11 +4176,10 @@ impl IotAnalytics for IotAnalyticsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateDatasetContentError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateDatasetContentError>())
+                            .and_then(|response| {
+                                Err(CreateDatasetContentError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4211,10 +4203,11 @@ impl IotAnalytics for IotAnalyticsClient {
             if response.status.as_u16() == 201 {
                 response
                     .buffer()
+                    .map_err(|e| CreateDatastoreError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateDatastoreResponse, _>()?;
+                                .deserialize::<CreateDatastoreResponse, _>();
 
                             result
                         })
@@ -4225,11 +4218,8 @@ impl IotAnalytics for IotAnalyticsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateDatastoreError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateDatastoreError>())
+                            .and_then(|response| Err(CreateDatastoreError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4253,10 +4243,11 @@ impl IotAnalytics for IotAnalyticsClient {
             if response.status.as_u16() == 201 {
                 response
                     .buffer()
+                    .map_err(|e| CreatePipelineError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreatePipelineResponse, _>()?;
+                                .deserialize::<CreatePipelineResponse, _>();
 
                             result
                         })
@@ -4267,11 +4258,8 @@ impl IotAnalytics for IotAnalyticsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreatePipelineError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreatePipelineError>())
+                            .and_then(|response| Err(CreatePipelineError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4292,8 +4280,9 @@ impl IotAnalytics for IotAnalyticsClient {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteChannelError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -4305,11 +4294,8 @@ impl IotAnalytics for IotAnalyticsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteChannelError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteChannelError>())
+                            .and_then(|response| Err(DeleteChannelError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4330,8 +4316,9 @@ impl IotAnalytics for IotAnalyticsClient {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteDatasetError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -4343,11 +4330,8 @@ impl IotAnalytics for IotAnalyticsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteDatasetError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteDatasetError>())
+                            .and_then(|response| Err(DeleteDatasetError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4377,8 +4361,9 @@ impl IotAnalytics for IotAnalyticsClient {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteDatasetContentError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -4390,11 +4375,10 @@ impl IotAnalytics for IotAnalyticsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteDatasetContentError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteDatasetContentError>())
+                            .and_then(|response| {
+                                Err(DeleteDatasetContentError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4418,8 +4402,9 @@ impl IotAnalytics for IotAnalyticsClient {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| DeleteDatastoreError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -4431,11 +4416,8 @@ impl IotAnalytics for IotAnalyticsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteDatastoreError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteDatastoreError>())
+                            .and_then(|response| Err(DeleteDatastoreError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4459,8 +4441,9 @@ impl IotAnalytics for IotAnalyticsClient {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| DeletePipelineError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -4472,11 +4455,8 @@ impl IotAnalytics for IotAnalyticsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeletePipelineError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeletePipelineError>())
+                            .and_then(|response| Err(DeletePipelineError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4506,10 +4486,11 @@ impl IotAnalytics for IotAnalyticsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeChannelError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeChannelResponse, _>()?;
+                                .deserialize::<DescribeChannelResponse, _>();
 
                             result
                         })
@@ -4520,11 +4501,8 @@ impl IotAnalytics for IotAnalyticsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DescribeChannelError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeChannelError>())
+                            .and_then(|response| Err(DescribeChannelError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4548,10 +4526,11 @@ impl IotAnalytics for IotAnalyticsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeDatasetError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeDatasetResponse, _>()?;
+                                .deserialize::<DescribeDatasetResponse, _>();
 
                             result
                         })
@@ -4562,11 +4541,8 @@ impl IotAnalytics for IotAnalyticsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DescribeDatasetError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeDatasetError>())
+                            .and_then(|response| Err(DescribeDatasetError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4596,10 +4572,11 @@ impl IotAnalytics for IotAnalyticsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeDatastoreError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeDatastoreResponse, _>()?;
+                                .deserialize::<DescribeDatastoreResponse, _>();
 
                             result
                         })
@@ -4610,11 +4587,10 @@ impl IotAnalytics for IotAnalyticsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DescribeDatastoreError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeDatastoreError>())
+                            .and_then(|response| {
+                                Err(DescribeDatastoreError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4634,10 +4610,11 @@ impl IotAnalytics for IotAnalyticsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeLoggingOptionsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeLoggingOptionsResponse, _>()?;
+                                .deserialize::<DescribeLoggingOptionsResponse, _>();
 
                             result
                         })
@@ -4648,13 +4625,10 @@ impl IotAnalytics for IotAnalyticsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(DescribeLoggingOptionsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeLoggingOptionsError>())
+                            .and_then(|response| {
+                                Err(DescribeLoggingOptionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4678,10 +4652,11 @@ impl IotAnalytics for IotAnalyticsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribePipelineError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribePipelineResponse, _>()?;
+                                .deserialize::<DescribePipelineResponse, _>();
 
                             result
                         })
@@ -4692,11 +4667,10 @@ impl IotAnalytics for IotAnalyticsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DescribePipelineError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribePipelineError>())
+                            .and_then(|response| {
+                                Err(DescribePipelineError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4726,10 +4700,11 @@ impl IotAnalytics for IotAnalyticsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetDatasetContentError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetDatasetContentResponse, _>()?;
+                                .deserialize::<GetDatasetContentResponse, _>();
 
                             result
                         })
@@ -4740,11 +4715,10 @@ impl IotAnalytics for IotAnalyticsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetDatasetContentError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetDatasetContentError>())
+                            .and_then(|response| {
+                                Err(GetDatasetContentError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4774,10 +4748,11 @@ impl IotAnalytics for IotAnalyticsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListChannelsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListChannelsResponse, _>()?;
+                                .deserialize::<ListChannelsResponse, _>();
 
                             result
                         })
@@ -4788,11 +4763,8 @@ impl IotAnalytics for IotAnalyticsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListChannelsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListChannelsError>())
+                            .and_then(|response| Err(ListChannelsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4831,10 +4803,11 @@ impl IotAnalytics for IotAnalyticsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListDatasetContentsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListDatasetContentsResponse, _>()?;
+                                .deserialize::<ListDatasetContentsResponse, _>();
 
                             result
                         })
@@ -4845,11 +4818,10 @@ impl IotAnalytics for IotAnalyticsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListDatasetContentsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListDatasetContentsError>())
+                            .and_then(|response| {
+                                Err(ListDatasetContentsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4879,10 +4851,11 @@ impl IotAnalytics for IotAnalyticsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListDatasetsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListDatasetsResponse, _>()?;
+                                .deserialize::<ListDatasetsResponse, _>();
 
                             result
                         })
@@ -4893,11 +4866,8 @@ impl IotAnalytics for IotAnalyticsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListDatasetsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListDatasetsError>())
+                            .and_then(|response| Err(ListDatasetsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4927,10 +4897,11 @@ impl IotAnalytics for IotAnalyticsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListDatastoresError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListDatastoresResponse, _>()?;
+                                .deserialize::<ListDatastoresResponse, _>();
 
                             result
                         })
@@ -4941,11 +4912,8 @@ impl IotAnalytics for IotAnalyticsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListDatastoresError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListDatastoresError>())
+                            .and_then(|response| Err(ListDatastoresError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4975,10 +4943,11 @@ impl IotAnalytics for IotAnalyticsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListPipelinesError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListPipelinesResponse, _>()?;
+                                .deserialize::<ListPipelinesResponse, _>();
 
                             result
                         })
@@ -4989,11 +4958,8 @@ impl IotAnalytics for IotAnalyticsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListPipelinesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListPipelinesError>())
+                            .and_then(|response| Err(ListPipelinesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5018,10 +4984,11 @@ impl IotAnalytics for IotAnalyticsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListTagsForResourceError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListTagsForResourceResponse, _>()?;
+                                .deserialize::<ListTagsForResourceResponse, _>();
 
                             result
                         })
@@ -5032,11 +4999,10 @@ impl IotAnalytics for IotAnalyticsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListTagsForResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListTagsForResourceError>())
+                            .and_then(|response| {
+                                Err(ListTagsForResourceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5060,8 +5026,9 @@ impl IotAnalytics for IotAnalyticsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| PutLoggingOptionsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -5073,11 +5040,10 @@ impl IotAnalytics for IotAnalyticsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(PutLoggingOptionsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<PutLoggingOptionsError>())
+                            .and_then(|response| {
+                                Err(PutLoggingOptionsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5101,10 +5067,11 @@ impl IotAnalytics for IotAnalyticsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| RunPipelineActivityError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RunPipelineActivityResponse, _>()?;
+                                .deserialize::<RunPipelineActivityResponse, _>();
 
                             result
                         })
@@ -5115,11 +5082,10 @@ impl IotAnalytics for IotAnalyticsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(RunPipelineActivityError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<RunPipelineActivityError>())
+                            .and_then(|response| {
+                                Err(RunPipelineActivityError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5155,10 +5121,11 @@ impl IotAnalytics for IotAnalyticsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| SampleChannelDataError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<SampleChannelDataResponse, _>()?;
+                                .deserialize::<SampleChannelDataResponse, _>();
 
                             result
                         })
@@ -5169,11 +5136,10 @@ impl IotAnalytics for IotAnalyticsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(SampleChannelDataError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<SampleChannelDataError>())
+                            .and_then(|response| {
+                                Err(SampleChannelDataError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5200,10 +5166,11 @@ impl IotAnalytics for IotAnalyticsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| StartPipelineReprocessingError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<StartPipelineReprocessingResponse, _>()?;
+                                .deserialize::<StartPipelineReprocessingResponse, _>();
 
                             result
                         })
@@ -5214,13 +5181,10 @@ impl IotAnalytics for IotAnalyticsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(StartPipelineReprocessingError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<StartPipelineReprocessingError>())
+                            .and_then(|response| {
+                                Err(StartPipelineReprocessingError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5248,10 +5212,11 @@ impl IotAnalytics for IotAnalyticsClient {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| TagResourceError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<TagResourceResponse, _>()?;
+                                .deserialize::<TagResourceResponse, _>();
 
                             result
                         })
@@ -5262,11 +5227,8 @@ impl IotAnalytics for IotAnalyticsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(TagResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<TagResourceError>())
+                            .and_then(|response| Err(TagResourceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5294,10 +5256,11 @@ impl IotAnalytics for IotAnalyticsClient {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| UntagResourceError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UntagResourceResponse, _>()?;
+                                .deserialize::<UntagResourceResponse, _>();
 
                             result
                         })
@@ -5308,11 +5271,8 @@ impl IotAnalytics for IotAnalyticsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UntagResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UntagResourceError>())
+                            .and_then(|response| Err(UntagResourceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5336,8 +5296,9 @@ impl IotAnalytics for IotAnalyticsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateChannelError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -5349,11 +5310,8 @@ impl IotAnalytics for IotAnalyticsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateChannelError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateChannelError>())
+                            .and_then(|response| Err(UpdateChannelError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5377,8 +5335,9 @@ impl IotAnalytics for IotAnalyticsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateDatasetError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -5390,11 +5349,8 @@ impl IotAnalytics for IotAnalyticsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateDatasetError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateDatasetError>())
+                            .and_then(|response| Err(UpdateDatasetError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5421,8 +5377,9 @@ impl IotAnalytics for IotAnalyticsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateDatastoreError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -5434,11 +5391,8 @@ impl IotAnalytics for IotAnalyticsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateDatastoreError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateDatastoreError>())
+                            .and_then(|response| Err(UpdateDatastoreError::from_response(response)))
                     })
                     .boxed()
             }
@@ -5465,8 +5419,9 @@ impl IotAnalytics for IotAnalyticsClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdatePipelineError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -5478,11 +5433,8 @@ impl IotAnalytics for IotAnalyticsClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdatePipelineError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdatePipelineError>())
+                            .and_then(|response| Err(UpdatePipelineError::from_response(response)))
                     })
                     .boxed()
             }

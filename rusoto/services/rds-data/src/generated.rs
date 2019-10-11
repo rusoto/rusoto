@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -1001,10 +1001,11 @@ impl RdsData for RdsDataClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| BatchExecuteStatementError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<BatchExecuteStatementResponse, _>()?;
+                                .deserialize::<BatchExecuteStatementResponse, _>();
 
                             result
                         })
@@ -1015,11 +1016,10 @@ impl RdsData for RdsDataClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(BatchExecuteStatementError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<BatchExecuteStatementError>())
+                            .and_then(|response| {
+                                Err(BatchExecuteStatementError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1055,10 +1055,11 @@ impl RdsData for RdsDataClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| BeginTransactionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<BeginTransactionResponse, _>()?;
+                                .deserialize::<BeginTransactionResponse, _>();
 
                             result
                         })
@@ -1069,11 +1070,10 @@ impl RdsData for RdsDataClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(BeginTransactionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<BeginTransactionError>())
+                            .and_then(|response| {
+                                Err(BeginTransactionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1098,10 +1098,11 @@ impl RdsData for RdsDataClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| CommitTransactionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CommitTransactionResponse, _>()?;
+                                .deserialize::<CommitTransactionResponse, _>();
 
                             result
                         })
@@ -1112,11 +1113,10 @@ impl RdsData for RdsDataClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CommitTransactionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CommitTransactionError>())
+                            .and_then(|response| {
+                                Err(CommitTransactionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1146,10 +1146,11 @@ impl RdsData for RdsDataClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ExecuteSqlError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ExecuteSqlResponse, _>()?;
+                                .deserialize::<ExecuteSqlResponse, _>();
 
                             result
                         })
@@ -1160,11 +1161,8 @@ impl RdsData for RdsDataClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ExecuteSqlError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ExecuteSqlError>())
+                            .and_then(|response| Err(ExecuteSqlError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1196,10 +1194,11 @@ impl RdsData for RdsDataClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ExecuteStatementError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ExecuteStatementResponse, _>()?;
+                                .deserialize::<ExecuteStatementResponse, _>();
 
                             result
                         })
@@ -1210,11 +1209,10 @@ impl RdsData for RdsDataClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ExecuteStatementError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ExecuteStatementError>())
+                            .and_then(|response| {
+                                Err(ExecuteStatementError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1238,10 +1236,11 @@ impl RdsData for RdsDataClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| RollbackTransactionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RollbackTransactionResponse, _>()?;
+                                .deserialize::<RollbackTransactionResponse, _>();
 
                             result
                         })
@@ -1252,11 +1251,10 @@ impl RdsData for RdsDataClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(RollbackTransactionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<RollbackTransactionError>())
+                            .and_then(|response| {
+                                Err(RollbackTransactionError::from_response(response))
+                            })
                     })
                     .boxed()
             }

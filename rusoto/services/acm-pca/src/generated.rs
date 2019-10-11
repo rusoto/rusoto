@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -2022,11 +2022,17 @@ impl AcmPca for AcmPcaClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateCertificateAuthorityError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateCertificateAuthorityResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateCertificateAuthorityError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateCertificateAuthorityResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2034,13 +2040,13 @@ impl AcmPca for AcmPcaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(CreateCertificateAuthorityError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateCertificateAuthorityError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateCertificateAuthorityError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2067,16 +2073,22 @@ impl AcmPca for AcmPcaClient {
 
         self.client.sign_and_dispatch(request, |response| {
                         if response.status.is_success() {
-                            response.buffer().map(|try_response| {
-                try_response.and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<CreateCertificateAuthorityAuditReportResponse, _>()
-                })
-            }).boxed()
+                            response.buffer()
+                .map_err(|e| CreateCertificateAuthorityAuditReportError::from(e))
+                .map(|try_response| {
+                    try_response
+                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<CreateCertificateAuthorityAuditReportError>)
+                    .and_then(|response| {
+                        proto::json::ResponsePayload::new(&response).deserialize::<CreateCertificateAuthorityAuditReportResponse, _>()
+                    })
+                }).boxed()
                         } else {
                             response.buffer().map(|try_response| {
-                                try_response.map_or_else(|e| e, |response| {
-                                    Err(CreateCertificateAuthorityAuditReportError::from_response(response))
-                                }).boxed()
+                                try_response
+                                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<CreateCertificateAuthorityAuditReportError>)
+                                    .and_then(|response| {
+                                        Err(CreateCertificateAuthorityAuditReportError::from_response(response))
+                                    })
                             }).boxed()
                         }
                     })
@@ -2096,17 +2108,18 @@ impl AcmPca for AcmPcaClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreatePermissionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreatePermissionError>
+                            })
+                            .and_then(|response| {
+                                Err(CreatePermissionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2127,19 +2140,19 @@ impl AcmPca for AcmPcaClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DeleteCertificateAuthorityError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteCertificateAuthorityError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteCertificateAuthorityError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2160,17 +2173,18 @@ impl AcmPca for AcmPcaClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeletePermissionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeletePermissionError>
+                            })
+                            .and_then(|response| {
+                                Err(DeletePermissionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2193,11 +2207,17 @@ impl AcmPca for AcmPcaClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeCertificateAuthorityError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeCertificateAuthorityResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeCertificateAuthorityError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeCertificateAuthorityResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2205,13 +2225,13 @@ impl AcmPca for AcmPcaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeCertificateAuthorityError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeCertificateAuthorityError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeCertificateAuthorityError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2238,16 +2258,22 @@ impl AcmPca for AcmPcaClient {
 
         self.client.sign_and_dispatch(request, |response| {
                         if response.status.is_success() {
-                            response.buffer().map(|try_response| {
-                try_response.and_then(|response| {
-                    proto::json::ResponsePayload::new(&response).deserialize::<DescribeCertificateAuthorityAuditReportResponse, _>()
-                })
-            }).boxed()
+                            response.buffer()
+                .map_err(|e| DescribeCertificateAuthorityAuditReportError::from(e))
+                .map(|try_response| {
+                    try_response
+                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<DescribeCertificateAuthorityAuditReportError>)
+                    .and_then(|response| {
+                        proto::json::ResponsePayload::new(&response).deserialize::<DescribeCertificateAuthorityAuditReportResponse, _>()
+                    })
+                }).boxed()
                         } else {
                             response.buffer().map(|try_response| {
-                                try_response.map_or_else(|e| e, |response| {
-                                    Err(DescribeCertificateAuthorityAuditReportError::from_response(response))
-                                }).boxed()
+                                try_response
+                                    .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<DescribeCertificateAuthorityAuditReportError>)
+                                    .and_then(|response| {
+                                        Err(DescribeCertificateAuthorityAuditReportError::from_response(response))
+                                    })
                             }).boxed()
                         }
                     })
@@ -2269,11 +2295,16 @@ impl AcmPca for AcmPcaClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetCertificateError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetCertificateResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetCertificateError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetCertificateResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2281,11 +2312,10 @@ impl AcmPca for AcmPcaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetCertificateError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetCertificateError>
+                            })
+                            .and_then(|response| Err(GetCertificateError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2314,11 +2344,17 @@ impl AcmPca for AcmPcaClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetCertificateAuthorityCertificateError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetCertificateAuthorityCertificateResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetCertificateAuthorityCertificateError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetCertificateAuthorityCertificateResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2326,15 +2362,15 @@ impl AcmPca for AcmPcaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(GetCertificateAuthorityCertificateError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetCertificateAuthorityCertificateError>
+                            })
+                            .and_then(|response| {
+                                Err(GetCertificateAuthorityCertificateError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -2357,11 +2393,17 @@ impl AcmPca for AcmPcaClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetCertificateAuthorityCsrError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetCertificateAuthorityCsrResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetCertificateAuthorityCsrError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetCertificateAuthorityCsrResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2369,13 +2411,13 @@ impl AcmPca for AcmPcaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(GetCertificateAuthorityCsrError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetCertificateAuthorityCsrError>
+                            })
+                            .and_then(|response| {
+                                Err(GetCertificateAuthorityCsrError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2399,21 +2441,21 @@ impl AcmPca for AcmPcaClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ImportCertificateAuthorityCertificateError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ImportCertificateAuthorityCertificateError>
+                            })
+                            .and_then(|response| {
+                                Err(ImportCertificateAuthorityCertificateError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -2436,11 +2478,16 @@ impl AcmPca for AcmPcaClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| IssueCertificateError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<IssueCertificateResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<IssueCertificateError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<IssueCertificateResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2448,11 +2495,12 @@ impl AcmPca for AcmPcaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(IssueCertificateError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<IssueCertificateError>
+                            })
+                            .and_then(|response| {
+                                Err(IssueCertificateError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2475,11 +2523,17 @@ impl AcmPca for AcmPcaClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListCertificateAuthoritiesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListCertificateAuthoritiesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListCertificateAuthoritiesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListCertificateAuthoritiesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2487,13 +2541,13 @@ impl AcmPca for AcmPcaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ListCertificateAuthoritiesError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListCertificateAuthoritiesError>
+                            })
+                            .and_then(|response| {
+                                Err(ListCertificateAuthoritiesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2516,11 +2570,16 @@ impl AcmPca for AcmPcaClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListPermissionsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListPermissionsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListPermissionsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListPermissionsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2528,11 +2587,10 @@ impl AcmPca for AcmPcaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListPermissionsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListPermissionsError>
+                            })
+                            .and_then(|response| Err(ListPermissionsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2552,11 +2610,14 @@ impl AcmPca for AcmPcaClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListTagsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListTagsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<ListTagsError>)
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListTagsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -2564,11 +2625,8 @@ impl AcmPca for AcmPcaClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListTagsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<ListTagsError>)
+                            .and_then(|response| Err(ListTagsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -2589,19 +2647,19 @@ impl AcmPca for AcmPcaClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(RestoreCertificateAuthorityError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<RestoreCertificateAuthorityError>
+                            })
+                            .and_then(|response| {
+                                Err(RestoreCertificateAuthorityError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2622,17 +2680,18 @@ impl AcmPca for AcmPcaClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(RevokeCertificateError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<RevokeCertificateError>
+                            })
+                            .and_then(|response| {
+                                Err(RevokeCertificateError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2653,19 +2712,19 @@ impl AcmPca for AcmPcaClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(TagCertificateAuthorityError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<TagCertificateAuthorityError>
+                            })
+                            .and_then(|response| {
+                                Err(TagCertificateAuthorityError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2686,19 +2745,19 @@ impl AcmPca for AcmPcaClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(UntagCertificateAuthorityError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UntagCertificateAuthorityError>
+                            })
+                            .and_then(|response| {
+                                Err(UntagCertificateAuthorityError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -2719,19 +2778,19 @@ impl AcmPca for AcmPcaClient {
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
-                futures::future::ready(::std::mem::drop(response)).boxed()
+                futures::future::ready(Ok(std::mem::drop(response))).boxed()
             } else {
                 response
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(UpdateCertificateAuthorityError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateCertificateAuthorityError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateCertificateAuthorityError::from_response(response))
+                            })
                     })
                     .boxed()
             }

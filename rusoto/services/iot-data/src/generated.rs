@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
@@ -466,8 +466,9 @@ impl IotData for IotDataClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteThingShadowError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let mut result = DeleteThingShadowResponse::default();
                             result.payload = response.body;
 
@@ -480,11 +481,10 @@ impl IotData for IotDataClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteThingShadowError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteThingShadowError>())
+                            .and_then(|response| {
+                                Err(DeleteThingShadowError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -507,8 +507,9 @@ impl IotData for IotDataClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetThingShadowError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let mut result = GetThingShadowResponse::default();
                             result.payload = Some(response.body);
 
@@ -521,11 +522,8 @@ impl IotData for IotDataClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetThingShadowError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetThingShadowError>())
+                            .and_then(|response| Err(GetThingShadowError::from_response(response)))
                     })
                     .boxed()
             }
@@ -557,8 +555,9 @@ impl IotData for IotDataClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| PublishError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -570,11 +569,8 @@ impl IotData for IotDataClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(PublishError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<PublishError>())
+                            .and_then(|response| Err(PublishError::from_response(response)))
                     })
                     .boxed()
             }
@@ -599,8 +595,9 @@ impl IotData for IotDataClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateThingShadowError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let mut result = UpdateThingShadowResponse::default();
                             result.payload = Some(response.body);
 
@@ -613,11 +610,10 @@ impl IotData for IotDataClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateThingShadowError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateThingShadowError>())
+                            .and_then(|response| {
+                                Err(UpdateThingShadowError::from_response(response))
+                            })
                     })
                     .boxed()
             }

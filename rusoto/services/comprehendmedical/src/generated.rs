@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -367,11 +367,16 @@ impl ComprehendMedical for ComprehendMedicalClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DetectEntitiesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DetectEntitiesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DetectEntitiesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DetectEntitiesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -379,11 +384,10 @@ impl ComprehendMedical for ComprehendMedicalClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DetectEntitiesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DetectEntitiesError>
+                            })
+                            .and_then(|response| Err(DetectEntitiesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -406,11 +410,16 @@ impl ComprehendMedical for ComprehendMedicalClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DetectPHIError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DetectPHIResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DetectPHIError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DetectPHIResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -418,11 +427,10 @@ impl ComprehendMedical for ComprehendMedicalClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DetectPHIError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DetectPHIError>
+                            })
+                            .and_then(|response| Err(DetectPHIError::from_response(response)))
                     })
                     .boxed()
             }

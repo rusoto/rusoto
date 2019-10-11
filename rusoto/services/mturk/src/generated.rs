@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -3413,11 +3413,17 @@ impl MechanicalTurk for MechanicalTurkClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AcceptQualificationRequestError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AcceptQualificationRequestResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AcceptQualificationRequestError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AcceptQualificationRequestResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3425,13 +3431,13 @@ impl MechanicalTurk for MechanicalTurkClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(AcceptQualificationRequestError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AcceptQualificationRequestError>
+                            })
+                            .and_then(|response| {
+                                Err(AcceptQualificationRequestError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3457,11 +3463,16 @@ impl MechanicalTurk for MechanicalTurkClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ApproveAssignmentError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ApproveAssignmentResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ApproveAssignmentError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ApproveAssignmentResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3469,11 +3480,12 @@ impl MechanicalTurk for MechanicalTurkClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ApproveAssignmentError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ApproveAssignmentError>
+                            })
+                            .and_then(|response| {
+                                Err(ApproveAssignmentError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3500,11 +3512,17 @@ impl MechanicalTurk for MechanicalTurkClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| AssociateQualificationWithWorkerError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<AssociateQualificationWithWorkerResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AssociateQualificationWithWorkerError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<AssociateQualificationWithWorkerResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3512,15 +3530,15 @@ impl MechanicalTurk for MechanicalTurkClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(AssociateQualificationWithWorkerError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<AssociateQualificationWithWorkerError>
+                            })
+                            .and_then(|response| {
+                                Err(AssociateQualificationWithWorkerError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -3549,11 +3567,17 @@ impl MechanicalTurk for MechanicalTurkClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateAdditionalAssignmentsForHITError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateAdditionalAssignmentsForHITResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateAdditionalAssignmentsForHITError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateAdditionalAssignmentsForHITResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3561,15 +3585,15 @@ impl MechanicalTurk for MechanicalTurkClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(CreateAdditionalAssignmentsForHITError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateAdditionalAssignmentsForHITError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateAdditionalAssignmentsForHITError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -3592,11 +3616,16 @@ impl MechanicalTurk for MechanicalTurkClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateHITError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateHITResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateHITError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateHITResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3604,11 +3633,10 @@ impl MechanicalTurk for MechanicalTurkClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateHITError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateHITError>
+                            })
+                            .and_then(|response| Err(CreateHITError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3634,11 +3662,16 @@ impl MechanicalTurk for MechanicalTurkClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateHITTypeError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateHITTypeResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateHITTypeError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateHITTypeResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3646,11 +3679,10 @@ impl MechanicalTurk for MechanicalTurkClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateHITTypeError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateHITTypeError>
+                            })
+                            .and_then(|response| Err(CreateHITTypeError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3676,11 +3708,17 @@ impl MechanicalTurk for MechanicalTurkClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateHITWithHITTypeError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateHITWithHITTypeResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateHITWithHITTypeError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateHITWithHITTypeResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3688,11 +3726,13 @@ impl MechanicalTurk for MechanicalTurkClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateHITWithHITTypeError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateHITWithHITTypeError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateHITWithHITTypeError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3718,11 +3758,17 @@ impl MechanicalTurk for MechanicalTurkClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateQualificationTypeError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateQualificationTypeResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateQualificationTypeError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateQualificationTypeResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3730,13 +3776,13 @@ impl MechanicalTurk for MechanicalTurkClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(CreateQualificationTypeError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<CreateQualificationTypeError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateQualificationTypeError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3762,11 +3808,16 @@ impl MechanicalTurk for MechanicalTurkClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateWorkerBlockError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateWorkerBlockResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateWorkerBlockError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateWorkerBlockResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3774,11 +3825,12 @@ impl MechanicalTurk for MechanicalTurkClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateWorkerBlockError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateWorkerBlockError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateWorkerBlockError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3801,11 +3853,16 @@ impl MechanicalTurk for MechanicalTurkClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteHITError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteHITResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteHITError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteHITResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3813,11 +3870,10 @@ impl MechanicalTurk for MechanicalTurkClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteHITError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteHITError>
+                            })
+                            .and_then(|response| Err(DeleteHITError::from_response(response)))
                     })
                     .boxed()
             }
@@ -3843,11 +3899,17 @@ impl MechanicalTurk for MechanicalTurkClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteQualificationTypeError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteQualificationTypeResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteQualificationTypeError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteQualificationTypeResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3855,13 +3917,13 @@ impl MechanicalTurk for MechanicalTurkClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DeleteQualificationTypeError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DeleteQualificationTypeError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteQualificationTypeError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3887,11 +3949,16 @@ impl MechanicalTurk for MechanicalTurkClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteWorkerBlockError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteWorkerBlockResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteWorkerBlockError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteWorkerBlockResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3899,11 +3966,12 @@ impl MechanicalTurk for MechanicalTurkClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteWorkerBlockError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteWorkerBlockError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteWorkerBlockError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -3932,11 +4000,17 @@ impl MechanicalTurk for MechanicalTurkClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DisassociateQualificationFromWorkerError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DisassociateQualificationFromWorkerResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DisassociateQualificationFromWorkerError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DisassociateQualificationFromWorkerResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3944,15 +4018,15 @@ impl MechanicalTurk for MechanicalTurkClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DisassociateQualificationFromWorkerError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DisassociateQualificationFromWorkerError>
+                            })
+                            .and_then(|response| {
+                                Err(DisassociateQualificationFromWorkerError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -3976,11 +4050,16 @@ impl MechanicalTurk for MechanicalTurkClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetAccountBalanceError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetAccountBalanceResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetAccountBalanceError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetAccountBalanceResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -3988,11 +4067,12 @@ impl MechanicalTurk for MechanicalTurkClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetAccountBalanceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetAccountBalanceError>
+                            })
+                            .and_then(|response| {
+                                Err(GetAccountBalanceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4018,11 +4098,16 @@ impl MechanicalTurk for MechanicalTurkClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetAssignmentError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetAssignmentResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetAssignmentError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetAssignmentResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4030,11 +4115,10 @@ impl MechanicalTurk for MechanicalTurkClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetAssignmentError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetAssignmentError>
+                            })
+                            .and_then(|response| Err(GetAssignmentError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4060,11 +4144,16 @@ impl MechanicalTurk for MechanicalTurkClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetFileUploadURLError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetFileUploadURLResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetFileUploadURLError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetFileUploadURLResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4072,11 +4161,12 @@ impl MechanicalTurk for MechanicalTurkClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetFileUploadURLError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<GetFileUploadURLError>
+                            })
+                            .and_then(|response| {
+                                Err(GetFileUploadURLError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4096,11 +4186,14 @@ impl MechanicalTurk for MechanicalTurkClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetHITError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetHITResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<GetHITError>)
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetHITResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4108,11 +4201,8 @@ impl MechanicalTurk for MechanicalTurkClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetHITError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<GetHITError>)
+                            .and_then(|response| Err(GetHITError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4138,11 +4228,17 @@ impl MechanicalTurk for MechanicalTurkClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetQualificationScoreError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetQualificationScoreResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetQualificationScoreError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetQualificationScoreResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4150,11 +4246,13 @@ impl MechanicalTurk for MechanicalTurkClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetQualificationScoreError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetQualificationScoreError>
+                            })
+                            .and_then(|response| {
+                                Err(GetQualificationScoreError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4180,11 +4278,17 @@ impl MechanicalTurk for MechanicalTurkClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetQualificationTypeError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetQualificationTypeResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetQualificationTypeError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetQualificationTypeResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4192,11 +4296,13 @@ impl MechanicalTurk for MechanicalTurkClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(GetQualificationTypeError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetQualificationTypeError>
+                            })
+                            .and_then(|response| {
+                                Err(GetQualificationTypeError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4222,11 +4328,17 @@ impl MechanicalTurk for MechanicalTurkClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListAssignmentsForHITError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListAssignmentsForHITResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListAssignmentsForHITError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListAssignmentsForHITResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4234,11 +4346,13 @@ impl MechanicalTurk for MechanicalTurkClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListAssignmentsForHITError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListAssignmentsForHITError>
+                            })
+                            .and_then(|response| {
+                                Err(ListAssignmentsForHITError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4264,11 +4378,16 @@ impl MechanicalTurk for MechanicalTurkClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListBonusPaymentsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListBonusPaymentsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListBonusPaymentsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListBonusPaymentsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4276,11 +4395,12 @@ impl MechanicalTurk for MechanicalTurkClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListBonusPaymentsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListBonusPaymentsError>
+                            })
+                            .and_then(|response| {
+                                Err(ListBonusPaymentsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4300,11 +4420,14 @@ impl MechanicalTurk for MechanicalTurkClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListHITsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListHITsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<ListHITsError>)
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListHITsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4312,11 +4435,8 @@ impl MechanicalTurk for MechanicalTurkClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListHITsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| RusotoError::HttpDispatch(e) as RusotoError<ListHITsError>)
+                            .and_then(|response| Err(ListHITsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4342,11 +4462,17 @@ impl MechanicalTurk for MechanicalTurkClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListHITsForQualificationTypeError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListHITsForQualificationTypeResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListHITsForQualificationTypeError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListHITsForQualificationTypeResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4354,13 +4480,13 @@ impl MechanicalTurk for MechanicalTurkClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ListHITsForQualificationTypeError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListHITsForQualificationTypeError>
+                            })
+                            .and_then(|response| {
+                                Err(ListHITsForQualificationTypeError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4386,11 +4512,17 @@ impl MechanicalTurk for MechanicalTurkClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListQualificationRequestsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListQualificationRequestsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListQualificationRequestsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListQualificationRequestsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4398,13 +4530,13 @@ impl MechanicalTurk for MechanicalTurkClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ListQualificationRequestsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListQualificationRequestsError>
+                            })
+                            .and_then(|response| {
+                                Err(ListQualificationRequestsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4430,11 +4562,17 @@ impl MechanicalTurk for MechanicalTurkClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListQualificationTypesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListQualificationTypesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListQualificationTypesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListQualificationTypesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4442,13 +4580,13 @@ impl MechanicalTurk for MechanicalTurkClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ListQualificationTypesError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListQualificationTypesError>
+                            })
+                            .and_then(|response| {
+                                Err(ListQualificationTypesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4475,11 +4613,17 @@ impl MechanicalTurk for MechanicalTurkClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListReviewPolicyResultsForHITError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListReviewPolicyResultsForHITResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListReviewPolicyResultsForHITError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListReviewPolicyResultsForHITResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4487,13 +4631,13 @@ impl MechanicalTurk for MechanicalTurkClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ListReviewPolicyResultsForHITError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListReviewPolicyResultsForHITError>
+                            })
+                            .and_then(|response| {
+                                Err(ListReviewPolicyResultsForHITError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4519,11 +4663,16 @@ impl MechanicalTurk for MechanicalTurkClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListReviewableHITsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListReviewableHITsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListReviewableHITsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListReviewableHITsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4531,11 +4680,12 @@ impl MechanicalTurk for MechanicalTurkClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListReviewableHITsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListReviewableHITsError>
+                            })
+                            .and_then(|response| {
+                                Err(ListReviewableHITsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4561,11 +4711,16 @@ impl MechanicalTurk for MechanicalTurkClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListWorkerBlocksError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListWorkerBlocksResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListWorkerBlocksError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListWorkerBlocksResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4573,11 +4728,12 @@ impl MechanicalTurk for MechanicalTurkClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(ListWorkerBlocksError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<ListWorkerBlocksError>
+                            })
+                            .and_then(|response| {
+                                Err(ListWorkerBlocksError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4604,11 +4760,17 @@ impl MechanicalTurk for MechanicalTurkClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListWorkersWithQualificationTypeError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListWorkersWithQualificationTypeResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListWorkersWithQualificationTypeError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<ListWorkersWithQualificationTypeResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4616,15 +4778,15 @@ impl MechanicalTurk for MechanicalTurkClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(ListWorkersWithQualificationTypeError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<ListWorkersWithQualificationTypeError>
+                            })
+                            .and_then(|response| {
+                                Err(ListWorkersWithQualificationTypeError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -4650,11 +4812,16 @@ impl MechanicalTurk for MechanicalTurkClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| NotifyWorkersError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<NotifyWorkersResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<NotifyWorkersError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<NotifyWorkersResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4662,11 +4829,10 @@ impl MechanicalTurk for MechanicalTurkClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(NotifyWorkersError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<NotifyWorkersError>
+                            })
+                            .and_then(|response| Err(NotifyWorkersError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4692,11 +4858,16 @@ impl MechanicalTurk for MechanicalTurkClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| RejectAssignmentError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RejectAssignmentResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<RejectAssignmentError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<RejectAssignmentResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4704,11 +4875,12 @@ impl MechanicalTurk for MechanicalTurkClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(RejectAssignmentError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<RejectAssignmentError>
+                            })
+                            .and_then(|response| {
+                                Err(RejectAssignmentError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4734,11 +4906,17 @@ impl MechanicalTurk for MechanicalTurkClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| RejectQualificationRequestError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<RejectQualificationRequestResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<RejectQualificationRequestError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<RejectQualificationRequestResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4746,13 +4924,13 @@ impl MechanicalTurk for MechanicalTurkClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(RejectQualificationRequestError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<RejectQualificationRequestError>
+                            })
+                            .and_then(|response| {
+                                Err(RejectQualificationRequestError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4775,11 +4953,16 @@ impl MechanicalTurk for MechanicalTurkClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| SendBonusError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<SendBonusResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<SendBonusError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<SendBonusResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4787,11 +4970,10 @@ impl MechanicalTurk for MechanicalTurkClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(SendBonusError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<SendBonusError>
+                            })
+                            .and_then(|response| Err(SendBonusError::from_response(response)))
                     })
                     .boxed()
             }
@@ -4817,11 +4999,17 @@ impl MechanicalTurk for MechanicalTurkClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| SendTestEventNotificationError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<SendTestEventNotificationResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<SendTestEventNotificationError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<SendTestEventNotificationResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4829,13 +5017,13 @@ impl MechanicalTurk for MechanicalTurkClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(SendTestEventNotificationError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<SendTestEventNotificationError>
+                            })
+                            .and_then(|response| {
+                                Err(SendTestEventNotificationError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4861,11 +5049,17 @@ impl MechanicalTurk for MechanicalTurkClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateExpirationForHITError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateExpirationForHITResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateExpirationForHITError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateExpirationForHITResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4873,13 +5067,13 @@ impl MechanicalTurk for MechanicalTurkClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(UpdateExpirationForHITError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateExpirationForHITError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateExpirationForHITError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4905,11 +5099,17 @@ impl MechanicalTurk for MechanicalTurkClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateHITReviewStatusError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateHITReviewStatusResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateHITReviewStatusError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateHITReviewStatusResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4917,11 +5117,13 @@ impl MechanicalTurk for MechanicalTurkClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateHITReviewStatusError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateHITReviewStatusError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateHITReviewStatusError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4947,11 +5149,16 @@ impl MechanicalTurk for MechanicalTurkClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateHITTypeOfHITError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateHITTypeOfHITResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateHITTypeOfHITError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateHITTypeOfHITResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -4959,11 +5166,12 @@ impl MechanicalTurk for MechanicalTurkClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateHITTypeOfHITError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateHITTypeOfHITError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateHITTypeOfHITError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -4989,11 +5197,17 @@ impl MechanicalTurk for MechanicalTurkClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateNotificationSettingsError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateNotificationSettingsResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateNotificationSettingsError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateNotificationSettingsResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5001,13 +5215,13 @@ impl MechanicalTurk for MechanicalTurkClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(UpdateNotificationSettingsError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateNotificationSettingsError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateNotificationSettingsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -5033,11 +5247,17 @@ impl MechanicalTurk for MechanicalTurkClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateQualificationTypeError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateQualificationTypeResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateQualificationTypeError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateQualificationTypeResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -5045,13 +5265,13 @@ impl MechanicalTurk for MechanicalTurkClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(UpdateQualificationTypeError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<UpdateQualificationTypeError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateQualificationTypeError::from_response(response))
+                            })
                     })
                     .boxed()
             }

@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
@@ -1142,10 +1142,11 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ClaimDevicesByClaimCodeError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ClaimDevicesByClaimCodeResponse, _>()?;
+                                .deserialize::<ClaimDevicesByClaimCodeResponse, _>();
 
                             result
                         })
@@ -1156,13 +1157,10 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| {
-                                    Err(ClaimDevicesByClaimCodeError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ClaimDevicesByClaimCodeError>())
+                            .and_then(|response| {
+                                Err(ClaimDevicesByClaimCodeError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1186,10 +1184,11 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| DescribeDeviceError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeDeviceResponse, _>()?;
+                                .deserialize::<DescribeDeviceResponse, _>();
 
                             result
                         })
@@ -1200,11 +1199,8 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DescribeDeviceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeDeviceError>())
+                            .and_then(|response| Err(DescribeDeviceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1237,10 +1233,11 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| FinalizeDeviceClaimError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<FinalizeDeviceClaimResponse, _>()?;
+                                .deserialize::<FinalizeDeviceClaimResponse, _>();
 
                             result
                         })
@@ -1251,11 +1248,10 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(FinalizeDeviceClaimError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<FinalizeDeviceClaimError>())
+                            .and_then(|response| {
+                                Err(FinalizeDeviceClaimError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1278,10 +1274,11 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| GetDeviceMethodsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetDeviceMethodsResponse, _>()?;
+                                .deserialize::<GetDeviceMethodsResponse, _>();
 
                             result
                         })
@@ -1292,11 +1289,10 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetDeviceMethodsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetDeviceMethodsError>())
+                            .and_then(|response| {
+                                Err(GetDeviceMethodsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1327,10 +1323,11 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| InitiateDeviceClaimError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<InitiateDeviceClaimResponse, _>()?;
+                                .deserialize::<InitiateDeviceClaimResponse, _>();
 
                             result
                         })
@@ -1341,11 +1338,10 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(InitiateDeviceClaimError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<InitiateDeviceClaimError>())
+                            .and_then(|response| {
+                                Err(InitiateDeviceClaimError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1371,10 +1367,11 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| InvokeDeviceMethodError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<InvokeDeviceMethodResponse, _>()?;
+                                .deserialize::<InvokeDeviceMethodResponse, _>();
 
                             result
                         })
@@ -1385,11 +1382,10 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(InvokeDeviceMethodError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<InvokeDeviceMethodError>())
+                            .and_then(|response| {
+                                Err(InvokeDeviceMethodError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1424,10 +1420,11 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListDeviceEventsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListDeviceEventsResponse, _>()?;
+                                .deserialize::<ListDeviceEventsResponse, _>();
 
                             result
                         })
@@ -1438,11 +1435,10 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListDeviceEventsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListDeviceEventsError>())
+                            .and_then(|response| {
+                                Err(ListDeviceEventsError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1477,10 +1473,11 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListDevicesError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListDevicesResponse, _>()?;
+                                .deserialize::<ListDevicesResponse, _>();
 
                             result
                         })
@@ -1491,11 +1488,8 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListDevicesError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListDevicesError>())
+                            .and_then(|response| Err(ListDevicesError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1518,10 +1512,11 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| ListTagsForResourceError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListTagsForResourceResponse, _>()?;
+                                .deserialize::<ListTagsForResourceResponse, _>();
 
                             result
                         })
@@ -1532,11 +1527,10 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListTagsForResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListTagsForResourceError>())
+                            .and_then(|response| {
+                                Err(ListTagsForResourceError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1559,8 +1553,9 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| TagResourceError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -1572,11 +1567,8 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(TagResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<TagResourceError>())
+                            .and_then(|response| Err(TagResourceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1599,10 +1591,11 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| UnclaimDeviceError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UnclaimDeviceResponse, _>()?;
+                                .deserialize::<UnclaimDeviceResponse, _>();
 
                             result
                         })
@@ -1613,11 +1606,8 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UnclaimDeviceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UnclaimDeviceError>())
+                            .and_then(|response| Err(UnclaimDeviceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1644,8 +1634,9 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
             if response.status.as_u16() == 204 {
                 response
                     .buffer()
+                    .map_err(|e| UntagResourceError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = ::std::mem::drop(response);
 
                             result
@@ -1657,11 +1648,8 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UntagResourceError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UntagResourceError>())
+                            .and_then(|response| Err(UntagResourceError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1687,10 +1675,11 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
             if response.status.as_u16() == 200 {
                 response
                     .buffer()
+                    .map_err(|e| UpdateDeviceStateError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateDeviceStateResponse, _>()?;
+                                .deserialize::<UpdateDeviceStateResponse, _>();
 
                             result
                         })
@@ -1701,11 +1690,10 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateDeviceStateError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateDeviceStateError>())
+                            .and_then(|response| {
+                                Err(UpdateDeviceStateError::from_response(response))
+                            })
                     })
                     .boxed()
             }

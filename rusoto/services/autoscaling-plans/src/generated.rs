@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -843,11 +843,16 @@ impl AutoscalingPlans for AutoscalingPlansClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateScalingPlanError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateScalingPlanResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateScalingPlanError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<CreateScalingPlanResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -855,11 +860,12 @@ impl AutoscalingPlans for AutoscalingPlansClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(CreateScalingPlanError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<CreateScalingPlanError>
+                            })
+                            .and_then(|response| {
+                                Err(CreateScalingPlanError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -885,11 +891,16 @@ impl AutoscalingPlans for AutoscalingPlansClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteScalingPlanError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteScalingPlanResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteScalingPlanError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DeleteScalingPlanResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -897,11 +908,12 @@ impl AutoscalingPlans for AutoscalingPlansClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DeleteScalingPlanError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<DeleteScalingPlanError>
+                            })
+                            .and_then(|response| {
+                                Err(DeleteScalingPlanError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -927,11 +939,17 @@ impl AutoscalingPlans for AutoscalingPlansClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeScalingPlanResourcesError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeScalingPlanResourcesResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeScalingPlanResourcesError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeScalingPlanResourcesResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -939,13 +957,13 @@ impl AutoscalingPlans for AutoscalingPlansClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(DescribeScalingPlanResourcesError::from_response(response))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeScalingPlanResourcesError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeScalingPlanResourcesError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -971,11 +989,17 @@ impl AutoscalingPlans for AutoscalingPlansClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeScalingPlansError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeScalingPlansResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeScalingPlansError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<DescribeScalingPlansResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -983,11 +1007,13 @@ impl AutoscalingPlans for AutoscalingPlansClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(DescribeScalingPlansError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<DescribeScalingPlansError>
+                            })
+                            .and_then(|response| {
+                                Err(DescribeScalingPlansError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1016,11 +1042,17 @@ impl AutoscalingPlans for AutoscalingPlansClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetScalingPlanResourceForecastDataError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetScalingPlanResourceForecastDataResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetScalingPlanResourceForecastDataError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<GetScalingPlanResourceForecastDataResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1028,15 +1060,15 @@ impl AutoscalingPlans for AutoscalingPlansClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| {
-                                    Err(GetScalingPlanResourceForecastDataError::from_response(
-                                        response,
-                                    ))
-                                },
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e)
+                                    as RusotoError<GetScalingPlanResourceForecastDataError>
+                            })
+                            .and_then(|response| {
+                                Err(GetScalingPlanResourceForecastDataError::from_response(
+                                    response,
+                                ))
+                            })
                     })
                     .boxed()
             }
@@ -1062,11 +1094,16 @@ impl AutoscalingPlans for AutoscalingPlansClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateScalingPlanError::from(e))
                     .map(|try_response| {
-                        try_response.and_then(|response| {
-                            proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateScalingPlanResponse, _>()
-                        })
+                        try_response
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateScalingPlanError>
+                            })
+                            .and_then(|response| {
+                                proto::json::ResponsePayload::new(&response)
+                                    .deserialize::<UpdateScalingPlanResponse, _>()
+                            })
                     })
                     .boxed()
             } else {
@@ -1074,11 +1111,12 @@ impl AutoscalingPlans for AutoscalingPlansClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| e,
-                                |response| Err(UpdateScalingPlanError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| {
+                                RusotoError::HttpDispatch(e) as RusotoError<UpdateScalingPlanError>
+                            })
+                            .and_then(|response| {
+                                Err(UpdateScalingPlanError::from_response(response))
+                            })
                     })
                     .boxed()
             }

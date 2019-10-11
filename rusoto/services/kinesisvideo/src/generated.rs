@@ -19,7 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use futures::FutureExt;
+use futures::{FutureExt, TryFutureExt};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde::{Deserialize, Serialize};
@@ -1020,10 +1020,11 @@ impl KinesisVideo for KinesisVideoClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| CreateStreamError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<CreateStreamOutput, _>()?;
+                                .deserialize::<CreateStreamOutput, _>();
 
                             result
                         })
@@ -1034,11 +1035,8 @@ impl KinesisVideo for KinesisVideoClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(CreateStreamError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<CreateStreamError>())
+                            .and_then(|response| Err(CreateStreamError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1062,10 +1060,11 @@ impl KinesisVideo for KinesisVideoClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DeleteStreamError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DeleteStreamOutput, _>()?;
+                                .deserialize::<DeleteStreamOutput, _>();
 
                             result
                         })
@@ -1076,11 +1075,8 @@ impl KinesisVideo for KinesisVideoClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DeleteStreamError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DeleteStreamError>())
+                            .and_then(|response| Err(DeleteStreamError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1104,10 +1100,11 @@ impl KinesisVideo for KinesisVideoClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| DescribeStreamError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<DescribeStreamOutput, _>()?;
+                                .deserialize::<DescribeStreamOutput, _>();
 
                             result
                         })
@@ -1118,11 +1115,8 @@ impl KinesisVideo for KinesisVideoClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(DescribeStreamError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<DescribeStreamError>())
+                            .and_then(|response| Err(DescribeStreamError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1146,10 +1140,11 @@ impl KinesisVideo for KinesisVideoClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| GetDataEndpointError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<GetDataEndpointOutput, _>()?;
+                                .deserialize::<GetDataEndpointOutput, _>();
 
                             result
                         })
@@ -1160,11 +1155,8 @@ impl KinesisVideo for KinesisVideoClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(GetDataEndpointError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<GetDataEndpointError>())
+                            .and_then(|response| Err(GetDataEndpointError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1188,10 +1180,11 @@ impl KinesisVideo for KinesisVideoClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListStreamsError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListStreamsOutput, _>()?;
+                                .deserialize::<ListStreamsOutput, _>();
 
                             result
                         })
@@ -1202,11 +1195,8 @@ impl KinesisVideo for KinesisVideoClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListStreamsError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListStreamsError>())
+                            .and_then(|response| Err(ListStreamsError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1230,10 +1220,11 @@ impl KinesisVideo for KinesisVideoClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| ListTagsForStreamError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<ListTagsForStreamOutput, _>()?;
+                                .deserialize::<ListTagsForStreamOutput, _>();
 
                             result
                         })
@@ -1244,11 +1235,10 @@ impl KinesisVideo for KinesisVideoClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(ListTagsForStreamError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<ListTagsForStreamError>())
+                            .and_then(|response| {
+                                Err(ListTagsForStreamError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1269,10 +1259,11 @@ impl KinesisVideo for KinesisVideoClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| TagStreamError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<TagStreamOutput, _>()?;
+                                .deserialize::<TagStreamOutput, _>();
 
                             result
                         })
@@ -1283,11 +1274,8 @@ impl KinesisVideo for KinesisVideoClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(TagStreamError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<TagStreamError>())
+                            .and_then(|response| Err(TagStreamError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1311,10 +1299,11 @@ impl KinesisVideo for KinesisVideoClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UntagStreamError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UntagStreamOutput, _>()?;
+                                .deserialize::<UntagStreamOutput, _>();
 
                             result
                         })
@@ -1325,11 +1314,8 @@ impl KinesisVideo for KinesisVideoClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UntagStreamError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UntagStreamError>())
+                            .and_then(|response| Err(UntagStreamError::from_response(response)))
                     })
                     .boxed()
             }
@@ -1353,10 +1339,11 @@ impl KinesisVideo for KinesisVideoClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateDataRetentionError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateDataRetentionOutput, _>()?;
+                                .deserialize::<UpdateDataRetentionOutput, _>();
 
                             result
                         })
@@ -1367,11 +1354,10 @@ impl KinesisVideo for KinesisVideoClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateDataRetentionError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateDataRetentionError>())
+                            .and_then(|response| {
+                                Err(UpdateDataRetentionError::from_response(response))
+                            })
                     })
                     .boxed()
             }
@@ -1395,10 +1381,11 @@ impl KinesisVideo for KinesisVideoClient {
             if response.status.is_success() {
                 response
                     .buffer()
+                    .map_err(|e| UpdateStreamError::from(e))
                     .map(|try_response| {
-                        try_response.map(|response| {
+                        try_response.map_err(|e| e.into()).and_then(|response| {
                             let result = proto::json::ResponsePayload::new(&response)
-                                .deserialize::<UpdateStreamOutput, _>()?;
+                                .deserialize::<UpdateStreamOutput, _>();
 
                             result
                         })
@@ -1409,11 +1396,8 @@ impl KinesisVideo for KinesisVideoClient {
                     .buffer()
                     .map(|try_response| {
                         try_response
-                            .map_or_else(
-                                |e| Err(e),
-                                |response| Err(UpdateStreamError::from_response(response)),
-                            )
-                            .boxed()
+                            .map_err(|e| e.into::<UpdateStreamError>())
+                            .and_then(|response| Err(UpdateStreamError::from_response(response)))
                     })
                     .boxed()
             }
