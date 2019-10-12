@@ -8,6 +8,7 @@
 - Don't decode query string parameters before encoding it. Results in fixing the prefix and marker
 params for s3 `list_objects` methods
 - Add Textract service
+- Update CloudDirectory API definition to `2017-01-11`
 
 ## [0.41.0] - 2019-10-07
 
