@@ -875,6 +875,12 @@
     "protocolVersion": "2012-01-25",
     "baseTypeName": "Swf"
   },
+  "textract": {
+    "version": "0.41.0",
+    "coreVersion": "0.41.0",
+    "protocolVersion": "2018-06-27",
+    "baseTypeName": "Textract"
+  },
   "transcribe": {
     "version": "0.41.0",
     "coreVersion": "0.41.0",
