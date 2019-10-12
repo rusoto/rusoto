@@ -5,6 +5,9 @@
 //!
 //! If needed, the request will be re-issued to a temporary redirect endpoint.  This can happen with
 //! newly created S3 buckets not in us-standard/us-east-1.
+//!
+//! Please note that this module does not expect URIs to already be encoded.
+//!
 
 use std::borrow::Cow;
 use std::collections::btree_map::Entry;
@@ -18,10 +21,10 @@ use bytes::Bytes;
 use hex;
 use hmac::{Hmac, Mac};
 use md5;
+use percent_encoding::{percent_decode, utf8_percent_encode, AsciiSet, NON_ALPHANUMERIC};
 use sha2::{Digest, Sha256};
 use time::now_utc;
 use time::Tm;
-use percent_encoding::{percent_decode, utf8_percent_encode, AsciiSet, NON_ALPHANUMERIC};
 
 use crate::credential::AwsCredentials;
 use crate::param::{Params, ServiceParams};
@@ -677,7 +680,7 @@ pub fn encode_uri_path(uri: &str) -> String {
 
 #[inline]
 fn encode_uri_strict(uri: &str) -> String {
-    utf8_percent_encode(&decode_uri(uri), &STRICT_ENCODE_SET).collect::<String>()
+    utf8_percent_encode(uri, &STRICT_ENCODE_SET).collect::<String>()
 }
 
 #[inline]
@@ -837,7 +840,7 @@ mod tests {
         request.add_param("arg2%7B+%2B", "+%2B");
         assert_eq!(
             super::build_canonical_query_string(&request.params),
-            "arg1%7B=arg1%7B&arg2%7B%20%2B=%20%2B"
+            "arg1%257B=arg1%257B&arg2%257B%20%252B=%20%252B"
         );
         assert_eq!(
             super::canonical_uri(&request.path, &Region::default()),
