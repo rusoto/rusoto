@@ -19,7 +19,7 @@ categories = [
 edition = "2018"
 
 [badges]
-appveyor = { repository = "rusoto/rusoto", branch = "master" }
+appveyor = { repository = "matthewkmayer/rusoto", branch = "master" }
 azure-devops = { project = "matthewkmayer/Rusoto", pipeline = "rusoto.rusoto", build="1" }
 
 [dependencies]
