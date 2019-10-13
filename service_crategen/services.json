@@ -116,7 +116,7 @@
   "clouddirectory": {
     "version": "0.41.0",
     "coreVersion": "0.41.0",
-    "protocolVersion": "2016-05-10",
+    "protocolVersion": "2017-01-11",
     "baseTypeName": "CloudDirectory"
   },
   "cloudformation": {
