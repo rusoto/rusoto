@@ -119,6 +119,7 @@ members = [
     "rusoto/services/pi",
     "rusoto/services/polly",
     "rusoto/services/pricing",
+    "rusoto/services/qldb",
     "rusoto/services/ram",
     "rusoto/services/rds",
     "rusoto/services/rds-data",
