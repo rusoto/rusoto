@@ -519,6 +519,10 @@ path = "../rusoto/services/sdb"
 optional = true
 path = "../rusoto/services/secretsmanager"
 
+[dependencies.rusoto_securityhub]
+optional = true
+path = "../rusoto/services/securityhub"
+
 [dependencies.rusoto_serverlessrepo]
 optional = true
 path = "../rusoto/services/serverlessrepo"
@@ -771,6 +775,7 @@ all = [
 	"sagemaker-runtime",
 	"sdb",
 	"secretsmanager",
+	"securityhub",
 	"serverlessrepo",
 	"servicecatalog",
 	"servicediscovery",
@@ -783,7 +788,7 @@ all = [
 	"ssm",
 	"stepfunctions",
 	"storagegateway",
-		"sts",
+	"sts",
 	"support",
 	"swf",
 	"transcribe",
@@ -926,6 +931,7 @@ sagemaker = ["rusoto_sagemaker"]
 sagemaker-runtime = ["rusoto_sagemaker_runtime"]
 sdb = ["rusoto_sdb"]
 secretsmanager = ["rusoto_secretsmanager"]
+securityhub = ["rusoto_securityhub"]
 serverlessrepo = ["rusoto_serverlessrepo"]
 servicecatalog = ["rusoto_servicecatalog"]
 servicediscovery = ["rusoto_servicediscovery"]

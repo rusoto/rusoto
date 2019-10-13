@@ -10,6 +10,7 @@
 params for s3 `list_objects` methods
 - Add Textract service
 - Update CloudDirectory API definition to `2017-01-11`
+- Add SecurityHub service
 
 ## [0.41.0] - 2019-10-07
 

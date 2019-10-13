@@ -134,6 +134,7 @@ members = [
     "rusoto/services/sagemaker-runtime",
     "rusoto/services/sdb",
     "rusoto/services/secretsmanager",
+    "rusoto/services/securityhub",
     "rusoto/services/serverlessrepo",
     "rusoto/services/servicecatalog",
     "rusoto/services/servicediscovery",
