@@ -4,6 +4,7 @@
 
 (Please put changes here)
 
+- Add QLDB service
 - Update Skeptic tests for Rusoto v0.41
 - Don't decode query string parameters before encoding it. Results in fixing the prefix and marker
 params for s3 `list_objects` methods

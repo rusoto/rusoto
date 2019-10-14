@@ -698,6 +698,12 @@
     "protocolVersion": "2017-10-15",
     "baseTypeName": "Pricing"
   },
+  "qldb": {
+    "version": "0.41.0",
+    "coreVersion": "0.41.0",
+    "protocolVersion": "2019-01-02",
+    "baseTypeName": "Qldb"
+  },
   "ram": {
     "version": "0.41.0",
     "coreVersion": "0.41.0",
