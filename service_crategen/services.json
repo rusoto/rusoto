@@ -788,6 +788,12 @@
     "protocolVersion": "2017-10-17",
     "baseTypeName": "SecretsManager"
   },
+  "securityhub": {
+    "version": "0.41.0",
+    "coreVersion": "0.41.0",
+    "protocolVersion": "2018-10-26",
+    "baseTypeName": "SecurityHub"
+  },
   "serverlessrepo": {
     "version": "0.41.0",
     "coreVersion": "0.41.0",
