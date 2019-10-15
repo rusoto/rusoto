@@ -1,6 +1,7 @@
 [workspace]
 members = [
     "mock",
+    "rusoto/credential_service_mock",
     "rusoto/core",
     "rusoto/credential",
     "rusoto/services/acm",
