@@ -11,7 +11,7 @@ use crate::{
     parse_credentials_from_aws_service, AwsCredentials, CredentialsError, ProvideAwsCredentials,
 };
 
-const AWS_CREDENTIALS_PROVIDER_IP: &str = "127.0.0.1:8080";
+const AWS_CREDENTIALS_PROVIDER_IP: &str = "169.254.169.254";
 const AWS_CREDENTIALS_PROVIDER_PATH: &str = "latest/meta-data/iam/security-credentials";
 
 /// Provides AWS credentials from a resource's IAM role.
@@ -40,6 +40,7 @@ const AWS_CREDENTIALS_PROVIDER_PATH: &str = "latest/meta-data/iam/security-crede
 pub struct InstanceMetadataProvider {
     client: HttpClient,
     timeout: Duration,
+    port_for_testing: Option<String>,
 }
 
 impl InstanceMetadataProvider {
@@ -48,12 +49,18 @@ impl InstanceMetadataProvider {
         InstanceMetadataProvider {
             client: HttpClient::new(),
             timeout: Duration::from_secs(30),
+            port_for_testing: None,
         }
     }
 
     /// Set the timeout on the provider to the specified duration.
     pub fn set_timeout(&mut self, timeout: Duration) {
         self.timeout = timeout;
+    }
+
+    /// Set the timeout on the provider to the specified duration.
+    pub fn set_to_localhost(&mut self, port: &str) {
+        self.port_for_testing = Some(format!("127.0.0.1:{}", port.to_string()));
     }
 }
 
@@ -75,6 +82,7 @@ pub struct InstanceMetadataProviderFuture {
     state: InstanceMetadataFutureState,
     client: HttpClient,
     timeout: Duration,
+    port_for_testing: Option<String>,
 }
 
 impl Future for InstanceMetadataProviderFuture {
@@ -84,12 +92,17 @@ impl Future for InstanceMetadataProviderFuture {
     fn poll(&mut self) -> Poll<Self::Item, Self::Error> {
         let new_state = match self.state {
             InstanceMetadataFutureState::Start => {
-                let new_future = get_role_name(&self.client, self.timeout)?;
+                let new_future = get_role_name(&self.client, self.timeout, self.port_for_testing.clone())?;
                 InstanceMetadataFutureState::GetRoleName(new_future)
             }
             InstanceMetadataFutureState::GetRoleName(ref mut future) => {
                 let role_name = try_ready!(future.poll());
-                let new_future = get_credentials_from_role(&self.client, self.timeout, &role_name)?;
+                let new_future = get_credentials_from_role(
+                    &self.client,
+                    self.timeout,
+                    &role_name,
+                    self.port_for_testing.clone(),
+                )?;
                 InstanceMetadataFutureState::GetCredentialsFromRole(new_future)
             }
             InstanceMetadataFutureState::GetCredentialsFromRole(ref mut future) => {
@@ -114,6 +127,7 @@ impl ProvideAwsCredentials for InstanceMetadataProvider {
             state: InstanceMetadataFutureState::Start,
             client: self.client.clone(),
             timeout: self.timeout,
+            port_for_testing: self.port_for_testing.clone(),
         }
     }
 }
@@ -122,11 +136,15 @@ impl ProvideAwsCredentials for InstanceMetadataProvider {
 fn get_role_name(
     client: &HttpClient,
     timeout: Duration,
+    port_for_testing: Option<String>,
 ) -> Result<HttpClientFuture, CredentialsError> {
-    let role_name_address = format!(
-        "http://{}/{}/",
-        AWS_CREDENTIALS_PROVIDER_IP, AWS_CREDENTIALS_PROVIDER_PATH
-    );
+    let role_name_address = match port_for_testing {
+        Some(p) => format!("http://{}/{}/", p, AWS_CREDENTIALS_PROVIDER_PATH),
+        None => format!(
+            "http://{}/{}/",
+            AWS_CREDENTIALS_PROVIDER_IP, AWS_CREDENTIALS_PROVIDER_PATH
+        ),
+    };
     let uri = match role_name_address.parse::<Uri>() {
         Ok(u) => u,
         Err(e) => return Err(CredentialsError::new(e)),
@@ -140,11 +158,18 @@ fn get_credentials_from_role(
     client: &HttpClient,
     timeout: Duration,
     role_name: &str,
+    port_for_testing: Option<String>,
 ) -> Result<HttpClientFuture, CredentialsError> {
-    let credentials_provider_url = format!(
-        "http://{}/{}/{}",
-        AWS_CREDENTIALS_PROVIDER_IP, AWS_CREDENTIALS_PROVIDER_PATH, role_name
-    );
+    let credentials_provider_url = match port_for_testing {
+        Some(p) => format!(
+            "http://{}/{}/{}",
+            p, AWS_CREDENTIALS_PROVIDER_PATH, role_name
+        ),
+        None => format!(
+            "http://{}/{}/{}",
+            AWS_CREDENTIALS_PROVIDER_IP, AWS_CREDENTIALS_PROVIDER_PATH, role_name
+        ),
+    };
 
     let uri = match credentials_provider_url.parse::<Uri>() {
         Ok(u) => u,
