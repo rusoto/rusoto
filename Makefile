@@ -54,3 +54,8 @@ time_credentials:
 .PHONY: bench_s3
 bench_s3:
 	(cd rusoto/services/s3 && cargo +nightly bench)
+
+.PHONY: credential_integration_test
+credential_integration_test:
+	# how to wait for the mock to come up?
+	(cd rusoto/credential_service_mock && cargo run && cd ../credential ; cargo test)
