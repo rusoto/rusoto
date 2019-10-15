@@ -120,6 +120,7 @@ members = [
     "rusoto/services/polly",
     "rusoto/services/pricing",
     "rusoto/services/qldb",
+    "rusoto/services/qldb-session",
     "rusoto/services/ram",
     "rusoto/services/rds",
     "rusoto/services/rds-data",

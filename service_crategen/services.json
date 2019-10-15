@@ -704,6 +704,12 @@
     "protocolVersion": "2019-01-02",
     "baseTypeName": "Qldb"
   },
+  "qldb-session": {
+    "version": "0.41.0",
+    "coreVersion": "0.41.0",
+    "protocolVersion": "2019-07-11",
+    "baseTypeName": "QldbSession"
+  },
   "ram": {
     "version": "0.41.0",
     "coreVersion": "0.41.0",
