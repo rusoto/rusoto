@@ -587,6 +587,10 @@ path = "../rusoto/services/swf"
 optional = true
 path = "../rusoto/services/transcribe"
 
+[dependencies.rusoto_transfer]
+optional = true
+path = "../rusoto/services/transfer"
+
 [dependencies.rusoto_translate]
 optional = true
 path = "../rusoto/services/translate"
@@ -792,6 +796,7 @@ all = [
 	"support",
 	"swf",
 	"transcribe",
+	"transfer",
 	"translate",
 	"waf",
 	"waf-regional",
@@ -948,6 +953,7 @@ sts = ["rusoto_sts", "rusoto_ec2"]
 support = ["rusoto_support"]
 swf = ["rusoto_swf"]
 transcribe = ["rusoto_transcribe"]
+transfer = ["rusoto_transfer"]
 translate = ["rusoto_translate"]
 waf = ["rusoto_waf"]
 waf-regional = ["rusoto_waf_regional"]
