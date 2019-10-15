@@ -11,7 +11,7 @@ use crate::{
     parse_credentials_from_aws_service, AwsCredentials, CredentialsError, ProvideAwsCredentials,
 };
 
-const AWS_CREDENTIALS_PROVIDER_IP: &str = "169.254.169.254";
+const AWS_CREDENTIALS_PROVIDER_IP: &str = "127.0.0.1:8080";
 const AWS_CREDENTIALS_PROVIDER_PATH: &str = "latest/meta-data/iam/security-credentials";
 
 /// Provides AWS credentials from a resource's IAM role.
