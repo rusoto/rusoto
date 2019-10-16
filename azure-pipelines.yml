@@ -21,6 +21,8 @@ jobs:
       displayName: 'Run unit tests with rustls'
     - script: make check_integration_test
       displayName: 'Cargo check integration tests'
+    - script: make credential_integration_test
+      displayName: 'Credential integration tests'
 
 - job: 'unit_and_integration_tests_linux_beta'
   displayName: 'Unit and integration tests on Linux (beta channel)'
