@@ -57,5 +57,4 @@ bench_s3:
 
 .PHONY: credential_integration_test
 credential_integration_test:
-	# how to wait for the mock to come up?
 	(cd rusoto/credential_service_mock && ./run-and-test.sh )

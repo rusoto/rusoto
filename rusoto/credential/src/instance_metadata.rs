@@ -58,7 +58,7 @@ impl InstanceMetadataProvider {
         self.timeout = timeout;
     }
 
-    /// Set the timeout on the provider to the specified duration.
+    /// Set source to localhost on specified port for integration testing.
     pub fn set_to_localhost(&mut self, port: &str) {
         self.port_for_testing = Some(format!("127.0.0.1:{}", port.to_string()));
     }
