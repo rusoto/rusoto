@@ -2,4 +2,4 @@
 
 cargo build; cargo run &
 
-cd ../credential ; cargo test ; killall credential_service_mock
+cd ../credential ; sleep 5 ; cargo test -- --ignored ; killall credential_service_mock

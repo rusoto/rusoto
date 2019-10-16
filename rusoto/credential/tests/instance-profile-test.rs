@@ -5,6 +5,7 @@ use std::time::Duration;
 use tokio_core::reactor::Core;
 
 #[test]
+#[ignore]
 fn it_fetches_basic_role() {
     // set env vars to point to local provider
     let mut provider = InstanceMetadataProvider::new();
