@@ -153,6 +153,7 @@ members = [
     "rusoto/services/swf",
     "rusoto/services/textract",
     "rusoto/services/transcribe",
+    "rusoto/services/transfer",
     "rusoto/services/translate",
     "rusoto/services/waf",
     "rusoto/services/waf-regional",

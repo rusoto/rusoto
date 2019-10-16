@@ -905,6 +905,12 @@
     "protocolVersion": "2017-10-26",
     "baseTypeName": "Transcribe"
   },
+  "transfer": {
+    "version": "0.41.0",
+    "coreVersion": "0.41.0",
+    "protocolVersion": "2018-11-05",
+    "baseTypeName": "Transfer"
+  },
   "translate": {
     "version": "0.41.0",
     "coreVersion": "0.41.0",
