@@ -431,10 +431,6 @@ impl SignedRequest {
             self.add_header("X-Amz-Security-Token", token);
         }
 
-        let signed_headers = signed_headers(&self.headers);
-
-        let canonical_headers = canonical_headers(&self.headers);
-
         let digest = match self.payload {
             None => Cow::Borrowed(EMPTY_SHA256_HASH),
             Some(SignedRequestPayload::Buffer(ref payload)) => {
@@ -445,6 +441,10 @@ impl SignedRequest {
         };
         self.remove_header("x-amz-content-sha256");
         self.add_header("x-amz-content-sha256", &digest);
+
+        let signed_headers = signed_headers(&self.headers);
+
+        let canonical_headers = canonical_headers(&self.headers);
 
         // Normalize URI paths according to RFC 3986. Remove redundant and relative path components. Each path segment must be URI-encoded twice (except for Amazon S3 which only gets URI-encoded once).
         // see https://docs.aws.amazon.com/general/latest/gr/sigv4-create-canonical-request.html
