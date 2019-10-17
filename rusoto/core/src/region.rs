@@ -373,6 +373,16 @@ mod tests {
             endpoint: "http://localhost:8000".to_owned(),
             name: "eu-east-1".to_owned(),
         };
+        assert_tokens(
+            &custom_region,
+            &[
+                Token::Tuple { len: 2 },
+                Token::String("eu-east-1"),
+                Token::Some,
+                Token::String("http://localhost:8000"),
+                Token::TupleEnd,
+            ],
+        );
         let expected = "[\"eu-east-1\",\"http://localhost:8000\"]";
         let region_deserialized = serde_json::to_string(&custom_region).unwrap();
         assert_eq!(region_deserialized, expected);
