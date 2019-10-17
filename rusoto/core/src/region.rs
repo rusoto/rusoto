@@ -202,12 +202,9 @@ impl<'de> de::Visitor<'de> for RegionVisitor {
         A: de::SeqAccess<'de>,
     {
         let name: String = seq
-            .next_element()?
+            .next_element::<String>()?
             .ok_or_else(|| de::Error::custom("region is missing name"))?;
-        let endpoint: Option<String> = match seq.next_element() {
-            Ok(o) => o,
-            Err(_) => None,
-        };
+        let endpoint: Option<String> = seq.next_element::<Option<String>>()?.unwrap_or_default();
         match (name, endpoint) {
             (name, Some(endpoint)) => Ok(Region::Custom { name, endpoint }),
             (name, None) => name.parse().map_err(de::Error::custom),
