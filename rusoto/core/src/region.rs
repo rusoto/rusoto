@@ -202,12 +202,9 @@ impl<'de> de::Visitor<'de> for RegionVisitor {
         A: de::SeqAccess<'de>,
     {
         let name: String = seq
-            .next_element()?
+            .next_element::<String>()?
             .ok_or_else(|| de::Error::custom("region is missing name"))?;
-        let endpoint: Option<String> = match seq.next_element() {
-            Ok(o) => o,
-            Err(_) => None,
-        };
+        let endpoint: Option<String> = seq.next_element::<Option<String>>()?.unwrap_or_default();
         match (name, endpoint) {
             (name, Some(endpoint)) => Ok(Region::Custom { name, endpoint }),
             (name, None) => name.parse().map_err(de::Error::custom),
@@ -376,6 +373,16 @@ mod tests {
             endpoint: "http://localhost:8000".to_owned(),
             name: "eu-east-1".to_owned(),
         };
+        assert_tokens(
+            &custom_region,
+            &[
+                Token::Tuple { len: 2 },
+                Token::String("eu-east-1"),
+                Token::Some,
+                Token::String("http://localhost:8000"),
+                Token::TupleEnd,
+            ],
+        );
         let expected = "[\"eu-east-1\",\"http://localhost:8000\"]";
         let region_deserialized = serde_json::to_string(&custom_region).unwrap();
         assert_eq!(region_deserialized, expected);
