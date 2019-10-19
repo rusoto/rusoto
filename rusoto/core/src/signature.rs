@@ -1000,4 +1000,29 @@ mod tests {
             "hostname.with.scheme"
         );
     }
+    
+    #[test]
+    fn x_amz_content_sha256_header_is_signed() {
+        // https://github.com/rusoto/rusoto/issues/1463
+
+        let provider = ProfileProvider::with_configuration(
+            "test_resources/multiple_profile_credentials",
+            "foo",
+        );
+        let mut request = SignedRequest::new(
+            "GET",
+            "s3",
+            &Region::UsEast1,
+            "/path",
+        );
+        request.sign(provider.credentials().wait().as_ref().unwrap());
+
+        let authorization_headers = request.headers.get("authorization").unwrap();
+        let authorization_header = authorization_headers[0].clone();
+        let authorization_header = String::from_utf8(authorization_header).unwrap();
+
+        // we want to check that "x-amz-content-sha256" header is signed
+        // and "authorization" header includes all signed headers
+        assert!(authorization_header.contains("x-amz-content-sha256"));
+    }
 }
