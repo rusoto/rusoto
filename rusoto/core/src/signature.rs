@@ -431,10 +431,6 @@ impl SignedRequest {
             self.add_header("X-Amz-Security-Token", token);
         }
 
-        let signed_headers = signed_headers(&self.headers);
-
-        let canonical_headers = canonical_headers(&self.headers);
-
         let digest = match self.payload {
             None => Cow::Borrowed(EMPTY_SHA256_HASH),
             Some(SignedRequestPayload::Buffer(ref payload)) => {
@@ -445,6 +441,10 @@ impl SignedRequest {
         };
         self.remove_header("x-amz-content-sha256");
         self.add_header("x-amz-content-sha256", &digest);
+
+        let signed_headers = signed_headers(&self.headers);
+
+        let canonical_headers = canonical_headers(&self.headers);
 
         // Normalize URI paths according to RFC 3986. Remove redundant and relative path components. Each path segment must be URI-encoded twice (except for Amazon S3 which only gets URI-encoded once).
         // see https://docs.aws.amazon.com/general/latest/gr/sigv4-create-canonical-request.html
@@ -999,5 +999,30 @@ mod tests {
             super::extract_hostname("https://hostname.with.scheme/test"),
             "hostname.with.scheme"
         );
+    }
+    
+    #[test]
+    fn x_amz_content_sha256_header_is_signed() {
+        // https://github.com/rusoto/rusoto/issues/1463
+
+        let provider = ProfileProvider::with_configuration(
+            "test_resources/multiple_profile_credentials",
+            "foo",
+        );
+        let mut request = SignedRequest::new(
+            "GET",
+            "s3",
+            &Region::UsEast1,
+            "/path",
+        );
+        request.sign(provider.credentials().wait().as_ref().unwrap());
+
+        let authorization_headers = request.headers.get("authorization").unwrap();
+        let authorization_header = authorization_headers[0].clone();
+        let authorization_header = String::from_utf8(authorization_header).unwrap();
+
+        // we want to check that "x-amz-content-sha256" header is signed
+        // and "authorization" header includes all signed headers
+        assert!(authorization_header.contains("x-amz-content-sha256"));
     }
 }
