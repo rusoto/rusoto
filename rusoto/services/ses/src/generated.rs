@@ -7243,7 +7243,7 @@ impl CreateCustomVerificationEmailTemplateError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "CustomVerificationEmailInvalidContent" => return RusotoError::Service(CreateCustomVerificationEmailTemplateError::CustomVerificationEmailInvalidContent(parsed_error.message)),"CustomVerificationEmailTemplateAlreadyExists" => return RusotoError::Service(CreateCustomVerificationEmailTemplateError::CustomVerificationEmailTemplateAlreadyExists(parsed_error.message)),"FromEmailAddressNotVerified" => return RusotoError::Service(CreateCustomVerificationEmailTemplateError::FromEmailAddressNotVerified(parsed_error.message)),"LimitExceeded" => return RusotoError::Service(CreateCustomVerificationEmailTemplateError::LimitExceeded(parsed_error.message)),_ => {{}}
+                                    "CustomVerificationEmailInvalidContent" => return RusotoError::Service(CreateCustomVerificationEmailTemplateError::CustomVerificationEmailInvalidContent(parsed_error.message)),"CustomVerificationEmailTemplateAlreadyExists" => return RusotoError::Service(CreateCustomVerificationEmailTemplateError::CustomVerificationEmailTemplateAlreadyExists(parsed_error.message)),"FromEmailAddressNotVerified" => return RusotoError::Service(CreateCustomVerificationEmailTemplateError::FromEmailAddressNotVerified(parsed_error.message)),"LimitExceeded" => return RusotoError::Service(CreateCustomVerificationEmailTemplateError::LimitExceeded(parsed_error.message)),_ => {}
                                 }
             }
         }
@@ -8278,7 +8278,7 @@ impl GetCustomVerificationEmailTemplateError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "CustomVerificationEmailTemplateDoesNotExist" => return RusotoError::Service(GetCustomVerificationEmailTemplateError::CustomVerificationEmailTemplateDoesNotExist(parsed_error.message)),_ => {{}}
+                                    "CustomVerificationEmailTemplateDoesNotExist" => return RusotoError::Service(GetCustomVerificationEmailTemplateError::CustomVerificationEmailTemplateDoesNotExist(parsed_error.message)),_ => {}
                                 }
             }
         }
@@ -9247,7 +9247,7 @@ impl SendCustomVerificationEmailError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "ConfigurationSetDoesNotExist" => return RusotoError::Service(SendCustomVerificationEmailError::ConfigurationSetDoesNotExist(parsed_error.message)),"CustomVerificationEmailTemplateDoesNotExist" => return RusotoError::Service(SendCustomVerificationEmailError::CustomVerificationEmailTemplateDoesNotExist(parsed_error.message)),"FromEmailAddressNotVerified" => return RusotoError::Service(SendCustomVerificationEmailError::FromEmailAddressNotVerified(parsed_error.message)),"MessageRejected" => return RusotoError::Service(SendCustomVerificationEmailError::MessageRejected(parsed_error.message)),"ProductionAccessNotGranted" => return RusotoError::Service(SendCustomVerificationEmailError::ProductionAccessNotGranted(parsed_error.message)),_ => {{}}
+                                    "ConfigurationSetDoesNotExist" => return RusotoError::Service(SendCustomVerificationEmailError::ConfigurationSetDoesNotExist(parsed_error.message)),"CustomVerificationEmailTemplateDoesNotExist" => return RusotoError::Service(SendCustomVerificationEmailError::CustomVerificationEmailTemplateDoesNotExist(parsed_error.message)),"FromEmailAddressNotVerified" => return RusotoError::Service(SendCustomVerificationEmailError::FromEmailAddressNotVerified(parsed_error.message)),"MessageRejected" => return RusotoError::Service(SendCustomVerificationEmailError::MessageRejected(parsed_error.message)),"ProductionAccessNotGranted" => return RusotoError::Service(SendCustomVerificationEmailError::ProductionAccessNotGranted(parsed_error.message)),_ => {}
                                 }
             }
         }
@@ -10040,7 +10040,7 @@ impl UpdateConfigurationSetReputationMetricsEnabledError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "ConfigurationSetDoesNotExist" => return RusotoError::Service(UpdateConfigurationSetReputationMetricsEnabledError::ConfigurationSetDoesNotExist(parsed_error.message)),_ => {{}}
+                                    "ConfigurationSetDoesNotExist" => return RusotoError::Service(UpdateConfigurationSetReputationMetricsEnabledError::ConfigurationSetDoesNotExist(parsed_error.message)),_ => {}
                                 }
             }
         }
@@ -10216,7 +10216,7 @@ impl UpdateCustomVerificationEmailTemplateError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "CustomVerificationEmailInvalidContent" => return RusotoError::Service(UpdateCustomVerificationEmailTemplateError::CustomVerificationEmailInvalidContent(parsed_error.message)),"CustomVerificationEmailTemplateDoesNotExist" => return RusotoError::Service(UpdateCustomVerificationEmailTemplateError::CustomVerificationEmailTemplateDoesNotExist(parsed_error.message)),"FromEmailAddressNotVerified" => return RusotoError::Service(UpdateCustomVerificationEmailTemplateError::FromEmailAddressNotVerified(parsed_error.message)),_ => {{}}
+                                    "CustomVerificationEmailInvalidContent" => return RusotoError::Service(UpdateCustomVerificationEmailTemplateError::CustomVerificationEmailInvalidContent(parsed_error.message)),"CustomVerificationEmailTemplateDoesNotExist" => return RusotoError::Service(UpdateCustomVerificationEmailTemplateError::CustomVerificationEmailTemplateDoesNotExist(parsed_error.message)),"FromEmailAddressNotVerified" => return RusotoError::Service(UpdateCustomVerificationEmailTemplateError::FromEmailAddressNotVerified(parsed_error.message)),_ => {}
                                 }
             }
         }
