@@ -41,7 +41,7 @@ check_integration_test:
 
 .PHONY: rustls_unit_test
 rustls_unit_test:
-	cargo +$$RUST_VERSION test --all -v --no-default-features --features=rustls
+	(cd rusoto/core && cargo +$$RUST_VERSION test --no-default-features --features=rustls)
 
 .PHONY: check_service_defintions
 check_service_defintions:

@@ -327,6 +327,10 @@ impl HttpClient {
         #[cfg(feature = "rustls")]
         let connector = HttpsConnector::new(4);
 
+        #[cfg(feature = "rustls")]
+        panic!("expected test failure");
+
+
         Ok(Self::from_connector(connector))
     }
 
@@ -344,6 +348,9 @@ impl HttpClient {
 
         #[cfg(feature = "rustls")]
         let connector = HttpsConnector::new(4);
+
+        #[cfg(feature = "rustls")]
+        panic!("expected test failure");
 
         Ok(Self::from_connector_with_config(connector, config))
     }
