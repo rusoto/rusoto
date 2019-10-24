@@ -27,6 +27,8 @@ install:
 build: off
 test_script:
   - cargo update
+  - set RUST_VERSION=%CHANNEL%
+  - echo using rust_version %RUST_VERSION%
   - make unit_test
   - make rustls_unit_test
   - make check_integration_test
