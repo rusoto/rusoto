@@ -38,12 +38,12 @@ pub extern crate rusoto_credential as credential;
 extern crate serde;
 #[macro_use]
 extern crate serde_derive;
+extern crate percent_encoding;
 extern crate serde_json;
 extern crate sha2;
 extern crate time;
 extern crate tokio;
 extern crate tokio_timer;
-extern crate percent_encoding;
 extern crate xml;
 
 mod client;
@@ -52,8 +52,10 @@ mod future;
 mod stream;
 
 pub mod param;
+#[doc(hidden)]
 pub mod region;
 pub mod request;
+#[doc(hidden)]
 pub mod signature;
 
 #[doc(hidden)]

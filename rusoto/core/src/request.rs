@@ -17,21 +17,20 @@ use std::time::Duration;
 use crate::tls::HttpsConnector;
 use bytes::Bytes;
 use futures::{Async, Future, Poll, Stream};
-use http::header::{HeaderName, HeaderValue};
-use http::{HeaderMap, Method, StatusCode};
-use hyper::body::Payload;
+use http::{HeaderMap, StatusCode};
+use hyper::body::Body as HyperBody;
 use hyper::client::connect::Connect;
 use hyper::client::Builder as HyperBuilder;
 use hyper::client::HttpConnector;
 use hyper::client::ResponseFuture as HyperResponseFuture;
 use hyper::Error as HyperError;
-use hyper::{Body, Client as HyperClient, Request as HyperRequest, Response as HyperResponse};
+use hyper::{Client as HyperClient, Response as HyperResponse};
+use std::convert::TryInto;
 use tokio_timer::Timeout;
 
-use log::Level::Debug;
-
-use crate::signature::{SignedRequest, SignedRequestPayload};
+use crate::signature::SignedRequest;
 use crate::stream::ByteStream;
+use rusoto_signature::payload::Body;
 
 // Pulls in the statically generated rustc version.
 include!(concat!(env!("OUT_DIR"), "/user_agent_vars.rs"));
@@ -131,7 +130,7 @@ impl HttpResponse {
         }
     }
 
-    fn from_hyper(hyper_response: HyperResponse<Body>) -> HttpResponse {
+    fn from_hyper(hyper_response: HyperResponse<HyperBody>) -> HttpResponse {
         let status = hyper_response.status();
         let headers = hyper_response
             .headers()
@@ -263,52 +262,9 @@ impl Future for HttpClientFuture {
     }
 }
 
-struct HttpClientPayload {
-    inner: Option<SignedRequestPayload>,
-}
-
-impl Payload for HttpClientPayload {
-    type Data = io::Cursor<Bytes>;
-    type Error = io::Error;
-
-    fn poll_data(&mut self) -> Poll<Option<Self::Data>, Self::Error> {
-        match self.inner {
-            None => Ok(Async::Ready(None)),
-            Some(SignedRequestPayload::Buffer(ref mut buffer)) => {
-                if buffer.is_empty() {
-                    Ok(Async::Ready(None))
-                } else {
-                    Ok(Async::Ready(Some(io::Cursor::new(buffer.split_off(0)))))
-                }
-            }
-            Some(SignedRequestPayload::Stream(ref mut stream)) => match stream.poll()? {
-                Async::NotReady => Ok(Async::NotReady),
-                Async::Ready(None) => Ok(Async::Ready(None)),
-                Async::Ready(Some(buffer)) => Ok(Async::Ready(Some(io::Cursor::new(buffer)))),
-            },
-        }
-    }
-
-    fn is_end_stream(&self) -> bool {
-        match self.inner {
-            None => true,
-            Some(SignedRequestPayload::Buffer(ref buffer)) => buffer.is_empty(),
-            Some(SignedRequestPayload::Stream(_)) => false,
-        }
-    }
-
-    fn content_length(&self) -> Option<u64> {
-        match self.inner {
-            None => Some(0),
-            Some(SignedRequestPayload::Buffer(ref buffer)) => Some(buffer.len() as u64),
-            Some(SignedRequestPayload::Stream(ref stream)) => stream.size_hint().map(|s| s as u64),
-        }
-    }
-}
-
 /// Http client for use with AWS services.
 pub struct HttpClient<C = HttpsConnector<HttpConnector>> {
-    inner: HyperClient<C, HttpClientPayload>,
+    inner: HyperClient<C, Body>,
 }
 
 impl HttpClient {
@@ -414,100 +370,19 @@ where
     type Future = HttpClientFuture;
 
     fn dispatch(&self, request: SignedRequest, timeout: Option<Duration>) -> Self::Future {
-        let hyper_method = match request.method().as_ref() {
-            "POST" => Method::POST,
-            "PUT" => Method::PUT,
-            "DELETE" => Method::DELETE,
-            "GET" => Method::GET,
-            "HEAD" => Method::HEAD,
-            v => {
+        // fixme: add default user agent when none is provided
+        // if !request.headers().contains_key("user-agent") {
+        //     request.add_header("user-agent", DEFAULT_USER_AGENT.as_str());
+        // }
+        let http_request = match request.try_into() {
+            Ok(req) => req,
+            Err(err) => {
                 return HttpClientFuture(ClientFutureInner::Error(format!(
-                    "Unsupported HTTP verb {}",
-                    v
+                    "Failed creating requests {}",
+                    err
                 )))
             }
         };
-
-        // translate the headers map to a format Hyper likes
-        let mut hyper_headers = HeaderMap::new();
-        for h in request.headers().iter() {
-            let header_name = match h.0.parse::<HeaderName>() {
-                Ok(name) => name,
-                Err(err) => {
-                    return HttpClientFuture(ClientFutureInner::Error(format!(
-                        "error parsing header name: {}",
-                        err
-                    )));
-                }
-            };
-            for v in h.1.iter() {
-                let header_value = match HeaderValue::from_bytes(v) {
-                    Ok(value) => value,
-                    Err(err) => {
-                        return HttpClientFuture(ClientFutureInner::Error(format!(
-                            "error parsing header value: {}",
-                            err
-                        )));
-                    }
-                };
-                hyper_headers.append(&header_name, header_value);
-            }
-        }
-
-        // Add a default user-agent header if one is not already present.
-        if !hyper_headers.contains_key("user-agent") {
-            hyper_headers.insert("user-agent", DEFAULT_USER_AGENT.parse().unwrap());
-        }
-
-        let mut final_uri = format!(
-            "{}://{}{}",
-            request.scheme(),
-            request.hostname(),
-            request.canonical_path()
-        );
-        if !request.canonical_query_string().is_empty() {
-            final_uri = final_uri + &format!("?{}", request.canonical_query_string());
-        }
-
-        if log_enabled!(Debug) {
-            let payload = match request.payload {
-                Some(SignedRequestPayload::Buffer(ref payload_bytes)) => {
-                    String::from_utf8(payload_bytes.as_ref().to_owned())
-                        .unwrap_or_else(|_| String::from("<non-UTF-8 data>"))
-                }
-                Some(SignedRequestPayload::Stream(ref stream)) => {
-                    format!("<stream size_hint={:?}>", stream.size_hint())
-                }
-                None => "".to_owned(),
-            };
-
-            debug!(
-                "Full request: \n method: {}\n final_uri: {}\n payload: {}\nHeaders:\n",
-                hyper_method, final_uri, payload
-            );
-            for (h, v) in hyper_headers.iter() {
-                debug!("{}:{:?}", h.as_str(), v);
-            }
-        }
-
-        let mut http_request_builder = HyperRequest::builder();
-        http_request_builder.method(hyper_method);
-        http_request_builder.uri(final_uri);
-
-        let body = HttpClientPayload {
-            inner: request.payload,
-        };
-        let mut http_request = match http_request_builder.body(body) {
-            Ok(request) => request,
-            Err(err) => {
-                return HttpClientFuture(ClientFutureInner::Error(format!(
-                    "error building request: {}",
-                    err
-                )));
-            }
-        };
-
-        *http_request.headers_mut() = hyper_headers;
 
         let inner = match timeout {
             None => ClientFutureInner::Hyper(self.inner.request(http_request)),
