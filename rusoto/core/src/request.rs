@@ -17,7 +17,7 @@ use std::time::Duration;
 use crate::tls::HttpsConnector;
 use bytes::Bytes;
 use futures::{Async, Future, Poll, Stream};
-use http::{HeaderMap, StatusCode};
+use http::{HeaderMap, Request, StatusCode};
 use hyper::body::Body;
 use hyper::client::connect::Connect;
 use hyper::client::Builder as HyperBuilder;
@@ -369,11 +369,7 @@ where
     type Future = HttpClientFuture;
 
     fn dispatch(&self, request: SignedRequest, timeout: Option<Duration>) -> Self::Future {
-        // fixme: add default user agent when none is provided
-        // if !request.headers().contains_key("user-agent") {
-        //     request.add_header("user-agent", DEFAULT_USER_AGENT.as_str());
-        // }
-        let req = match request.try_into() {
+        let mut req: Request<Body> = match request.try_into() {
             Ok(req) => req,
             Err(err) => {
                 return HttpClientFuture(ClientFutureInner::Error(format!(
@@ -382,6 +378,15 @@ where
                 )))
             }
         };
+
+        if !req.headers().contains_key("user-agent") {
+            req.headers_mut().insert(
+                "user-agent",
+                DEFAULT_USER_AGENT
+                    .parse()
+                    .expect("failed to parse user agent string"),
+            );
+        }
 
         let inner = match timeout {
             None => ClientFutureInner::Hyper(self.inner.request(req)),
