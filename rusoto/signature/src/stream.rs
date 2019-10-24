@@ -8,9 +8,6 @@ use tokio::io::AsyncRead;
 /// Stream of bytes.
 pub struct ByteStream {
     size_hint: Option<usize>,
-    // Box<
-    //         Stream<Item = Chunk, Error = Box<::std::error::Error + Send + Sync>> + Send + 'static,
-    //     >
     inner: Box<dyn Stream<Item = Bytes, Error = io::Error> + Send + 'static>,
 }
 
