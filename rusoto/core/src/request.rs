@@ -377,7 +377,7 @@ where
             Ok(req) => req,
             Err(err) => {
                 return HttpClientFuture(ClientFutureInner::Error(format!(
-                    "Failed creating requests {}",
+                    "error building request: {}",
                     err
                 )))
             }
