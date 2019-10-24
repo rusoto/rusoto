@@ -31,16 +31,11 @@ extern crate lazy_static;
 #[macro_use]
 extern crate log;
 extern crate base64;
-extern crate hex;
-extern crate hmac;
-extern crate md5;
 pub extern crate rusoto_credential as credential;
 extern crate serde;
 #[macro_use]
 extern crate serde_derive;
-extern crate percent_encoding;
 extern crate serde_json;
-extern crate sha2;
 extern crate time;
 extern crate tokio;
 extern crate tokio_timer;
