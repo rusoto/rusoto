@@ -23,6 +23,7 @@ use hex;
 use hmac::{Hmac, Mac};
 use http::header::{HeaderMap, HeaderName, HeaderValue};
 use http::{HttpTryFrom, Method, Request};
+use hyper::Body;
 use log::{debug, log_enabled, Level::Debug};
 use md5;
 use percent_encoding::{percent_decode, utf8_percent_encode, AsciiSet, NON_ALPHANUMERIC};
@@ -31,7 +32,6 @@ use time::now_utc;
 use time::Tm;
 
 use crate::credential::AwsCredentials;
-use crate::payload::Body;
 use crate::region::Region;
 use crate::stream::ByteStream;
 
@@ -563,7 +563,15 @@ impl TryInto<Request<Body>> for SignedRequest {
         builder.method(method);
         builder.uri(final_uri);
 
-        let mut request = builder.body(Body::new(self.payload))?;
+        let body = if let Some(payload) = self.payload {
+            match payload {
+                SignedRequestPayload::Buffer(bytes) => Body::from(bytes),
+                SignedRequestPayload::Stream(stream) => Body::wrap_stream(stream),
+            }
+        } else {
+            Body::empty()
+        };
+        let mut request = builder.body(body)?;
 
         *request.headers_mut() = headers;
         Ok(request)
