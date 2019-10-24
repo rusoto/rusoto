@@ -10,7 +10,6 @@
 //!
 #![cfg_attr(not(feature = "unstable"), deny(warnings))]
 pub extern crate rusoto_credential as credential;
-pub mod payload;
 pub mod region;
 pub mod signature;
 pub mod stream;
