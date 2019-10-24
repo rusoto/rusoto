@@ -863,6 +863,24 @@ mod tests {
     }
 
     #[test]
+    fn convert_request() {
+        use http::{Method, Uri, Version};
+        let mut request = SignedRequest::new("POST", "sqs", &Region::UsEast1, "/");
+        request.sign(&AwsCredentials::new(
+            "foo_access_key",
+            "foo_secret_key",
+            None,
+            None,
+        ));
+
+        let req: http::Request<Body> = request.try_into().unwrap();
+        let expected_uri = Uri::from_static("https://sqs.us-east-1.amazonaws.com");
+        assert_eq!(req.method(), Method::POST);
+        assert_eq!(req.uri(), &expected_uri);
+        assert_eq!(req.version(), Version::HTTP_11);
+    }
+
+    #[test]
     fn path_percent_encoded() {
         let mut request = SignedRequest::new(
             "GET",

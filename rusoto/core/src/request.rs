@@ -30,7 +30,6 @@ use tokio_timer::Timeout;
 
 use crate::signature::SignedRequest;
 use crate::stream::ByteStream;
-// use rusoto_signature::payload::Body;
 
 // Pulls in the statically generated rustc version.
 include!(concat!(env!("OUT_DIR"), "/user_agent_vars.rs"));
