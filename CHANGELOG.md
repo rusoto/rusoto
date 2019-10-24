@@ -3,7 +3,7 @@
 ## [Unreleased]
 
 (Please put changes here)
-
+- Use static initializer for AWS profile regex
 - Add QLDB service
 - Add QLDB Session service
 - Update Skeptic tests for Rusoto v0.41

@@ -12,6 +12,7 @@ use futures::future::{result, FutureResult};
 use futures::{Future, Poll};
 use regex::Regex;
 use tokio_process::{CommandExt, OutputAsync};
+use lazy_static::lazy_static;
 
 use crate::{non_empty_env_var, AwsCredentials, CredentialsError, ProvideAwsCredentials};
 
@@ -20,6 +21,10 @@ const AWS_PROFILE: &str = "AWS_PROFILE";
 const AWS_SHARED_CREDENTIALS_FILE: &str = "AWS_SHARED_CREDENTIALS_FILE";
 const DEFAULT: &str = "default";
 const REGION: &str = "region";
+
+lazy_static! {
+    static ref PROFILE_REGEX: Regex = Regex::new(r"^\[(profile )?([^\]]+)\]$").expect("Failed to compile regex");
+}
 
 /// Provides AWS credentials from a profile in a credentials file, or from a credential process.
 ///
@@ -256,11 +261,6 @@ fn parse_credential_process_output(v: &[u8]) -> Result<AwsCredentials, Credentia
     }
 }
 
-// should probably constantize with lazy_static!
-fn new_profile_regex() -> Regex {
-    Regex::new(r"^\[(profile )?([^\]]+)\]$").expect("Failed to compile regex")
-}
-
 fn parse_config_file(file_path: &Path) -> Option<HashMap<String, HashMap<String, String>>> {
     match fs::metadata(file_path) {
         Err(_) => return None,
@@ -270,7 +270,7 @@ fn parse_config_file(file_path: &Path) -> Option<HashMap<String, HashMap<String,
             }
         }
     };
-    let profile_regex = new_profile_regex();
+
     let file = File::open(file_path).expect("expected file");
     let file_lines = BufReader::new(&file);
     let result: (HashMap<String, HashMap<String, String>>, Option<String>) = file_lines
@@ -282,8 +282,8 @@ fn parse_config_file(file_path: &Path) -> Option<HashMap<String, HashMap<String,
                 .find(|l| !l.starts_with('#') && !l.is_empty())
         })
         .fold(Default::default(), |(mut result, profile), line| {
-            if profile_regex.is_match(&line) {
-                let caps = profile_regex.captures(&line).unwrap();
+            if PROFILE_REGEX.is_match(&line) {
+                let caps = PROFILE_REGEX.captures(&line).unwrap();
                 let next_profile = caps.get(2).map(|value| value.as_str().to_string());
                 (result, next_profile)
             } else {
@@ -329,7 +329,6 @@ fn parse_credentials_file(
 
     let file = File::open(file_path)?;
 
-    let profile_regex = new_profile_regex();
     let mut profiles: HashMap<String, AwsCredentials> = HashMap::new();
     let mut access_key: Option<String> = None;
     let mut secret_key: Option<String> = None;
@@ -352,7 +351,7 @@ fn parse_credentials_file(
         }
 
         // handle the opening of named profile blocks
-        if profile_regex.is_match(&unwrapped_line) {
+        if PROFILE_REGEX.is_match(&unwrapped_line) {
             if let (Some(profile), Some(key), Some(secret)) = (profile_name, access_key, secret_key)
             {
                 let creds = AwsCredentials::new(key, secret, token, None);
@@ -363,7 +362,7 @@ fn parse_credentials_file(
             secret_key = None;
             token = None;
 
-            let caps = profile_regex.captures(&unwrapped_line).unwrap();
+            let caps = PROFILE_REGEX.captures(&unwrapped_line).unwrap();
             profile_name = Some(caps.get(2).unwrap().as_str().to_string());
             continue;
         }
