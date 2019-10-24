@@ -18,7 +18,7 @@ use crate::tls::HttpsConnector;
 use bytes::Bytes;
 use futures::{Async, Future, Poll, Stream};
 use http::{HeaderMap, StatusCode};
-use hyper::body::Body as HyperBody;
+use hyper::body::Body;
 use hyper::client::connect::Connect;
 use hyper::client::Builder as HyperBuilder;
 use hyper::client::HttpConnector;
@@ -30,7 +30,6 @@ use tokio_timer::Timeout;
 
 use crate::signature::SignedRequest;
 use crate::stream::ByteStream;
-use rusoto_signature::payload::Body;
 
 // Pulls in the statically generated rustc version.
 include!(concat!(env!("OUT_DIR"), "/user_agent_vars.rs"));
@@ -130,7 +129,7 @@ impl HttpResponse {
         }
     }
 
-    fn from_hyper(hyper_response: HyperResponse<HyperBody>) -> HttpResponse {
+    fn from_hyper(hyper_response: HyperResponse<Body>) -> HttpResponse {
         let status = hyper_response.status();
         let headers = hyper_response
             .headers()
@@ -374,7 +373,7 @@ where
         // if !request.headers().contains_key("user-agent") {
         //     request.add_header("user-agent", DEFAULT_USER_AGENT.as_str());
         // }
-        let http_request = match request.try_into() {
+        let req = match request.try_into() {
             Ok(req) => req,
             Err(err) => {
                 return HttpClientFuture(ClientFutureInner::Error(format!(
@@ -385,9 +384,9 @@ where
         };
 
         let inner = match timeout {
-            None => ClientFutureInner::Hyper(self.inner.request(http_request)),
+            None => ClientFutureInner::Hyper(self.inner.request(req)),
             Some(duration) => {
-                let future = Timeout::new(self.inner.request(http_request), duration);
+                let future = Timeout::new(self.inner.request(req), duration);
                 ClientFutureInner::HyperWithTimeout(future)
             }
         };
