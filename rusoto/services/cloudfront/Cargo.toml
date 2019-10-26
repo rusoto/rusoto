@@ -26,6 +26,7 @@ default-features = false
 [dev-dependencies.rusoto_mock]
 version = "0.41.0"
 path = "../../../mock"
+default-features = false
 
 [features]
 default = ["native-tls"]

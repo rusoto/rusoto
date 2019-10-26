@@ -36,8 +36,10 @@ version = "0.0"
 version = "> 0.25.0"
 path = "../rusoto/core"
 default_features = false
-features = ["native-tls"]
 
 [features]
 nightly-testing = ["rusoto_core/nightly-testing"]
 unstable = []
+rustls = ["rusoto_core/rustls"]
+native-tls = ["rusoto_core/native-tls"]
+default = ["native-tls"]
