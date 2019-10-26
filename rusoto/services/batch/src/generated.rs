@@ -34,7 +34,7 @@ pub struct ArrayProperties {
 
 /// <p>An object representing the array properties of a job.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ArrayPropertiesDetail {
     /// <p>The job index within the array that is associated with this job. This parameter is returned for array job children.</p>
     #[serde(rename = "index")]
@@ -52,7 +52,7 @@ pub struct ArrayPropertiesDetail {
 
 /// <p>An object representing the array properties of a job.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ArrayPropertiesSummary {
     /// <p>The job index within the array that is associated with this job. This parameter is returned for children of array jobs.</p>
     #[serde(rename = "index")]
@@ -66,7 +66,7 @@ pub struct ArrayPropertiesSummary {
 
 /// <p>An object representing the details of a container that is part of a job attempt.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct AttemptContainerDetail {
     /// <p>The Amazon Resource Name (ARN) of the Amazon ECS container instance that hosts the job attempt.</p>
     #[serde(rename = "containerInstanceArn")]
@@ -96,7 +96,7 @@ pub struct AttemptContainerDetail {
 
 /// <p>An object representing a job attempt.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct AttemptDetail {
     /// <p>Details about the container in this job attempt.</p>
     #[serde(rename = "container")]
@@ -127,12 +127,12 @@ pub struct CancelJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct CancelJobResponse {}
 
 /// <p>An object representing an AWS Batch compute environment.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ComputeEnvironmentDetail {
     /// <p>The Amazon Resource Name (ARN) of the compute environment. </p>
     #[serde(rename = "computeEnvironmentArn")]
@@ -258,7 +258,7 @@ pub struct ComputeResourceUpdate {
 
 /// <p>An object representing the details of a container that is part of a job.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ContainerDetail {
     /// <p>The command that is passed to the container. </p>
     #[serde(rename = "command")]
@@ -442,7 +442,7 @@ pub struct ContainerProperties {
 
 /// <p>An object representing summary details of a container within a job.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ContainerSummary {
     /// <p>The exit code to return upon completion.</p>
     #[serde(rename = "exitCode")]
@@ -476,7 +476,7 @@ pub struct CreateComputeEnvironmentRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct CreateComputeEnvironmentResponse {
     /// <p>The Amazon Resource Name (ARN) of the compute environment. </p>
     #[serde(rename = "computeEnvironmentArn")]
@@ -506,7 +506,7 @@ pub struct CreateJobQueueRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct CreateJobQueueResponse {
     /// <p>The Amazon Resource Name (ARN) of the job queue.</p>
     #[serde(rename = "jobQueueArn")]
@@ -524,7 +524,7 @@ pub struct DeleteComputeEnvironmentRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DeleteComputeEnvironmentResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -535,7 +535,7 @@ pub struct DeleteJobQueueRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DeleteJobQueueResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -546,7 +546,7 @@ pub struct DeregisterJobDefinitionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DeregisterJobDefinitionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -566,7 +566,7 @@ pub struct DescribeComputeEnvironmentsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DescribeComputeEnvironmentsResponse {
     /// <p>The list of compute environments.</p>
     #[serde(rename = "computeEnvironments")]
@@ -603,7 +603,7 @@ pub struct DescribeJobDefinitionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DescribeJobDefinitionsResponse {
     /// <p>The list of job definitions. </p>
     #[serde(rename = "jobDefinitions")]
@@ -632,7 +632,7 @@ pub struct DescribeJobQueuesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DescribeJobQueuesResponse {
     /// <p>The list of job queues. </p>
     #[serde(rename = "jobQueues")]
@@ -652,7 +652,7 @@ pub struct DescribeJobsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DescribeJobsResponse {
     /// <p>The list of jobs. </p>
     #[serde(rename = "jobs")]
@@ -687,7 +687,7 @@ pub struct Host {
 
 /// <p>An object representing an AWS Batch job definition.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct JobDefinition {
     /// <p>An object with various properties specific to container-based jobs. </p>
     #[serde(rename = "containerProperties")]
@@ -742,7 +742,7 @@ pub struct JobDependency {
 
 /// <p>An object representing an AWS Batch job.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct JobDetail {
     /// <p>The array properties of the job, if it is an array job.</p>
     #[serde(rename = "arrayProperties")]
@@ -814,7 +814,7 @@ pub struct JobDetail {
 
 /// <p>An object representing the details of an AWS Batch job queue.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct JobQueueDetail {
     /// <p>The compute environments that are attached to the job queue and the order in which job placement is preferred. Compute environments are selected for job placement in ascending order.</p>
     #[serde(rename = "computeEnvironmentOrder")]
@@ -843,7 +843,7 @@ pub struct JobQueueDetail {
 
 /// <p>An object representing summary details of a job.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct JobSummary {
     /// <p>The array properties of the job, if it is an array job.</p>
     #[serde(rename = "arrayProperties")]
@@ -962,7 +962,7 @@ pub struct ListJobsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ListJobsResponse {
     /// <p>A list of job summaries that match the request.</p>
     #[serde(rename = "jobSummaryList")]
@@ -992,7 +992,7 @@ pub struct MountPoint {
 
 /// <p>An object representing the elastic network interface for a multi-node parallel job node.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct NetworkInterface {
     /// <p>The attachment ID for the network interface.</p>
     #[serde(rename = "attachmentId")]
@@ -1010,7 +1010,7 @@ pub struct NetworkInterface {
 
 /// <p>An object representing the details of a multi-node parallel job node.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct NodeDetails {
     /// <p>Specifies whether the current node is the main node for a multi-node parallel job.</p>
     #[serde(rename = "isMainNode")]
@@ -1051,7 +1051,7 @@ pub struct NodeProperties {
 
 /// <p>An object representing the properties of a node that is associated with a multi-node parallel job.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct NodePropertiesSummary {
     /// <p>Specifies whether the current node is the main node for a multi-node parallel job.</p>
     #[serde(rename = "isMainNode")]
@@ -1122,7 +1122,7 @@ pub struct RegisterJobDefinitionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct RegisterJobDefinitionResponse {
     /// <p>The Amazon Resource Name (ARN) of the job definition. </p>
     #[serde(rename = "jobDefinitionArn")]
@@ -1197,7 +1197,7 @@ pub struct SubmitJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct SubmitJobResponse {
     /// <p>The unique identifier for the job.</p>
     #[serde(rename = "jobId")]
@@ -1218,7 +1218,7 @@ pub struct TerminateJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct TerminateJobResponse {}
 
 /// <p>The <code>ulimit</code> settings to pass to the container.</p>
@@ -1255,7 +1255,7 @@ pub struct UpdateComputeEnvironmentRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct UpdateComputeEnvironmentResponse {
     /// <p>The Amazon Resource Name (ARN) of the compute environment. </p>
     #[serde(rename = "computeEnvironmentArn")]
@@ -1287,7 +1287,7 @@ pub struct UpdateJobQueueRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct UpdateJobQueueResponse {
     /// <p>The Amazon Resource Name (ARN) of the job queue.</p>
     #[serde(rename = "jobQueueArn")]

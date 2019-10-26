@@ -26,7 +26,7 @@ use rusoto_core::signature::SignedRequest;
 use serde_json;
 /// <p>A Channel resource configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct Channel {
     /// <p>The Amazon Resource Name (ARN) assigned to the Channel.</p>
     #[serde(rename = "Arn")]
@@ -61,7 +61,7 @@ pub struct CmafEncryption {
 
 /// <p>A Common Media Application Format (CMAF) packaging configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct CmafPackage {
     #[serde(rename = "Encryption")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -125,7 +125,7 @@ pub struct CreateChannelRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct CreateChannelResponse {
     /// <p>The Amazon Resource Name (ARN) assigned to the Channel.</p>
     #[serde(rename = "Arn")]
@@ -198,7 +198,7 @@ pub struct CreateOriginEndpointRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct CreateOriginEndpointResponse {
     /// <p>The Amazon Resource Name (ARN) assigned to the OriginEndpoint.</p>
     #[serde(rename = "Arn")]
@@ -331,7 +331,7 @@ pub struct DeleteChannelRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DeleteChannelResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -342,7 +342,7 @@ pub struct DeleteOriginEndpointRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DeleteOriginEndpointResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -353,7 +353,7 @@ pub struct DescribeChannelRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DescribeChannelResponse {
     /// <p>The Amazon Resource Name (ARN) assigned to the Channel.</p>
     #[serde(rename = "Arn")]
@@ -383,7 +383,7 @@ pub struct DescribeOriginEndpointRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DescribeOriginEndpointResponse {
     /// <p>The Amazon Resource Name (ARN) assigned to the OriginEndpoint.</p>
     #[serde(rename = "Arn")]
@@ -466,7 +466,7 @@ pub struct HlsEncryption {
 
 /// <p>An HTTP Live Streaming (HLS) ingest resource configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct HlsIngest {
     /// <p>A list of endpoints to which the source stream should be sent.</p>
     #[serde(rename = "IngestEndpoints")]
@@ -476,7 +476,7 @@ pub struct HlsIngest {
 
 /// <p>A HTTP Live Streaming (HLS) manifest configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct HlsManifest {
     /// <p>This setting controls how ad markers are included in the packaged OriginEndpoint.
     /// &quot;NONE&quot; will omit all SCTE-35 ad markers from the output.
@@ -642,7 +642,7 @@ pub struct HlsPackage {
 
 /// <p>An endpoint for ingesting source content for a Channel.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct IngestEndpoint {
     /// <p>The system generated unique identifier for the IngestEndpoint</p>
     #[serde(rename = "Id")]
@@ -675,7 +675,7 @@ pub struct ListChannelsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ListChannelsResponse {
     /// <p>A list of Channel records.</p>
     #[serde(rename = "Channels")]
@@ -704,7 +704,7 @@ pub struct ListOriginEndpointsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ListOriginEndpointsResponse {
     /// <p>A token that can be used to resume pagination from the end of the collection.</p>
     #[serde(rename = "NextToken")]
@@ -723,7 +723,7 @@ pub struct ListTagsForResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -758,7 +758,7 @@ pub struct MssPackage {
 
 /// <p>An OriginEndpoint resource configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct OriginEndpoint {
     /// <p>The Amazon Resource Name (ARN) assigned to the OriginEndpoint.</p>
     #[serde(rename = "Arn")]
@@ -823,7 +823,7 @@ pub struct RotateChannelCredentialsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct RotateChannelCredentialsResponse {
     /// <p>The Amazon Resource Name (ARN) assigned to the Channel.</p>
     #[serde(rename = "Arn")]
@@ -856,7 +856,7 @@ pub struct RotateIngestEndpointCredentialsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct RotateIngestEndpointCredentialsResponse {
     /// <p>The Amazon Resource Name (ARN) assigned to the Channel.</p>
     #[serde(rename = "Arn")]
@@ -949,7 +949,7 @@ pub struct UpdateChannelRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct UpdateChannelResponse {
     /// <p>The Amazon Resource Name (ARN) assigned to the Channel.</p>
     #[serde(rename = "Arn")]
@@ -1014,7 +1014,7 @@ pub struct UpdateOriginEndpointRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct UpdateOriginEndpointResponse {
     /// <p>The Amazon Resource Name (ARN) assigned to the OriginEndpoint.</p>
     #[serde(rename = "Arn")]

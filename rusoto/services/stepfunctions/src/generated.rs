@@ -25,7 +25,7 @@ use rusoto_core::signature::SignedRequest;
 use serde_json;
 /// <p>Contains details about an activity that failed during an execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ActivityFailedEventDetails {
     /// <p>A more detailed explanation of the cause of the failure.</p>
     #[serde(rename = "cause")]
@@ -39,7 +39,7 @@ pub struct ActivityFailedEventDetails {
 
 /// <p>Contains details about an activity.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ActivityListItem {
     /// <p>The Amazon Resource Name (ARN) that identifies the activity.</p>
     #[serde(rename = "activityArn")]
@@ -54,7 +54,7 @@ pub struct ActivityListItem {
 
 /// <p>Contains details about an activity schedule failure that occurred during an execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ActivityScheduleFailedEventDetails {
     /// <p>A more detailed explanation of the cause of the failure.</p>
     #[serde(rename = "cause")]
@@ -68,7 +68,7 @@ pub struct ActivityScheduleFailedEventDetails {
 
 /// <p>Contains details about an activity scheduled during an execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ActivityScheduledEventDetails {
     /// <p>The maximum allowed duration between two heartbeats for the activity task.</p>
     #[serde(rename = "heartbeatInSeconds")]
@@ -89,7 +89,7 @@ pub struct ActivityScheduledEventDetails {
 
 /// <p>Contains details about the start of an activity during an execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ActivityStartedEventDetails {
     /// <p>The name of the worker that the task is assigned to. These names are provided by the workers when calling <a>GetActivityTask</a>.</p>
     #[serde(rename = "workerName")]
@@ -99,7 +99,7 @@ pub struct ActivityStartedEventDetails {
 
 /// <p>Contains details about an activity that successfully terminated during an execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ActivitySucceededEventDetails {
     /// <p>The JSON data output by the activity task.</p>
     #[serde(rename = "output")]
@@ -109,7 +109,7 @@ pub struct ActivitySucceededEventDetails {
 
 /// <p>Contains details about an activity timeout that occurred during an execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ActivityTimedOutEventDetails {
     /// <p>A more detailed explanation of the cause of the timeout.</p>
     #[serde(rename = "cause")]
@@ -133,7 +133,7 @@ pub struct CreateActivityInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct CreateActivityOutput {
     /// <p>The Amazon Resource Name (ARN) that identifies the created activity.</p>
     #[serde(rename = "activityArn")]
@@ -161,7 +161,7 @@ pub struct CreateStateMachineInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct CreateStateMachineOutput {
     /// <p>The date the state machine is created.</p>
     #[serde(rename = "creationDate")]
@@ -179,7 +179,7 @@ pub struct DeleteActivityInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DeleteActivityOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -190,7 +190,7 @@ pub struct DeleteStateMachineInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DeleteStateMachineOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -201,7 +201,7 @@ pub struct DescribeActivityInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DescribeActivityOutput {
     /// <p>The Amazon Resource Name (ARN) that identifies the activity.</p>
     #[serde(rename = "activityArn")]
@@ -222,7 +222,7 @@ pub struct DescribeExecutionInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DescribeExecutionOutput {
     /// <p>The Amazon Resource Name (ARN) that identifies the execution.</p>
     #[serde(rename = "executionArn")]
@@ -261,7 +261,7 @@ pub struct DescribeStateMachineForExecutionInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DescribeStateMachineForExecutionOutput {
     /// <p>The Amazon States Language definition of the state machine. See <a href="https://docs.aws.amazon.com/step-functions/latest/dg/concepts-amazon-states-language.html">Amazon States Language</a>.</p>
     #[serde(rename = "definition")]
@@ -288,7 +288,7 @@ pub struct DescribeStateMachineInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DescribeStateMachineOutput {
     /// <p>The date the state machine is created.</p>
     #[serde(rename = "creationDate")]
@@ -313,7 +313,7 @@ pub struct DescribeStateMachineOutput {
 
 /// <p>Contains details about an abort of an execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ExecutionAbortedEventDetails {
     /// <p>A more detailed explanation of the cause of the failure.</p>
     #[serde(rename = "cause")]
@@ -327,7 +327,7 @@ pub struct ExecutionAbortedEventDetails {
 
 /// <p>Contains details about an execution failure event.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ExecutionFailedEventDetails {
     /// <p>A more detailed explanation of the cause of the failure.</p>
     #[serde(rename = "cause")]
@@ -341,7 +341,7 @@ pub struct ExecutionFailedEventDetails {
 
 /// <p>Contains details about an execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ExecutionListItem {
     /// <p>The Amazon Resource Name (ARN) that identifies the execution.</p>
     #[serde(rename = "executionArn")]
@@ -366,7 +366,7 @@ pub struct ExecutionListItem {
 
 /// <p>Contains details about the start of the execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ExecutionStartedEventDetails {
     /// <p>The JSON data input to the execution.</p>
     #[serde(rename = "input")]
@@ -380,7 +380,7 @@ pub struct ExecutionStartedEventDetails {
 
 /// <p>Contains details about the successful termination of the execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ExecutionSucceededEventDetails {
     /// <p>The JSON data output by the execution.</p>
     #[serde(rename = "output")]
@@ -390,7 +390,7 @@ pub struct ExecutionSucceededEventDetails {
 
 /// <p>Contains details about the execution timeout that occurred during the execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ExecutionTimedOutEventDetails {
     /// <p>A more detailed explanation of the cause of the timeout.</p>
     #[serde(rename = "cause")]
@@ -414,7 +414,7 @@ pub struct GetActivityTaskInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct GetActivityTaskOutput {
     /// <p>The string that contains the JSON input data for the task.</p>
     #[serde(rename = "input")]
@@ -446,7 +446,7 @@ pub struct GetExecutionHistoryInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct GetExecutionHistoryOutput {
     /// <p>The list of events that occurred in the execution.</p>
     #[serde(rename = "events")]
@@ -459,7 +459,7 @@ pub struct GetExecutionHistoryOutput {
 
 /// <p>Contains details about the events of an execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct HistoryEvent {
     #[serde(rename = "activityFailedEventDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -591,7 +591,7 @@ pub struct HistoryEvent {
 
 /// <p>Contains details about a lambda function that failed during an execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct LambdaFunctionFailedEventDetails {
     /// <p>A more detailed explanation of the cause of the failure.</p>
     #[serde(rename = "cause")]
@@ -605,7 +605,7 @@ pub struct LambdaFunctionFailedEventDetails {
 
 /// <p>Contains details about a failed lambda function schedule event that occurred during an execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct LambdaFunctionScheduleFailedEventDetails {
     /// <p>A more detailed explanation of the cause of the failure.</p>
     #[serde(rename = "cause")]
@@ -619,7 +619,7 @@ pub struct LambdaFunctionScheduleFailedEventDetails {
 
 /// <p>Contains details about a lambda function scheduled during an execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct LambdaFunctionScheduledEventDetails {
     /// <p>The JSON data input to the lambda function.</p>
     #[serde(rename = "input")]
@@ -636,7 +636,7 @@ pub struct LambdaFunctionScheduledEventDetails {
 
 /// <p>Contains details about a lambda function that failed to start during an execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct LambdaFunctionStartFailedEventDetails {
     /// <p>A more detailed explanation of the cause of the failure.</p>
     #[serde(rename = "cause")]
@@ -650,7 +650,7 @@ pub struct LambdaFunctionStartFailedEventDetails {
 
 /// <p>Contains details about a lambda function that successfully terminated during an execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct LambdaFunctionSucceededEventDetails {
     /// <p>The JSON data output by the lambda function.</p>
     #[serde(rename = "output")]
@@ -660,7 +660,7 @@ pub struct LambdaFunctionSucceededEventDetails {
 
 /// <p>Contains details about a lambda function timeout that occurred during an execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct LambdaFunctionTimedOutEventDetails {
     /// <p>A more detailed explanation of the cause of the timeout.</p>
     #[serde(rename = "cause")]
@@ -685,7 +685,7 @@ pub struct ListActivitiesInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ListActivitiesOutput {
     /// <p>The list of activities.</p>
     #[serde(rename = "activities")]
@@ -716,7 +716,7 @@ pub struct ListExecutionsInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ListExecutionsOutput {
     /// <p>The list of matching executions.</p>
     #[serde(rename = "executions")]
@@ -740,7 +740,7 @@ pub struct ListStateMachinesInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ListStateMachinesOutput {
     /// <p>If <code>nextToken</code> is returned, there are more results available. The value of <code>nextToken</code> is a unique pagination token for each page. Make the call again using the returned token to retrieve the next page. Keep all other arguments unchanged. Each pagination token expires after 24 hours. Using an expired pagination token will return an <i>HTTP 400 InvalidToken</i> error.</p>
     #[serde(rename = "nextToken")]
@@ -758,7 +758,7 @@ pub struct ListTagsForResourceInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ListTagsForResourceOutput {
     /// <p>An array of tags associated with the resource.</p>
     #[serde(rename = "tags")]
@@ -768,7 +768,7 @@ pub struct ListTagsForResourceOutput {
 
 /// <p>Contains details about an iteration of a Map state.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct MapIterationEventDetails {
     /// <p>The index of the array belonging to the Map state iteration.</p>
     #[serde(rename = "index")]
@@ -782,7 +782,7 @@ pub struct MapIterationEventDetails {
 
 /// <p>Details about a Map state that was started.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct MapStateStartedEventDetails {
     /// <p>The size of the array for Map state iterations.</p>
     #[serde(rename = "length")]
@@ -806,7 +806,7 @@ pub struct SendTaskFailureInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct SendTaskFailureOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -817,7 +817,7 @@ pub struct SendTaskHeartbeatInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct SendTaskHeartbeatOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -831,7 +831,7 @@ pub struct SendTaskSuccessInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct SendTaskSuccessOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -850,7 +850,7 @@ pub struct StartExecutionInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct StartExecutionOutput {
     /// <p>The Amazon Resource Name (ARN) that identifies the execution.</p>
     #[serde(rename = "executionArn")]
@@ -862,7 +862,7 @@ pub struct StartExecutionOutput {
 
 /// <p>Contains details about a state entered during an execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct StateEnteredEventDetails {
     /// <p>The string that contains the JSON input data for the state.</p>
     #[serde(rename = "input")]
@@ -875,7 +875,7 @@ pub struct StateEnteredEventDetails {
 
 /// <p>Contains details about an exit from a state during an execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct StateExitedEventDetails {
     /// <p><p>The name of the state.</p> <p>A name must <i>not</i> contain:</p> <ul> <li> <p>white space</p> </li> <li> <p>brackets <code>&lt; &gt; { } [ ]</code> </p> </li> <li> <p>wildcard characters <code>? *</code> </p> </li> <li> <p>special characters <code>&quot; # % \ ^ | ~ ` $ &amp; , ; : /</code> </p> </li> <li> <p>control characters (<code>U+0000-001F</code>, <code>U+007F-009F</code>)</p> </li> </ul></p>
     #[serde(rename = "name")]
@@ -888,7 +888,7 @@ pub struct StateExitedEventDetails {
 
 /// <p>Contains details about the state machine.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct StateMachineListItem {
     /// <p>The date the state machine is created.</p>
     #[serde(rename = "creationDate")]
@@ -917,7 +917,7 @@ pub struct StopExecutionInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct StopExecutionOutput {
     /// <p>The date the execution is stopped.</p>
     #[serde(rename = "stopDate")]
@@ -948,12 +948,12 @@ pub struct TagResourceInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct TagResourceOutput {}
 
 /// <p>Contains details about a task failure event.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct TaskFailedEventDetails {
     /// <p>A more detailed explanation of the cause of the failure.</p>
     #[serde(rename = "cause")]
@@ -973,7 +973,7 @@ pub struct TaskFailedEventDetails {
 
 /// <p>Contains details about a task scheduled during an execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct TaskScheduledEventDetails {
     /// <p>The JSON data passed to the resource referenced in a task state.</p>
     #[serde(rename = "parameters")]
@@ -995,7 +995,7 @@ pub struct TaskScheduledEventDetails {
 
 /// <p>Contains details about a task that failed to start during an execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct TaskStartFailedEventDetails {
     /// <p>A more detailed explanation of the cause of the failure.</p>
     #[serde(rename = "cause")]
@@ -1015,7 +1015,7 @@ pub struct TaskStartFailedEventDetails {
 
 /// <p>Contains details about the start of a task during an execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct TaskStartedEventDetails {
     /// <p>The service name of the resource in a task state.</p>
     #[serde(rename = "resource")]
@@ -1027,7 +1027,7 @@ pub struct TaskStartedEventDetails {
 
 /// <p>Contains details about a task that failed to submit during an execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct TaskSubmitFailedEventDetails {
     /// <p>A more detailed explanation of the cause of the failure.</p>
     #[serde(rename = "cause")]
@@ -1047,7 +1047,7 @@ pub struct TaskSubmitFailedEventDetails {
 
 /// <p>Contains details about a task submitted to a resource .</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct TaskSubmittedEventDetails {
     /// <p>The response from a resource when a task has started.</p>
     #[serde(rename = "output")]
@@ -1063,7 +1063,7 @@ pub struct TaskSubmittedEventDetails {
 
 /// <p>Contains details about the successful completion of a task state.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct TaskSucceededEventDetails {
     /// <p>The full JSON response from a resource when a task has succeeded. This response becomes the output of the related task.</p>
     #[serde(rename = "output")]
@@ -1079,7 +1079,7 @@ pub struct TaskSucceededEventDetails {
 
 /// <p>Contains details about a resource timeout that occurred during an execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct TaskTimedOutEventDetails {
     /// <p>A more detailed explanation of the cause of the failure.</p>
     #[serde(rename = "cause")]
@@ -1108,7 +1108,7 @@ pub struct UntagResourceInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct UntagResourceOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1127,7 +1127,7 @@ pub struct UpdateStateMachineInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct UpdateStateMachineOutput {
     /// <p>The date and time the state machine was updated.</p>
     #[serde(rename = "updateDate")]

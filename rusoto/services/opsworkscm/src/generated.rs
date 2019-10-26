@@ -25,7 +25,7 @@ use rusoto_core::signature::SignedRequest;
 use serde_json;
 /// <p>Stores account attributes. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct AccountAttribute {
     /// <p> The maximum allowed value. </p>
     #[serde(rename = "Maximum")]
@@ -55,7 +55,7 @@ pub struct AssociateNodeRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct AssociateNodeResponse {
     /// <p>Contains a token which can be passed to the <code>DescribeNodeAssociationStatus</code> API call to get the status of the association request. </p>
     #[serde(rename = "NodeAssociationStatusToken")]
@@ -65,7 +65,7 @@ pub struct AssociateNodeResponse {
 
 /// <p>Describes a single backup. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct Backup {
     /// <p>The ARN of the backup. </p>
     #[serde(rename = "BackupArn")]
@@ -169,7 +169,7 @@ pub struct CreateBackupRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct CreateBackupResponse {
     /// <p>Backup created by request.</p>
     #[serde(rename = "Backup")]
@@ -246,7 +246,7 @@ pub struct CreateServerRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct CreateServerResponse {
     /// <p>The server that is created by the request. </p>
     #[serde(rename = "Server")]
@@ -262,7 +262,7 @@ pub struct DeleteBackupRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DeleteBackupResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -273,14 +273,14 @@ pub struct DeleteServerRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DeleteServerResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeAccountAttributesRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DescribeAccountAttributesResponse {
     /// <p> The attributes that are currently set for the account. </p>
     #[serde(rename = "Attributes")]
@@ -309,7 +309,7 @@ pub struct DescribeBackupsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DescribeBackupsResponse {
     /// <p>Contains the response to a <code>DescribeBackups</code> request. </p>
     #[serde(rename = "Backups")]
@@ -337,7 +337,7 @@ pub struct DescribeEventsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DescribeEventsResponse {
     /// <p>NextToken is a string that is returned in some command responses. It indicates that not all entries have been returned, and that you must run at least one more request to get remaining items. To get remaining results, call <code>DescribeEvents</code> again, and assign the token from the previous results as the value of the <code>nextToken</code> parameter. If there are no more results, the response object's <code>nextToken</code> parameter value is <code>null</code>. Setting a <code>nextToken</code> value that was not returned in your previous results causes an <code>InvalidNextTokenException</code> to occur. </p>
     #[serde(rename = "NextToken")]
@@ -360,7 +360,7 @@ pub struct DescribeNodeAssociationStatusRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DescribeNodeAssociationStatusResponse {
     /// <p>Attributes specific to the node association. In Puppet, the attibute PUPPET_NODE_CERT contains the signed certificate (the result of the CSR). </p>
     #[serde(rename = "EngineAttributes")]
@@ -389,7 +389,7 @@ pub struct DescribeServersRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DescribeServersResponse {
     /// <p>This is not currently implemented for <code>DescribeServers</code> requests. </p>
     #[serde(rename = "NextToken")]
@@ -416,7 +416,7 @@ pub struct DisassociateNodeRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DisassociateNodeResponse {
     /// <p>Contains a token which can be passed to the <code>DescribeNodeAssociationStatus</code> API call to get the status of the disassociation request. </p>
     #[serde(rename = "NodeAssociationStatusToken")]
@@ -452,7 +452,7 @@ pub struct ExportServerEngineAttributeRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ExportServerEngineAttributeResponse {
     /// <p>The requested engine attribute pair with attribute name and value.</p>
     #[serde(rename = "EngineAttribute")]
@@ -483,12 +483,12 @@ pub struct RestoreServerRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct RestoreServerResponse {}
 
 /// <p>Describes a configuration management server. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct Server {
     /// <p>Associate a public IP address with a server that you are launching. </p>
     #[serde(rename = "AssociatePublicIpAddress")]
@@ -586,7 +586,7 @@ pub struct Server {
 
 /// <p>An event that is related to the server, such as the start of maintenance or backup. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ServerEvent {
     /// <p>The time when the event occurred. </p>
     #[serde(rename = "CreatedAt")]
@@ -618,7 +618,7 @@ pub struct StartMaintenanceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct StartMaintenanceResponse {
     /// <p>Contains the response to a <code>StartMaintenance</code> request. </p>
     #[serde(rename = "Server")]
@@ -641,7 +641,7 @@ pub struct UpdateServerEngineAttributesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct UpdateServerEngineAttributesResponse {
     /// <p>Contains the response to an <code>UpdateServerEngineAttributes</code> request. </p>
     #[serde(rename = "Server")]
@@ -671,7 +671,7 @@ pub struct UpdateServerRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct UpdateServerResponse {
     /// <p>Contains the response to a <code>UpdateServer</code> request. </p>
     #[serde(rename = "Server")]

@@ -25,7 +25,7 @@ use rusoto_core::signature::SignedRequest;
 use serde_json;
 /// <p>Structure containing the estimated age range, in years, for a face.</p> <p>Amazon Rekognition estimates an age range for faces detected in the input image. Estimated age ranges can overlap. A face of a 5-year-old might have an estimated range of 4-6, while the face of a 6-year-old might have an estimated range of 4-8.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct AgeRange {
     /// <p>The highest estimated age.</p>
     #[serde(rename = "High")]
@@ -39,7 +39,7 @@ pub struct AgeRange {
 
 /// <p>Indicates whether or not the face has a beard, and the confidence level in the determination.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct Beard {
     /// <p>Level of confidence in the determination.</p>
     #[serde(rename = "Confidence")]
@@ -53,7 +53,7 @@ pub struct Beard {
 
 /// <p><p>Identifies the bounding box around the label, face, or text. The <code>left</code> (x-coordinate) and <code>top</code> (y-coordinate) are coordinates representing the top and left sides of the bounding box. Note that the upper-left corner of the image is the origin (0,0). </p> <p>The <code>top</code> and <code>left</code> values returned are ratios of the overall image size. For example, if the input image is 700x200 pixels, and the top-left coordinate of the bounding box is 350x50 pixels, the API returns a <code>left</code> value of 0.5 (350/700) and a <code>top</code> value of 0.25 (50/200).</p> <p>The <code>width</code> and <code>height</code> values represent the dimensions of the bounding box as a ratio of the overall image dimension. For example, if the input image is 700x200 pixels, and the bounding box width is 70 pixels, the width returned is 0.1. </p> <note> <p> The bounding box coordinates can have negative values. For example, if Amazon Rekognition is able to detect a face that is at the image edge and is only partially visible, the service can return coordinates that are outside the image bounds and, depending on the image edge, you might get negative values or values greater than 1 for the <code>left</code> or <code>top</code> values. </p> </note></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct BoundingBox {
     /// <p>Height of the bounding box as a ratio of the overall image height.</p>
     #[serde(rename = "Height")]
@@ -75,7 +75,7 @@ pub struct BoundingBox {
 
 /// <p>Provides information about a celebrity recognized by the <a>RecognizeCelebrities</a> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct Celebrity {
     /// <p>Provides information about the celebrity's face, such as its location on the image.</p>
     #[serde(rename = "Face")]
@@ -101,7 +101,7 @@ pub struct Celebrity {
 
 /// <p>Information about a recognized celebrity.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct CelebrityDetail {
     /// <p>Bounding box around the body of a celebrity.</p>
     #[serde(rename = "BoundingBox")]
@@ -131,7 +131,7 @@ pub struct CelebrityDetail {
 
 /// <p>Information about a detected celebrity and the time the celebrity was detected in a stored video. For more information, see GetCelebrityRecognition in the Amazon Rekognition Developer Guide.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct CelebrityRecognition {
     /// <p>Information about a recognized celebrity.</p>
     #[serde(rename = "Celebrity")]
@@ -145,7 +145,7 @@ pub struct CelebrityRecognition {
 
 /// <p>Provides information about a face in a target image that matches the source image face analyzed by <code>CompareFaces</code>. The <code>Face</code> property contains the bounding box of the face in the target image. The <code>Similarity</code> property is the confidence that the source image face matches the face in the bounding box.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct CompareFacesMatch {
     /// <p>Provides face metadata (bounding box and confidence that the bounding box actually contains a face).</p>
     #[serde(rename = "Face")]
@@ -172,7 +172,7 @@ pub struct CompareFacesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct CompareFacesResponse {
     /// <p>An array of faces in the target image that match the source image face. Each <code>CompareFacesMatch</code> object provides the bounding box, the confidence level that the bounding box contains a face, and the similarity score for the face in the bounding box and the face in the source image.</p>
     #[serde(rename = "FaceMatches")]
@@ -198,7 +198,7 @@ pub struct CompareFacesResponse {
 
 /// <p>Provides face metadata for target image faces that are analyzed by <code>CompareFaces</code> and <code>RecognizeCelebrities</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ComparedFace {
     /// <p>Bounding box of the face.</p>
     #[serde(rename = "BoundingBox")]
@@ -224,7 +224,7 @@ pub struct ComparedFace {
 
 /// <p>Type that describes the face Amazon Rekognition chose to compare with the faces in the target. This contains a bounding box for the selected face and confidence level that the bounding box contains a face. Note that Amazon Rekognition selects the largest face in the source image for this comparison. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ComparedSourceImageFace {
     /// <p>Bounding box of the face.</p>
     #[serde(rename = "BoundingBox")]
@@ -238,7 +238,7 @@ pub struct ComparedSourceImageFace {
 
 /// <p>Information about an unsafe content label detection in a stored video.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ContentModerationDetection {
     /// <p>The unsafe content label detected by in the stored video.</p>
     #[serde(rename = "ModerationLabel")]
@@ -258,7 +258,7 @@ pub struct CreateCollectionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct CreateCollectionResponse {
     /// <p>Amazon Resource Name (ARN) of the collection. You can use this to manage permissions on your resources. </p>
     #[serde(rename = "CollectionArn")]
@@ -294,7 +294,7 @@ pub struct CreateStreamProcessorRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct CreateStreamProcessorResponse {
     /// <p>ARN for the newly create stream processor.</p>
     #[serde(rename = "StreamProcessorArn")]
@@ -310,7 +310,7 @@ pub struct DeleteCollectionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DeleteCollectionResponse {
     /// <p>HTTP status code that indicates the result of the operation.</p>
     #[serde(rename = "StatusCode")]
@@ -329,7 +329,7 @@ pub struct DeleteFacesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DeleteFacesResponse {
     /// <p>An array of strings (face IDs) of the faces that were deleted.</p>
     #[serde(rename = "DeletedFaces")]
@@ -345,7 +345,7 @@ pub struct DeleteStreamProcessorRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DeleteStreamProcessorResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -356,7 +356,7 @@ pub struct DescribeCollectionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DescribeCollectionResponse {
     /// <p>The Amazon Resource Name (ARN) of the collection.</p>
     #[serde(rename = "CollectionARN")]
@@ -384,7 +384,7 @@ pub struct DescribeStreamProcessorRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DescribeStreamProcessorResponse {
     /// <p>Date and time the stream processor was created</p>
     #[serde(rename = "CreationTimestamp")]
@@ -440,7 +440,7 @@ pub struct DetectFacesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DetectFacesResponse {
     /// <p>Details of each face found in the image. </p>
     #[serde(rename = "FaceDetails")]
@@ -468,7 +468,7 @@ pub struct DetectLabelsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DetectLabelsResponse {
     /// <p>Version number of the label detection model that was used to detect labels.</p>
     #[serde(rename = "LabelModelVersion")]
@@ -496,7 +496,7 @@ pub struct DetectModerationLabelsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DetectModerationLabelsResponse {
     /// <p>Array of detected Moderation labels and the time, in milliseconds from the start of the video, they were detected.</p>
     #[serde(rename = "ModerationLabels")]
@@ -516,7 +516,7 @@ pub struct DetectTextRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DetectTextResponse {
     /// <p>An array of text that was detected in the input image.</p>
     #[serde(rename = "TextDetections")]
@@ -526,7 +526,7 @@ pub struct DetectTextResponse {
 
 /// <p>The emotions that appear to be expressed on the face, and the confidence level in the determination. The API is only making a determination of the physical appearance of a person's face. It is not a determination of the person’s internal emotional state and should not be used in such a way. For example, a person pretending to have a sad face might not be sad emotionally.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct Emotion {
     /// <p>Level of confidence in the determination.</p>
     #[serde(rename = "Confidence")]
@@ -540,7 +540,7 @@ pub struct Emotion {
 
 /// <p>Indicates whether or not the eyes on the face are open, and the confidence level in the determination.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct EyeOpen {
     /// <p>Level of confidence in the determination.</p>
     #[serde(rename = "Confidence")]
@@ -554,7 +554,7 @@ pub struct EyeOpen {
 
 /// <p>Indicates whether or not the face is wearing eye glasses, and the confidence level in the determination.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct Eyeglasses {
     /// <p>Level of confidence in the determination.</p>
     #[serde(rename = "Confidence")]
@@ -568,7 +568,7 @@ pub struct Eyeglasses {
 
 /// <p>Describes the face properties such as the bounding box, face ID, image ID of the input image, and external image ID that you assigned. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct Face {
     /// <p>Bounding box of the face.</p>
     #[serde(rename = "BoundingBox")]
@@ -594,7 +594,7 @@ pub struct Face {
 
 /// <p>Structure containing attributes of the face that the algorithm detected.</p> <p>A <code>FaceDetail</code> object contains either the default facial attributes or all facial attributes. The default attributes are <code>BoundingBox</code>, <code>Confidence</code>, <code>Landmarks</code>, <code>Pose</code>, and <code>Quality</code>.</p> <p> <a>GetFaceDetection</a> is the only Amazon Rekognition Video stored video operation that can return a <code>FaceDetail</code> object with all attributes. To specify which attributes to return, use the <code>FaceAttributes</code> input parameter for <a>StartFaceDetection</a>. The following Amazon Rekognition Video operations return only the default attributes. The corresponding Start operations don't have a <code>FaceAttributes</code> input parameter.</p> <ul> <li> <p>GetCelebrityRecognition</p> </li> <li> <p>GetPersonTracking</p> </li> <li> <p>GetFaceSearch</p> </li> </ul> <p>The Amazon Rekognition Image <a>DetectFaces</a> and <a>IndexFaces</a> operations can return all facial attributes. To specify which attributes to return, use the <code>Attributes</code> input parameter for <code>DetectFaces</code>. For <code>IndexFaces</code>, use the <code>DetectAttributes</code> input parameter.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct FaceDetail {
     /// <p>The estimated age range, in years, for the face. Low represents the lowest estimated age and High represents the highest estimated age.</p>
     #[serde(rename = "AgeRange")]
@@ -660,7 +660,7 @@ pub struct FaceDetail {
 
 /// <p>Information about a face detected in a video analysis request and the time the face was detected in the video. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct FaceDetection {
     /// <p>The face properties for the detected face.</p>
     #[serde(rename = "Face")]
@@ -674,7 +674,7 @@ pub struct FaceDetection {
 
 /// <p>Provides face metadata. In addition, it also provides the confidence in the match of this face with the input face.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct FaceMatch {
     /// <p>Describes the face properties such as the bounding box, face ID, image ID of the source image, and external image ID that you assigned.</p>
     #[serde(rename = "Face")]
@@ -688,7 +688,7 @@ pub struct FaceMatch {
 
 /// <p>Object containing both the face metadata (stored in the backend database), and facial attributes that are detected but aren't stored in the database.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct FaceRecord {
     /// <p>Describes the face properties such as the bounding box, face ID, image ID of the input image, and external image ID that you assigned. </p>
     #[serde(rename = "Face")]
@@ -715,7 +715,7 @@ pub struct FaceSearchSettings {
 
 /// <p>Gender of the face and the confidence level in the determination.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct Gender {
     /// <p>Level of confidence in the determination.</p>
     #[serde(rename = "Confidence")]
@@ -729,7 +729,7 @@ pub struct Gender {
 
 /// <p>Information about where the text detected by <a>DetectText</a> is located on an image.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct Geometry {
     /// <p>An axis-aligned coarse representation of the detected text's location on the image.</p>
     #[serde(rename = "BoundingBox")]
@@ -749,7 +749,7 @@ pub struct GetCelebrityInfoRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct GetCelebrityInfoResponse {
     /// <p>The name of the celebrity.</p>
     #[serde(rename = "Name")]
@@ -781,7 +781,7 @@ pub struct GetCelebrityRecognitionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct GetCelebrityRecognitionResponse {
     /// <p>Array of celebrities recognized in the video.</p>
     #[serde(rename = "Celebrities")]
@@ -825,7 +825,7 @@ pub struct GetContentModerationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct GetContentModerationResponse {
     /// <p>The current status of the unsafe content analysis job.</p>
     #[serde(rename = "JobStatus")]
@@ -869,7 +869,7 @@ pub struct GetFaceDetectionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct GetFaceDetectionResponse {
     /// <p>An array of faces detected in the video. Each element contains a detected face's details and the time, in milliseconds from the start of the video, the face was detected. </p>
     #[serde(rename = "Faces")]
@@ -913,7 +913,7 @@ pub struct GetFaceSearchRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct GetFaceSearchResponse {
     /// <p>The current status of the face search job.</p>
     #[serde(rename = "JobStatus")]
@@ -957,7 +957,7 @@ pub struct GetLabelDetectionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct GetLabelDetectionResponse {
     /// <p>The current status of the label detection job.</p>
     #[serde(rename = "JobStatus")]
@@ -1005,7 +1005,7 @@ pub struct GetPersonTrackingRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct GetPersonTrackingResponse {
     /// <p>The current status of the person tracking job.</p>
     #[serde(rename = "JobStatus")]
@@ -1049,7 +1049,7 @@ pub struct Image {
 
 /// <p>Identifies face image brightness and sharpness. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ImageQuality {
     /// <p>Value representing brightness of the face. The service returns a value between 0 and 100 (inclusive). A higher value indicates a brighter face image.</p>
     #[serde(rename = "Brightness")]
@@ -1088,7 +1088,7 @@ pub struct IndexFacesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct IndexFacesResponse {
     /// <p>The version number of the face detection model that's associated with the input collection (<code>CollectionId</code>).</p>
     #[serde(rename = "FaceModelVersion")]
@@ -1110,7 +1110,7 @@ pub struct IndexFacesResponse {
 
 /// <p>An instance of a label returned by Amazon Rekognition Image (<a>DetectLabels</a>) or by Amazon Rekognition Video (<a>GetLabelDetection</a>).</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct Instance {
     /// <p>The position of the label instance on the image.</p>
     #[serde(rename = "BoundingBox")]
@@ -1142,7 +1142,7 @@ pub struct KinesisVideoStream {
 
 /// <p>Structure containing details about the detected label, including the name, detected instances, parent labels, and level of confidence.</p> <p> </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct Label {
     /// <p>Level of confidence.</p>
     #[serde(rename = "Confidence")]
@@ -1164,7 +1164,7 @@ pub struct Label {
 
 /// <p>Information about a label detected in a video analysis request and the time the label was detected in the video. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct LabelDetection {
     /// <p>Details about the detected label.</p>
     #[serde(rename = "Label")]
@@ -1178,7 +1178,7 @@ pub struct LabelDetection {
 
 /// <p>Indicates the location of the landmark on the face.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct Landmark {
     /// <p>Type of landmark.</p>
     #[serde(rename = "Type")]
@@ -1207,7 +1207,7 @@ pub struct ListCollectionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ListCollectionsResponse {
     /// <p>An array of collection IDs.</p>
     #[serde(rename = "CollectionIds")]
@@ -1239,7 +1239,7 @@ pub struct ListFacesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ListFacesResponse {
     /// <p>Version number of the face detection model associated with the input collection (<code>CollectionId</code>).</p>
     #[serde(rename = "FaceModelVersion")]
@@ -1268,7 +1268,7 @@ pub struct ListStreamProcessorsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ListStreamProcessorsResponse {
     /// <p>If the response is truncated, Amazon Rekognition Video returns this token that you can use in the subsequent request to retrieve the next set of stream processors. </p>
     #[serde(rename = "NextToken")]
@@ -1282,7 +1282,7 @@ pub struct ListStreamProcessorsResponse {
 
 /// <p>Provides information about a single type of unsafe content found in an image or video. Each type of moderated content has a label within a hierarchical taxonomy. For more information, see Detecting Unsafe Content in the Amazon Rekognition Developer Guide.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ModerationLabel {
     /// <p>Specifies the confidence that Amazon Rekognition has that the label has been correctly identified.</p> <p>If you don't specify the <code>MinConfidence</code> parameter in the call to <code>DetectModerationLabels</code>, the operation returns labels with a confidence value greater than or equal to 50 percent.</p>
     #[serde(rename = "Confidence")]
@@ -1300,7 +1300,7 @@ pub struct ModerationLabel {
 
 /// <p>Indicates whether or not the mouth on the face is open, and the confidence level in the determination.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct MouthOpen {
     /// <p>Level of confidence in the determination.</p>
     #[serde(rename = "Confidence")]
@@ -1314,7 +1314,7 @@ pub struct MouthOpen {
 
 /// <p>Indicates whether or not the face has a mustache, and the confidence level in the determination.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct Mustache {
     /// <p>Level of confidence in the determination.</p>
     #[serde(rename = "Confidence")]
@@ -1339,7 +1339,7 @@ pub struct NotificationChannel {
 
 /// <p>A parent label for a label. A label can have 0, 1, or more parents. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct Parent {
     /// <p>The name of the parent label.</p>
     #[serde(rename = "Name")]
@@ -1349,7 +1349,7 @@ pub struct Parent {
 
 /// <p>Details about a person detected in a video analysis request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct PersonDetail {
     /// <p>Bounding box around the detected person.</p>
     #[serde(rename = "BoundingBox")]
@@ -1367,7 +1367,7 @@ pub struct PersonDetail {
 
 /// <p>Details and path tracking information for a single time a person's path is tracked in a video. Amazon Rekognition operations that track people's paths return an array of <code>PersonDetection</code> objects with elements for each time a person's path is tracked in a video. </p> <p>For more information, see GetPersonTracking in the Amazon Rekognition Developer Guide. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct PersonDetection {
     /// <p>Details about a person whose path was tracked in a video.</p>
     #[serde(rename = "Person")]
@@ -1381,7 +1381,7 @@ pub struct PersonDetection {
 
 /// <p>Information about a person whose face matches a face(s) in an Amazon Rekognition collection. Includes information about the faces in the Amazon Rekognition collection (<a>FaceMatch</a>), information about the person (<a>PersonDetail</a>), and the time stamp for when the person was detected in a video. An array of <code>PersonMatch</code> objects is returned by <a>GetFaceSearch</a>. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct PersonMatch {
     /// <p>Information about the faces in the input collection that match the face of a person in the video.</p>
     #[serde(rename = "FaceMatches")]
@@ -1399,7 +1399,7 @@ pub struct PersonMatch {
 
 /// <p>The X and Y coordinates of a point on an image. The X and Y values returned are ratios of the overall image size. For example, if the input image is 700x200 and the operation returns X=0.5 and Y=0.25, then the point is at the (350,50) pixel coordinate on the image.</p> <p>An array of <code>Point</code> objects, <code>Polygon</code>, is returned by <a>DetectText</a>. <code>Polygon</code> represents a fine-grained polygon around detected text. For more information, see Geometry in the Amazon Rekognition Developer Guide. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct Point {
     /// <p>The value of the X coordinate for a point on a <code>Polygon</code>.</p>
     #[serde(rename = "X")]
@@ -1413,7 +1413,7 @@ pub struct Point {
 
 /// <p>Indicates the pose of the face as determined by its pitch, roll, and yaw.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct Pose {
     /// <p>Value representing the face rotation on the pitch axis.</p>
     #[serde(rename = "Pitch")]
@@ -1437,7 +1437,7 @@ pub struct RecognizeCelebritiesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct RecognizeCelebritiesResponse {
     /// <p>Details about each celebrity found in the image. Amazon Rekognition can detect a maximum of 15 celebrities in an image.</p>
     #[serde(rename = "CelebrityFaces")]
@@ -1489,7 +1489,7 @@ pub struct SearchFacesByImageRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct SearchFacesByImageResponse {
     /// <p>An array of faces that match the input face, along with the confidence in the match.</p>
     #[serde(rename = "FaceMatches")]
@@ -1528,7 +1528,7 @@ pub struct SearchFacesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct SearchFacesResponse {
     /// <p>An array of faces that matched the input face, along with the confidence in the match.</p>
     #[serde(rename = "FaceMatches")]
@@ -1546,7 +1546,7 @@ pub struct SearchFacesResponse {
 
 /// <p>Indicates whether or not the face is smiling, and the confidence level in the determination.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct Smile {
     /// <p>Level of confidence in the determination.</p>
     #[serde(rename = "Confidence")]
@@ -1578,7 +1578,7 @@ pub struct StartCelebrityRecognitionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct StartCelebrityRecognitionResponse {
     /// <p>The identifier for the celebrity recognition analysis job. Use <code>JobId</code> to identify the job in a subsequent call to <code>GetCelebrityRecognition</code>.</p>
     #[serde(rename = "JobId")]
@@ -1610,7 +1610,7 @@ pub struct StartContentModerationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct StartContentModerationResponse {
     /// <p>The identifier for the unsafe content analysis job. Use <code>JobId</code> to identify the job in a subsequent call to <code>GetContentModeration</code>.</p>
     #[serde(rename = "JobId")]
@@ -1642,7 +1642,7 @@ pub struct StartFaceDetectionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct StartFaceDetectionResponse {
     /// <p>The identifier for the face detection job. Use <code>JobId</code> to identify the job in a subsequent call to <code>GetFaceDetection</code>.</p>
     #[serde(rename = "JobId")]
@@ -1677,7 +1677,7 @@ pub struct StartFaceSearchRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct StartFaceSearchResponse {
     /// <p>The identifier for the search job. Use <code>JobId</code> to identify the job in a subsequent call to <code>GetFaceSearch</code>. </p>
     #[serde(rename = "JobId")]
@@ -1709,7 +1709,7 @@ pub struct StartLabelDetectionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct StartLabelDetectionResponse {
     /// <p>The identifier for the label detection job. Use <code>JobId</code> to identify the job in a subsequent call to <code>GetLabelDetection</code>. </p>
     #[serde(rename = "JobId")]
@@ -1737,7 +1737,7 @@ pub struct StartPersonTrackingRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct StartPersonTrackingResponse {
     /// <p>The identifier for the person detection job. Use <code>JobId</code> to identify the job in a subsequent call to <code>GetPersonTracking</code>.</p>
     #[serde(rename = "JobId")]
@@ -1753,7 +1753,7 @@ pub struct StartStreamProcessorRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct StartStreamProcessorResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1764,12 +1764,12 @@ pub struct StopStreamProcessorRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct StopStreamProcessorResponse {}
 
 /// <p>An object that recognizes faces in a streaming video. An Amazon Rekognition stream processor is created by a call to <a>CreateStreamProcessor</a>. The request parameters for <code>CreateStreamProcessor</code> describe the Kinesis video stream source for the streaming video, face recognition parameters, and where to stream the analysis resullts. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct StreamProcessor {
     /// <p>Name of the Amazon Rekognition stream processor. </p>
     #[serde(rename = "Name")]
@@ -1810,7 +1810,7 @@ pub struct StreamProcessorSettings {
 
 /// <p>Indicates whether or not the face is wearing sunglasses, and the confidence level in the determination.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct Sunglasses {
     /// <p>Level of confidence in the determination.</p>
     #[serde(rename = "Confidence")]
@@ -1824,7 +1824,7 @@ pub struct Sunglasses {
 
 /// <p>Information about a word or line of text detected by <a>DetectText</a>.</p> <p>The <code>DetectedText</code> field contains the text that Amazon Rekognition detected in the image. </p> <p>Every word and line has an identifier (<code>Id</code>). Each word belongs to a line and has a parent identifier (<code>ParentId</code>) that identifies the line of text in which the word appears. The word <code>Id</code> is also an index for the word within a line of words. </p> <p>For more information, see Detecting Text in the Amazon Rekognition Developer Guide.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct TextDetection {
     /// <p>The confidence that Amazon Rekognition has in the accuracy of the detected text and the accuracy of the geometry points around the detected text.</p>
     #[serde(rename = "Confidence")]
@@ -1854,7 +1854,7 @@ pub struct TextDetection {
 
 /// <p>A face that <a>IndexFaces</a> detected, but didn't index. Use the <code>Reasons</code> response attribute to determine why a face wasn't indexed.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct UnindexedFace {
     /// <p>The structure that contains attributes of a face that <code>IndexFaces</code>detected, but didn't index. </p>
     #[serde(rename = "FaceDetail")]
@@ -1877,7 +1877,7 @@ pub struct Video {
 
 /// <p>Information about a video that Amazon Rekognition analyzed. <code>Videometadata</code> is returned in every page of paginated responses from a Amazon Rekognition video operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct VideoMetadata {
     /// <p>Type of compression used in the analyzed video. </p>
     #[serde(rename = "Codec")]

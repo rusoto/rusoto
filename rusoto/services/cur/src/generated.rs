@@ -33,7 +33,7 @@ pub struct DeleteReportDefinitionRequest {
 
 /// <p>If the action is successful, the service sends back an HTTP 200 response.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DeleteReportDefinitionResponse {
     #[serde(rename = "ResponseMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -53,7 +53,7 @@ pub struct DescribeReportDefinitionsRequest {
 
 /// <p>If the action is successful, the service sends back an HTTP 200 response.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DescribeReportDefinitionsResponse {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -73,7 +73,7 @@ pub struct ModifyReportDefinitionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ModifyReportDefinitionResponse {}
 
 /// <p>Creates a Cost and Usage Report.</p>
@@ -86,7 +86,7 @@ pub struct PutReportDefinitionRequest {
 
 /// <p>If the action is successful, the service sends back an HTTP 200 response with an empty HTTP body.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct PutReportDefinitionResponse {}
 
 /// <p>The definition of AWS Cost and Usage Report. You can specify the report name, time unit, report format, compression format, S3 bucket, additional artifacts, and schema elements in the definition. </p>

@@ -50,7 +50,7 @@ pub struct CreateScalingPlanRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct CreateScalingPlanResponse {
     /// <p>The version number of the scaling plan. This value is always 1.</p> <p>Currently, you cannot specify multiple scaling plan versions.</p>
     #[serde(rename = "ScalingPlanVersion")]
@@ -103,7 +103,7 @@ pub struct CustomizedScalingMetricSpecification {
 
 /// <p>Represents a single value in the forecast data used for predictive scaling.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct Datapoint {
     /// <p>The time stamp for the data point in UTC format.</p>
     #[serde(rename = "Timestamp")]
@@ -126,7 +126,7 @@ pub struct DeleteScalingPlanRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DeleteScalingPlanResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -148,7 +148,7 @@ pub struct DescribeScalingPlanResourcesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DescribeScalingPlanResourcesResponse {
     /// <p>The token required to get the next set of results. This value is <code>null</code> if there are no more results to return.</p>
     #[serde(rename = "NextToken")]
@@ -185,7 +185,7 @@ pub struct DescribeScalingPlansRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DescribeScalingPlansResponse {
     /// <p>The token required to get the next set of results. This value is <code>null</code> if there are no more results to return.</p>
     #[serde(rename = "NextToken")]
@@ -226,7 +226,7 @@ pub struct GetScalingPlanResourceForecastDataRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct GetScalingPlanResourceForecastDataResponse {
     /// <p>The data points to return.</p>
     #[serde(rename = "Datapoints")]
@@ -325,7 +325,7 @@ pub struct ScalingInstruction {
 
 /// <p>Represents a scaling plan.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ScalingPlan {
     /// <p>The application source.</p>
     #[serde(rename = "ApplicationSource")]
@@ -358,7 +358,7 @@ pub struct ScalingPlan {
 
 /// <p>Represents a scalable resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ScalingPlanResource {
     /// <p><p>The ID of the resource. This string consists of the resource type and unique identifier.</p> <ul> <li> <p>Auto Scaling group - The resource type is <code>autoScalingGroup</code> and the unique identifier is the name of the Auto Scaling group. Example: <code>autoScalingGroup/my-asg</code>.</p> </li> <li> <p>ECS service - The resource type is <code>service</code> and the unique identifier is the cluster name and service name. Example: <code>service/default/sample-webapp</code>.</p> </li> <li> <p>Spot Fleet request - The resource type is <code>spot-fleet-request</code> and the unique identifier is the Spot Fleet request ID. Example: <code>spot-fleet-request/sfr-73fbd2ce-aa30-494c-8788-1cee4EXAMPLE</code>.</p> </li> <li> <p>DynamoDB table - The resource type is <code>table</code> and the unique identifier is the resource ID. Example: <code>table/my-table</code>.</p> </li> <li> <p>DynamoDB global secondary index - The resource type is <code>index</code> and the unique identifier is the resource ID. Example: <code>table/my-table/index/my-table-index</code>.</p> </li> <li> <p>Aurora DB cluster - The resource type is <code>cluster</code> and the unique identifier is the cluster name. Example: <code>cluster:my-db-cluster</code>.</p> </li> </ul></p>
     #[serde(rename = "ResourceId")]
@@ -390,7 +390,7 @@ pub struct ScalingPlanResource {
 
 /// <p>Represents a scaling policy.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ScalingPolicy {
     /// <p>The name of the scaling policy.</p>
     #[serde(rename = "PolicyName")]
@@ -468,7 +468,7 @@ pub struct UpdateScalingPlanRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct UpdateScalingPlanResponse {}
 
 /// Errors returned by CreateScalingPlan

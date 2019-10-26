@@ -40,7 +40,7 @@ pub struct AccessLogSettings {
 
 /// <p>Represents an API.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct Api {
     /// <p>The URI of the API, of the form {api-id}.execute-api.{region}.amazonaws.com. The
     /// stage name is typically appended to this URI to form a complete path to a deployed
@@ -94,7 +94,7 @@ pub struct Api {
 
 /// <p>Represents an API mapping.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ApiMapping {
     /// <p>The API identifier.</p>
     #[serde(rename = "ApiId")]
@@ -114,7 +114,7 @@ pub struct ApiMapping {
 
 /// <p>Represents an authorizer.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct Authorizer {
     /// <p>Specifies the required credentials as an IAM role for API Gateway to invoke the
     /// authorizer. To specify an IAM role for API Gateway to assume, use the role's Amazon
@@ -204,7 +204,7 @@ pub struct CreateApiMappingRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct CreateApiMappingResponse {
     /// <p>The API identifier.</p>
     #[serde(rename = "ApiId")]
@@ -258,7 +258,7 @@ pub struct CreateApiRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct CreateApiResponse {
     /// <p>The URI of the API, of the form {api-id}.execute-api.{region}.amazonaws.com. The
     /// stage name is typically appended to this URI to form a complete path to a deployed
@@ -382,7 +382,7 @@ pub struct CreateAuthorizerRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct CreateAuthorizerResponse {
     /// <p>Specifies the required credentials as an IAM role for API Gateway to invoke the
     /// authorizer. To specify an IAM role for API Gateway to assume, use the role's Amazon
@@ -472,7 +472,7 @@ pub struct CreateDeploymentRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct CreateDeploymentResponse {
     /// <p>The date and time when the Deployment resource was created.</p>
     #[serde(rename = "CreatedDate")]
@@ -513,7 +513,7 @@ pub struct CreateDomainNameRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct CreateDomainNameResponse {
     /// <p>The API mapping selection expression.</p>
     #[serde(rename = "ApiMappingSelectionExpression")]
@@ -649,7 +649,7 @@ pub struct CreateIntegrationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct CreateIntegrationResponse {
     /// <p>The connection ID.</p>
     #[serde(rename = "ConnectionId")]
@@ -820,7 +820,7 @@ pub struct CreateIntegrationResponseRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct CreateIntegrationResponseResponse {
     /// <p>Specifies how to handle response payload content type conversions. Supported
     /// values are CONVERT_TO_BINARY and CONVERT_TO_TEXT, with the
@@ -889,7 +889,7 @@ pub struct CreateModelRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct CreateModelResponse {
     /// <p>The content-type for the model, for example, "application/json".</p>
     #[serde(rename = "ContentType")]
@@ -972,7 +972,7 @@ pub struct CreateRouteRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct CreateRouteResponse {
     /// <p>Specifies whether an API key is required for this route.</p>
     #[serde(rename = "ApiKeyRequired")]
@@ -1062,7 +1062,7 @@ pub struct CreateRouteResponseRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct CreateRouteResponseResponse {
     /// <p>Represents the model selection expression of a route response.</p>
     #[serde(rename = "ModelSelectionExpression")]
@@ -1131,7 +1131,7 @@ pub struct CreateStageRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct CreateStageResponse {
     /// <p>Settings for logging access in this stage.</p>
     #[serde(rename = "AccessLogSettings")]
@@ -1296,7 +1296,7 @@ pub struct DeleteStageRequest {
 /// Deployment must be associated with a Stage for it to be
 /// callable over the internet.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct Deployment {
     /// <p>The date and time when the Deployment resource was created.</p>
     #[serde(rename = "CreatedDate")]
@@ -1323,7 +1323,7 @@ pub struct Deployment {
 
 /// <p>Represents a domain name.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DomainName {
     /// <p>The API mapping selection expression.</p>
     #[serde(rename = "ApiMappingSelectionExpression")]
@@ -1397,7 +1397,7 @@ pub struct GetApiMappingRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct GetApiMappingResponse {
     /// <p>The API identifier.</p>
     #[serde(rename = "ApiId")]
@@ -1434,7 +1434,7 @@ pub struct GetApiMappingsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct GetApiMappingsResponse {
     /// <p>The elements from this collection.</p>
     #[serde(rename = "Items")]
@@ -1455,7 +1455,7 @@ pub struct GetApiRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct GetApiResponse {
     /// <p>The URI of the API, of the form {api-id}.execute-api.{region}.amazonaws.com. The
     /// stage name is typically appended to this URI to form a complete path to a deployed
@@ -1524,7 +1524,7 @@ pub struct GetApisRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct GetApisResponse {
     /// <p>The elements from this collection.</p>
     #[serde(rename = "Items")]
@@ -1548,7 +1548,7 @@ pub struct GetAuthorizerRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct GetAuthorizerResponse {
     /// <p>Specifies the required credentials as an IAM role for API Gateway to invoke the
     /// authorizer. To specify an IAM role for API Gateway to assume, use the role's Amazon
@@ -1638,7 +1638,7 @@ pub struct GetAuthorizersRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct GetAuthorizersResponse {
     /// <p>The elements from this collection.</p>
     #[serde(rename = "Items")]
@@ -1662,7 +1662,7 @@ pub struct GetDeploymentRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct GetDeploymentResponse {
     /// <p>The date and time when the Deployment resource was created.</p>
     #[serde(rename = "CreatedDate")]
@@ -1704,7 +1704,7 @@ pub struct GetDeploymentsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct GetDeploymentsResponse {
     /// <p>The elements from this collection.</p>
     #[serde(rename = "Items")]
@@ -1725,7 +1725,7 @@ pub struct GetDomainNameRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct GetDomainNameResponse {
     /// <p>The API mapping selection expression.</p>
     #[serde(rename = "ApiMappingSelectionExpression")]
@@ -1759,7 +1759,7 @@ pub struct GetDomainNamesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct GetDomainNamesResponse {
     /// <p>The elements from this collection.</p>
     #[serde(rename = "Items")]
@@ -1783,7 +1783,7 @@ pub struct GetIntegrationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct GetIntegrationResponse {
     /// <p>The connection ID.</p>
     #[serde(rename = "ConnectionId")]
@@ -1918,7 +1918,7 @@ pub struct GetIntegrationResponseRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct GetIntegrationResponseResponse {
     /// <p>Specifies how to handle response payload content type conversions. Supported
     /// values are CONVERT_TO_BINARY and CONVERT_TO_TEXT, with the
@@ -1984,7 +1984,7 @@ pub struct GetIntegrationResponsesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct GetIntegrationResponsesResponse {
     /// <p>The elements from this collection.</p>
     #[serde(rename = "Items")]
@@ -2014,7 +2014,7 @@ pub struct GetIntegrationsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct GetIntegrationsResponse {
     /// <p>The elements from this collection.</p>
     #[serde(rename = "Items")]
@@ -2038,7 +2038,7 @@ pub struct GetModelRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct GetModelResponse {
     /// <p>The content-type for the model, for example, "application/json".</p>
     #[serde(rename = "ContentType")]
@@ -2074,7 +2074,7 @@ pub struct GetModelTemplateRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct GetModelTemplateResponse {
     /// <p>The template value.</p>
     #[serde(rename = "Value")]
@@ -2099,7 +2099,7 @@ pub struct GetModelsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct GetModelsResponse {
     /// <p>The elements from this collection.</p>
     #[serde(rename = "Items")]
@@ -2123,7 +2123,7 @@ pub struct GetRouteRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct GetRouteResponse {
     /// <p>Specifies whether an API key is required for this route.</p>
     #[serde(rename = "ApiKeyRequired")]
@@ -2201,7 +2201,7 @@ pub struct GetRouteResponseRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct GetRouteResponseResponse {
     /// <p>Represents the model selection expression of a route response.</p>
     #[serde(rename = "ModelSelectionExpression")]
@@ -2245,7 +2245,7 @@ pub struct GetRouteResponsesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct GetRouteResponsesResponse {
     /// <p>The elements from this collection.</p>
     #[serde(rename = "Items")]
@@ -2275,7 +2275,7 @@ pub struct GetRoutesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct GetRoutesResponse {
     /// <p>The elements from this collection.</p>
     #[serde(rename = "Items")]
@@ -2299,7 +2299,7 @@ pub struct GetStageRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct GetStageResponse {
     /// <p>Settings for logging access in this stage.</p>
     #[serde(rename = "AccessLogSettings")]
@@ -2367,7 +2367,7 @@ pub struct GetStagesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct GetStagesResponse {
     /// <p>The elements from this collection.</p>
     #[serde(rename = "Items")]
@@ -2387,7 +2387,7 @@ pub struct GetTagsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct GetTagsResponse {
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2396,7 +2396,7 @@ pub struct GetTagsResponse {
 
 /// <p>Represents an integration.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct Integration {
     /// <p>The connection ID.</p>
     #[serde(rename = "ConnectionId")]
@@ -2519,7 +2519,7 @@ pub struct Integration {
 
 /// <p>Represents an integration response.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct IntegrationResponse {
     /// <p>Specifies how to handle response payload content type conversions. Supported
     /// values are CONVERT_TO_BINARY and CONVERT_TO_TEXT, with the
@@ -2567,7 +2567,7 @@ pub struct IntegrationResponse {
 /// <p>Represents a data model for an API. See <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/models-mappings.html">Create Models and Mapping Templates for Request and Response
 /// Mappings</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct Model {
     /// <p>The content-type for the model, for example, "application/json".</p>
     #[serde(rename = "ContentType")]
@@ -2603,7 +2603,7 @@ pub struct ParameterConstraints {
 
 /// <p>Represents a route.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct Route {
     /// <p>Specifies whether an API key is required for this route.</p>
     #[serde(rename = "ApiKeyRequired")]
@@ -2668,7 +2668,7 @@ pub struct Route {
 
 /// <p>Represents a route response.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct RouteResponse {
     /// <p>Represents the model selection expression of a route response.</p>
     #[serde(rename = "ModelSelectionExpression")]
@@ -2722,7 +2722,7 @@ pub struct RouteSettings {
 
 /// <p>Represents an API stage.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct Stage {
     /// <p>Settings for logging access in this stage.</p>
     #[serde(rename = "AccessLogSettings")]
@@ -2784,7 +2784,7 @@ pub struct TagResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct TagResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -2819,7 +2819,7 @@ pub struct UpdateApiMappingRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct UpdateApiMappingResponse {
     /// <p>The API identifier.</p>
     #[serde(rename = "ApiId")]
@@ -2871,7 +2871,7 @@ pub struct UpdateApiRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct UpdateApiResponse {
     /// <p>The URI of the API, of the form {api-id}.execute-api.{region}.amazonaws.com. The
     /// stage name is typically appended to this URI to form a complete path to a deployed
@@ -3001,7 +3001,7 @@ pub struct UpdateAuthorizerRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct UpdateAuthorizerResponse {
     /// <p>Specifies the required credentials as an IAM role for API Gateway to invoke the
     /// authorizer. To specify an IAM role for API Gateway to assume, use the role's Amazon
@@ -3089,7 +3089,7 @@ pub struct UpdateDeploymentRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct UpdateDeploymentResponse {
     /// <p>The date and time when the Deployment resource was created.</p>
     #[serde(rename = "CreatedDate")]
@@ -3126,7 +3126,7 @@ pub struct UpdateDomainNameRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct UpdateDomainNameResponse {
     /// <p>The API mapping selection expression.</p>
     #[serde(rename = "ApiMappingSelectionExpression")]
@@ -3266,7 +3266,7 @@ pub struct UpdateIntegrationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct UpdateIntegrationResponse {
     /// <p>The connection ID.</p>
     #[serde(rename = "ConnectionId")]
@@ -3446,7 +3446,7 @@ pub struct UpdateIntegrationResponseRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct UpdateIntegrationResponseResponse {
     /// <p>Specifies how to handle response payload content type conversions. Supported
     /// values are CONVERT_TO_BINARY and CONVERT_TO_TEXT, with the
@@ -3520,7 +3520,7 @@ pub struct UpdateModelRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct UpdateModelResponse {
     /// <p>The content-type for the model, for example, "application/json".</p>
     #[serde(rename = "ContentType")]
@@ -3607,7 +3607,7 @@ pub struct UpdateRouteRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct UpdateRouteResponse {
     /// <p>Specifies whether an API key is required for this route.</p>
     #[serde(rename = "ApiKeyRequired")]
@@ -3701,7 +3701,7 @@ pub struct UpdateRouteResponseRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct UpdateRouteResponseResponse {
     /// <p>Represents the model selection expression of a route response.</p>
     #[serde(rename = "ModelSelectionExpression")]
@@ -3766,7 +3766,7 @@ pub struct UpdateStageRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct UpdateStageResponse {
     /// <p>Settings for logging access in this stage.</p>
     #[serde(rename = "AccessLogSettings")]

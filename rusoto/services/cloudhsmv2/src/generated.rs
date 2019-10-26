@@ -25,7 +25,7 @@ use rusoto_core::signature::SignedRequest;
 use serde_json;
 /// <p>Contains information about a backup of an AWS CloudHSM cluster.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct Backup {
     /// <p>The identifier (ID) of the backup.</p>
     #[serde(rename = "BackupId")]
@@ -62,7 +62,7 @@ pub struct Backup {
 
 /// <p>Contains one or more certificates or a certificate signing request (CSR).</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct Certificates {
     /// <p>The HSM hardware certificate issued (signed) by AWS CloudHSM.</p>
     #[serde(rename = "AwsHardwareCertificate")]
@@ -88,7 +88,7 @@ pub struct Certificates {
 
 /// <p>Contains information about an AWS CloudHSM cluster.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct Cluster {
     /// <p>The cluster's backup policy.</p>
     #[serde(rename = "BackupPolicy")]
@@ -155,7 +155,7 @@ pub struct CopyBackupToRegionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct CopyBackupToRegionResponse {
     /// <p>Information on the backup that will be copied to the destination region, including CreateTimestamp, SourceBackup, SourceCluster, and Source Region. CreateTimestamp of the destination backup will be the same as that of the source backup.</p> <p>You will need to use the <code>sourceBackupID</code> returned in this operation to use the <a>DescribeBackups</a> operation on the backup that will be copied to the destination region.</p>
     #[serde(rename = "DestinationBackup")]
@@ -178,7 +178,7 @@ pub struct CreateClusterRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct CreateClusterResponse {
     /// <p>Information about the cluster that was created.</p>
     #[serde(rename = "Cluster")]
@@ -201,7 +201,7 @@ pub struct CreateHsmRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct CreateHsmResponse {
     /// <p>Information about the HSM that was created.</p>
     #[serde(rename = "Hsm")]
@@ -217,7 +217,7 @@ pub struct DeleteBackupRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DeleteBackupResponse {
     /// <p>Information on the <code>Backup</code> object deleted.</p>
     #[serde(rename = "Backup")]
@@ -233,7 +233,7 @@ pub struct DeleteClusterRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DeleteClusterResponse {
     /// <p>Information about the cluster that was deleted.</p>
     #[serde(rename = "Cluster")]
@@ -261,7 +261,7 @@ pub struct DeleteHsmRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DeleteHsmResponse {
     /// <p>The identifier (ID) of the HSM that was deleted.</p>
     #[serde(rename = "HsmId")]
@@ -289,7 +289,7 @@ pub struct DescribeBackupsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DescribeBackupsResponse {
     /// <p>A list of backups.</p>
     #[serde(rename = "Backups")]
@@ -318,7 +318,7 @@ pub struct DescribeClustersRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DescribeClustersResponse {
     /// <p>A list of clusters.</p>
     #[serde(rename = "Clusters")]
@@ -331,7 +331,7 @@ pub struct DescribeClustersResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DestinationBackup {
     #[serde(rename = "CreateTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -349,7 +349,7 @@ pub struct DestinationBackup {
 
 /// <p>Contains information about a hardware security module (HSM) in an AWS CloudHSM cluster.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct Hsm {
     /// <p>The Availability Zone that contains the HSM.</p>
     #[serde(rename = "AvailabilityZone")]
@@ -398,7 +398,7 @@ pub struct InitializeClusterRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct InitializeClusterResponse {
     /// <p>The cluster's state.</p>
     #[serde(rename = "State")]
@@ -426,7 +426,7 @@ pub struct ListTagsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ListTagsResponse {
     /// <p>An opaque string that indicates that the response contains only a subset of tags. Use this value in a subsequent <code>ListTags</code> request to get more tags.</p>
     #[serde(rename = "NextToken")]
@@ -445,7 +445,7 @@ pub struct RestoreBackupRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct RestoreBackupResponse {
     /// <p>Information on the <code>Backup</code> object created.</p>
     #[serde(rename = "Backup")]
@@ -475,7 +475,7 @@ pub struct TagResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct TagResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -489,7 +489,7 @@ pub struct UntagResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
 /// Errors returned by CopyBackupToRegion

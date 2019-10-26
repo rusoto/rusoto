@@ -31,7 +31,7 @@ pub struct BatchGetNamedQueryInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct BatchGetNamedQueryOutput {
     /// <p>Information about the named query IDs submitted.</p>
     #[serde(rename = "NamedQueries")]
@@ -51,7 +51,7 @@ pub struct BatchGetQueryExecutionInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct BatchGetQueryExecutionOutput {
     /// <p>Information about a query execution.</p>
     #[serde(rename = "QueryExecutions")]
@@ -65,7 +65,7 @@ pub struct BatchGetQueryExecutionOutput {
 
 /// <p>Information about the columns in a query execution result.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ColumnInfo {
     /// <p>Indicates whether values in the column are case-sensitive.</p>
     #[serde(rename = "CaseSensitive")]
@@ -133,7 +133,7 @@ pub struct CreateNamedQueryInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct CreateNamedQueryOutput {
     /// <p>The unique ID of the query.</p>
     #[serde(rename = "NamedQueryId")]
@@ -161,12 +161,12 @@ pub struct CreateWorkGroupInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct CreateWorkGroupOutput {}
 
 /// <p>A piece of data (a field in the table).</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct Datum {
     /// <p>The value of the datum.</p>
     #[serde(rename = "VarCharValue")]
@@ -182,7 +182,7 @@ pub struct DeleteNamedQueryInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DeleteNamedQueryOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -197,7 +197,7 @@ pub struct DeleteWorkGroupInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DeleteWorkGroupOutput {}
 
 /// <p>If query results are encrypted in Amazon S3, indicates the encryption option used (for example, <code>SSE-KMS</code> or <code>CSE-KMS</code>) and key information.</p>
@@ -220,7 +220,7 @@ pub struct GetNamedQueryInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct GetNamedQueryOutput {
     /// <p>Information about the query.</p>
     #[serde(rename = "NamedQuery")]
@@ -236,7 +236,7 @@ pub struct GetQueryExecutionInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct GetQueryExecutionOutput {
     /// <p>Information about the query execution.</p>
     #[serde(rename = "QueryExecution")]
@@ -260,7 +260,7 @@ pub struct GetQueryResultsInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct GetQueryResultsOutput {
     /// <p>A token to be used by the next request if this request is truncated.</p>
     #[serde(rename = "NextToken")]
@@ -284,7 +284,7 @@ pub struct GetWorkGroupInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct GetWorkGroupOutput {
     /// <p>Information about the workgroup.</p>
     #[serde(rename = "WorkGroup")]
@@ -309,7 +309,7 @@ pub struct ListNamedQueriesInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ListNamedQueriesOutput {
     /// <p>The list of unique query IDs.</p>
     #[serde(rename = "NamedQueryIds")]
@@ -338,7 +338,7 @@ pub struct ListQueryExecutionsInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ListQueryExecutionsOutput {
     /// <p>A token to be used by the next request if this request is truncated.</p>
     #[serde(rename = "NextToken")]
@@ -366,7 +366,7 @@ pub struct ListTagsForResourceInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ListTagsForResourceOutput {
     /// <p>A token to be used by the next request if this request is truncated.</p>
     #[serde(rename = "NextToken")]
@@ -391,7 +391,7 @@ pub struct ListWorkGroupsInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ListWorkGroupsOutput {
     /// <p>A token to be used by the next request if this request is truncated.</p>
     #[serde(rename = "NextToken")]
@@ -405,7 +405,7 @@ pub struct ListWorkGroupsOutput {
 
 /// <p>A query, where <code>QueryString</code> is the list of SQL query statements that comprise the query.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct NamedQuery {
     /// <p>The database to which the query belongs.</p>
     #[serde(rename = "Database")]
@@ -432,7 +432,7 @@ pub struct NamedQuery {
 
 /// <p>Information about a single instance of a query execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct QueryExecution {
     /// <p>The SQL query statements which the query execution ran.</p>
     #[serde(rename = "Query")]
@@ -479,7 +479,7 @@ pub struct QueryExecutionContext {
 
 /// <p>The location of a manifest file that tracks file locations generated by the query, the amount of data scanned by the query, and the amount of time that it took the query to run.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct QueryExecutionStatistics {
     /// <p>The location and file name of a data manifest file. The manifest file is saved to the Athena query results location in Amazon S3. It tracks files that the query wrote to Amazon S3. If the query fails, the manifest file also tracks files that the query intended to write. The manifest is useful for identifying orphaned files resulting from a failed query. For more information, see <a href="https://docs.aws.amazon.com/athena/latest/ug/querying.html">Working with Query Output Files</a> in the <i>Amazon Athena User Guide</i>.</p>
     #[serde(rename = "DataManifestLocation")]
@@ -497,7 +497,7 @@ pub struct QueryExecutionStatistics {
 
 /// <p>The completion date, current state, submission time, and state change reason (if applicable) for the query execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct QueryExecutionStatus {
     /// <p>The date and time that the query completed.</p>
     #[serde(rename = "CompletionDateTime")]
@@ -553,7 +553,7 @@ pub struct ResultConfigurationUpdates {
 
 /// <p>The metadata and rows that comprise a query result set. The metadata describes the column structure and data types.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ResultSet {
     /// <p>The metadata that describes the column structure and data types of a table of query results.</p>
     #[serde(rename = "ResultSetMetadata")]
@@ -567,7 +567,7 @@ pub struct ResultSet {
 
 /// <p>The metadata that describes the column structure and data types of a table of query results. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ResultSetMetadata {
     /// <p>Information about the columns returned in a query result metadata.</p>
     #[serde(rename = "ColumnInfo")]
@@ -577,7 +577,7 @@ pub struct ResultSetMetadata {
 
 /// <p>The rows that comprise a query result table.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct Row {
     /// <p>The data that populates a row in a query result table.</p>
     #[serde(rename = "Data")]
@@ -609,7 +609,7 @@ pub struct StartQueryExecutionInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct StartQueryExecutionOutput {
     /// <p>The unique ID of the query that ran as a result of this request.</p>
     #[serde(rename = "QueryExecutionId")]
@@ -625,7 +625,7 @@ pub struct StopQueryExecutionInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct StopQueryExecutionOutput {}
 
 /// <p>A tag that you can add to a resource. A tag is a label that you assign to an AWS Athena resource (a workgroup). Each tag consists of a key and an optional value, both of which you define. Tags enable you to categorize workgroups in Athena, for example, by purpose, owner, or environment. Use a consistent set of tag keys to make it easier to search and filter workgroups in your account. The maximum tag key length is 128 Unicode characters in UTF-8. The maximum tag value length is 256 Unicode characters in UTF-8. You can use letters and numbers representable in UTF-8, and the following characters: + - = . _ : / @. Tag keys and values are case-sensitive. Tag keys must be unique per resource. </p>
@@ -652,12 +652,12 @@ pub struct TagResourceInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct TagResourceOutput {}
 
 /// <p>Information about a named query ID that could not be processed.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct UnprocessedNamedQueryId {
     /// <p>The error code returned when the processing request for the named query failed, if applicable.</p>
     #[serde(rename = "ErrorCode")]
@@ -675,7 +675,7 @@ pub struct UnprocessedNamedQueryId {
 
 /// <p>Describes a query execution that failed to process.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct UnprocessedQueryExecutionId {
     /// <p>The error code returned when the query execution failed to process, if applicable.</p>
     #[serde(rename = "ErrorCode")]
@@ -702,7 +702,7 @@ pub struct UntagResourceInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct UntagResourceOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -725,12 +725,12 @@ pub struct UpdateWorkGroupInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct UpdateWorkGroupOutput {}
 
 /// <p>A workgroup, which contains a name, description, creation time, state, and other configuration, listed under <a>WorkGroup$Configuration</a>. Each workgroup enables you to isolate queries for you or your group of users from other queries in the same account, to configure the query results location and the encryption configuration (known as workgroup settings), to enable sending query metrics to Amazon CloudWatch, and to establish per-query data usage control limits for all queries in a workgroup. The workgroup settings override is specified in EnforceWorkGroupConfiguration (true/false) in the WorkGroupConfiguration. See <a>WorkGroupConfiguration$EnforceWorkGroupConfiguration</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct WorkGroup {
     /// <p>The configuration of the workgroup, which includes the location in Amazon S3 where query results are stored, the encryption configuration, if any, used for query results; whether the Amazon CloudWatch Metrics are enabled for the workgroup; whether workgroup settings override client-side settings; and the data usage limits for the amount of data scanned per query or per workgroup. The workgroup settings override is specified in EnforceWorkGroupConfiguration (true/false) in the WorkGroupConfiguration. See <a>WorkGroupConfiguration$EnforceWorkGroupConfiguration</a>.</p>
     #[serde(rename = "Configuration")]
@@ -809,7 +809,7 @@ pub struct WorkGroupConfigurationUpdates {
 
 /// <p>The summary information for the workgroup, which includes its name, state, description, and the date and time it was created.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct WorkGroupSummary {
     /// <p>The workgroup creation date and time.</p>
     #[serde(rename = "CreationTime")]

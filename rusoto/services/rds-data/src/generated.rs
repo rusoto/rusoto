@@ -63,7 +63,7 @@ pub struct BatchExecuteStatementRequest {
 /// <p>The response elements represent the output of a SQL statement over an array of
 /// data.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct BatchExecuteStatementResponse {
     /// <p>The execution results of each batch entry.</p>
     #[serde(rename = "updateResults")]
@@ -94,7 +94,7 @@ pub struct BeginTransactionRequest {
 /// <p>The response elements represent the output of a request to start a SQL
 /// transaction.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct BeginTransactionResponse {
     /// <p>The transaction ID of the transaction started by the call.</p>
     #[serde(rename = "transactionId")]
@@ -104,7 +104,7 @@ pub struct BeginTransactionResponse {
 
 /// <p>Contains the metadata for a column.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ColumnMetadata {
     /// <p>The type of the column.</p>
     #[serde(rename = "arrayBaseColumnType")]
@@ -180,7 +180,7 @@ pub struct CommitTransactionRequest {
 
 /// <p>The response elements represent the output of a commit transaction request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct CommitTransactionResponse {
     /// <p>The status of the commit operation.</p>
     #[serde(rename = "transactionStatus")]
@@ -219,7 +219,7 @@ pub struct ExecuteSqlRequest {
 /// <p>The response elements represent the output of a request to run one or more SQL
 /// statements.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ExecuteSqlResponse {
     /// <p>The results of the SQL statement or statements.</p>
     #[serde(rename = "sqlStatementResults")]
@@ -283,7 +283,7 @@ pub struct ExecuteStatementRequest {
 /// <p>The response elements represent the output of a request to run a SQL statement against
 /// a database.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ExecuteStatementResponse {
     /// <p>Metadata for the columns included in the results.</p>
     #[serde(rename = "columnMetadata")]
@@ -339,7 +339,7 @@ pub struct Field {
 
 /// <p>A record returned by a call.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct Record {
     /// <p>The values returned in the record.</p>
     #[serde(rename = "values")]
@@ -349,7 +349,7 @@ pub struct Record {
 
 /// <p>The result set returned by a SQL statement.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ResultFrame {
     /// <p>The records in the result set.</p>
     #[serde(rename = "records")]
@@ -363,7 +363,7 @@ pub struct ResultFrame {
 
 /// <p>The metadata of the result set returned by a SQL statement.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ResultSetMetadata {
     /// <p>The number of columns in the result set.</p>
     #[serde(rename = "columnCount")]
@@ -393,7 +393,7 @@ pub struct RollbackTransactionRequest {
 /// <p>The response elements represent the output of a request to perform a rollback of a
 /// transaction.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct RollbackTransactionResponse {
     /// <p>The status of the rollback operation.</p>
     #[serde(rename = "transactionStatus")]
@@ -416,7 +416,7 @@ pub struct SqlParameter {
 
 /// <p>The result of a SQL statement.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct SqlStatementResult {
     /// <p>The number of records updated by a SQL statement.</p>
     #[serde(rename = "numberOfRecordsUpdated")]
@@ -430,7 +430,7 @@ pub struct SqlStatementResult {
 
 /// <p>A structure value returned by a call.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct StructValue {
     /// <p>The attributes returned in the record.</p>
     #[serde(rename = "attributes")]
@@ -440,7 +440,7 @@ pub struct StructValue {
 
 /// <p>The response elements represent the results of an update.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct UpdateResult {
     /// <p>Values for fields generated during the request.</p>
     #[serde(rename = "generatedFields")]
@@ -450,7 +450,7 @@ pub struct UpdateResult {
 
 /// <p>Contains the value of a column.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct Value {
     /// <p>An array of column values.</p>
     #[serde(rename = "arrayValues")]

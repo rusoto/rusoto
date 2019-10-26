@@ -109,7 +109,7 @@ pub struct CreateEventBusRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct CreateEventBusResponse {
     /// <p>The ARN of the new event bus.</p>
     #[serde(rename = "EventBusArn")]
@@ -128,7 +128,7 @@ pub struct CreatePartnerEventSourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct CreatePartnerEventSourceResponse {
     /// <p>The ARN of the partner event source.</p>
     #[serde(rename = "EventSourceArn")]
@@ -184,7 +184,7 @@ pub struct DescribeEventBusRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DescribeEventBusResponse {
     /// <p>The Amazon Resource Name (ARN) of the account permitted to write events to the current account.</p>
     #[serde(rename = "Arn")]
@@ -208,7 +208,7 @@ pub struct DescribeEventSourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DescribeEventSourceResponse {
     /// <p>The ARN of the partner event source.</p>
     #[serde(rename = "Arn")]
@@ -244,7 +244,7 @@ pub struct DescribePartnerEventSourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DescribePartnerEventSourceResponse {
     /// <p>The ARN of the event source.</p>
     #[serde(rename = "Arn")]
@@ -268,7 +268,7 @@ pub struct DescribeRuleRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DescribeRuleResponse {
     /// <p>The Amazon Resource Name (ARN) of the rule.</p>
     #[serde(rename = "Arn")]
@@ -360,7 +360,7 @@ pub struct EnableRuleRequest {
 
 /// <p>An event bus receives events from a source and routes them to rules associated with that event bus. Your account's default event bus receives rules from AWS services. A custom event bus can receive rules from AWS services as well as your custom applications and services. A partner event bus receives events from an event source created by an SaaS partner. These events come from the partners services or applications.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct EventBus {
     /// <p>The ARN of the event bus.</p>
     #[serde(rename = "Arn")]
@@ -378,7 +378,7 @@ pub struct EventBus {
 
 /// <p>A partner event source is created by an SaaS partner. If a customer creates a partner event bus that matches this event source, that AWS account can receive events from the partner's applications or services.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct EventSource {
     /// <p>The ARN of the event source.</p>
     #[serde(rename = "Arn")]
@@ -443,7 +443,7 @@ pub struct ListEventBusesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ListEventBusesResponse {
     /// <p>This list of event buses.</p>
     #[serde(rename = "EventBuses")]
@@ -472,7 +472,7 @@ pub struct ListEventSourcesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ListEventSourcesResponse {
     /// <p>The list of event sources.</p>
     #[serde(rename = "EventSources")]
@@ -500,7 +500,7 @@ pub struct ListPartnerEventSourceAccountsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ListPartnerEventSourceAccountsResponse {
     /// <p>A token you can use in a subsequent operation to retrieve the next set of results.</p>
     #[serde(rename = "NextToken")]
@@ -528,7 +528,7 @@ pub struct ListPartnerEventSourcesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ListPartnerEventSourcesResponse {
     /// <p>A token you can use in a subsequent operation to retrieve the next set of results.</p>
     #[serde(rename = "NextToken")]
@@ -560,7 +560,7 @@ pub struct ListRuleNamesByTargetRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ListRuleNamesByTargetResponse {
     /// <p>Indicates whether there are additional results to retrieve. If there are no more results, the value is null.</p>
     #[serde(rename = "NextToken")]
@@ -593,7 +593,7 @@ pub struct ListRulesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ListRulesResponse {
     /// <p>Indicates whether there are additional results to retrieve. If there are no more results, the value is null.</p>
     #[serde(rename = "NextToken")]
@@ -613,7 +613,7 @@ pub struct ListTagsForResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
     /// <p>The list of tag keys and values associated with the rule that you specified.</p>
     #[serde(rename = "Tags")]
@@ -641,7 +641,7 @@ pub struct ListTargetsByRuleRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ListTargetsByRuleResponse {
     /// <p>Indicates whether there are additional results to retrieve. If there are no more results, the value is null.</p>
     #[serde(rename = "NextToken")]
@@ -664,7 +664,7 @@ pub struct NetworkConfiguration {
 
 /// <p>A partner event source is created by an SaaS partner. If a customer creates a partner event bus that matches this event source, that AWS account can receive events from the partner's applications or services.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct PartnerEventSource {
     /// <p>The ARN of the partner event source.</p>
     #[serde(rename = "Arn")]
@@ -678,7 +678,7 @@ pub struct PartnerEventSource {
 
 /// <p>The AWS account that a partner event source has been offered to.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct PartnerEventSourceAccount {
     /// <p>The AWS account ID that the partner event source was offered to.</p>
     #[serde(rename = "Account")]
@@ -735,7 +735,7 @@ pub struct PutEventsRequestEntry {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct PutEventsResponse {
     /// <p>The successfully and unsuccessfully ingested events results. If the ingestion was successful, the entry has the event ID in it. Otherwise, you can use the error code and error message to identify the problem with the entry.</p>
     #[serde(rename = "Entries")]
@@ -749,7 +749,7 @@ pub struct PutEventsResponse {
 
 /// <p>Represents an event that failed to be submitted.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct PutEventsResultEntry {
     /// <p>The error code that indicates why the event submission failed.</p>
     #[serde(rename = "ErrorCode")]
@@ -798,7 +798,7 @@ pub struct PutPartnerEventsRequestEntry {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct PutPartnerEventsResponse {
     /// <p>The list of events from this operation that were successfully written to the partner event bus.</p>
     #[serde(rename = "Entries")]
@@ -812,7 +812,7 @@ pub struct PutPartnerEventsResponse {
 
 /// <p>Represents an event that a partner tried to generate but failed.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct PutPartnerEventsResultEntry {
     /// <p>The error code that indicates why the event submission failed.</p>
     #[serde(rename = "ErrorCode")]
@@ -885,7 +885,7 @@ pub struct PutRuleRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct PutRuleResponse {
     /// <p>The Amazon Resource Name (ARN) of the rule.</p>
     #[serde(rename = "RuleArn")]
@@ -908,7 +908,7 @@ pub struct PutTargetsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct PutTargetsResponse {
     /// <p>The failed target entries.</p>
     #[serde(rename = "FailedEntries")]
@@ -922,7 +922,7 @@ pub struct PutTargetsResponse {
 
 /// <p>Represents a target that failed to be added to a rule.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct PutTargetsResultEntry {
     /// <p>The error code that indicates why the target addition failed. If the value is <code>ConcurrentModificationException</code>, too many requests were made at the same time.</p>
     #[serde(rename = "ErrorCode")]
@@ -968,7 +968,7 @@ pub struct RemoveTargetsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct RemoveTargetsResponse {
     /// <p>The failed target entries.</p>
     #[serde(rename = "FailedEntries")]
@@ -982,7 +982,7 @@ pub struct RemoveTargetsResponse {
 
 /// <p>Represents a target that failed to be removed from a rule.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct RemoveTargetsResultEntry {
     /// <p>The error code that indicates why the target removal failed. If the value is <code>ConcurrentModificationException</code>, too many requests were made at the same time.</p>
     #[serde(rename = "ErrorCode")]
@@ -1000,7 +1000,7 @@ pub struct RemoveTargetsResultEntry {
 
 /// <p>Contains information about a rule in Amazon EventBridge.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct Rule {
     /// <p>The Amazon Resource Name (ARN) of the rule.</p>
     #[serde(rename = "Arn")]
@@ -1090,7 +1090,7 @@ pub struct TagResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct TagResourceResponse {}
 
 /// <p>Targets are the resources to be invoked when a rule is triggered. For a complete list of services and resources that can be set as a target, see <a>PutTargets</a>.</p> <p>If you're setting the event bus of another account as the target and that account granted permission to your account through an organization instead of directly by the account ID, you must specify a <code>RoleArn</code> with proper permissions in the <code>Target</code> structure. For more information, see <a href="https://docs.aws.amazon.com/eventbridge/latest/userguide/eventbridge-cross-account-event-delivery.html">Sending and Receiving Events Between AWS Accounts</a> in the <i>Amazon EventBridge User Guide</i>.</p>
@@ -1151,7 +1151,7 @@ pub struct TestEventPatternRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct TestEventPatternResponse {
     /// <p>Indicates whether the event matches the event pattern.</p>
     #[serde(rename = "Result")]
@@ -1170,7 +1170,7 @@ pub struct UntagResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
 /// Errors returned by ActivateEventSource

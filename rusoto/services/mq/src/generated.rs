@@ -26,7 +26,7 @@ use rusoto_core::signature::SignedRequest;
 use serde_json;
 /// <p>Name of the availability zone.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct AvailabilityZone {
     /// <p>Id for the availability zone.</p>
     #[serde(rename = "Name")]
@@ -36,7 +36,7 @@ pub struct AvailabilityZone {
 
 /// <p>Types of broker engines.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct BrokerEngineType {
     /// <p>The type of broker engine.</p>
     #[serde(rename = "EngineType")]
@@ -50,7 +50,7 @@ pub struct BrokerEngineType {
 
 /// <p>Returns information about all brokers.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct BrokerInstance {
     /// <p>The URL of the broker&#39;s ActiveMQ Web Console.</p>
     #[serde(rename = "ConsoleURL")]
@@ -68,7 +68,7 @@ pub struct BrokerInstance {
 
 /// <p>Option for host instance type.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct BrokerInstanceOption {
     /// <p>The list of available az.</p>
     #[serde(rename = "AvailabilityZones")]
@@ -90,7 +90,7 @@ pub struct BrokerInstanceOption {
 
 /// <p>The Amazon Resource Name (ARN) of the broker.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct BrokerSummary {
     /// <p>The Amazon Resource Name (ARN) of the broker.</p>
     #[serde(rename = "BrokerArn")]
@@ -124,7 +124,7 @@ pub struct BrokerSummary {
 
 /// <p>Returns information about all configurations.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct Configuration {
     /// <p>Required. The ARN of the configuration.</p>
     #[serde(rename = "Arn")]
@@ -179,7 +179,7 @@ pub struct ConfigurationId {
 
 /// <p>Returns information about the specified configuration revision.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ConfigurationRevision {
     /// <p>Required. The date and time of the configuration revision.</p>
     #[serde(rename = "Created")]
@@ -197,7 +197,7 @@ pub struct ConfigurationRevision {
 
 /// <p>Broker configuration information</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct Configurations {
     /// <p>The current configuration of the broker.</p>
     #[serde(rename = "Current")]
@@ -283,7 +283,7 @@ pub struct CreateBrokerRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct CreateBrokerResponse {
     /// <p>The Amazon Resource Name (ARN) of the broker.</p>
     #[serde(rename = "BrokerArn")]
@@ -317,7 +317,7 @@ pub struct CreateConfigurationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct CreateConfigurationResponse {
     /// <p>Required. The Amazon Resource Name (ARN) of the configuration.</p>
     #[serde(rename = "Arn")]
@@ -377,7 +377,7 @@ pub struct CreateUserRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct CreateUserResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -388,7 +388,7 @@ pub struct DeleteBrokerRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DeleteBrokerResponse {
     /// <p>The unique ID that Amazon MQ generates for the broker.</p>
     #[serde(rename = "BrokerId")]
@@ -417,7 +417,7 @@ pub struct DeleteUserRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DeleteUserResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -437,7 +437,7 @@ pub struct DescribeBrokerEngineTypesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DescribeBrokerEngineTypesResponse {
     /// <p>List of available engine types and versions.</p>
     #[serde(rename = "BrokerEngineTypes")]
@@ -474,7 +474,7 @@ pub struct DescribeBrokerInstanceOptionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DescribeBrokerInstanceOptionsResponse {
     /// <p>List of available broker instance options.</p>
     #[serde(rename = "BrokerInstanceOptions")]
@@ -498,7 +498,7 @@ pub struct DescribeBrokerRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DescribeBrokerResponse {
     /// <p>Required. Enables automatic upgrades to new minor versions for brokers, as Apache releases the versions. The automatic upgrades occur during the maintenance window of the broker or after a manual broker reboot.</p>
     #[serde(rename = "AutoMinorVersionUpgrade")]
@@ -598,7 +598,7 @@ pub struct DescribeConfigurationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DescribeConfigurationResponse {
     /// <p>Required. The ARN of the configuration.</p>
     #[serde(rename = "Arn")]
@@ -649,7 +649,7 @@ pub struct DescribeConfigurationRevisionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DescribeConfigurationRevisionResponse {
     /// <p>Required. The unique ID that Amazon MQ generates for the configuration.</p>
     #[serde(rename = "ConfigurationId")]
@@ -680,7 +680,7 @@ pub struct DescribeUserRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DescribeUserResponse {
     /// <p>Required. The unique ID that Amazon MQ generates for the broker.</p>
     #[serde(rename = "BrokerId")]
@@ -718,7 +718,7 @@ pub struct EncryptionOptions {
 
 /// <p>Id of the engine version.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct EngineVersion {
     /// <p>Id for the version.</p>
     #[serde(rename = "Name")]
@@ -739,7 +739,7 @@ pub struct ListBrokersRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ListBrokersResponse {
     /// <p>A list of information about all brokers.</p>
     #[serde(rename = "BrokerSummaries")]
@@ -767,7 +767,7 @@ pub struct ListConfigurationRevisionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ListConfigurationRevisionsResponse {
     /// <p>The unique ID that Amazon MQ generates for the configuration.</p>
     #[serde(rename = "ConfigurationId")]
@@ -800,7 +800,7 @@ pub struct ListConfigurationsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ListConfigurationsResponse {
     /// <p>The list of all revisions for the specified configuration.</p>
     #[serde(rename = "Configurations")]
@@ -824,7 +824,7 @@ pub struct ListTagsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ListTagsResponse {
     /// <p>The key-value pair for the resource tag.</p>
     #[serde(rename = "Tags")]
@@ -848,7 +848,7 @@ pub struct ListUsersRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ListUsersResponse {
     /// <p>Required. The unique ID that Amazon MQ generates for the broker.</p>
     #[serde(rename = "BrokerId")]
@@ -883,7 +883,7 @@ pub struct Logs {
 
 /// <p>The list of information about logs currently enabled and pending to be deployed for the specified broker.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct LogsSummary {
     /// <p>Enables audit logging. Every user management action made using JMX or the ActiveMQ Web Console is logged.</p>
     #[serde(rename = "Audit")]
@@ -909,7 +909,7 @@ pub struct LogsSummary {
 
 /// <p>The list of information about logs to be enabled for the specified broker.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct PendingLogs {
     /// <p>Enables audit logging. Every user management action made using JMX or the ActiveMQ Web Console is logged.</p>
     #[serde(rename = "Audit")]
@@ -929,12 +929,12 @@ pub struct RebootBrokerRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct RebootBrokerResponse {}
 
 /// <p>Returns information about the XML element or attribute that was sanitized in the configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct SanitizationWarning {
     /// <p>The name of the XML attribute that has been sanitized.</p>
     #[serde(rename = "AttributeName")]
@@ -979,7 +979,7 @@ pub struct UpdateBrokerRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct UpdateBrokerResponse {
     /// <p>The new value of automatic upgrades to new minor version for brokers.</p>
     #[serde(rename = "AutoMinorVersionUpgrade")]
@@ -1024,7 +1024,7 @@ pub struct UpdateConfigurationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct UpdateConfigurationResponse {
     /// <p>Required. The Amazon Resource Name (ARN) of the configuration.</p>
     #[serde(rename = "Arn")]
@@ -1076,7 +1076,7 @@ pub struct UpdateUserRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct UpdateUserResponse {}
 
 /// <p>An ActiveMQ user associated with the broker.</p>
@@ -1102,7 +1102,7 @@ pub struct User {
 
 /// <p>Returns information about the status of the changes pending for the ActiveMQ user.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct UserPendingChanges {
     /// <p>Enables access to the the ActiveMQ Web Console for the ActiveMQ user.</p>
     #[serde(rename = "ConsoleAccess")]
@@ -1120,7 +1120,7 @@ pub struct UserPendingChanges {
 
 /// <p>Returns a list of all ActiveMQ users.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct UserSummary {
     /// <p>The type of change pending for the ActiveMQ user.</p>
     #[serde(rename = "PendingChange")]

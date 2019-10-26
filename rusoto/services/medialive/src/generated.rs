@@ -355,7 +355,7 @@ pub struct BatchScheduleActionCreateRequest {
 
 /// <p>List of actions that have been created in the schedule.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct BatchScheduleActionCreateResult {
     /// <p>List of actions that have been created in the schedule.</p>
     #[serde(rename = "ScheduleActions")]
@@ -372,7 +372,7 @@ pub struct BatchScheduleActionDeleteRequest {
 
 /// <p>List of actions that have been deleted from the schedule.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct BatchScheduleActionDeleteResult {
     /// <p>List of actions that have been deleted from the schedule.</p>
     #[serde(rename = "ScheduleActions")]
@@ -397,7 +397,7 @@ pub struct BatchUpdateScheduleRequest {
 
 /// <p>Placeholder documentation for BatchUpdateScheduleResponse</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct BatchUpdateScheduleResponse {
     /// <p>Schedule actions created in the schedule.</p>
     #[serde(rename = "Creates")]
@@ -626,7 +626,7 @@ pub struct CaptionSelectorSettings {
 
 /// <p>Placeholder documentation for Channel</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct Channel {
     /// <p>The unique arn of the channel.</p>
     #[serde(rename = "Arn")]
@@ -691,7 +691,7 @@ pub struct Channel {
 
 /// <p>Placeholder documentation for ChannelEgressEndpoint</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ChannelEgressEndpoint {
     /// <p>Public IP of where a channel&#39;s output comes from</p>
     #[serde(rename = "SourceIp")]
@@ -701,7 +701,7 @@ pub struct ChannelEgressEndpoint {
 
 /// <p>Placeholder documentation for ChannelSummary</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ChannelSummary {
     /// <p>The unique arn of the channel.</p>
     #[serde(rename = "Arn")]
@@ -807,7 +807,7 @@ pub struct CreateChannelRequest {
 
 /// <p>Placeholder documentation for CreateChannelResponse</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct CreateChannelResponse {
     #[serde(rename = "Channel")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -864,7 +864,7 @@ pub struct CreateInputRequest {
 
 /// <p>Placeholder documentation for CreateInputResponse</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct CreateInputResponse {
     #[serde(rename = "Input")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -886,7 +886,7 @@ pub struct CreateInputSecurityGroupRequest {
 
 /// <p>Placeholder documentation for CreateInputSecurityGroupResponse</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct CreateInputSecurityGroupResponse {
     #[serde(rename = "SecurityGroup")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -913,7 +913,7 @@ pub struct DeleteChannelRequest {
 
 /// <p>Placeholder documentation for DeleteChannelResponse</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DeleteChannelResponse {
     /// <p>The unique arn of the channel.</p>
     #[serde(rename = "Arn")]
@@ -986,7 +986,7 @@ pub struct DeleteInputRequest {
 
 /// <p>Placeholder documentation for DeleteInputResponse</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DeleteInputResponse {}
 
 /// <p>Placeholder documentation for DeleteInputSecurityGroupRequest</p>
@@ -999,7 +999,7 @@ pub struct DeleteInputSecurityGroupRequest {
 
 /// <p>Placeholder documentation for DeleteInputSecurityGroupResponse</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DeleteInputSecurityGroupResponse {}
 
 /// <p>Placeholder documentation for DeleteReservationRequest</p>
@@ -1012,7 +1012,7 @@ pub struct DeleteReservationRequest {
 
 /// <p>Placeholder documentation for DeleteReservationResponse</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DeleteReservationResponse {
     /// <p>Unique reservation ARN, e.g. &#39;arn:aws:medialive:us-west-2:123456789012:reservation:1234567&#39;</p>
     #[serde(rename = "Arn")]
@@ -1098,7 +1098,7 @@ pub struct DeleteScheduleRequest {
 
 /// <p>Placeholder documentation for DeleteScheduleResponse</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DeleteScheduleResponse {}
 
 /// <p>Placeholder documentation for DeleteTagsRequest</p>
@@ -1121,7 +1121,7 @@ pub struct DescribeChannelRequest {
 
 /// <p>Placeholder documentation for DescribeChannelResponse</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DescribeChannelResponse {
     /// <p>The unique arn of the channel.</p>
     #[serde(rename = "Arn")]
@@ -1194,7 +1194,7 @@ pub struct DescribeInputRequest {
 
 /// <p>Placeholder documentation for DescribeInputResponse</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DescribeInputResponse {
     /// <p>The Unique ARN of the input (generated, immutable).</p>
     #[serde(rename = "Arn")]
@@ -1264,7 +1264,7 @@ pub struct DescribeInputSecurityGroupRequest {
 
 /// <p>Placeholder documentation for DescribeInputSecurityGroupResponse</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DescribeInputSecurityGroupResponse {
     /// <p>Unique ARN of Input Security Group</p>
     #[serde(rename = "Arn")]
@@ -1302,7 +1302,7 @@ pub struct DescribeOfferingRequest {
 
 /// <p>Placeholder documentation for DescribeOfferingResponse</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DescribeOfferingResponse {
     /// <p>Unique offering ARN, e.g. &#39;arn:aws:medialive:us-west-2:123456789012:offering:87654321&#39;</p>
     #[serde(rename = "Arn")]
@@ -1360,7 +1360,7 @@ pub struct DescribeReservationRequest {
 
 /// <p>Placeholder documentation for DescribeReservationResponse</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DescribeReservationResponse {
     /// <p>Unique reservation ARN, e.g. &#39;arn:aws:medialive:us-west-2:123456789012:reservation:1234567&#39;</p>
     #[serde(rename = "Arn")]
@@ -1452,7 +1452,7 @@ pub struct DescribeScheduleRequest {
 
 /// <p>Placeholder documentation for DescribeScheduleResponse</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DescribeScheduleResponse {
     /// <p>The next token; for use in pagination.</p>
     #[serde(rename = "NextToken")]
@@ -2536,7 +2536,7 @@ pub struct ImmediateModeScheduleActionStartSettings {}
 
 /// <p>Placeholder documentation for Input</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct Input {
     /// <p>The Unique ARN of the input (generated, immutable).</p>
     #[serde(rename = "Arn")]
@@ -2642,7 +2642,7 @@ pub struct InputClippingSettings {
 
 /// <p>The settings for a PUSH type input.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct InputDestination {
     /// <p>The system-generated static IP address of endpoint.
     /// It remains fixed for the lifetime of the input.</p>
@@ -2675,7 +2675,7 @@ pub struct InputDestinationRequest {
 
 /// <p>The properties for a VPC type input destination.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct InputDestinationVpc {
     /// <p>The availability zone of the Input destination.</p>
     #[serde(rename = "AvailabilityZone")]
@@ -2730,7 +2730,7 @@ pub struct InputLossBehavior {
 
 /// <p>An Input Security Group</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct InputSecurityGroup {
     /// <p>Unique ARN of Input Security Group</p>
     #[serde(rename = "Arn")]
@@ -2804,7 +2804,7 @@ pub struct InputSettings {
 
 /// <p>The settings for a PULL type input.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct InputSource {
     /// <p>The key used to extract the password from EC2 Parameter store.</p>
     #[serde(rename = "PasswordParam")]
@@ -2891,7 +2891,7 @@ pub struct InputVpcRequest {
 
 /// <p>Whitelist rule</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct InputWhitelistRule {
     /// <p>The IPv4 CIDR that&#39;s whitelisted.</p>
     #[serde(rename = "Cidr")]
@@ -2929,7 +2929,7 @@ pub struct ListChannelsRequest {
 
 /// <p>Placeholder documentation for ListChannelsResponse</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ListChannelsResponse {
     #[serde(rename = "Channels")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2952,7 +2952,7 @@ pub struct ListInputSecurityGroupsRequest {
 
 /// <p>Placeholder documentation for ListInputSecurityGroupsResponse</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ListInputSecurityGroupsResponse {
     /// <p>List of input security groups</p>
     #[serde(rename = "InputSecurityGroups")]
@@ -2976,7 +2976,7 @@ pub struct ListInputsRequest {
 
 /// <p>Placeholder documentation for ListInputsResponse</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ListInputsResponse {
     #[serde(rename = "Inputs")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3035,7 +3035,7 @@ pub struct ListOfferingsRequest {
 
 /// <p>Placeholder documentation for ListOfferingsResponse</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ListOfferingsResponse {
     /// <p>Token to retrieve the next page of results</p>
     #[serde(rename = "NextToken")]
@@ -3092,7 +3092,7 @@ pub struct ListReservationsRequest {
 
 /// <p>Placeholder documentation for ListReservationsResponse</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ListReservationsResponse {
     /// <p>Token to retrieve the next page of results</p>
     #[serde(rename = "NextToken")]
@@ -3113,7 +3113,7 @@ pub struct ListTagsForResourceRequest {
 
 /// <p>Placeholder documentation for ListTagsForResourceResponse</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3384,7 +3384,7 @@ pub struct M3u8Settings {
 
 /// <p>The settings for a MediaConnect Flow.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct MediaConnectFlow {
     /// <p>The unique ARN of the MediaConnect Flow being used as a source.</p>
     #[serde(rename = "FlowArn")]
@@ -3557,7 +3557,7 @@ pub struct NetworkInputSettings {
 
 /// <p>Reserved resources available for purchase</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct Offering {
     /// <p>Unique offering ARN, e.g. &#39;arn:aws:medialive:us-west-2:123456789012:offering:87654321&#39;</p>
     #[serde(rename = "Arn")]
@@ -3755,7 +3755,7 @@ pub struct PauseStateScheduleActionSettings {
 
 /// <p>Runtime details of a pipeline when a channel is running.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct PipelineDetail {
     /// <p>The name of the active input attachment currently being ingested by this pipeline.</p>
     #[serde(rename = "ActiveInputAttachmentName")]
@@ -3808,7 +3808,7 @@ pub struct PurchaseOfferingRequest {
 
 /// <p>Placeholder documentation for PurchaseOfferingResponse</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct PurchaseOfferingResponse {
     #[serde(rename = "Reservation")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3842,7 +3842,7 @@ pub struct RemixSettings {
 
 /// <p>Reserved resources available to use</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct Reservation {
     /// <p>Unique reservation ARN, e.g. &#39;arn:aws:medialive:us-west-2:123456789012:reservation:1234567&#39;</p>
     #[serde(rename = "Arn")]
@@ -3920,7 +3920,7 @@ pub struct Reservation {
 
 /// <p>Resource configuration (codec, resolution, bitrate, ...)</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ReservationResourceSpecification {
     /// <p>Channel class, e.g. &#39;STANDARD&#39;</p>
     #[serde(rename = "ChannelClass")]
@@ -4284,7 +4284,7 @@ pub struct StartChannelRequest {
 
 /// <p>Placeholder documentation for StartChannelResponse</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct StartChannelResponse {
     /// <p>The unique arn of the channel.</p>
     #[serde(rename = "Arn")]
@@ -4435,7 +4435,7 @@ pub struct StopChannelRequest {
 
 /// <p>Placeholder documentation for StopChannelResponse</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct StopChannelResponse {
     /// <p>The unique arn of the channel.</p>
     #[serde(rename = "Arn")]
@@ -4608,7 +4608,7 @@ pub struct UpdateChannelClassRequest {
 
 /// <p>Placeholder documentation for UpdateChannelClassResponse</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct UpdateChannelClassResponse {
     #[serde(rename = "Channel")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4652,7 +4652,7 @@ pub struct UpdateChannelRequest {
 
 /// <p>Placeholder documentation for UpdateChannelResponse</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct UpdateChannelResponse {
     #[serde(rename = "Channel")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4697,7 +4697,7 @@ pub struct UpdateInputRequest {
 
 /// <p>Placeholder documentation for UpdateInputResponse</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct UpdateInputResponse {
     #[serde(rename = "Input")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4722,7 +4722,7 @@ pub struct UpdateInputSecurityGroupRequest {
 
 /// <p>Placeholder documentation for UpdateInputSecurityGroupResponse</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct UpdateInputSecurityGroupResponse {
     #[serde(rename = "SecurityGroup")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4743,7 +4743,7 @@ pub struct UpdateReservationRequest {
 
 /// <p>Placeholder documentation for UpdateReservationResponse</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct UpdateReservationResponse {
     #[serde(rename = "Reservation")]
     #[serde(skip_serializing_if = "Option::is_none")]

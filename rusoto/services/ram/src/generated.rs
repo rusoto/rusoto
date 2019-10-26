@@ -36,7 +36,7 @@ pub struct AcceptResourceShareInvitationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct AcceptResourceShareInvitationResponse {
     /// <p>A unique, case-sensitive identifier that you provide to ensure the idempotency of the request.</p>
     #[serde(rename = "clientToken")]
@@ -68,7 +68,7 @@ pub struct AssociateResourceShareRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct AssociateResourceShareResponse {
     /// <p>A unique, case-sensitive identifier that you provide to ensure the idempotency of the request.</p>
     #[serde(rename = "clientToken")]
@@ -108,7 +108,7 @@ pub struct CreateResourceShareRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct CreateResourceShareResponse {
     /// <p>A unique, case-sensitive identifier that you provide to ensure the idempotency of the request.</p>
     #[serde(rename = "clientToken")]
@@ -132,7 +132,7 @@ pub struct DeleteResourceShareRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DeleteResourceShareResponse {
     /// <p>A unique, case-sensitive identifier that you provide to ensure the idempotency of the request.</p>
     #[serde(rename = "clientToken")]
@@ -164,7 +164,7 @@ pub struct DisassociateResourceShareRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DisassociateResourceShareResponse {
     /// <p>A unique, case-sensitive identifier that you provide to ensure the idempotency of the request.</p>
     #[serde(rename = "clientToken")]
@@ -180,7 +180,7 @@ pub struct DisassociateResourceShareResponse {
 pub struct EnableSharingWithAwsOrganizationRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct EnableSharingWithAwsOrganizationResponse {
     /// <p>Indicates whether the request succeeded.</p>
     #[serde(rename = "returnValue")]
@@ -208,7 +208,7 @@ pub struct GetResourcePoliciesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct GetResourcePoliciesResponse {
     /// <p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
     #[serde(rename = "nextToken")]
@@ -252,7 +252,7 @@ pub struct GetResourceShareAssociationsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct GetResourceShareAssociationsResponse {
     /// <p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
     #[serde(rename = "nextToken")]
@@ -285,7 +285,7 @@ pub struct GetResourceShareInvitationsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct GetResourceShareInvitationsResponse {
     /// <p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
     #[serde(rename = "nextToken")]
@@ -329,7 +329,7 @@ pub struct GetResourceSharesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct GetResourceSharesResponse {
     /// <p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
     #[serde(rename = "nextToken")]
@@ -373,7 +373,7 @@ pub struct ListPrincipalsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ListPrincipalsResponse {
     /// <p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
     #[serde(rename = "nextToken")]
@@ -417,7 +417,7 @@ pub struct ListResourcesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ListResourcesResponse {
     /// <p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
     #[serde(rename = "nextToken")]
@@ -431,7 +431,7 @@ pub struct ListResourcesResponse {
 
 /// <p>Describes a principal for use with AWS Resource Access Manager.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct Principal {
     /// <p>The time when the principal was associated with the resource share.</p>
     #[serde(rename = "creationTime")]
@@ -467,7 +467,7 @@ pub struct RejectResourceShareInvitationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct RejectResourceShareInvitationResponse {
     /// <p>A unique, case-sensitive identifier that you provide to ensure the idempotency of the request.</p>
     #[serde(rename = "clientToken")]
@@ -481,7 +481,7 @@ pub struct RejectResourceShareInvitationResponse {
 
 /// <p>Describes a resource associated with a resource share.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct Resource {
     /// <p>The Amazon Resource Name (ARN) of the resource.</p>
     #[serde(rename = "arn")]
@@ -515,7 +515,7 @@ pub struct Resource {
 
 /// <p>Describes a resource share.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ResourceShare {
     /// <p>Indicates whether principals outside your organization can be associated with a resource share.</p>
     #[serde(rename = "allowExternalPrincipals")]
@@ -557,7 +557,7 @@ pub struct ResourceShare {
 
 /// <p>Describes an association with a resource share.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ResourceShareAssociation {
     /// <p>The associated entity. For resource associations, this is the ARN of the resource. For principal associations, this is the ID of an AWS account or the ARN of an OU or organization from AWS Organizations.</p>
     #[serde(rename = "associatedEntity")]
@@ -595,7 +595,7 @@ pub struct ResourceShareAssociation {
 
 /// <p>Describes an invitation to join a resource share.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ResourceShareInvitation {
     /// <p>The date and time when the invitation was sent.</p>
     #[serde(rename = "invitationTimestamp")]
@@ -668,7 +668,7 @@ pub struct TagResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct TagResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -682,7 +682,7 @@ pub struct UntagResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -705,7 +705,7 @@ pub struct UpdateResourceShareRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct UpdateResourceShareResponse {
     /// <p>A unique, case-sensitive identifier that you provide to ensure the idempotency of the request.</p>
     #[serde(rename = "clientToken")]

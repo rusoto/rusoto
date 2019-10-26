@@ -36,7 +36,7 @@ pub struct BatchMeterUsageRequest {
 
 /// <p>Contains the UsageRecords processed by BatchMeterUsage and any records that have failed due to transient error.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct BatchMeterUsageResult {
     /// <p>Contains all UsageRecords processed by BatchMeterUsage. These records were either honored by AWS Marketplace Metering Service or were invalid.</p>
     #[serde(rename = "Results")]
@@ -70,7 +70,7 @@ pub struct MeterUsageRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct MeterUsageResult {
     /// <p>Metering record id.</p>
     #[serde(rename = "MeteringRecordId")]
@@ -93,7 +93,7 @@ pub struct RegisterUsageRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct RegisterUsageResult {
     /// <p>(Optional) Only included when public key version has expired</p>
     #[serde(rename = "PublicKeyRotationTimestamp")]
@@ -115,7 +115,7 @@ pub struct ResolveCustomerRequest {
 
 /// <p>The result of the ResolveCustomer operation. Contains the CustomerIdentifier and product code.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ResolveCustomerResult {
     /// <p>The CustomerIdentifier is used to identify an individual customer in your application. Calls to BatchMeterUsage require CustomerIdentifiers for each UsageRecord.</p>
     #[serde(rename = "CustomerIdentifier")]
@@ -147,7 +147,7 @@ pub struct UsageRecord {
 
 /// <p>A UsageRecordResult indicates the status of a given UsageRecord processed by BatchMeterUsage.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct UsageRecordResult {
     /// <p>The MeteringRecordId is a unique identifier for this metering event.</p>
     #[serde(rename = "MeteringRecordId")]

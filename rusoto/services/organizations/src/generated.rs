@@ -31,7 +31,7 @@ pub struct AcceptHandshakeRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct AcceptHandshakeResponse {
     /// <p>A structure that contains details about the accepted handshake.</p>
     #[serde(rename = "Handshake")]
@@ -41,7 +41,7 @@ pub struct AcceptHandshakeResponse {
 
 /// <p>Contains information about an AWS account that is a member of an organization.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct Account {
     /// <p>The Amazon Resource Name (ARN) of the account.</p> <p>For more information about ARNs in Organizations, see <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_permissions.html#orgs-permissions-arns">ARN Formats Supported by Organizations</a> in the <i>AWS Organizations User Guide</i>.</p>
     #[serde(rename = "Arn")]
@@ -91,7 +91,7 @@ pub struct CancelHandshakeRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct CancelHandshakeResponse {
     /// <p>A structure that contains details about the handshake that you canceled.</p>
     #[serde(rename = "Handshake")]
@@ -101,7 +101,7 @@ pub struct CancelHandshakeResponse {
 
 /// <p>Contains a list of child entities, either OUs or accounts.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct Child {
     /// <p><p>The unique identifier (ID) of this child entity.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> for a child ID string requires one of the following:</p> <ul> <li> <p>Account: a string that consists of exactly 12 digits.</p> </li> <li> <p>Organizational unit (OU): a string that begins with &quot;ou-&quot; followed by from 4 to 32 lower-case letters or digits (the ID of the root that contains the OU) followed by a second &quot;-&quot; dash and from 8 to 32 additional lower-case letters or digits.</p> </li> </ul></p>
     #[serde(rename = "Id")]
@@ -132,7 +132,7 @@ pub struct CreateAccountRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct CreateAccountResponse {
     /// <p>A structure that contains details about the request to create an account. This response structure might not be fully populated when you first receive it because account creation is an asynchronous process. You can pass the returned <code>CreateAccountStatus</code> ID as a parameter to <a>DescribeCreateAccountStatus</a> to get status about the progress of the request at later times. You can also check the AWS CloudTrail log for the <code>CreateAccountResult</code> event. For more information, see <a href="http://docs.aws.amazon.com/organizations/latest/userguide/orgs_monitoring.html">Monitoring the Activity in Your Organization</a> in the <i>AWS Organizations User Guide</i>.</p>
     #[serde(rename = "CreateAccountStatus")]
@@ -142,7 +142,7 @@ pub struct CreateAccountResponse {
 
 /// <p>Contains the status about a <a>CreateAccount</a> or <a>CreateGovCloudAccount</a> request to create an AWS account or an AWS GovCloud (US) account in an organization.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct CreateAccountStatus {
     /// <p>If the account was created successfully, the unique identifier (ID) of the new account.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> for an account ID string requires exactly 12 digits.</p>
     #[serde(rename = "AccountId")]
@@ -197,7 +197,7 @@ pub struct CreateGovCloudAccountRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct CreateGovCloudAccountResponse {
     #[serde(rename = "CreateAccountStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -213,7 +213,7 @@ pub struct CreateOrganizationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct CreateOrganizationResponse {
     /// <p>A structure that contains details about the newly created organization.</p>
     #[serde(rename = "Organization")]
@@ -232,7 +232,7 @@ pub struct CreateOrganizationalUnitRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct CreateOrganizationalUnitResponse {
     /// <p>A structure that contains details about the newly created OU.</p>
     #[serde(rename = "OrganizationalUnit")]
@@ -257,7 +257,7 @@ pub struct CreatePolicyRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct CreatePolicyResponse {
     /// <p>A structure that contains details about the newly created policy.</p>
     #[serde(rename = "Policy")]
@@ -273,7 +273,7 @@ pub struct DeclineHandshakeRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DeclineHandshakeResponse {
     /// <p>A structure that contains details about the declined handshake. The state is updated to show the value <code>DECLINED</code>.</p>
     #[serde(rename = "Handshake")]
@@ -303,7 +303,7 @@ pub struct DescribeAccountRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DescribeAccountResponse {
     /// <p>A structure that contains information about the requested account.</p>
     #[serde(rename = "Account")]
@@ -319,7 +319,7 @@ pub struct DescribeCreateAccountStatusRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DescribeCreateAccountStatusResponse {
     /// <p>A structure that contains the current status of an account creation request.</p>
     #[serde(rename = "CreateAccountStatus")]
@@ -335,7 +335,7 @@ pub struct DescribeHandshakeRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DescribeHandshakeResponse {
     /// <p>A structure that contains information about the specified handshake.</p>
     #[serde(rename = "Handshake")]
@@ -344,7 +344,7 @@ pub struct DescribeHandshakeResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DescribeOrganizationResponse {
     /// <p>A structure that contains information about the organization.</p>
     #[serde(rename = "Organization")]
@@ -360,7 +360,7 @@ pub struct DescribeOrganizationalUnitRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DescribeOrganizationalUnitResponse {
     /// <p>A structure that contains details about the specified OU.</p>
     #[serde(rename = "OrganizationalUnit")]
@@ -376,7 +376,7 @@ pub struct DescribePolicyRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DescribePolicyResponse {
     /// <p>A structure that contains details about the specified policy.</p>
     #[serde(rename = "Policy")]
@@ -412,7 +412,7 @@ pub struct DisablePolicyTypeRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DisablePolicyTypeResponse {
     /// <p>A structure that shows the root with the updated list of enabled policy types.</p>
     #[serde(rename = "Root")]
@@ -431,7 +431,7 @@ pub struct EnableAWSServiceAccessRequest {
 pub struct EnableAllFeaturesRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct EnableAllFeaturesResponse {
     /// <p>A structure that contains details about the handshake created to support this request to enable all features in the organization.</p>
     #[serde(rename = "Handshake")]
@@ -450,7 +450,7 @@ pub struct EnablePolicyTypeRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct EnablePolicyTypeResponse {
     /// <p>A structure that shows the root with the updated list of enabled policy types.</p>
     #[serde(rename = "Root")]
@@ -460,7 +460,7 @@ pub struct EnablePolicyTypeResponse {
 
 /// <p>A structure that contains details of a service principal that is enabled to integrate with AWS Organizations.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct EnabledServicePrincipal {
     /// <p>The date that the service principal was enabled for integration with AWS Organizations.</p>
     #[serde(rename = "DateEnabled")]
@@ -474,7 +474,7 @@ pub struct EnabledServicePrincipal {
 
 /// <p>Contains information that must be exchanged to securely establish a relationship between two accounts (an <i>originator</i> and a <i>recipient</i>). For example, when a master account (the originator) invites another account (the recipient) to join its organization, the two accounts exchange information as a series of handshake requests and responses.</p> <p> <b>Note:</b> Handshakes that are CANCELED, ACCEPTED, or DECLINED show up in lists for only 30 days after entering that state After that they are deleted.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct Handshake {
     /// <p><p>The type of handshake, indicating what action occurs when the recipient accepts the handshake. The following handshake types are supported:</p> <ul> <li> <p> <b>INVITE</b>: This type of handshake represents a request to join an organization. It is always sent from the master account to only non-member accounts.</p> </li> <li> <p> <b>ENABLE<em>ALL</em>FEATURES</b>: This type of handshake represents a request to enable all features in an organization. It is always sent from the master account to only <i>invited</i> member accounts. Created accounts do not receive this because those accounts were created by the organization&#39;s master account and approval is inferred.</p> </li> <li> <p> <b>APPROVE<em>ALL</em>FEATURES</b>: This type of handshake is sent from the Organizations service when all member accounts have approved the <code>ENABLE<em>ALL</em>FEATURES</code> invitation. It is sent only to the master account and signals the master that it can finalize the process to enable all features.</p> </li> </ul></p>
     #[serde(rename = "Action")]
@@ -536,7 +536,7 @@ pub struct HandshakeParty {
 
 /// <p>Contains additional data that is needed to process a handshake.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct HandshakeResource {
     /// <p>When needed, contains an additional array of <code>HandshakeResource</code> objects.</p>
     #[serde(rename = "Resources")]
@@ -564,7 +564,7 @@ pub struct InviteAccountToOrganizationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct InviteAccountToOrganizationResponse {
     /// <p>A structure that contains details about the handshake that is created to support this invitation request.</p>
     #[serde(rename = "Handshake")]
@@ -585,7 +585,7 @@ pub struct ListAWSServiceAccessForOrganizationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ListAWSServiceAccessForOrganizationResponse {
     /// <p>A list of the service principals for the services that are enabled to integrate with your organization. Each principal is a structure that includes the name and the date that it was enabled for integration with AWS Organizations.</p>
     #[serde(rename = "EnabledServicePrincipals")]
@@ -613,7 +613,7 @@ pub struct ListAccountsForParentRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ListAccountsForParentResponse {
     /// <p>A list of the accounts in the specified root or OU.</p>
     #[serde(rename = "Accounts")]
@@ -638,7 +638,7 @@ pub struct ListAccountsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ListAccountsResponse {
     /// <p>A list of objects in the organization.</p>
     #[serde(rename = "Accounts")]
@@ -669,7 +669,7 @@ pub struct ListChildrenRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ListChildrenResponse {
     /// <p>The list of children of the specified parent container.</p>
     #[serde(rename = "Children")]
@@ -698,7 +698,7 @@ pub struct ListCreateAccountStatusRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ListCreateAccountStatusResponse {
     /// <p>A list of objects with details about the requests. Certain elements, such as the accountId number, are present in the output only after the account has been successfully created.</p>
     #[serde(rename = "CreateAccountStatuses")]
@@ -727,7 +727,7 @@ pub struct ListHandshakesForAccountRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ListHandshakesForAccountResponse {
     /// <p>A list of <a>Handshake</a> objects with details about each of the handshakes that is associated with the specified account.</p>
     #[serde(rename = "Handshakes")]
@@ -756,7 +756,7 @@ pub struct ListHandshakesForOrganizationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ListHandshakesForOrganizationResponse {
     /// <p>A list of <a>Handshake</a> objects with details about each of the handshakes that are associated with an organization.</p>
     #[serde(rename = "Handshakes")]
@@ -784,7 +784,7 @@ pub struct ListOrganizationalUnitsForParentRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ListOrganizationalUnitsForParentResponse {
     /// <p>If present, this value indicates that there is more output available than is included in the current response. Use this value in the <code>NextToken</code> request parameter in a subsequent call to the operation to get the next part of the output. You should repeat this until the <code>NextToken</code> response element comes back as <code>null</code>.</p>
     #[serde(rename = "NextToken")]
@@ -812,7 +812,7 @@ pub struct ListParentsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ListParentsResponse {
     /// <p>If present, this value indicates that there is more output available than is included in the current response. Use this value in the <code>NextToken</code> request parameter in a subsequent call to the operation to get the next part of the output. You should repeat this until the <code>NextToken</code> response element comes back as <code>null</code>.</p>
     #[serde(rename = "NextToken")]
@@ -843,7 +843,7 @@ pub struct ListPoliciesForTargetRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ListPoliciesForTargetResponse {
     /// <p>If present, this value indicates that there is more output available than is included in the current response. Use this value in the <code>NextToken</code> request parameter in a subsequent call to the operation to get the next part of the output. You should repeat this until the <code>NextToken</code> response element comes back as <code>null</code>.</p>
     #[serde(rename = "NextToken")]
@@ -871,7 +871,7 @@ pub struct ListPoliciesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ListPoliciesResponse {
     /// <p>If present, this value indicates that there is more output available than is included in the current response. Use this value in the <code>NextToken</code> request parameter in a subsequent call to the operation to get the next part of the output. You should repeat this until the <code>NextToken</code> response element comes back as <code>null</code>.</p>
     #[serde(rename = "NextToken")]
@@ -896,7 +896,7 @@ pub struct ListRootsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ListRootsResponse {
     /// <p>If present, this value indicates that there is more output available than is included in the current response. Use this value in the <code>NextToken</code> request parameter in a subsequent call to the operation to get the next part of the output. You should repeat this until the <code>NextToken</code> response element comes back as <code>null</code>.</p>
     #[serde(rename = "NextToken")]
@@ -920,7 +920,7 @@ pub struct ListTagsForResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
     /// <p>If present, this value indicates that there is more output available than is included in the current response. Use this value in the <code>NextToken</code> request parameter in a subsequent call to the operation to get the next part of the output. You should repeat this until the <code>NextToken</code> response element comes back as <code>null</code>.</p>
     #[serde(rename = "NextToken")]
@@ -948,7 +948,7 @@ pub struct ListTargetsForPolicyRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ListTargetsForPolicyResponse {
     /// <p>If present, this value indicates that there is more output available than is included in the current response. Use this value in the <code>NextToken</code> request parameter in a subsequent call to the operation to get the next part of the output. You should repeat this until the <code>NextToken</code> response element comes back as <code>null</code>.</p>
     #[serde(rename = "NextToken")]
@@ -975,7 +975,7 @@ pub struct MoveAccountRequest {
 
 /// <p>Contains details about an organization. An organization is a collection of accounts that are centrally managed together using consolidated billing, organized hierarchically with organizational units (OUs), and controlled with policies .</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct Organization {
     /// <p>The Amazon Resource Name (ARN) of an organization.</p> <p>For more information about ARNs in Organizations, see <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_permissions.html#orgs-permissions-arns">ARN Formats Supported by Organizations</a> in the <i>AWS Organizations User Guide</i>.</p>
     #[serde(rename = "Arn")]
@@ -1009,7 +1009,7 @@ pub struct Organization {
 
 /// <p>Contains details about an organizational unit (OU). An OU is a container of AWS accounts within a root of an organization. Policies that are attached to an OU apply to all accounts contained in that OU and in any child OUs.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct OrganizationalUnit {
     /// <p>The Amazon Resource Name (ARN) of this OU.</p> <p>For more information about ARNs in Organizations, see <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_permissions.html#orgs-permissions-arns">ARN Formats Supported by Organizations</a> in the <i>AWS Organizations User Guide</i>.</p>
     #[serde(rename = "Arn")]
@@ -1027,7 +1027,7 @@ pub struct OrganizationalUnit {
 
 /// <p>Contains information about either a root or an organizational unit (OU) that can contain OUs or accounts in an organization.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct Parent {
     /// <p><p>The unique identifier (ID) of the parent entity.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> for a parent ID string requires one of the following:</p> <ul> <li> <p>Root: a string that begins with &quot;r-&quot; followed by from 4 to 32 lower-case letters or digits.</p> </li> <li> <p>Organizational unit (OU): a string that begins with &quot;ou-&quot; followed by from 4 to 32 lower-case letters or digits (the ID of the root that the OU is in) followed by a second &quot;-&quot; dash and from 8 to 32 additional lower-case letters or digits.</p> </li> </ul></p>
     #[serde(rename = "Id")]
@@ -1041,7 +1041,7 @@ pub struct Parent {
 
 /// <p>Contains rules to be applied to the affected accounts. Policies can be attached directly to accounts, or to roots and OUs to affect all accounts in those hierarchies.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct Policy {
     /// <p>The text content of the policy.</p>
     #[serde(rename = "Content")]
@@ -1055,7 +1055,7 @@ pub struct Policy {
 
 /// <p>Contains information about a policy, but does not include the content. To see the content of a policy, see <a>DescribePolicy</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct PolicySummary {
     /// <p>The Amazon Resource Name (ARN) of the policy.</p> <p>For more information about ARNs in Organizations, see <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_permissions.html#orgs-permissions-arns">ARN Formats Supported by Organizations</a> in the <i>AWS Organizations User Guide</i>.</p>
     #[serde(rename = "Arn")]
@@ -1085,7 +1085,7 @@ pub struct PolicySummary {
 
 /// <p>Contains information about a root, OU, or account that a policy is attached to.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct PolicyTargetSummary {
     /// <p>The Amazon Resource Name (ARN) of the policy target.</p> <p>For more information about ARNs in Organizations, see <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_permissions.html#orgs-permissions-arns">ARN Formats Supported by Organizations</a> in the <i>AWS Organizations User Guide</i>.</p>
     #[serde(rename = "Arn")]
@@ -1107,7 +1107,7 @@ pub struct PolicyTargetSummary {
 
 /// <p>Contains information about a policy type and its status in the associated root.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct PolicyTypeSummary {
     /// <p>The status of the policy type as it relates to the associated root. To attach a policy of the specified type to a root or to an OU or account in that root, it must be available in the organization and enabled for that root.</p>
     #[serde(rename = "Status")]
@@ -1128,7 +1128,7 @@ pub struct RemoveAccountFromOrganizationRequest {
 
 /// <p>Contains details about a root. A root is a top-level parent node in the hierarchy of an organization that can contain organizational units (OUs) and accounts. Every root contains every AWS account in the organization. Each root enables the accounts to be organized in a different way and to have different policy types enabled for use in that root.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct Root {
     /// <p>The Amazon Resource Name (ARN) of the root.</p> <p>For more information about ARNs in Organizations, see <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_permissions.html#orgs-permissions-arns">ARN Formats Supported by Organizations</a> in the <i>AWS Organizations User Guide</i>.</p>
     #[serde(rename = "Arn")]
@@ -1191,7 +1191,7 @@ pub struct UpdateOrganizationalUnitRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct UpdateOrganizationalUnitResponse {
     /// <p>A structure that contains the details about the specified OU, including its new name.</p>
     #[serde(rename = "OrganizationalUnit")]
@@ -1219,7 +1219,7 @@ pub struct UpdatePolicyRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct UpdatePolicyResponse {
     /// <p>A structure that contains details about the updated policy, showing the requested changes.</p>
     #[serde(rename = "Policy")]

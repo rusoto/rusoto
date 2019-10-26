@@ -35,7 +35,7 @@ pub struct GetConnectionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct GetConnectionResponse {
     /// <p>The time in ISO 8601 format for when the connection was established.</p>
     #[serde(rename = "ConnectedAt")]
@@ -51,7 +51,7 @@ pub struct GetConnectionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct Identity {
     /// <p>The source IP address of the TCP connection making the request to API Gateway.</p>
     #[serde(rename = "SourceIp")]

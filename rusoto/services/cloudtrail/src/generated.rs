@@ -37,7 +37,7 @@ pub struct AddTagsRequest {
 
 /// <p>Returns the objects or data listed below if successful. Otherwise, returns an error.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct AddTagsResponse {}
 
 /// <p>Specifies the settings for each trail.</p>
@@ -89,7 +89,7 @@ pub struct CreateTrailRequest {
 
 /// <p>Returns the objects or data listed below if successful. Otherwise, returns an error.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct CreateTrailResponse {
     /// <p>Specifies the Amazon Resource Name (ARN) of the log group to which CloudTrail logs will be delivered.</p>
     #[serde(rename = "CloudWatchLogsLogGroupArn")]
@@ -164,7 +164,7 @@ pub struct DeleteTrailRequest {
 
 /// <p>Returns the objects or data listed below if successful. Otherwise, returns an error.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DeleteTrailResponse {}
 
 /// <p>Returns information about the trail.</p>
@@ -182,7 +182,7 @@ pub struct DescribeTrailsRequest {
 
 /// <p>Returns the objects or data listed below if successful. Otherwise, returns an error.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct DescribeTrailsResponse {
     /// <p>The list of trail objects.</p>
     #[serde(rename = "trailList")]
@@ -192,7 +192,7 @@ pub struct DescribeTrailsResponse {
 
 /// <p>Contains information about an event that was returned by a lookup request. The result includes a representation of a CloudTrail event.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct Event {
     /// <p>The AWS access key ID that was used to sign the request. If the request was made with temporary security credentials, this is the access key ID of the temporary credentials.</p>
     #[serde(rename = "AccessKeyId")]
@@ -257,7 +257,7 @@ pub struct GetEventSelectorsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct GetEventSelectorsResponse {
     /// <p>The event selectors that are configured for the trail.</p>
     #[serde(rename = "EventSelectors")]
@@ -279,7 +279,7 @@ pub struct GetTrailStatusRequest {
 
 /// <p>Returns the objects or data listed below if successful. Otherwise, returns an error.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct GetTrailStatusResponse {
     /// <p>Whether the CloudTrail is currently logging AWS API calls.</p>
     #[serde(rename = "IsLogging")]
@@ -370,7 +370,7 @@ pub struct ListPublicKeysRequest {
 
 /// <p>Returns the objects or data listed below if successful. Otherwise, returns an error.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ListPublicKeysResponse {
     /// <p>Reserved for future use.</p>
     #[serde(rename = "NextToken")]
@@ -396,7 +396,7 @@ pub struct ListTagsRequest {
 
 /// <p>Returns the objects or data listed below if successful. Otherwise, returns an error.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ListTagsResponse {
     /// <p>Reserved for future use.</p>
     #[serde(rename = "NextToken")]
@@ -446,7 +446,7 @@ pub struct LookupEventsRequest {
 
 /// <p>Contains a response to a LookupEvents action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct LookupEventsResponse {
     /// <p>A list of events returned based on the lookup attributes specified and the CloudTrail event. The events list is sorted by time. The most recent event is listed first.</p>
     #[serde(rename = "Events")]
@@ -460,7 +460,7 @@ pub struct LookupEventsResponse {
 
 /// <p>Contains information about a returned public key.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct PublicKey {
     /// <p>The fingerprint of the public key.</p>
     #[serde(rename = "Fingerprint")]
@@ -496,7 +496,7 @@ pub struct PutEventSelectorsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct PutEventSelectorsResponse {
     /// <p>Specifies the event selectors configured for your trail.</p>
     #[serde(rename = "EventSelectors")]
@@ -522,12 +522,12 @@ pub struct RemoveTagsRequest {
 
 /// <p>Returns the objects or data listed below if successful. Otherwise, returns an error.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct RemoveTagsResponse {}
 
 /// <p>Specifies the type and name of a resource referenced by an event.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct Resource {
     /// <p>The name of the resource referenced by the event returned. These are user-created names whose values will depend on the environment. For example, the resource name might be "auto-scaling-test-group" for an Auto Scaling Group or "i-1234567" for an EC2 Instance.</p>
     #[serde(rename = "ResourceName")]
@@ -541,7 +541,7 @@ pub struct Resource {
 
 /// <p>A resource tag.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct ResourceTag {
     /// <p>Specifies the ARN of the resource.</p>
     #[serde(rename = "ResourceId")]
@@ -563,7 +563,7 @@ pub struct StartLoggingRequest {
 
 /// <p>Returns the objects or data listed below if successful. Otherwise, returns an error.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct StartLoggingResponse {}
 
 /// <p>Passes the request to CloudTrail to stop logging AWS API calls for the specified account.</p>
@@ -576,7 +576,7 @@ pub struct StopLoggingRequest {
 
 /// <p>Returns the objects or data listed below if successful. Otherwise, returns an error.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct StopLoggingResponse {}
 
 /// <p>A custom key-value pair associated with a resource such as a CloudTrail trail.</p>
@@ -593,7 +593,7 @@ pub struct Tag {
 
 /// <p>The settings for a trail.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct Trail {
     /// <p>Specifies an Amazon Resource Name (ARN), a unique identifier that represents the log group to which CloudTrail logs will be delivered.</p>
     #[serde(rename = "CloudWatchLogsLogGroupArn")]
@@ -703,7 +703,7 @@ pub struct UpdateTrailRequest {
 
 /// <p>Returns the objects or data listed below if successful. Otherwise, returns an error.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
 pub struct UpdateTrailResponse {
     /// <p>Specifies the Amazon Resource Name (ARN) of the log group to which CloudTrail logs will be delivered.</p>
     #[serde(rename = "CloudWatchLogsLogGroupArn")]
