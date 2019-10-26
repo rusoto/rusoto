@@ -17,12 +17,24 @@ jobs:
       displayName: 'Install Rust'
     - script: make unit_test
       displayName: 'Run unit tests'
-    - script: |
-        cargo clean
-        make rustls_unit_test
-      displayName: 'Run unit tests with rustls'
     - script: make check_integration_test
       displayName: 'Cargo check integration tests'
+
+- job: 'rustls_unit_tests_linux'
+  displayName: 'Rustls unit tests on Linux'
+  pool:
+    vmImage: 'Ubuntu-16.04'
+
+  steps:
+    - checkout: self
+      fetchDepth: 5
+    - script: |
+        set -e
+        curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain stable
+        echo "##vso[task.setvariable variable=PATH;]$PATH:$HOME/.cargo/bin"
+      displayName: 'Install Rust'
+    - script: make rustls_unit_test
+      displayName: 'Run unit tests with rustls'
 
 - job: 'unit_and_integration_tests_linux_beta'
   displayName: 'Unit and integration tests on Linux (beta channel)'
@@ -43,12 +55,26 @@ jobs:
       displayName: 'Install Rust beta'
     - script: RUST_VERSION=beta make unit_test
       displayName: 'Run unit tests'
+
+- job: 'rustls_unit_tests_linux_beta'
+  displayName: 'Rustls unit tests on Linux (beta channel)'
+  pool:
+    vmImage: 'Ubuntu-16.04'
+
+  steps:
+    - checkout: self
+      fetchDepth: 5
     - script: |
-        cargo clean
-        RUST_VERSION=beta make rustls_unit_test
+        set -e
+        curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain beta-x86_64-unknown-linux-gnu -y
+        echo "##vso[task.setvariable variable=PATH;]$PATH:$HOME/.cargo/bin"
+      displayName: 'Install Rustup'
+    - script: |
+        rustup install beta
+        rustup default beta
+      displayName: 'Install Rust beta'
+    - script: RUST_VERSION=beta make rustls_unit_test
       displayName: 'Run unit tests with rustls'
-    - script: RUST_VERSION=beta make check_integration_test
-      displayName: 'Cargo check integration tests'
 
 - job: 'unit_and_integration_tests_linux_nightly'
   displayName: 'Unit and integration tests on Linux (nightly channel)'
@@ -70,13 +96,29 @@ jobs:
     - script: RUST_VERSION=nightly make unit_test
       displayName: 'Run unit tests'
       continueOnError: true
-    - script: |
-        cargo clean
-        RUST_VERSION=nightly make rustls_unit_test
-      displayName: 'Run unit tests with rustls'
-      continueOnError: true
     - script: RUST_VERSION=nightly make check_integration_test
       displayName: 'Cargo check integration tests'
+      continueOnError: true
+
+- job: 'rustls_unit_tests_linux_nightly'
+  displayName: 'Rustls unit tests on Linux (nightly channel)'
+  pool:
+    vmImage: 'Ubuntu-16.04'
+
+  steps:
+    - checkout: self
+      fetchDepth: 5
+    - script: |
+        set -e
+        curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain nightly-x86_64-unknown-linux-gnu -y
+        echo "##vso[task.setvariable variable=PATH;]$PATH:$HOME/.cargo/bin"
+      displayName: 'Install Rustup'
+    - script: |
+        rustup install nightly
+        rustup default nightly
+      displayName: 'Install Rust beta'
+    - script:  RUST_VERSION=nightly make rustls_unit_test
+      displayName: 'Run unit tests with rustls'
       continueOnError: true
 
 - job: 'unit_and_integration_tests_osx'
@@ -94,12 +136,24 @@ jobs:
       displayName: 'Install Rust'
     - script: make unit_test
       displayName: 'Run unit tests'
-    - script: |
-        cargo clean
-        make rustls_unit_test
-      displayName: 'Run unit tests with rustls'
     - script: make check_integration_test
       displayName: 'Cargo check integration tests'
+
+- job: 'rustls_unit_tests_osx'
+  displayName: 'Unit and integration tests on OSX'
+  pool:
+    vmImage: 'macos-10.13'
+
+  steps:
+    - checkout: self
+      fetchDepth: 5
+    - script: |
+        set -e
+        curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain stable
+        echo "##vso[task.setvariable variable=PATH;]$PATH:$HOME/.cargo/bin"
+      displayName: 'Install Rust'
+    - script: make rustls_unit_test
+      displayName: 'Run unit tests with rustls'
 
 - job: 'unit_and_integration_tests_osx_beta'
   displayName: 'Unit and integration tests on OSX (beta channel)'
@@ -116,12 +170,24 @@ jobs:
       displayName: 'Install Rust'
     - script: RUST_VERSION=beta make unit_test
       displayName: 'Run unit tests'
-    - script: |
-        cargo clean
-        RUST_VERSION=beta make rustls_unit_test
-      displayName: 'Run unit tests with rustls'
     - script: RUST_VERSION=beta make check_integration_test
       displayName: 'Cargo check integration tests'
+
+- job: 'rustls_unit_tests_osx_beta'
+  displayName: 'Rustls unit tests on OSX (beta channel)'
+  pool:
+    vmImage: 'macos-10.13'
+
+  steps:
+    - checkout: self
+      fetchDepth: 5
+    - script: |
+        set -e
+        curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain beta
+        echo "##vso[task.setvariable variable=PATH;]$PATH:$HOME/.cargo/bin"
+      displayName: 'Install Rust'
+    - script: RUST_VERSION=beta make rustls_unit_test
+      displayName: 'Run unit tests with rustls'
 
 - job: 'unit_and_integration_tests_osx_nightly'
   displayName: 'Unit and integration tests on OSX (nightly channel)'
@@ -139,13 +205,25 @@ jobs:
     - script: RUST_VERSION=nightly make unit_test
       displayName: 'Run unit tests'
       continueOnError: true
-    - script: |
-        cargo clean
-        RUST_VERSION=nightly make rustls_unit_test
-      displayName: 'Run unit tests with rustls'
-      continueOnError: true
     - script: RUST_VERSION=nightly make check_integration_test
       displayName: 'Cargo check integration tests'
+      continueOnError: true
+
+- job: 'rustls_unit_tests_osx_nightly'
+  displayName: 'Rustls unit tests on OSX (nightly channel)'
+  pool:
+    vmImage: 'macos-10.13'
+
+  steps:
+    - checkout: self
+      fetchDepth: 5
+    - script: |
+        set -e
+        curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain nightly
+        echo "##vso[task.setvariable variable=PATH;]$PATH:$HOME/.cargo/bin"
+      displayName: 'Install Rust'
+    - script: RUST_VERSION=nightly make rustls_unit_test
+      displayName: 'Run unit tests with rustls'
       continueOnError: true
 
 - job: 'crate_gen_linux'
