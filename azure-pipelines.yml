@@ -17,7 +17,9 @@ jobs:
       displayName: 'Install Rust'
     - script: make unit_test
       displayName: 'Run unit tests'
-    - script: make rustls_unit_test
+    - script: |
+        cargo clean
+        make rustls_unit_test
       displayName: 'Run unit tests with rustls'
     - script: make check_integration_test
       displayName: 'Cargo check integration tests'
@@ -41,7 +43,9 @@ jobs:
       displayName: 'Install Rust beta'
     - script: RUST_VERSION=beta make unit_test
       displayName: 'Run unit tests'
-    - script: RUST_VERSION=beta make rustls_unit_test
+    - script: |
+        cargo clean
+        RUST_VERSION=beta make rustls_unit_test
       displayName: 'Run unit tests with rustls'
     - script: RUST_VERSION=beta make check_integration_test
       displayName: 'Cargo check integration tests'
@@ -66,7 +70,9 @@ jobs:
     - script: RUST_VERSION=nightly make unit_test
       displayName: 'Run unit tests'
       continueOnError: true
-    - script: RUST_VERSION=nightly make rustls_unit_test
+    - script: |
+        cargo clean
+        RUST_VERSION=nightly make rustls_unit_test
       displayName: 'Run unit tests with rustls'
       continueOnError: true
     - script: RUST_VERSION=nightly make check_integration_test
@@ -88,7 +94,9 @@ jobs:
       displayName: 'Install Rust'
     - script: make unit_test
       displayName: 'Run unit tests'
-    - script: make rustls_unit_test
+    - script: |
+        cargo clean
+        make rustls_unit_test
       displayName: 'Run unit tests with rustls'
     - script: make check_integration_test
       displayName: 'Cargo check integration tests'
@@ -108,7 +116,9 @@ jobs:
       displayName: 'Install Rust'
     - script: RUST_VERSION=beta make unit_test
       displayName: 'Run unit tests'
-    - script: RUST_VERSION=beta make rustls_unit_test
+    - script: |
+        cargo clean
+        RUST_VERSION=beta make rustls_unit_test
       displayName: 'Run unit tests with rustls'
     - script: RUST_VERSION=beta make check_integration_test
       displayName: 'Cargo check integration tests'
@@ -129,7 +139,9 @@ jobs:
     - script: RUST_VERSION=nightly make unit_test
       displayName: 'Run unit tests'
       continueOnError: true
-    - script: RUST_VERSION=nightly make rustls_unit_test
+    - script: |
+        cargo clean
+        RUST_VERSION=nightly make rustls_unit_test
       displayName: 'Run unit tests with rustls'
       continueOnError: true
     - script: RUST_VERSION=nightly make check_integration_test
