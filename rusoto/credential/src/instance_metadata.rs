@@ -19,7 +19,7 @@ const AWS_CREDENTIALS_PROVIDER_PATH: &str = "latest/meta-data/iam/security-crede
 /// The provider has a default timeout of 30 seconds. While it should work well for most setups,
 /// you can change the timeout using the `set_timeout` method.
 ///
-/// # Example
+/// # Examples
 ///
 /// ```rust
 /// extern crate rusoto_credential;
@@ -32,6 +32,24 @@ const AWS_CREDENTIALS_PROVIDER_PATH: &str = "latest/meta-data/iam/security-crede
 ///   let mut provider = InstanceMetadataProvider::new();
 ///   // you can overwrite the default timeout like this:
 ///   provider.set_timeout(Duration::from_secs(60));
+///
+///   // ...
+/// }
+/// ```
+///
+/// The source location can be changed from the default of 169.254.169.254:
+///
+/// ```rust
+/// extern crate rusoto_credential;
+///
+/// use std::time::Duration;
+///
+/// use rusoto_credential::InstanceMetadataProvider;
+///
+/// fn main() {
+///   let mut provider = InstanceMetadataProvider::new();
+///   // you can overwrite the default endpoint like this:
+///   provider.set_ip_addr_with_port("127.0.0.1", "8080");
 ///
 ///   // ...
 /// }
