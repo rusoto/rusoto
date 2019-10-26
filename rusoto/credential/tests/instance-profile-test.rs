@@ -12,7 +12,7 @@ fn it_fetches_basic_role() {
     // set env vars to point to local provider
     let mut provider = InstanceMetadataProvider::new();
     provider.set_timeout(Duration::from_secs(5));
-    provider.set_to_localhost("8080");
+    provider.set_ip_addr_with_port("127.0.0.1", "8080");
 
     let creds_future = provider.credentials();
     let mut core = Core::new().unwrap();
