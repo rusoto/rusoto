@@ -92,7 +92,8 @@ impl Future for InstanceMetadataProviderFuture {
     fn poll(&mut self) -> Poll<Self::Item, Self::Error> {
         let new_state = match self.state {
             InstanceMetadataFutureState::Start => {
-                let new_future = get_role_name(&self.client, self.timeout, self.metadata_ip_addr.clone())?;
+                let new_future =
+                    get_role_name(&self.client, self.timeout, self.metadata_ip_addr.clone())?;
                 InstanceMetadataFutureState::GetRoleName(new_future)
             }
             InstanceMetadataFutureState::GetRoleName(ref mut future) => {
