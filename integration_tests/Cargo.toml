@@ -23,13 +23,10 @@ debug = false
 [dependencies.rusoto_core]
 path = "../rusoto/core"
 default-features = false
-features = ["rustls"]
 
 [dependencies.rusoto_acm]
 optional = true
 path = "../rusoto/services/acm"
-default-features = false
-features = ["rustls"]
 
 [dependencies.rusoto_acm_pca]
 optional = true
@@ -974,3 +971,6 @@ qldb = ["rusoto_qldb"]
 nightly-testing = ["rusoto_core/nightly-testing"]
 disable_ceph_unsupported = []
 disable_minio_unsupported = []
+default = ["native-tls"]
+native-tls = ["rusoto_core/native-tls"]
+rustls = ["rusoto_core/rustls"]
