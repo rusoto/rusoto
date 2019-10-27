@@ -1,0 +1,70 @@
+name: CI
+
+on: push
+
+jobs:
+  unit_and_integration_tests:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macOS-latest, windows-latest]
+        rust: [stable, beta, nightly]
+        include:
+          - os: ubuntu-latest
+            rust: stable
+          - os: ubuntu-latest
+            rust: beta
+          - os: ubuntu-latest
+            rust: nightly
+          - os: macOS-latest
+            rust: stable
+          - os: macOS-latest
+            rust: beta
+          - os: macOS-latest
+            rust: nightly
+          - os: ubuntu-latest
+            rust: nightly
+          - os: windows-latest
+            rust: stable
+          - os: windows-latest
+            rust: beta
+          - os: windows-latest
+            rust: nightly
+    runs-on: ${{ matrix.os }}
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v1
+    - name: Set up Rust
+      uses: hecrj/setup-rust-action@v1
+      with:
+        rust-version: ${{ matrix.rust }}
+    - name: Run unit tests
+      run: RUST_VERSION=${{ matrix.rust }} make unit_test
+    - name: Run unit tests with rustls
+      run: RUST_VERSION=${{ matrix.rust }} make rustls_unit_test
+    - name: Cargo check integration tests
+      run: RUST_VERSION=${{ matrix.rust }} make check_integration_test
+  crate_gen:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macOS-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v1
+      with:
+        submodules: recursive
+    - name: Set up Rust
+      uses: hecrj/setup-rust-action@v1
+      with:
+        components: rustfmt
+    - name: Generate crates
+      run: make generate
+  skeptic:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v1
+    - name: Set up Rust
+      uses: hecrj/setup-rust-action@v1
+    - name: Skeptic Test
+      run: make skeptical
