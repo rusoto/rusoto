@@ -4,6 +4,7 @@ on: push
 
 jobs:
   unit_and_integration_tests:
+    name: Unit and integration tests
     strategy:
       matrix:
         os: [ubuntu-latest, macOS-latest, windows-latest]
@@ -23,6 +24,7 @@ jobs:
     - name: Cargo check integration tests
       run: RUST_VERSION=${{ matrix.rust }} make check_integration_test
   crate_gen:
+    name: Crate generation
     strategy:
       matrix:
         os: [ubuntu-latest, macOS-latest, windows-latest]
@@ -39,6 +41,7 @@ jobs:
     - name: Generate crates
       run: make generate
   skeptic:
+    name: Skeptic tests
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
