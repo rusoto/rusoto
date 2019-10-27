@@ -25,7 +25,7 @@ use rusoto_core::signature::SignedRequest;
 use serde_json;
 /// <p>Information about the application.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AppSummary {
     /// <p>Unique ID of the application.</p>
     #[serde(rename = "appId")]
@@ -95,7 +95,7 @@ pub struct AppSummary {
 
 /// <p>Represents a connector.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Connector {
     /// <p>The time the connector was associated.</p>
     #[serde(rename = "associatedOn")]
@@ -168,7 +168,7 @@ pub struct CreateAppRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateAppResponse {
     /// <p>Summary description of the application.</p>
     #[serde(rename = "appSummary")]
@@ -227,7 +227,7 @@ pub struct CreateReplicationJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateReplicationJobResponse {
     /// <p>The unique identifier of the replication job.</p>
     #[serde(rename = "replicationJobId")]
@@ -244,7 +244,7 @@ pub struct DeleteAppLaunchConfigurationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteAppLaunchConfigurationResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -256,7 +256,7 @@ pub struct DeleteAppReplicationConfigurationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteAppReplicationConfigurationResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -276,7 +276,7 @@ pub struct DeleteAppRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteAppResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -287,14 +287,14 @@ pub struct DeleteReplicationJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteReplicationJobResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteServerCatalogRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteServerCatalogResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -305,7 +305,7 @@ pub struct DisassociateConnectorRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateConnectorResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -321,7 +321,7 @@ pub struct GenerateChangeSetRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GenerateChangeSetResponse {
     /// <p>Location of the Amazon S3 object.</p>
     #[serde(rename = "s3Location")]
@@ -342,7 +342,7 @@ pub struct GenerateTemplateRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GenerateTemplateResponse {
     /// <p>Location of the Amazon S3 object.</p>
     #[serde(rename = "s3Location")]
@@ -359,7 +359,7 @@ pub struct GetAppLaunchConfigurationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAppLaunchConfigurationResponse {
     /// <p>ID of the application associated with the launch configuration.</p>
     #[serde(rename = "appId")]
@@ -384,7 +384,7 @@ pub struct GetAppReplicationConfigurationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAppReplicationConfigurationResponse {
     /// <p>Replication configurations associated with server groups in this application.</p>
     #[serde(rename = "serverGroupReplicationConfigurations")]
@@ -401,7 +401,7 @@ pub struct GetAppRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAppResponse {
     /// <p>Information about the application.</p>
     #[serde(rename = "appSummary")]
@@ -430,7 +430,7 @@ pub struct GetConnectorsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetConnectorsResponse {
     /// <p>Information about the registered connectors.</p>
     #[serde(rename = "connectorList")]
@@ -459,7 +459,7 @@ pub struct GetReplicationJobsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetReplicationJobsResponse {
     /// <p>The token required to retrieve the next set of results. This value is null when there are no more results to return.</p>
     #[serde(rename = "nextToken")]
@@ -487,7 +487,7 @@ pub struct GetReplicationRunsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetReplicationRunsResponse {
     /// <p>The token required to retrieve the next set of results. This value is null when there are no more results to return.</p>
     #[serde(rename = "nextToken")]
@@ -520,7 +520,7 @@ pub struct GetServersRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetServersResponse {
     /// <p>The time when the server was last modified.</p>
     #[serde(rename = "lastModifiedOn")]
@@ -544,7 +544,7 @@ pub struct GetServersResponse {
 pub struct ImportServerCatalogRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ImportServerCatalogResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -556,12 +556,12 @@ pub struct LaunchAppRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct LaunchAppResponse {}
 
 /// <p>Details about the latest launch of an application.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct LaunchDetails {
     /// <p>Latest time this application was launched successfully.</p>
     #[serde(rename = "latestLaunchTime")]
@@ -594,7 +594,7 @@ pub struct ListAppsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAppsResponse {
     /// <p>A list of application summaries.</p>
     #[serde(rename = "apps")]
@@ -623,7 +623,7 @@ pub struct PutAppLaunchConfigurationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutAppLaunchConfigurationResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -639,12 +639,12 @@ pub struct PutAppReplicationConfigurationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutAppReplicationConfigurationResponse {}
 
 /// <p>Represents a replication job.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ReplicationJob {
     /// <p>The description of the replication job.</p>
     #[serde(rename = "description")]
@@ -722,7 +722,7 @@ pub struct ReplicationJob {
 
 /// <p>Represents a replication run.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ReplicationRun {
     /// <p>The identifier of the Amazon Machine Image (AMI) from the replication run.</p>
     #[serde(rename = "amiId")]
@@ -772,7 +772,7 @@ pub struct ReplicationRun {
 
 /// <p>Details of the current stage of a replication run.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ReplicationRunStageDetails {
     /// <p>String describing the current stage of a replication run.</p>
     #[serde(rename = "stage")]
@@ -965,7 +965,7 @@ pub struct StartAppReplicationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartAppReplicationResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -980,7 +980,7 @@ pub struct StartOnDemandReplicationRunRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartOnDemandReplicationRunResponse {
     /// <p>The identifier of the replication run.</p>
     #[serde(rename = "replicationRunId")]
@@ -997,7 +997,7 @@ pub struct StopAppReplicationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopAppReplicationResponse {}
 
 /// <p>A label that can be assigned to an application.</p>
@@ -1022,7 +1022,7 @@ pub struct TerminateAppRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TerminateAppResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1054,7 +1054,7 @@ pub struct UpdateAppRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateAppResponse {
     /// <p>Summary description of the application.</p>
     #[serde(rename = "appSummary")]
@@ -1110,7 +1110,7 @@ pub struct UpdateReplicationJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateReplicationJobResponse {}
 
 /// <p>A script that runs on first launch of an Amazon EC2 instance. Used for configuring the server during launch.</p>

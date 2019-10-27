@@ -117,7 +117,7 @@ pub struct CancelJobRequest {
 
 /// <p>The response body contains a JSON object. If the job is successfully canceled, the value of <code>Success</code> is <code>true</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CancelJobResponse {}
 
 /// <p>The file format of the output captions. If you leave this value blank, Elastic Transcoder returns an error.</p>
@@ -286,7 +286,7 @@ pub struct CreateJobRequest {
 
 /// <p>The CreateJobResponse structure.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateJobResponse {
     /// <p>A section of the response body that provides information about the job that is created.</p>
     #[serde(rename = "Job")]
@@ -330,7 +330,7 @@ pub struct CreatePipelineRequest {
 
 /// <p>When you create a pipeline, Elastic Transcoder returns the values that you specified in the request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreatePipelineResponse {
     /// <p>A section of the response body that provides information about the pipeline that is created.</p>
     #[serde(rename = "Pipeline")]
@@ -371,7 +371,7 @@ pub struct CreatePresetRequest {
 
 /// <p>The <code>CreatePresetResponse</code> structure.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreatePresetResponse {
     /// <p>A section of the response body that provides information about the preset that is created.</p>
     #[serde(rename = "Preset")]
@@ -393,7 +393,7 @@ pub struct DeletePipelineRequest {
 
 /// <p>The <code>DeletePipelineResponse</code> structure.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeletePipelineResponse {}
 
 /// <p>The <code>DeletePresetRequest</code> structure.</p>
@@ -406,7 +406,7 @@ pub struct DeletePresetRequest {
 
 /// <p>The <code>DeletePresetResponse</code> structure.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeletePresetResponse {}
 
 /// <p>The detected properties of the input file. Elastic Transcoder identifies these values from the input file.</p>
@@ -499,7 +499,7 @@ pub struct InputCaptions {
 
 /// <p>A section of the response body that provides information about the job that is created.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Job {
     /// <p>The Amazon Resource Name (ARN) for the job.</p>
     #[serde(rename = "Arn")]
@@ -611,7 +611,7 @@ pub struct JobInput {
 
 /// <p><important> <p>Outputs recommended instead.</p> </important> <p>If you specified one output for a job, information about that output. If you specified multiple outputs for a job, the <code>Output</code> object lists information about the first output. This duplicates the information that is listed for the first output in the <code>Outputs</code> object.</p></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct JobOutput {
     /// <p>The album art to be associated with the output file, if any.</p>
     #[serde(rename = "AlbumArt")]
@@ -730,7 +730,7 @@ pub struct ListJobsByPipelineRequest {
 
 /// <p>The <code>ListJobsByPipelineResponse</code> structure.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListJobsByPipelineResponse {
     /// <p>An array of <code>Job</code> objects that are in the specified pipeline.</p>
     #[serde(rename = "Jobs")]
@@ -760,7 +760,7 @@ pub struct ListJobsByStatusRequest {
 
 /// <p> The <code>ListJobsByStatusResponse</code> structure. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListJobsByStatusResponse {
     /// <p>An array of <code>Job</code> objects that have the specified status.</p>
     #[serde(rename = "Jobs")]
@@ -787,7 +787,7 @@ pub struct ListPipelinesRequest {
 
 /// <p>A list of the pipelines associated with the current AWS account.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPipelinesResponse {
     /// <p>A value that you use to access the second and subsequent pages of results, if any. When the pipelines fit on one page or when you've reached the last page of results, the value of <code>NextPageToken</code> is <code>null</code>.</p>
     #[serde(rename = "NextPageToken")]
@@ -814,7 +814,7 @@ pub struct ListPresetsRequest {
 
 /// <p>The <code>ListPresetsResponse</code> structure.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPresetsResponse {
     /// <p>A value that you use to access the second and subsequent pages of results, if any. When the presets fit on one page or when you've reached the last page of results, the value of <code>NextPageToken</code> is <code>null</code>.</p>
     #[serde(rename = "NextPageToken")]
@@ -866,7 +866,7 @@ pub struct Permission {
 
 /// <p>The pipeline (queue) that is used to manage jobs.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Pipeline {
     /// <p>The Amazon Resource Name (ARN) for the pipeline.</p>
     #[serde(rename = "Arn")]
@@ -962,7 +962,7 @@ pub struct PlayReadyDrm {
 
 /// <p> Use Only for Fragmented MP4 or MPEG-TS Outputs. If you specify a preset for which the value of Container is <code>fmp4</code> (Fragmented MP4) or <code>ts</code> (MPEG-TS), Playlists contains information about the master playlists that you want Elastic Transcoder to create. We recommend that you create only one master playlist per output format. The maximum number of master playlists in a job is 30. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Playlist {
     /// <p>The format of the output playlist. Valid formats include <code>HLSv3</code>, <code>HLSv4</code>, and <code>Smooth</code>.</p>
     #[serde(rename = "Format")]
@@ -996,7 +996,7 @@ pub struct Playlist {
 
 /// <p>Presets are templates that contain most of the settings for transcoding media files from one format to another. Elastic Transcoder includes some default presets for common formats, for example, several iPod and iPhone versions. You can also create your own presets for formats that aren't included among the default presets. You specify which preset you want to use when you create a job.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Preset {
     /// <p>The Amazon Resource Name (ARN) for the preset.</p>
     #[serde(rename = "Arn")]
@@ -1091,7 +1091,7 @@ pub struct ReadJobRequest {
 
 /// <p>The <code>ReadJobResponse</code> structure.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ReadJobResponse {
     /// <p>A section of the response body that provides information about the job.</p>
     #[serde(rename = "Job")]
@@ -1109,7 +1109,7 @@ pub struct ReadPipelineRequest {
 
 /// <p>The <code>ReadPipelineResponse</code> structure.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ReadPipelineResponse {
     /// <p>A section of the response body that provides information about the pipeline.</p>
     #[serde(rename = "Pipeline")]
@@ -1131,7 +1131,7 @@ pub struct ReadPresetRequest {
 
 /// <p>The <code>ReadPresetResponse</code> structure.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ReadPresetResponse {
     /// <p>A section of the response body that provides information about the preset.</p>
     #[serde(rename = "Preset")]
@@ -1158,7 +1158,7 @@ pub struct TestRoleRequest {
 
 /// <p>The <code>TestRoleResponse</code> structure.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TestRoleResponse {
     /// <p>If the <code>Success</code> element contains <code>false</code>, this value is an array of one or more error messages that were generated during the test process.</p>
     #[serde(rename = "Messages")]
@@ -1222,7 +1222,7 @@ pub struct TimeSpan {
 
 /// <p>Details about the timing of a job.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Timing {
     /// <p>The time the job finished transcoding, in epoch milliseconds.</p>
     #[serde(rename = "FinishTimeMillis")]
@@ -1251,7 +1251,7 @@ pub struct UpdatePipelineNotificationsRequest {
 
 /// <p>The <code>UpdatePipelineNotificationsResponse</code> structure.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdatePipelineNotificationsResponse {
     /// <p>A section of the response body that provides information about the pipeline associated with this notification.</p>
     #[serde(rename = "Pipeline")]
@@ -1297,7 +1297,7 @@ pub struct UpdatePipelineRequest {
 
 /// <p>When you update a pipeline, Elastic Transcoder returns the values that you specified in the request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdatePipelineResponse {
     /// <p>The pipeline updated by this <code>UpdatePipelineResponse</code> call.</p>
     #[serde(rename = "Pipeline")]
@@ -1322,7 +1322,7 @@ pub struct UpdatePipelineStatusRequest {
 
 /// <p>When you update status for a pipeline, Elastic Transcoder returns the values that you specified in the request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdatePipelineStatusResponse {
     /// <p>A section of the response body that provides information about the pipeline.</p>
     #[serde(rename = "Pipeline")]
@@ -1397,7 +1397,7 @@ pub struct VideoParameters {
 
 /// <p>Elastic Transcoder returns a warning if the resources used by your pipeline are not in the same region as the pipeline.</p> <p>Using resources in the same region, such as your Amazon S3 buckets, Amazon SNS notification topics, and AWS KMS key, reduces processing time and prevents cross-regional charges.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Warning {
     /// <p>The code of the cross-regional warning.</p>
     #[serde(rename = "Code")]

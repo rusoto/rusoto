@@ -38,12 +38,12 @@ pub struct AcceptMatchInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AcceptMatchOutput {}
 
 /// <p><p>Properties describing a fleet alias.</p> <ul> <li> <p> <a>CreateAlias</a> </p> </li> <li> <p> <a>ListAliases</a> </p> </li> <li> <p> <a>DescribeAlias</a> </p> </li> <li> <p> <a>UpdateAlias</a> </p> </li> <li> <p> <a>DeleteAlias</a> </p> </li> <li> <p> <a>ResolveAlias</a> </p> </li> </ul></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Alias {
     /// <p>Unique identifier for an alias; alias ARNs are unique across all regions.</p>
     #[serde(rename = "AliasArn")]
@@ -98,7 +98,7 @@ pub struct AttributeValue {
 
 /// <p>Temporary access credentials used for uploading game build files to Amazon GameLift. They are valid for a limited time. If they expire before you upload your game build, get a new set by calling <a>RequestUploadCredentials</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AwsCredentials {
     /// <p>Temporary key allowing access to the Amazon GameLift S3 account.</p>
     #[serde(rename = "AccessKeyId")]
@@ -116,7 +116,7 @@ pub struct AwsCredentials {
 
 /// <p><p>Properties describing a custom game build.</p> <p> <b>Related operations</b> </p> <ul> <li> <p> <a>CreateBuild</a> </p> </li> <li> <p> <a>ListBuilds</a> </p> </li> <li> <p> <a>DescribeBuild</a> </p> </li> <li> <p> <a>UpdateBuild</a> </p> </li> <li> <p> <a>DeleteBuild</a> </p> </li> </ul></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Build {
     /// <p>Unique identifier for a build.</p>
     #[serde(rename = "BuildId")]
@@ -171,7 +171,7 @@ pub struct CreateAliasInput {
 
 /// <p>Represents the returned data in response to a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateAliasOutput {
     /// <p>Object that describes the newly created alias record.</p>
     #[serde(rename = "Alias")]
@@ -202,7 +202,7 @@ pub struct CreateBuildInput {
 
 /// <p>Represents the returned data in response to a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateBuildOutput {
     /// <p>The newly created build record, including a unique build ID and status. </p>
     #[serde(rename = "Build")]
@@ -294,7 +294,7 @@ pub struct CreateFleetInput {
 
 /// <p>Represents the returned data in response to a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateFleetOutput {
     /// <p>Properties for the newly created fleet.</p>
     #[serde(rename = "FleetAttributes")]
@@ -344,7 +344,7 @@ pub struct CreateGameSessionInput {
 
 /// <p>Represents the returned data in response to a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateGameSessionOutput {
     /// <p>Object that describes the newly created game session record.</p>
     #[serde(rename = "GameSession")]
@@ -374,7 +374,7 @@ pub struct CreateGameSessionQueueInput {
 
 /// <p>Represents the returned data in response to a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateGameSessionQueueOutput {
     /// <p>Object that describes the newly created game session queue.</p>
     #[serde(rename = "GameSessionQueue")]
@@ -436,7 +436,7 @@ pub struct CreateMatchmakingConfigurationInput {
 
 /// <p>Represents the returned data in response to a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateMatchmakingConfigurationOutput {
     /// <p>Object that describes the newly created matchmaking configuration.</p>
     #[serde(rename = "Configuration")]
@@ -457,7 +457,7 @@ pub struct CreateMatchmakingRuleSetInput {
 
 /// <p>Represents the returned data in response to a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateMatchmakingRuleSetOutput {
     /// <p>Object that describes the newly created matchmaking rule set.</p>
     #[serde(rename = "RuleSet")]
@@ -481,7 +481,7 @@ pub struct CreatePlayerSessionInput {
 
 /// <p>Represents the returned data in response to a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreatePlayerSessionOutput {
     /// <p>Object that describes the newly created player session record.</p>
     #[serde(rename = "PlayerSession")]
@@ -506,7 +506,7 @@ pub struct CreatePlayerSessionsInput {
 
 /// <p>Represents the returned data in response to a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreatePlayerSessionsOutput {
     /// <p>Collection of player session objects created for the added players.</p>
     #[serde(rename = "PlayerSessions")]
@@ -540,7 +540,7 @@ pub struct CreateScriptInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateScriptOutput {
     /// <p>The newly created script record with a unique script ID. The new script's storage location reflects an Amazon S3 location: (1) If the script was uploaded from an S3 bucket under your account, the storage location reflects the information that was provided in the <i>CreateScript</i> request; (2) If the script file was uploaded from a local zip file, the storage location reflects an S3 location controls by the Amazon GameLift service.</p>
     #[serde(rename = "Script")]
@@ -561,7 +561,7 @@ pub struct CreateVpcPeeringAuthorizationInput {
 
 /// <p>Represents the returned data in response to a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateVpcPeeringAuthorizationOutput {
     /// <p>Details on the requested VPC peering authorization, including expiration.</p>
     #[serde(rename = "VpcPeeringAuthorization")]
@@ -584,7 +584,7 @@ pub struct CreateVpcPeeringConnectionInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateVpcPeeringConnectionOutput {}
 
 /// <p>Represents the input for a request action.</p>
@@ -620,7 +620,7 @@ pub struct DeleteGameSessionQueueInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteGameSessionQueueOutput {}
 
 /// <p>Represents the input for a request action.</p>
@@ -632,7 +632,7 @@ pub struct DeleteMatchmakingConfigurationInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteMatchmakingConfigurationOutput {}
 
 /// <p>Represents the input for a request action.</p>
@@ -645,7 +645,7 @@ pub struct DeleteMatchmakingRuleSetInput {
 
 /// <p>Represents the returned data in response to a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteMatchmakingRuleSetOutput {}
 
 /// <p>Represents the input for a request action.</p>
@@ -678,7 +678,7 @@ pub struct DeleteVpcPeeringAuthorizationInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteVpcPeeringAuthorizationOutput {}
 
 /// <p>Represents the input for a request action.</p>
@@ -693,7 +693,7 @@ pub struct DeleteVpcPeeringConnectionInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteVpcPeeringConnectionOutput {}
 
 /// <p>Represents the input for a request action.</p>
@@ -706,7 +706,7 @@ pub struct DescribeAliasInput {
 
 /// <p>Represents the returned data in response to a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAliasOutput {
     /// <p>Object that contains the requested alias.</p>
     #[serde(rename = "Alias")]
@@ -724,7 +724,7 @@ pub struct DescribeBuildInput {
 
 /// <p>Represents the returned data in response to a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeBuildOutput {
     /// <p>Set of properties describing the requested build.</p>
     #[serde(rename = "Build")]
@@ -743,7 +743,7 @@ pub struct DescribeEC2InstanceLimitsInput {
 
 /// <p>Represents the returned data in response to a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeEC2InstanceLimitsOutput {
     /// <p>Object that contains the maximum number of instances for the specified instance type.</p>
     #[serde(rename = "EC2InstanceLimits")]
@@ -770,7 +770,7 @@ pub struct DescribeFleetAttributesInput {
 
 /// <p>Represents the returned data in response to a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeFleetAttributesOutput {
     /// <p>Collection of objects containing attribute metadata for each requested fleet ID.</p>
     #[serde(rename = "FleetAttributes")]
@@ -801,7 +801,7 @@ pub struct DescribeFleetCapacityInput {
 
 /// <p>Represents the returned data in response to a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeFleetCapacityOutput {
     /// <p>Collection of objects containing capacity information for each requested fleet ID. Leave this parameter empty to retrieve capacity information for all fleets.</p>
     #[serde(rename = "FleetCapacity")]
@@ -839,7 +839,7 @@ pub struct DescribeFleetEventsInput {
 
 /// <p>Represents the returned data in response to a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeFleetEventsOutput {
     /// <p>Collection of objects containing event log entries for the specified fleet.</p>
     #[serde(rename = "Events")]
@@ -861,7 +861,7 @@ pub struct DescribeFleetPortSettingsInput {
 
 /// <p>Represents the returned data in response to a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeFleetPortSettingsOutput {
     /// <p>Object that contains port settings for the requested fleet ID.</p>
     #[serde(rename = "InboundPermissions")]
@@ -888,7 +888,7 @@ pub struct DescribeFleetUtilizationInput {
 
 /// <p>Represents the returned data in response to a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeFleetUtilizationOutput {
     /// <p>Collection of objects containing utilization information for each requested fleet ID.</p>
     #[serde(rename = "FleetUtilization")]
@@ -931,7 +931,7 @@ pub struct DescribeGameSessionDetailsInput {
 
 /// <p>Represents the returned data in response to a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeGameSessionDetailsOutput {
     /// <p>Collection of objects containing game session properties and the protection policy currently in force for each session matching the request.</p>
     #[serde(rename = "GameSessionDetails")]
@@ -953,7 +953,7 @@ pub struct DescribeGameSessionPlacementInput {
 
 /// <p>Represents the returned data in response to a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeGameSessionPlacementOutput {
     /// <p>Object that describes the requested game session placement.</p>
     #[serde(rename = "GameSessionPlacement")]
@@ -980,7 +980,7 @@ pub struct DescribeGameSessionQueuesInput {
 
 /// <p>Represents the returned data in response to a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeGameSessionQueuesOutput {
     /// <p>Collection of objects that describes the requested game session queues.</p>
     #[serde(rename = "GameSessionQueues")]
@@ -1023,7 +1023,7 @@ pub struct DescribeGameSessionsInput {
 
 /// <p>Represents the returned data in response to a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeGameSessionsOutput {
     /// <p>Collection of objects containing game session properties for each session matching the request.</p>
     #[serde(rename = "GameSessions")]
@@ -1057,7 +1057,7 @@ pub struct DescribeInstancesInput {
 
 /// <p>Represents the returned data in response to a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeInstancesOutput {
     /// <p>Collection of objects containing properties for each instance returned.</p>
     #[serde(rename = "Instances")]
@@ -1092,7 +1092,7 @@ pub struct DescribeMatchmakingConfigurationsInput {
 
 /// <p>Represents the returned data in response to a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeMatchmakingConfigurationsOutput {
     /// <p>Collection of requested matchmaking configuration objects.</p>
     #[serde(rename = "Configurations")]
@@ -1114,7 +1114,7 @@ pub struct DescribeMatchmakingInput {
 
 /// <p>Represents the returned data in response to a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeMatchmakingOutput {
     /// <p>Collection of existing matchmaking ticket objects matching the request.</p>
     #[serde(rename = "TicketList")]
@@ -1141,7 +1141,7 @@ pub struct DescribeMatchmakingRuleSetsInput {
 
 /// <p>Represents the returned data in response to a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeMatchmakingRuleSetsOutput {
     /// <p>Token that indicates where to resume retrieving results on the next call to this action. If no token is returned, these results represent the end of the list.</p>
     #[serde(rename = "NextToken")]
@@ -1183,7 +1183,7 @@ pub struct DescribePlayerSessionsInput {
 
 /// <p>Represents the returned data in response to a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribePlayerSessionsOutput {
     /// <p>Token that indicates where to resume retrieving results on the next call to this action. If no token is returned, these results represent the end of the list.</p>
     #[serde(rename = "NextToken")]
@@ -1205,7 +1205,7 @@ pub struct DescribeRuntimeConfigurationInput {
 
 /// <p>Represents the returned data in response to a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeRuntimeConfigurationOutput {
     /// <p>Instructions describing how server processes should be launched and maintained on each instance in the fleet.</p>
     #[serde(rename = "RuntimeConfiguration")]
@@ -1235,7 +1235,7 @@ pub struct DescribeScalingPoliciesInput {
 
 /// <p>Represents the returned data in response to a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeScalingPoliciesOutput {
     /// <p>Token that indicates where to resume retrieving results on the next call to this action. If no token is returned, these results represent the end of the list.</p>
     #[serde(rename = "NextToken")]
@@ -1255,7 +1255,7 @@ pub struct DescribeScriptInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeScriptOutput {
     /// <p>Set of properties describing the requested script.</p>
     #[serde(rename = "Script")]
@@ -1267,7 +1267,7 @@ pub struct DescribeScriptOutput {
 pub struct DescribeVpcPeeringAuthorizationsInput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeVpcPeeringAuthorizationsOutput {
     /// <p>Collection of objects that describe all valid VPC peering operations for the current AWS account.</p>
     #[serde(rename = "VpcPeeringAuthorizations")]
@@ -1286,7 +1286,7 @@ pub struct DescribeVpcPeeringConnectionsInput {
 
 /// <p>Represents the returned data in response to a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeVpcPeeringConnectionsOutput {
     /// <p>Collection of VPC peering connection records that match the request.</p>
     #[serde(rename = "VpcPeeringConnections")]
@@ -1309,7 +1309,7 @@ pub struct DesiredPlayerSession {
 
 /// <p><p>Current status of fleet capacity. The number of active instances should match or be in the process of matching the number of desired instances. Pending and terminating counts are non-zero only if fleet capacity is adjusting to an <a>UpdateFleetCapacity</a> request, or if access to resources is temporarily affected.</p> <ul> <li> <p> <a>CreateFleet</a> </p> </li> <li> <p> <a>ListFleets</a> </p> </li> <li> <p> <a>DeleteFleet</a> </p> </li> <li> <p>Describe fleets:</p> <ul> <li> <p> <a>DescribeFleetAttributes</a> </p> </li> <li> <p> <a>DescribeFleetCapacity</a> </p> </li> <li> <p> <a>DescribeFleetPortSettings</a> </p> </li> <li> <p> <a>DescribeFleetUtilization</a> </p> </li> <li> <p> <a>DescribeRuntimeConfiguration</a> </p> </li> <li> <p> <a>DescribeEC2InstanceLimits</a> </p> </li> <li> <p> <a>DescribeFleetEvents</a> </p> </li> </ul> </li> <li> <p>Update fleets:</p> <ul> <li> <p> <a>UpdateFleetAttributes</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetPortSettings</a> </p> </li> <li> <p> <a>UpdateRuntimeConfiguration</a> </p> </li> </ul> </li> <li> <p>Manage fleet actions:</p> <ul> <li> <p> <a>StartFleetActions</a> </p> </li> <li> <p> <a>StopFleetActions</a> </p> </li> </ul> </li> </ul></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EC2InstanceCounts {
     /// <p>Actual number of active instances in the fleet.</p>
     #[serde(rename = "ACTIVE")]
@@ -1343,7 +1343,7 @@ pub struct EC2InstanceCounts {
 
 /// <p>Maximum number of instances allowed based on the Amazon Elastic Compute Cloud (Amazon EC2) instance type. Instance limits can be retrieved by calling <a>DescribeEC2InstanceLimits</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EC2InstanceLimit {
     /// <p>Number of instances of the specified type that are currently in use by this AWS account.</p>
     #[serde(rename = "CurrentInstances")]
@@ -1361,7 +1361,7 @@ pub struct EC2InstanceLimit {
 
 /// <p>Log entry describing an event that involves Amazon GameLift resources (such as a fleet). In addition to tracking activity, event codes and messages can provide additional information for troubleshooting and debugging problems.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Event {
     /// <p><p>Type of event being logged. The following events are currently in use:</p> <p> <b>Fleet creation events:</b> </p> <ul> <li> <p>FLEET<em>CREATED -- A fleet record was successfully created with a status of <code>NEW</code>. Event messaging includes the fleet ID.</p> </li> <li> <p>FLEET</em>STATE<em>DOWNLOADING -- Fleet status changed from <code>NEW</code> to <code>DOWNLOADING</code>. The compressed build has started downloading to a fleet instance for installation.</p> </li> <li> <p> FLEET</em>BINARY<em>DOWNLOAD</em>FAILED -- The build failed to download to the fleet instance.</p> </li> <li> <p>FLEET<em>CREATION</em>EXTRACTING<em>BUILD – The game server build was successfully downloaded to an instance, and the build files are now being extracted from the uploaded build and saved to an instance. Failure at this stage prevents a fleet from moving to <code>ACTIVE</code> status. Logs for this stage display a list of the files that are extracted and saved on the instance. Access the logs by using the URL in <i>PreSignedLogUrl</i>.</p> </li> <li> <p>FLEET</em>CREATION<em>RUNNING</em>INSTALLER – The game server build files were successfully extracted, and the Amazon GameLift is now running the build&#39;s install script (if one is included). Failure in this stage prevents a fleet from moving to <code>ACTIVE</code> status. Logs for this stage list the installation steps and whether or not the install completed successfully. Access the logs by using the URL in <i>PreSignedLogUrl</i>. </p> </li> <li> <p>FLEET<em>CREATION</em>VALIDATING<em>RUNTIME</em>CONFIG -- The build process was successful, and the Amazon GameLift is now verifying that the game server launch paths, which are specified in the fleet&#39;s run-time configuration, exist. If any listed launch path exists, Amazon GameLift tries to launch a game server process and waits for the process to report ready. Failures in this stage prevent a fleet from moving to <code>ACTIVE</code> status. Logs for this stage list the launch paths in the run-time configuration and indicate whether each is found. Access the logs by using the URL in <i>PreSignedLogUrl</i>. </p> </li> <li> <p>FLEET<em>STATE</em>VALIDATING -- Fleet status changed from <code>DOWNLOADING</code> to <code>VALIDATING</code>.</p> </li> <li> <p> FLEET<em>VALIDATION</em>LAUNCH<em>PATH</em>NOT<em>FOUND -- Validation of the run-time configuration failed because the executable specified in a launch path does not exist on the instance.</p> </li> <li> <p>FLEET</em>STATE<em>BUILDING -- Fleet status changed from <code>VALIDATING</code> to <code>BUILDING</code>.</p> </li> <li> <p>FLEET</em>VALIDATION<em>EXECUTABLE</em>RUNTIME<em>FAILURE -- Validation of the run-time configuration failed because the executable specified in a launch path failed to run on the fleet instance.</p> </li> <li> <p>FLEET</em>STATE<em>ACTIVATING -- Fleet status changed from <code>BUILDING</code> to <code>ACTIVATING</code>. </p> </li> <li> <p> FLEET</em>ACTIVATION<em>FAILED - The fleet failed to successfully complete one of the steps in the fleet activation process. This event code indicates that the game build was successfully downloaded to a fleet instance, built, and validated, but was not able to start a server process. A possible reason for failure is that the game server is not reporting &quot;process ready&quot; to the Amazon GameLift service.</p> </li> <li> <p>FLEET</em>STATE<em>ACTIVE -- The fleet&#39;s status changed from <code>ACTIVATING</code> to <code>ACTIVE</code>. The fleet is now ready to host game sessions.</p> </li> </ul> <p> <b>VPC peering events:</b> </p> <ul> <li> <p>FLEET</em>VPC<em>PEERING</em>SUCCEEDED -- A VPC peering connection has been established between the VPC for an Amazon GameLift fleet and a VPC in your AWS account.</p> </li> <li> <p>FLEET<em>VPC</em>PEERING<em>FAILED -- A requested VPC peering connection has failed. Event details and status information (see <a>DescribeVpcPeeringConnections</a>) provide additional detail. A common reason for peering failure is that the two VPCs have overlapping CIDR blocks of IPv4 addresses. To resolve this, change the CIDR block for the VPC in your AWS account. For more information on VPC peering failures, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/PeeringGuide/invalid-peering-configurations.html">https://docs.aws.amazon.com/AmazonVPC/latest/PeeringGuide/invalid-peering-configurations.html</a> </p> </li> <li> <p>FLEET</em>VPC<em>PEERING</em>DELETED -- A VPC peering connection has been successfully deleted.</p> </li> </ul> <p> <b>Spot instance events:</b> </p> <ul> <li> <p> INSTANCE<em>INTERRUPTED -- A spot instance was interrupted by EC2 with a two-minute notification.</p> </li> </ul> <p> <b>Other fleet events:</b> </p> <ul> <li> <p>FLEET</em>SCALING<em>EVENT -- A change was made to the fleet&#39;s capacity settings (desired instances, minimum/maximum scaling limits). Event messaging includes the new capacity settings.</p> </li> <li> <p>FLEET</em>NEW<em>GAME</em>SESSION<em>PROTECTION</em>POLICY<em>UPDATED -- A change was made to the fleet&#39;s game session protection policy setting. Event messaging includes both the old and new policy setting. </p> </li> <li> <p>FLEET</em>DELETED -- A request to delete a fleet was initiated.</p> </li> <li> <p> GENERIC_EVENT -- An unspecified event has occurred.</p> </li> </ul></p>
     #[serde(rename = "EventCode")]
@@ -1391,7 +1391,7 @@ pub struct Event {
 
 /// <p><p>General properties describing a fleet.</p> <ul> <li> <p> <a>CreateFleet</a> </p> </li> <li> <p> <a>ListFleets</a> </p> </li> <li> <p> <a>DeleteFleet</a> </p> </li> <li> <p>Describe fleets:</p> <ul> <li> <p> <a>DescribeFleetAttributes</a> </p> </li> <li> <p> <a>DescribeFleetCapacity</a> </p> </li> <li> <p> <a>DescribeFleetPortSettings</a> </p> </li> <li> <p> <a>DescribeFleetUtilization</a> </p> </li> <li> <p> <a>DescribeRuntimeConfiguration</a> </p> </li> <li> <p> <a>DescribeEC2InstanceLimits</a> </p> </li> <li> <p> <a>DescribeFleetEvents</a> </p> </li> </ul> </li> <li> <p>Update fleets:</p> <ul> <li> <p> <a>UpdateFleetAttributes</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetPortSettings</a> </p> </li> <li> <p> <a>UpdateRuntimeConfiguration</a> </p> </li> </ul> </li> <li> <p>Manage fleet actions:</p> <ul> <li> <p> <a>StartFleetActions</a> </p> </li> <li> <p> <a>StopFleetActions</a> </p> </li> </ul> </li> </ul></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FleetAttributes {
     /// <p>Unique identifier for a build.</p>
     #[serde(rename = "BuildId")]
@@ -1480,7 +1480,7 @@ pub struct FleetAttributes {
 
 /// <p><p>Information about the fleet&#39;s capacity. Fleet capacity is measured in EC2 instances. By default, new fleets have a capacity of one instance, but can be updated as needed. The maximum number of instances for a fleet is determined by the fleet&#39;s instance type.</p> <ul> <li> <p> <a>CreateFleet</a> </p> </li> <li> <p> <a>ListFleets</a> </p> </li> <li> <p> <a>DeleteFleet</a> </p> </li> <li> <p>Describe fleets:</p> <ul> <li> <p> <a>DescribeFleetAttributes</a> </p> </li> <li> <p> <a>DescribeFleetCapacity</a> </p> </li> <li> <p> <a>DescribeFleetPortSettings</a> </p> </li> <li> <p> <a>DescribeFleetUtilization</a> </p> </li> <li> <p> <a>DescribeRuntimeConfiguration</a> </p> </li> <li> <p> <a>DescribeEC2InstanceLimits</a> </p> </li> <li> <p> <a>DescribeFleetEvents</a> </p> </li> </ul> </li> <li> <p>Update fleets:</p> <ul> <li> <p> <a>UpdateFleetAttributes</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetPortSettings</a> </p> </li> <li> <p> <a>UpdateRuntimeConfiguration</a> </p> </li> </ul> </li> <li> <p>Manage fleet actions:</p> <ul> <li> <p> <a>StartFleetActions</a> </p> </li> <li> <p> <a>StopFleetActions</a> </p> </li> </ul> </li> </ul></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FleetCapacity {
     /// <p>Unique identifier for a fleet.</p>
     #[serde(rename = "FleetId")]
@@ -1498,7 +1498,7 @@ pub struct FleetCapacity {
 
 /// <p><p>Current status of fleet utilization, including the number of game and player sessions being hosted.</p> <ul> <li> <p> <a>CreateFleet</a> </p> </li> <li> <p> <a>ListFleets</a> </p> </li> <li> <p> <a>DeleteFleet</a> </p> </li> <li> <p>Describe fleets:</p> <ul> <li> <p> <a>DescribeFleetAttributes</a> </p> </li> <li> <p> <a>DescribeFleetCapacity</a> </p> </li> <li> <p> <a>DescribeFleetPortSettings</a> </p> </li> <li> <p> <a>DescribeFleetUtilization</a> </p> </li> <li> <p> <a>DescribeRuntimeConfiguration</a> </p> </li> <li> <p> <a>DescribeEC2InstanceLimits</a> </p> </li> <li> <p> <a>DescribeFleetEvents</a> </p> </li> </ul> </li> <li> <p>Update fleets:</p> <ul> <li> <p> <a>UpdateFleetAttributes</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetPortSettings</a> </p> </li> <li> <p> <a>UpdateRuntimeConfiguration</a> </p> </li> </ul> </li> <li> <p>Manage fleet actions:</p> <ul> <li> <p> <a>StartFleetActions</a> </p> </li> <li> <p> <a>StopFleetActions</a> </p> </li> </ul> </li> </ul></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FleetUtilization {
     /// <p>Number of active game sessions currently being hosted on all instances in the fleet.</p>
     #[serde(rename = "ActiveGameSessionCount")]
@@ -1535,7 +1535,7 @@ pub struct GameProperty {
 
 /// <p><p>Properties describing a game session.</p> <p>A game session in ACTIVE status can host players. When a game session ends, its status is set to <code>TERMINATED</code>. </p> <p>Once the session ends, the game session object is retained for 30 days. This means you can reuse idempotency token values after this time. Game session logs are retained for 14 days.</p> <ul> <li> <p> <a>CreateGameSession</a> </p> </li> <li> <p> <a>DescribeGameSessions</a> </p> </li> <li> <p> <a>DescribeGameSessionDetails</a> </p> </li> <li> <p> <a>SearchGameSessions</a> </p> </li> <li> <p> <a>UpdateGameSession</a> </p> </li> <li> <p> <a>GetGameSessionLogUrl</a> </p> </li> <li> <p>Game session placements</p> <ul> <li> <p> <a>StartGameSessionPlacement</a> </p> </li> <li> <p> <a>DescribeGameSessionPlacement</a> </p> </li> <li> <p> <a>StopGameSessionPlacement</a> </p> </li> </ul> </li> </ul></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GameSession {
     /// <p>Time stamp indicating when this data object was created. Format is a number expressed in Unix time as milliseconds (for example "1469498468.057").</p>
     #[serde(rename = "CreationTime")]
@@ -1608,7 +1608,7 @@ pub struct GameSession {
 
 /// <p>Connection information for the new game session that is created with matchmaking. (with <a>StartMatchmaking</a>). Once a match is set, the FlexMatch engine places the match and creates a new game session for it. This information, including the game session endpoint and player sessions for each player in the original matchmaking request, is added to the <a>MatchmakingTicket</a>, which can be retrieved by calling <a>DescribeMatchmaking</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GameSessionConnectionInfo {
     #[serde(rename = "DnsName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1633,7 +1633,7 @@ pub struct GameSessionConnectionInfo {
 
 /// <p>A game session's properties plus the protection policy currently in force.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GameSessionDetail {
     /// <p>Object that describes a game session.</p>
     #[serde(rename = "GameSession")]
@@ -1647,7 +1647,7 @@ pub struct GameSessionDetail {
 
 /// <p><p>Object that describes a <a>StartGameSessionPlacement</a> request. This object includes the full details of the original request plus the current status and start/end time stamps.</p> <p>Game session placement-related operations include:</p> <ul> <li> <p> <a>StartGameSessionPlacement</a> </p> </li> <li> <p> <a>DescribeGameSessionPlacement</a> </p> </li> <li> <p> <a>StopGameSessionPlacement</a> </p> </li> </ul></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GameSessionPlacement {
     #[serde(rename = "DnsName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1724,7 +1724,7 @@ pub struct GameSessionPlacement {
 
 /// <p><p>Configuration of a queue that is used to process game session placement requests. The queue configuration identifies several game features:</p> <ul> <li> <p>The destinations where a new game session can potentially be hosted. Amazon GameLift tries these destinations in an order based on either the queue&#39;s default order or player latency information, if provided in a placement request. With latency information, Amazon GameLift can place game sessions where the majority of players are reporting the lowest possible latency. </p> </li> <li> <p>The length of time that placement requests can wait in the queue before timing out. </p> </li> <li> <p>A set of optional latency policies that protect individual players from high latencies, preventing game sessions from being placed where any individual player is reporting latency higher than a policy&#39;s maximum.</p> </li> </ul> <ul> <li> <p> <a>CreateGameSessionQueue</a> </p> </li> <li> <p> <a>DescribeGameSessionQueues</a> </p> </li> <li> <p> <a>UpdateGameSessionQueue</a> </p> </li> <li> <p> <a>DeleteGameSessionQueue</a> </p> </li> </ul></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GameSessionQueue {
     /// <p>List of fleets that can be used to fulfill game session placement requests in the queue. Fleets are identified by either a fleet ARN or a fleet alias ARN. Destinations are listed in default preference order.</p>
     #[serde(rename = "Destinations")]
@@ -1767,7 +1767,7 @@ pub struct GetGameSessionLogUrlInput {
 
 /// <p>Represents the returned data in response to a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetGameSessionLogUrlOutput {
     /// <p>Location of the requested game session logs, available for download. This URL is valid for 15 minutes, after which S3 will reject any download request using this URL. You can request a new URL any time within the 14-day period that the logs are retained.</p>
     #[serde(rename = "PreSignedUrl")]
@@ -1788,7 +1788,7 @@ pub struct GetInstanceAccessInput {
 
 /// <p>Represents the returned data in response to a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetInstanceAccessOutput {
     /// <p>Object that contains connection information for a fleet instance, including IP address and access credentials.</p>
     #[serde(rename = "InstanceAccess")]
@@ -1798,7 +1798,7 @@ pub struct GetInstanceAccessOutput {
 
 /// <p>Properties that describe an instance of a virtual computing resource that hosts one or more game servers. A fleet may contain zero or more instances.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Instance {
     /// <p>Time stamp indicating when this data object was created. Format is a number expressed in Unix time as milliseconds (for example "1469498468.057").</p>
     #[serde(rename = "CreationTime")]
@@ -1835,7 +1835,7 @@ pub struct Instance {
 
 /// <p>Information required to remotely connect to a fleet instance. Access is requested by calling <a>GetInstanceAccess</a>. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InstanceAccess {
     /// <p>Credentials required to access the instance.</p>
     #[serde(rename = "Credentials")]
@@ -1861,7 +1861,7 @@ pub struct InstanceAccess {
 
 /// <p>Set of credentials required to remotely access a fleet instance. Access credentials are requested by calling <a>GetInstanceAccess</a> and returned in an <a>InstanceAccess</a> object.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InstanceCredentials {
     /// <p>Secret string. For Windows instances, the secret is a password for use with Windows Remote Desktop. For Linux instances, it is a private key (which must be saved as a <code>.pem</code> file) for use with SSH.</p>
     #[serde(rename = "Secret")]
@@ -1913,7 +1913,7 @@ pub struct ListAliasesInput {
 
 /// <p>Represents the returned data in response to a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAliasesOutput {
     /// <p>Collection of alias records that match the list request.</p>
     #[serde(rename = "Aliases")]
@@ -1944,7 +1944,7 @@ pub struct ListBuildsInput {
 
 /// <p>Represents the returned data in response to a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListBuildsOutput {
     /// <p>Collection of build records that match the request.</p>
     #[serde(rename = "Builds")]
@@ -1979,7 +1979,7 @@ pub struct ListFleetsInput {
 
 /// <p>Represents the returned data in response to a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListFleetsOutput {
     /// <p>Set of fleet IDs matching the list request. You can retrieve additional information about all returned fleets by passing this result set to a call to <a>DescribeFleetAttributes</a>, <a>DescribeFleetCapacity</a>, or <a>DescribeFleetUtilization</a>.</p>
     #[serde(rename = "FleetIds")]
@@ -2004,7 +2004,7 @@ pub struct ListScriptsInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListScriptsOutput {
     /// <p>Token that indicates where to resume retrieving results on the next call to this action. If no token is returned, these results represent the end of the list.</p>
     #[serde(rename = "NextToken")]
@@ -2018,7 +2018,7 @@ pub struct ListScriptsOutput {
 
 /// <p>Represents a new player session that is created as a result of a successful FlexMatch match. A successful match automatically creates new player sessions for every player ID in the original matchmaking request. </p> <p>When players connect to the match's game session, they must include both player ID and player session ID in order to claim their assigned player slot.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MatchedPlayerSession {
     /// <p>Unique identifier for a player </p>
     #[serde(rename = "PlayerId")]
@@ -2032,7 +2032,7 @@ pub struct MatchedPlayerSession {
 
 /// <p>Guidelines for use with FlexMatch to match players into games. All matchmaking requests must specify a matchmaking configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MatchmakingConfiguration {
     /// <p>Flag that determines whether a match that was created with this configuration must be accepted by the matched players. To require acceptance, set to TRUE.</p>
     #[serde(rename = "AcceptanceRequired")]
@@ -2094,7 +2094,7 @@ pub struct MatchmakingConfiguration {
 
 /// <p><p>Set of rule statements, used with FlexMatch, that determine how to build your player matches. Each rule set describes a type of group to be created and defines the parameters for acceptable player matches. Rule sets are used in <a>MatchmakingConfiguration</a> objects.</p> <p>A rule set may define the following elements for a match. For detailed information and examples showing how to construct a rule set, see <a href="https://docs.aws.amazon.com/gamelift/latest/developerguide/match-rulesets.html">Build a FlexMatch Rule Set</a>. </p> <ul> <li> <p>Teams -- Required. A rule set must define one or multiple teams for the match and set minimum and maximum team sizes. For example, a rule set might describe a 4x4 match that requires all eight slots to be filled. </p> </li> <li> <p>Player attributes -- Optional. These attributes specify a set of player characteristics to evaluate when looking for a match. Matchmaking requests that use a rule set with player attributes must provide the corresponding attribute values. For example, an attribute might specify a player&#39;s skill or level.</p> </li> <li> <p>Rules -- Optional. Rules define how to evaluate potential players for a match based on player attributes. A rule might specify minimum requirements for individual players, teams, or entire matches. For example, a rule might require each player to meet a certain skill level, each team to have at least one player in a certain role, or the match to have a minimum average skill level. or may describe an entire group--such as all teams must be evenly matched or have at least one player in a certain role. </p> </li> <li> <p>Expansions -- Optional. Expansions allow you to relax the rules after a period of time when no acceptable matches are found. This feature lets you balance getting players into games in a reasonable amount of time instead of making them wait indefinitely for the best possible match. For example, you might use an expansion to increase the maximum skill variance between players after 30 seconds.</p> </li> </ul></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MatchmakingRuleSet {
     /// <p>Time stamp indicating when this data object was created. Format is a number expressed in Unix time as milliseconds (for example "1469498468.057").</p>
     #[serde(rename = "CreationTime")]
@@ -2111,7 +2111,7 @@ pub struct MatchmakingRuleSet {
 
 /// <p>Ticket generated to track the progress of a matchmaking request. Each ticket is uniquely identified by a ticket ID, supplied by the requester, when creating a matchmaking request with <a>StartMatchmaking</a>. Tickets can be retrieved by calling <a>DescribeMatchmaking</a> with the ticket ID.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MatchmakingTicket {
     /// <p>Name of the <a>MatchmakingConfiguration</a> that is used with this ticket. Matchmaking configurations determine how players are grouped into a match and how a new game session is created for the match.</p>
     #[serde(rename = "ConfigurationName")]
@@ -2157,7 +2157,7 @@ pub struct MatchmakingTicket {
 
 /// <p><p>Information about a player session that was created as part of a <a>StartGameSessionPlacement</a> request. This object contains only the player ID and player session ID. To retrieve full details on a player session, call <a>DescribePlayerSessions</a> with the player session ID.</p> <ul> <li> <p> <a>CreatePlayerSession</a> </p> </li> <li> <p> <a>CreatePlayerSessions</a> </p> </li> <li> <p> <a>DescribePlayerSessions</a> </p> </li> <li> <p>Game session placements</p> <ul> <li> <p> <a>StartGameSessionPlacement</a> </p> </li> <li> <p> <a>DescribeGameSessionPlacement</a> </p> </li> <li> <p> <a>StopGameSessionPlacement</a> </p> </li> </ul> </li> </ul></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PlacedPlayerSession {
     /// <p>Unique identifier for a player that is associated with this player session.</p>
     #[serde(rename = "PlayerId")]
@@ -2222,7 +2222,7 @@ pub struct PlayerLatencyPolicy {
 
 /// <p><p>Properties describing a player session. Player session objects are created either by creating a player session for a specific game session, or as part of a game session placement. A player session represents either a player reservation for a game session (status <code>RESERVED</code>) or actual player activity in a game session (status <code>ACTIVE</code>). A player session object (including player data) is automatically passed to a game session when the player connects to the game session and is validated.</p> <p>When a player disconnects, the player session status changes to <code>COMPLETED</code>. Once the session ends, the player session object is retained for 30 days and then removed.</p> <ul> <li> <p> <a>CreatePlayerSession</a> </p> </li> <li> <p> <a>CreatePlayerSessions</a> </p> </li> <li> <p> <a>DescribePlayerSessions</a> </p> </li> <li> <p>Game session placements</p> <ul> <li> <p> <a>StartGameSessionPlacement</a> </p> </li> <li> <p> <a>DescribeGameSessionPlacement</a> </p> </li> <li> <p> <a>StopGameSessionPlacement</a> </p> </li> </ul> </li> </ul></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PlayerSession {
     /// <p>Time stamp indicating when this data object was created. Format is a number expressed in Unix time as milliseconds (for example "1469498468.057").</p>
     #[serde(rename = "CreationTime")]
@@ -2313,7 +2313,7 @@ pub struct PutScalingPolicyInput {
 
 /// <p>Represents the returned data in response to a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutScalingPolicyOutput {
     /// <p>Descriptive label that is associated with a scaling policy. Policy names do not need to be unique.</p>
     #[serde(rename = "Name")]
@@ -2331,7 +2331,7 @@ pub struct RequestUploadCredentialsInput {
 
 /// <p>Represents the returned data in response to a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RequestUploadCredentialsOutput {
     /// <p>Amazon S3 path and key, identifying where the game build files are stored.</p>
     #[serde(rename = "StorageLocation")]
@@ -2353,7 +2353,7 @@ pub struct ResolveAliasInput {
 
 /// <p>Represents the returned data in response to a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResolveAliasOutput {
     /// <p>Fleet identifier that is associated with the requested alias.</p>
     #[serde(rename = "FleetId")]
@@ -2431,7 +2431,7 @@ pub struct S3Location {
 
 /// <p><p>Rule that controls how a fleet is scaled. Scaling policies are uniquely identified by the combination of name and fleet ID.</p> <ul> <li> <p> <a>DescribeFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>DescribeEC2InstanceLimits</a> </p> </li> <li> <p>Manage scaling policies:</p> <ul> <li> <p> <a>PutScalingPolicy</a> (auto-scaling)</p> </li> <li> <p> <a>DescribeScalingPolicies</a> (auto-scaling)</p> </li> <li> <p> <a>DeleteScalingPolicy</a> (auto-scaling)</p> </li> </ul> </li> <li> <p>Manage fleet actions:</p> <ul> <li> <p> <a>StartFleetActions</a> </p> </li> <li> <p> <a>StopFleetActions</a> </p> </li> </ul> </li> </ul></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ScalingPolicy {
     /// <p>Comparison operator to use when measuring a metric against the threshold value.</p>
     #[serde(rename = "ComparisonOperator")]
@@ -2481,7 +2481,7 @@ pub struct ScalingPolicy {
 
 /// <p><p>Properties describing a Realtime script.</p> <p> <b>Related operations</b> </p> <ul> <li> <p> <a>CreateScript</a> </p> </li> <li> <p> <a>ListScripts</a> </p> </li> <li> <p> <a>DescribeScript</a> </p> </li> <li> <p> <a>UpdateScript</a> </p> </li> <li> <p> <a>DeleteScript</a> </p> </li> </ul></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Script {
     /// <p>Time stamp indicating when this data object was created. Format is a number expressed in Unix time as milliseconds (for example "1469498468.057").</p>
     #[serde(rename = "CreationTime")]
@@ -2539,7 +2539,7 @@ pub struct SearchGameSessionsInput {
 
 /// <p>Represents the returned data in response to a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SearchGameSessionsOutput {
     /// <p>Collection of objects containing game session properties for each session matching the request.</p>
     #[serde(rename = "GameSessions")]
@@ -2577,7 +2577,7 @@ pub struct StartFleetActionsInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartFleetActionsOutput {}
 
 /// <p>Represents the input for a request action.</p>
@@ -2616,7 +2616,7 @@ pub struct StartGameSessionPlacementInput {
 
 /// <p>Represents the returned data in response to a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartGameSessionPlacementOutput {
     /// <p>Object that describes the newly created game session placement. This object includes all the information provided in the request, as well as start/end time stamps and placement status. </p>
     #[serde(rename = "GameSessionPlacement")]
@@ -2644,7 +2644,7 @@ pub struct StartMatchBackfillInput {
 
 /// <p>Represents the returned data in response to a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartMatchBackfillOutput {
     /// <p>Ticket representing the backfill matchmaking request. This object includes the information in the request, ticket status, and match results as generated during the matchmaking process.</p>
     #[serde(rename = "MatchmakingTicket")]
@@ -2669,7 +2669,7 @@ pub struct StartMatchmakingInput {
 
 /// <p>Represents the returned data in response to a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartMatchmakingOutput {
     /// <p>Ticket representing the matchmaking request. This object include the information included in the request, ticket status, and match results as generated during the matchmaking process.</p>
     #[serde(rename = "MatchmakingTicket")]
@@ -2688,7 +2688,7 @@ pub struct StopFleetActionsInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopFleetActionsOutput {}
 
 /// <p>Represents the input for a request action.</p>
@@ -2701,7 +2701,7 @@ pub struct StopGameSessionPlacementInput {
 
 /// <p>Represents the returned data in response to a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopGameSessionPlacementOutput {
     /// <p>Object that describes the canceled game session placement, with <code>CANCELLED</code> status and an end time stamp. </p>
     #[serde(rename = "GameSessionPlacement")]
@@ -2718,7 +2718,7 @@ pub struct StopMatchmakingInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopMatchmakingOutput {}
 
 /// <p><p>Settings for a target-based scaling policy (see <a>ScalingPolicy</a>. A target-based policy tracks a particular fleet metric specifies a target value for the metric. As player usage changes, the policy triggers Amazon GameLift to adjust capacity so that the metric returns to the target value. The target configuration specifies settings as needed for the target based policy, including the target value. </p> <ul> <li> <p> <a>DescribeFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>DescribeEC2InstanceLimits</a> </p> </li> <li> <p>Manage scaling policies:</p> <ul> <li> <p> <a>PutScalingPolicy</a> (auto-scaling)</p> </li> <li> <p> <a>DescribeScalingPolicies</a> (auto-scaling)</p> </li> <li> <p> <a>DeleteScalingPolicy</a> (auto-scaling)</p> </li> </ul> </li> <li> <p>Manage fleet actions:</p> <ul> <li> <p> <a>StartFleetActions</a> </p> </li> <li> <p> <a>StopFleetActions</a> </p> </li> </ul> </li> </ul></p>
@@ -2751,7 +2751,7 @@ pub struct UpdateAliasInput {
 
 /// <p>Represents the returned data in response to a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateAliasOutput {
     /// <p>Object that contains the updated alias configuration.</p>
     #[serde(rename = "Alias")]
@@ -2777,7 +2777,7 @@ pub struct UpdateBuildInput {
 
 /// <p>Represents the returned data in response to a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateBuildOutput {
     /// <p>Object that contains the updated build record.</p>
     #[serde(rename = "Build")]
@@ -2815,7 +2815,7 @@ pub struct UpdateFleetAttributesInput {
 
 /// <p>Represents the returned data in response to a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateFleetAttributesOutput {
     /// <p>Unique identifier for a fleet that was updated.</p>
     #[serde(rename = "FleetId")]
@@ -2845,7 +2845,7 @@ pub struct UpdateFleetCapacityInput {
 
 /// <p>Represents the returned data in response to a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateFleetCapacityOutput {
     /// <p>Unique identifier for a fleet that was updated.</p>
     #[serde(rename = "FleetId")]
@@ -2871,7 +2871,7 @@ pub struct UpdateFleetPortSettingsInput {
 
 /// <p>Represents the returned data in response to a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateFleetPortSettingsOutput {
     /// <p>Unique identifier for a fleet that was updated.</p>
     #[serde(rename = "FleetId")]
@@ -2905,7 +2905,7 @@ pub struct UpdateGameSessionInput {
 
 /// <p>Represents the returned data in response to a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateGameSessionOutput {
     /// <p>Object that contains the updated game session metadata.</p>
     #[serde(rename = "GameSession")]
@@ -2935,7 +2935,7 @@ pub struct UpdateGameSessionQueueInput {
 
 /// <p>Represents the returned data in response to a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateGameSessionQueueOutput {
     /// <p>Object that describes the newly updated game session queue.</p>
     #[serde(rename = "GameSessionQueue")]
@@ -3001,7 +3001,7 @@ pub struct UpdateMatchmakingConfigurationInput {
 
 /// <p>Represents the returned data in response to a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateMatchmakingConfigurationOutput {
     /// <p>Object that describes the updated matchmaking configuration.</p>
     #[serde(rename = "Configuration")]
@@ -3022,7 +3022,7 @@ pub struct UpdateRuntimeConfigurationInput {
 
 /// <p>Represents the returned data in response to a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateRuntimeConfigurationOutput {
     /// <p>The run-time configuration currently in force. If the update was successful, this object matches the one in the request.</p>
     #[serde(rename = "RuntimeConfiguration")]
@@ -3059,7 +3059,7 @@ pub struct UpdateScriptInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateScriptOutput {
     /// <p>The newly created script record with a unique script ID. The new script's storage location reflects an Amazon S3 location: (1) If the script was uploaded from an S3 bucket under your account, the storage location reflects the information that was provided in the <i>CreateScript</i> request; (2) If the script file was uploaded from a local zip file, the storage location reflects an S3 location controls by the Amazon GameLift service.</p>
     #[serde(rename = "Script")]
@@ -3077,7 +3077,7 @@ pub struct ValidateMatchmakingRuleSetInput {
 
 /// <p>Represents the returned data in response to a request action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ValidateMatchmakingRuleSetOutput {
     /// <p>Response indicating whether the rule set is valid.</p>
     #[serde(rename = "Valid")]
@@ -3087,7 +3087,7 @@ pub struct ValidateMatchmakingRuleSetOutput {
 
 /// <p><p>Represents an authorization for a VPC peering connection between the VPC for an Amazon GameLift fleet and another VPC on an account you have access to. This authorization must exist and be valid for the peering connection to be established. Authorizations are valid for 24 hours after they are issued.</p> <ul> <li> <p> <a>CreateVpcPeeringAuthorization</a> </p> </li> <li> <p> <a>DescribeVpcPeeringAuthorizations</a> </p> </li> <li> <p> <a>DeleteVpcPeeringAuthorization</a> </p> </li> <li> <p> <a>CreateVpcPeeringConnection</a> </p> </li> <li> <p> <a>DescribeVpcPeeringConnections</a> </p> </li> <li> <p> <a>DeleteVpcPeeringConnection</a> </p> </li> </ul></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct VpcPeeringAuthorization {
     /// <p>Time stamp indicating when this authorization was issued. Format is a number expressed in Unix time as milliseconds (for example "1469498468.057").</p>
     #[serde(rename = "CreationTime")]
@@ -3113,7 +3113,7 @@ pub struct VpcPeeringAuthorization {
 
 /// <p><p>Represents a peering connection between a VPC on one of your AWS accounts and the VPC for your Amazon GameLift fleets. This record may be for an active peering connection or a pending connection that has not yet been established.</p> <ul> <li> <p> <a>CreateVpcPeeringAuthorization</a> </p> </li> <li> <p> <a>DescribeVpcPeeringAuthorizations</a> </p> </li> <li> <p> <a>DeleteVpcPeeringAuthorization</a> </p> </li> <li> <p> <a>CreateVpcPeeringConnection</a> </p> </li> <li> <p> <a>DescribeVpcPeeringConnections</a> </p> </li> <li> <p> <a>DeleteVpcPeeringConnection</a> </p> </li> </ul></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct VpcPeeringConnection {
     /// <p>Unique identifier for a fleet. This ID determines the ID of the Amazon GameLift VPC for your fleet.</p>
     #[serde(rename = "FleetId")]
@@ -3143,7 +3143,7 @@ pub struct VpcPeeringConnection {
 
 /// <p>Represents status information for a VPC peering connection. Status is associated with a <a>VpcPeeringConnection</a> object. Status codes and messages are provided from EC2 (see <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_VpcPeeringConnectionStateReason.html">VpcPeeringConnectionStateReason</a>). Connection status information is also communicated as a fleet <a>Event</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct VpcPeeringConnectionStatus {
     /// <p>Code indicating the status of a VPC peering connection.</p>
     #[serde(rename = "Code")]

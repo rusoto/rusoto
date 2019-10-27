@@ -25,7 +25,7 @@ use rusoto_core::signature::SignedRequest;
 use serde_json;
 /// <p>The custom terminology applied to the input text by Amazon Translate for the translated text response. This is optional in the response and will only be present if you specified terminology input in the request. Currently, only one terminology can be applied per TranslateText request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AppliedTerminology {
     /// <p>The name of the custom terminology applied to the input text by Amazon Translate for the translated text response.</p>
     #[serde(rename = "Name")]
@@ -66,7 +66,7 @@ pub struct GetTerminologyRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetTerminologyResponse {
     /// <p>The data location of the custom terminology being retrieved. The custom terminology file is returned in a presigned url that has a 30 minute expiration.</p>
     #[serde(rename = "TerminologyDataLocation")]
@@ -100,7 +100,7 @@ pub struct ImportTerminologyRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ImportTerminologyResponse {
     /// <p>The properties of the custom terminology being imported.</p>
     #[serde(rename = "TerminologyProperties")]
@@ -121,7 +121,7 @@ pub struct ListTerminologiesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTerminologiesResponse {
     /// <p> If the response to the ListTerminologies was truncated, the NextToken fetches the next group of custom terminologies. </p>
     #[serde(rename = "NextToken")]
@@ -135,7 +135,7 @@ pub struct ListTerminologiesResponse {
 
 /// <p>The term being translated by the custom terminology.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Term {
     /// <p>The source text of the term being translated by the custom terminology.</p>
     #[serde(rename = "SourceText")]
@@ -165,7 +165,7 @@ pub struct TerminologyData {
 
 /// <p>The location of the custom terminology data.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TerminologyDataLocation {
     /// <p>The location of the custom terminology data.</p>
     #[serde(rename = "Location")]
@@ -177,7 +177,7 @@ pub struct TerminologyDataLocation {
 
 /// <p>The properties of the custom terminology.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TerminologyProperties {
     /// <p> The Amazon Resource Name (ARN) of the custom terminology. </p>
     #[serde(rename = "Arn")]
@@ -239,7 +239,7 @@ pub struct TranslateTextRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TranslateTextResponse {
     /// <p>The names of the custom terminologies applied to the input text by Amazon Translate for the translated text response.</p>
     #[serde(rename = "AppliedTerminologies")]

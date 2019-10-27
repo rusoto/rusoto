@@ -34,7 +34,7 @@ pub struct AnalyzeDocumentRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AnalyzeDocumentResponse {
     /// <p>The text that's detected and analyzed by <code>AnalyzeDocument</code>.</p>
     #[serde(rename = "Blocks")]
@@ -48,7 +48,7 @@ pub struct AnalyzeDocumentResponse {
 
 /// <p>A <code>Block</code> represents items that are recognized in a document within a group of pixels close to each other. The information returned in a <code>Block</code> depends on the type of operation. In document-text detection (for example <a>DetectDocumentText</a>), you get information about the detected words and lines of text. In text analysis (for example <a>AnalyzeDocument</a>), you can also get information about the fields, tables and selection elements that are detected in the document.</p> <p>An array of <code>Block</code> objects is returned by both synchronous and asynchronous operations. In synchronous operations, such as <a>DetectDocumentText</a>, the array of <code>Block</code> objects is the entire set of results. In asynchronous operations, such as <a>GetDocumentAnalysis</a>, the array is returned over one or more responses.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/textract/latest/dg/how-it-works.html">How Amazon Textract Works</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Block {
     /// <p><p>The type of text that&#39;s recognized in a block. In text-detection operations, the following types are returned:</p> <ul> <li> <p> <i>PAGE</i> - Contains a list of the LINE Block objects that are detected on a document page.</p> </li> <li> <p> <i>WORD</i> - A word detected on a document page. A word is one or more ISO basic Latin script characters that aren&#39;t separated by spaces.</p> </li> <li> <p> <i>LINE</i> - A string of tab-delimited, contiguous words that&#39;s detected on a document page.</p> </li> </ul> <p>In text analysis operations, the following types are returned:</p> <ul> <li> <p> <i>PAGE</i> - Contains a list of child Block objects that are detected on a document page.</p> </li> <li> <p> <i>KEY<em>VALUE</em>SET</i> - Stores the KEY and VALUE Block objects for a field that&#39;s detected on a document page. Use the <code>EntityType</code> field to determine if a KEY<em>VALUE</em>SET object is a KEY Block object or a VALUE Block object. </p> </li> <li> <p> <i>WORD</i> - A word detected on a document page. A word is one or more ISO basic Latin script characters that aren&#39;t separated by spaces that&#39;s detected on a document page.</p> </li> <li> <p> <i>LINE</i> - A string of tab-delimited, contiguous words that&#39;s detected on a document page.</p> </li> <li> <p> <i>TABLE</i> - A table that&#39;s detected on a document page. A table is any grid-based information with 2 or more rows or columns with a cell span of 1 row and 1 column each. </p> </li> <li> <p> <i>CELL</i> - A cell within a detected table. The cell is the parent of the block that contains the text in the cell.</p> </li> <li> <p> <i>SELECTION_ELEMENT</i> - A selectable element such as a radio button or checkbox that&#39;s detected on a document page. Use the value of <code>SelectionStatus</code> to determine the status of the selection element.</p> </li> </ul></p>
     #[serde(rename = "BlockType")]
@@ -106,7 +106,7 @@ pub struct Block {
 
 /// <p>The bounding box around the recognized text, key, value, table or table cell on a document page. The <code>left</code> (x-coordinate) and <code>top</code> (y-coordinate) are coordinates that represent the top and left sides of the bounding box. Note that the upper-left corner of the image is the origin (0,0). </p> <p>The <code>top</code> and <code>left</code> values returned are ratios of the overall document page size. For example, if the input image is 700 x 200 pixels, and the top-left coordinate of the bounding box is 350 x 50 pixels, the API returns a <code>left</code> value of 0.5 (350/700) and a <code>top</code> value of 0.25 (50/200).</p> <p>The <code>width</code> and <code>height</code> values represent the dimensions of the bounding box as a ratio of the overall document page dimension. For example, if the document page size is 700 x 200 pixels, and the bounding box width is 70 pixels, the width returned is 0.1. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BoundingBox {
     /// <p>The height of the bounding box as a ratio of the overall document page height.</p>
     #[serde(rename = "Height")]
@@ -134,7 +134,7 @@ pub struct DetectDocumentTextRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DetectDocumentTextResponse {
     /// <p>An array of Block objects containing the text detected in the document.</p>
     #[serde(rename = "Blocks")]
@@ -175,7 +175,7 @@ pub struct DocumentLocation {
 
 /// <p>Information about the input document.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DocumentMetadata {
     /// <p>The number of pages detected in the document.</p>
     #[serde(rename = "Pages")]
@@ -185,7 +185,7 @@ pub struct DocumentMetadata {
 
 /// <p>Information about where a recognized text, key, value, table, or table cell is located on a document page.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Geometry {
     /// <p>An axis-aligned coarse representation of the location of the recognized text on the document page.</p>
     #[serde(rename = "BoundingBox")]
@@ -213,7 +213,7 @@ pub struct GetDocumentAnalysisRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDocumentAnalysisResponse {
     /// <p>The results of the text analysis operation.</p>
     #[serde(rename = "Blocks")]
@@ -257,7 +257,7 @@ pub struct GetDocumentTextDetectionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDocumentTextDetectionResponse {
     /// <p>The results of the text-detection operation.</p>
     #[serde(rename = "Blocks")]
@@ -298,7 +298,7 @@ pub struct NotificationChannel {
 
 /// <p>The X and Y coordinates of a point on a document page. The X and Y values returned are ratios of the overall document page size. For example, if the input document is 700 x 200 and the operation returns X=0.5 and Y=0.25, then the point is at the (350,50) pixel coordinate on the document page.</p> <p>An array of <code>Point</code> objects, <code>Polygon</code>, is returned by <a>DetectDocumentText</a>. <code>Polygon</code> represents a fine-grained polygon around detected text. For more information, see Geometry in the Amazon Textract Developer Guide. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Point {
     /// <p>The value of the X coordinate for a point on a <code>Polygon</code>.</p>
     #[serde(rename = "X")]
@@ -312,7 +312,7 @@ pub struct Point {
 
 /// <p>Information about how blocks are related to each other. A <code>Block</code> object contains 0 or more <code>Relation</code> objects in a list, <code>Relationships</code>. For more information, see <a>Block</a>.</p> <p>The <code>Type</code> element provides the type of the relationship for all blocks in the <code>IDs</code> array. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Relationship {
     /// <p>An array of IDs for related blocks. You can get the type of the relationship from the <code>Type</code> element.</p>
     #[serde(rename = "Ids")]
@@ -364,7 +364,7 @@ pub struct StartDocumentAnalysisRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartDocumentAnalysisResponse {
     /// <p>The identifier for the document text detection job. Use <code>JobId</code> to identify the job in a subsequent call to <code>GetDocumentAnalysis</code>.</p>
     #[serde(rename = "JobId")]
@@ -392,7 +392,7 @@ pub struct StartDocumentTextDetectionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartDocumentTextDetectionResponse {
     /// <p>The identifier for the document text-detection job. Use <code>JobId</code> to identify the job in a subsequent call to <code>GetDocumentTextDetection</code>.</p>
     #[serde(rename = "JobId")]
@@ -402,7 +402,7 @@ pub struct StartDocumentTextDetectionResponse {
 
 /// <p>A warning about an issue that occurred during asynchronous text analysis (<a>StartDocumentAnalysis</a>) or asynchronous document-text detection (<a>StartDocumentTextDetection</a>). </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Warning {
     /// <p>The error code for the warning.</p>
     #[serde(rename = "ErrorCode")]

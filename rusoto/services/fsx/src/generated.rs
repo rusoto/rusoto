@@ -25,7 +25,7 @@ use rusoto_core::signature::SignedRequest;
 use serde_json;
 /// <p>The Microsoft AD attributes of the Amazon FSx for Windows File Server file system.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ActiveDirectoryBackupAttributes {
     /// <p>The ID of the AWS Managed Microsoft Active Directory instance to which the file system is joined.</p>
     #[serde(rename = "ActiveDirectoryId")]
@@ -39,7 +39,7 @@ pub struct ActiveDirectoryBackupAttributes {
 
 /// <p>A backup of an Amazon FSx for Windows File Server file system. You can create a new file system from a backup to protect against data loss.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Backup {
     /// <p>The ID of the backup.</p>
     #[serde(rename = "BackupId")]
@@ -83,7 +83,7 @@ pub struct Backup {
 
 /// <p>If backup creation fails, this structure contains the details of that failure.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BackupFailureDetails {
     /// <p>A message describing the backup creation failure.</p>
     #[serde(rename = "Message")]
@@ -109,7 +109,7 @@ pub struct CreateBackupRequest {
 
 /// <p>The response object for the <code>CreateBackup</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateBackupResponse {
     /// <p>A description of the backup.</p>
     #[serde(rename = "Backup")]
@@ -145,7 +145,7 @@ pub struct CreateFileSystemFromBackupRequest {
 
 /// <p>The response object for the <code>CreateFileSystemFromBackup</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateFileSystemFromBackupResponse {
     /// <p>A description of the file system.</p>
     #[serde(rename = "FileSystem")]
@@ -212,7 +212,7 @@ pub struct CreateFileSystemRequest {
 
 /// <p>The response object returned after the file system is created.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateFileSystemResponse {
     /// <p>The configuration of the file system that was created.</p>
     #[serde(rename = "FileSystem")]
@@ -254,7 +254,7 @@ pub struct CreateFileSystemWindowsConfiguration {
 
 /// <p>The data repository configuration object for Lustre file systems returned in the response of the <code>CreateFileSystem</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DataRepositoryConfiguration {
     /// <p>The export path to the Amazon S3 bucket (and prefix) that you are using to store new and changed Lustre file system files in S3.</p>
     #[serde(rename = "ExportPath")]
@@ -284,7 +284,7 @@ pub struct DeleteBackupRequest {
 
 /// <p>The response object for <code>DeleteBackup</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteBackupResponse {
     /// <p>The ID of the backup deleted.</p>
     #[serde(rename = "BackupId")]
@@ -313,7 +313,7 @@ pub struct DeleteFileSystemRequest {
 
 /// <p>The response object for the <code>DeleteFileSystem</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteFileSystemResponse {
     /// <p>The ID of the file system being deleted.</p>
     #[serde(rename = "FileSystemId")]
@@ -343,7 +343,7 @@ pub struct DeleteFileSystemWindowsConfiguration {
 
 /// <p>The response object for the Microsoft Windows file system used in the <code>DeleteFileSystem</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteFileSystemWindowsResponse {
     /// <p>The ID of the final backup for this file system.</p>
     #[serde(rename = "FinalBackupId")]
@@ -378,7 +378,7 @@ pub struct DescribeBackupsRequest {
 
 /// <p>Response object for <code>DescribeBackups</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeBackupsResponse {
     /// <p>Any array of backups.</p>
     #[serde(rename = "Backups")]
@@ -409,7 +409,7 @@ pub struct DescribeFileSystemsRequest {
 
 /// <p>The response object for <code>DescribeFileSystems</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeFileSystemsResponse {
     /// <p>An array of file system descriptions.</p>
     #[serde(rename = "FileSystems")]
@@ -423,7 +423,7 @@ pub struct DescribeFileSystemsResponse {
 
 /// <p>A description of a specific Amazon FSx file system.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FileSystem {
     /// <p>The time that the file system was created, in seconds (since 1970-01-01T00:00:00Z), also known as Unix time.</p>
     #[serde(rename = "CreationTime")]
@@ -491,7 +491,7 @@ pub struct FileSystem {
 
 /// <p>A structure providing details of any failures that occur when creating the file system has failed.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FileSystemFailureDetails {
     /// <p>A message describing any failures that occurred during file system creation.</p>
     #[serde(rename = "Message")]
@@ -530,7 +530,7 @@ pub struct ListTagsForResourceRequest {
 
 /// <p>The response object for <code>ListTagsForResource</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
     /// <p>This is present if there are more tags than returned in the response (String). You can use the <code>NextToken</code> value in the later request to fetch the tags. </p>
     #[serde(rename = "NextToken")]
@@ -544,7 +544,7 @@ pub struct ListTagsForResourceResponse {
 
 /// <p>The configuration for the Amazon FSx for Lustre file system.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct LustreFileSystemConfiguration {
     #[serde(rename = "DataRepositoryConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -557,7 +557,7 @@ pub struct LustreFileSystemConfiguration {
 
 /// <p>The configuration of the self-managed Microsoft Active Directory (AD) directory to which the Windows File Server instance is joined.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SelfManagedActiveDirectoryAttributes {
     /// <p>A list of up to two IP addresses of DNS servers or domain controllers in the self-managed AD directory.</p>
     #[serde(rename = "DnsIps")]
@@ -649,7 +649,7 @@ pub struct TagResourceRequest {
 
 /// <p>The response object for the <code>TagResource</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
 
 /// <p>The request object for <code>UntagResource</code> action.</p>
@@ -665,7 +665,7 @@ pub struct UntagResourceRequest {
 
 /// <p>The response object for <code>UntagResource</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
 /// <p>The configuration object for Amazon FSx for Lustre file systems used in the <code>UpdateFileSystem</code> operation.</p>
@@ -697,7 +697,7 @@ pub struct UpdateFileSystemRequest {
 
 /// <p>The response object for the <code>UpdateFileSystem</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateFileSystemResponse {
     /// <p>A description of the file system that was updated.</p>
     #[serde(rename = "FileSystem")]
@@ -729,7 +729,7 @@ pub struct UpdateFileSystemWindowsConfiguration {
 
 /// <p>The configuration for this Microsoft Windows file system.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct WindowsFileSystemConfiguration {
     /// <p>The ID for an existing Microsoft Active Directory instance that the file system should join when it's created.</p>
     #[serde(rename = "ActiveDirectoryId")]

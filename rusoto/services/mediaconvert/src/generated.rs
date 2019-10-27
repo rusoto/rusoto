@@ -152,7 +152,7 @@ pub struct AssociateCertificateRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateCertificateResponse {}
 
 /// <p>Audio codec settings (CodecSettings) under (AudioDescriptions) contains the group of settings related to audio encoding. The settings in this group vary depending on the value that you choose for Audio codec (Codec). For each codec enum that you choose, define the corresponding settings object. The following lists the codec enum, settings object pairs. * AAC, AacSettings * MP2, Mp2Settings * WAV, WavSettings * AIFF, AiffSettings * AC3, Ac3Settings * EAC3, Eac3Settings * EAC3_ATMOS, Eac3AtmosSettings</p>
@@ -414,7 +414,7 @@ pub struct CancelJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CancelJobResponse {}
 
 /// <p>Description of Caption output</p>
@@ -762,7 +762,7 @@ pub struct CreateJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateJobResponse {
     /// <p>Each job converts an input file into an output file or files. For more information, see the User Guide at http://docs.aws.amazon.com/mediaconvert/latest/ug/what-is.html</p>
     #[serde(rename = "Job")]
@@ -809,7 +809,7 @@ pub struct CreateJobTemplateRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateJobTemplateResponse {
     /// <p>A job template is a pre-made set of encoding instructions that you can use to quickly create a job.</p>
     #[serde(rename = "JobTemplate")]
@@ -840,7 +840,7 @@ pub struct CreatePresetRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreatePresetResponse {
     /// <p>A preset is a collection of preconfigured media conversion settings that you want MediaConvert to apply to the output during the conversion process.</p>
     #[serde(rename = "Preset")]
@@ -876,7 +876,7 @@ pub struct CreateQueueRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateQueueResponse {
     /// <p>You can use queues to manage the resources that are available to your AWS account for running multiple transcoding jobs at the same time. If you don&#39;t specify a queue, the service sends all jobs through the default queue. For more information, see https://docs.aws.amazon.com/mediaconvert/latest/ug/working-with-queues.html.</p>
     #[serde(rename = "Queue")]
@@ -969,7 +969,7 @@ pub struct DeleteJobTemplateRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteJobTemplateResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -980,7 +980,7 @@ pub struct DeletePresetRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeletePresetResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -991,7 +991,7 @@ pub struct DeleteQueueRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteQueueResponse {}
 
 /// <p>DescribeEndpointsRequest</p>
@@ -1012,7 +1012,7 @@ pub struct DescribeEndpointsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeEndpointsResponse {
     /// <p>List of endpoints</p>
     #[serde(rename = "Endpoints")]
@@ -1041,7 +1041,7 @@ pub struct DisassociateCertificateRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateCertificateResponse {}
 
 /// <p>Inserts DVB Network Information Table (NIT) at the specified table repetition interval.</p>
@@ -1371,7 +1371,7 @@ pub struct EmbeddedSourceSettings {
 
 /// <p>Describes an account-specific API endpoint.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Endpoint {
     /// <p>URL of endpoint</p>
     #[serde(rename = "Url")]
@@ -1482,7 +1482,7 @@ pub struct GetJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetJobResponse {
     /// <p>Each job converts an input file into an output file or files. For more information, see the User Guide at http://docs.aws.amazon.com/mediaconvert/latest/ug/what-is.html</p>
     #[serde(rename = "Job")]
@@ -1498,7 +1498,7 @@ pub struct GetJobTemplateRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetJobTemplateResponse {
     /// <p>A job template is a pre-made set of encoding instructions that you can use to quickly create a job.</p>
     #[serde(rename = "JobTemplate")]
@@ -1514,7 +1514,7 @@ pub struct GetPresetRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetPresetResponse {
     /// <p>A preset is a collection of preconfigured media conversion settings that you want MediaConvert to apply to the output during the conversion process.</p>
     #[serde(rename = "Preset")]
@@ -1530,7 +1530,7 @@ pub struct GetQueueRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetQueueResponse {
     /// <p>You can use queues to manage the resources that are available to your AWS account for running multiple transcoding jobs at the same time. If you don&#39;t specify a queue, the service sends all jobs through the default queue. For more information, see https://docs.aws.amazon.com/mediaconvert/latest/ug/working-with-queues.html.</p>
     #[serde(rename = "Queue")]
@@ -2391,7 +2391,7 @@ pub struct InsertableImage {
 
 /// <p>Each job converts an input file into an output file or files. For more information, see the User Guide at http://docs.aws.amazon.com/mediaconvert/latest/ug/what-is.html</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Job {
     /// <p>Accelerated transcoding can significantly speed up jobs with long, visually complex content.</p>
     #[serde(rename = "AccelerationSettings")]
@@ -2520,7 +2520,7 @@ pub struct JobSettings {
 
 /// <p>A job template is a pre-made set of encoding instructions that you can use to quickly create a job.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct JobTemplate {
     /// <p>Accelerated transcoding can significantly speed up jobs with long, visually complex content.</p>
     #[serde(rename = "AccelerationSettings")]
@@ -2636,7 +2636,7 @@ pub struct ListJobTemplatesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListJobTemplatesResponse {
     /// <p>List of Job templates.</p>
     #[serde(rename = "JobTemplates")]
@@ -2673,7 +2673,7 @@ pub struct ListJobsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListJobsResponse {
     /// <p>List of jobs</p>
     #[serde(rename = "Jobs")]
@@ -2710,7 +2710,7 @@ pub struct ListPresetsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPresetsResponse {
     /// <p>Use this string to request the next batch of presets.</p>
     #[serde(rename = "NextToken")]
@@ -2743,7 +2743,7 @@ pub struct ListQueuesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListQueuesResponse {
     /// <p>Use this string to request the next batch of queues.</p>
     #[serde(rename = "NextToken")]
@@ -2763,7 +2763,7 @@ pub struct ListTagsForResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
     /// <p>The Amazon Resource Name (ARN) and tags for an AWS Elemental MediaConvert resource.</p>
     #[serde(rename = "ResourceTags")]
@@ -3410,7 +3410,7 @@ pub struct OutputChannelMapping {
 
 /// <p>Details regarding output</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct OutputDetail {
     /// <p>Duration in milliseconds</p>
     #[serde(rename = "DurationInMs")]
@@ -3445,7 +3445,7 @@ pub struct OutputGroup {
 
 /// <p>Contains details about the output groups specified in the job settings.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct OutputGroupDetail {
     /// <p>Details about the output</p>
     #[serde(rename = "OutputDetails")]
@@ -3493,7 +3493,7 @@ pub struct OutputSettings {
 
 /// <p>A preset is a collection of preconfigured media conversion settings that you want MediaConvert to apply to the output during the conversion process.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Preset {
     /// <p>An identifier for this resource that is unique within all of AWS.</p>
     #[serde(rename = "Arn")]
@@ -3601,7 +3601,7 @@ pub struct ProresSettings {
 
 /// <p>You can use queues to manage the resources that are available to your AWS account for running multiple transcoding jobs at the same time. If you don&#39;t specify a queue, the service sends all jobs through the default queue. For more information, see https://docs.aws.amazon.com/mediaconvert/latest/ug/working-with-queues.html.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Queue {
     /// <p>An identifier for this resource that is unique within all of AWS.</p>
     #[serde(rename = "Arn")]
@@ -3688,7 +3688,7 @@ pub struct RemixSettings {
 
 /// <p>Details about the pricing plan for your reserved queue. Required for reserved queues and not applicable to on-demand queues.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ReservationPlan {
     /// <p>The length of the term of your reserved queue pricing plan commitment.</p>
     #[serde(rename = "Commitment")]
@@ -3732,7 +3732,7 @@ pub struct ReservationPlanSettings {
 
 /// <p>The Amazon Resource Name (ARN) and tags for an AWS Elemental MediaConvert resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResourceTags {
     /// <p>The Amazon Resource Name (ARN) of the resource.</p>
     #[serde(rename = "Arn")]
@@ -3854,7 +3854,7 @@ pub struct TagResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
 
 /// <p>Settings for Teletext caption output</p>
@@ -3928,7 +3928,7 @@ pub struct TimedMetadataInsertion {
 
 /// <p>Information about when jobs are submitted, started, and finished is specified in Unix epoch format in seconds.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Timing {
     /// <p>The time, in Unix epoch format, that the transcoding job finished</p>
     #[serde(rename = "FinishTime")]
@@ -3974,7 +3974,7 @@ pub struct UntagResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -4013,7 +4013,7 @@ pub struct UpdateJobTemplateRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateJobTemplateResponse {
     /// <p>A job template is a pre-made set of encoding instructions that you can use to quickly create a job.</p>
     #[serde(rename = "JobTemplate")]
@@ -4041,7 +4041,7 @@ pub struct UpdatePresetRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdatePresetResponse {
     /// <p>A preset is a collection of preconfigured media conversion settings that you want MediaConvert to apply to the output during the conversion process.</p>
     #[serde(rename = "Preset")]
@@ -4069,7 +4069,7 @@ pub struct UpdateQueueRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateQueueResponse {
     /// <p>You can use queues to manage the resources that are available to your AWS account for running multiple transcoding jobs at the same time. If you don&#39;t specify a queue, the service sends all jobs through the default queue. For more information, see https://docs.aws.amazon.com/mediaconvert/latest/ug/working-with-queues.html.</p>
     #[serde(rename = "Queue")]
@@ -4173,7 +4173,7 @@ pub struct VideoDescription {
 
 /// <p>Contains details about the output&#39;s video stream</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct VideoDetail {
     /// <p>Height in pixels for the output</p>
     #[serde(rename = "HeightInPx")]

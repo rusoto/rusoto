@@ -31,3 +31,4 @@ path = "../../../mock"
 default = ["native-tls"]
 native-tls = ["rusoto_core/native-tls"]
 rustls = ["rusoto_core/rustls"]
+serialize_structs = []

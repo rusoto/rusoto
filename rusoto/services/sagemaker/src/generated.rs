@@ -34,7 +34,7 @@ pub struct AddTagsInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AddTagsOutput {
     /// <p>A list of tags associated with the Amazon SageMaker resource.</p>
     #[serde(rename = "Tags")]
@@ -64,7 +64,7 @@ pub struct AlgorithmSpecification {
 
 /// <p>Specifies the validation and image scan statuses of the algorithm.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AlgorithmStatusDetails {
     /// <p>The status of the scan of the algorithm's Docker image container.</p>
     #[serde(rename = "ImageScanStatuses")]
@@ -78,7 +78,7 @@ pub struct AlgorithmStatusDetails {
 
 /// <p>Represents the overall status of an algorithm.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AlgorithmStatusItem {
     /// <p>if the overall status is <code>Failed</code>, the reason for the failure.</p>
     #[serde(rename = "FailureReason")]
@@ -94,7 +94,7 @@ pub struct AlgorithmStatusItem {
 
 /// <p>Provides summary information about an algorithm.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AlgorithmSummary {
     /// <p>The Amazon Resource Name (ARN) of the algorithm.</p>
     #[serde(rename = "AlgorithmArn")]
@@ -238,7 +238,7 @@ pub struct CheckpointConfig {
 
 /// <p>Specifies summary information about a Git repository.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CodeRepositorySummary {
     /// <p>The Amazon Resource Name (ARN) of the Git repository.</p>
     #[serde(rename = "CodeRepositoryArn")]
@@ -274,7 +274,7 @@ pub struct CognitoMemberDefinition {
 
 /// <p>A summary of a model compilation job.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CompilationJobSummary {
     /// <p>The time when the model compilation job completed.</p>
     #[serde(rename = "CompilationEndTime")]
@@ -386,7 +386,7 @@ pub struct CreateAlgorithmInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateAlgorithmOutput {
     /// <p>The Amazon Resource Name (ARN) of the new algorithm.</p>
     #[serde(rename = "AlgorithmArn")]
@@ -404,7 +404,7 @@ pub struct CreateCodeRepositoryInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateCodeRepositoryOutput {
     /// <p>The Amazon Resource Name (ARN) of the new repository.</p>
     #[serde(rename = "CodeRepositoryArn")]
@@ -431,7 +431,7 @@ pub struct CreateCompilationJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateCompilationJobResponse {
     /// <p><p>If the action is successful, the service sends back an HTTP 200 response. Amazon SageMaker returns the following data in JSON format:</p> <ul> <li> <p> <code>CompilationJobArn</code>: The Amazon Resource Name (ARN) of the compiled job.</p> </li> </ul></p>
     #[serde(rename = "CompilationJobArn")]
@@ -457,7 +457,7 @@ pub struct CreateEndpointConfigInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateEndpointConfigOutput {
     /// <p>The Amazon Resource Name (ARN) of the endpoint configuration. </p>
     #[serde(rename = "EndpointConfigArn")]
@@ -479,7 +479,7 @@ pub struct CreateEndpointInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateEndpointOutput {
     /// <p>The Amazon Resource Name (ARN) of the endpoint.</p>
     #[serde(rename = "EndpointArn")]
@@ -509,7 +509,7 @@ pub struct CreateHyperParameterTuningJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateHyperParameterTuningJobResponse {
     /// <p>The Amazon Resource Name (ARN) of the tuning job. Amazon SageMaker assigns an ARN to a hyperparameter tuning job when you create it.</p>
     #[serde(rename = "HyperParameterTuningJobArn")]
@@ -555,7 +555,7 @@ pub struct CreateLabelingJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateLabelingJobResponse {
     /// <p>The Amazon Resource Name (ARN) of the labeling job. You use this ARN to identify the labeling job.</p>
     #[serde(rename = "LabelingJobArn")]
@@ -593,7 +593,7 @@ pub struct CreateModelInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateModelOutput {
     /// <p>The ARN of the model created in Amazon SageMaker.</p>
     #[serde(rename = "ModelArn")]
@@ -628,7 +628,7 @@ pub struct CreateModelPackageInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateModelPackageOutput {
     /// <p>The Amazon Resource Name (ARN) of the new model package.</p>
     #[serde(rename = "ModelPackageArn")]
@@ -708,7 +708,7 @@ pub struct CreateNotebookInstanceLifecycleConfigInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateNotebookInstanceLifecycleConfigOutput {
     /// <p>The Amazon Resource Name (ARN) of the lifecycle configuration.</p>
     #[serde(rename = "NotebookInstanceLifecycleConfigArn")]
@@ -717,7 +717,7 @@ pub struct CreateNotebookInstanceLifecycleConfigOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateNotebookInstanceOutput {
     /// <p>The Amazon Resource Name (ARN) of the notebook instance. </p>
     #[serde(rename = "NotebookInstanceArn")]
@@ -737,7 +737,7 @@ pub struct CreatePresignedNotebookInstanceUrlInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreatePresignedNotebookInstanceUrlOutput {
     /// <p>A JSON object that contains the URL string. </p>
     #[serde(rename = "AuthorizedUrl")]
@@ -800,7 +800,7 @@ pub struct CreateTrainingJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateTrainingJobResponse {
     /// <p>The Amazon Resource Name (ARN) of the training job.</p>
     #[serde(rename = "TrainingJobArn")]
@@ -851,7 +851,7 @@ pub struct CreateTransformJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateTransformJobResponse {
     /// <p>The Amazon Resource Name (ARN) of the transform job.</p>
     #[serde(rename = "TransformJobArn")]
@@ -880,7 +880,7 @@ pub struct CreateWorkteamRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateWorkteamResponse {
     /// <p>The Amazon Resource Name (ARN) of the work team. You can use this ARN to identify the work team.</p>
     #[serde(rename = "WorkteamArn")]
@@ -985,7 +985,7 @@ pub struct DeleteTagsInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteTagsOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -996,7 +996,7 @@ pub struct DeleteWorkteamRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteWorkteamResponse {
     /// <p>Returns <code>true</code> if the work team was successfully deleted; otherwise, returns <code>false</code>.</p>
     #[serde(rename = "Success")]
@@ -1005,7 +1005,7 @@ pub struct DeleteWorkteamResponse {
 
 /// <p>Gets the Amazon EC2 Container Registry path of the docker image of the model that is hosted in this <a>ProductionVariant</a>.</p> <p>If you used the <code>registry/repository[:tag]</code> form to specify the image path of the primary container when you created the model hosted in this <code>ProductionVariant</code>, the path resolves to a path of the form <code>registry/repository[@digest]</code>. A digest is a hash value that identifies a specific version of an image. For information about Amazon ECR paths, see <a href="https://docs.aws.amazon.com/AmazonECR/latest/userguide/docker-pull-ecr-image.html">Pulling an Image</a> in the <i>Amazon ECR User Guide</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeployedImage {
     /// <p>The date and time when the image path for the model resolved to the <code>ResolvedImage</code> </p>
     #[serde(rename = "ResolutionTime")]
@@ -1029,7 +1029,7 @@ pub struct DescribeAlgorithmInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAlgorithmOutput {
     /// <p>The Amazon Resource Name (ARN) of the algorithm.</p>
     #[serde(rename = "AlgorithmArn")]
@@ -1079,7 +1079,7 @@ pub struct DescribeCodeRepositoryInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeCodeRepositoryOutput {
     /// <p>The Amazon Resource Name (ARN) of the Git repository.</p>
     #[serde(rename = "CodeRepositoryArn")]
@@ -1107,7 +1107,7 @@ pub struct DescribeCompilationJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeCompilationJobResponse {
     /// <p>The time when the model compilation job on a compilation job instance ended. For a successful or stopped job, this is when the job's model artifacts have finished uploading. For a failed job, this is when Amazon SageMaker detected that the job failed. </p>
     #[serde(rename = "CompilationEndTime")]
@@ -1160,7 +1160,7 @@ pub struct DescribeEndpointConfigInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeEndpointConfigOutput {
     /// <p>A timestamp that shows when the endpoint configuration was created.</p>
     #[serde(rename = "CreationTime")]
@@ -1188,7 +1188,7 @@ pub struct DescribeEndpointInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeEndpointOutput {
     /// <p>A timestamp that shows when the endpoint was created.</p>
     #[serde(rename = "CreationTime")]
@@ -1226,7 +1226,7 @@ pub struct DescribeHyperParameterTuningJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeHyperParameterTuningJobResponse {
     /// <p>A <a>TrainingJobSummary</a> object that describes the training job that completed with the best current <a>HyperParameterTuningJobObjective</a>.</p>
     #[serde(rename = "BestTrainingJob")]
@@ -1287,7 +1287,7 @@ pub struct DescribeLabelingJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeLabelingJobResponse {
     /// <p>The date and time that the labeling job was created.</p>
     #[serde(rename = "CreationTime")]
@@ -1360,7 +1360,7 @@ pub struct DescribeModelInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeModelOutput {
     /// <p>The containers in the inference pipeline.</p>
     #[serde(rename = "Containers")]
@@ -1400,7 +1400,7 @@ pub struct DescribeModelPackageInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeModelPackageOutput {
     /// <p>Whether the model package is certified for listing on AWS Marketplace.</p>
     #[serde(rename = "CertifyForMarketplace")]
@@ -1454,7 +1454,7 @@ pub struct DescribeNotebookInstanceLifecycleConfigInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeNotebookInstanceLifecycleConfigOutput {
     /// <p>A timestamp that tells when the lifecycle configuration was created.</p>
     #[serde(rename = "CreationTime")]
@@ -1483,7 +1483,7 @@ pub struct DescribeNotebookInstanceLifecycleConfigOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeNotebookInstanceOutput {
     /// <p>A list of the Elastic Inference (EI) instance types associated with this notebook instance. Currently only one EI instance type can be associated with a notebook instance. For more information, see <a href="sagemaker/latest/dg/ei.html">Using Elastic Inference in Amazon SageMaker</a>.</p>
     #[serde(rename = "AcceleratorTypes")]
@@ -1575,7 +1575,7 @@ pub struct DescribeSubscribedWorkteamRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeSubscribedWorkteamResponse {
     /// <p>A <code>Workteam</code> instance that contains information about the work team.</p>
     #[serde(rename = "SubscribedWorkteam")]
@@ -1590,7 +1590,7 @@ pub struct DescribeTrainingJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeTrainingJobResponse {
     /// <p>Information about the algorithm used for training, and algorithm metadata. </p>
     #[serde(rename = "AlgorithmSpecification")]
@@ -1704,7 +1704,7 @@ pub struct DescribeTransformJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeTransformJobResponse {
     /// <p>Specifies the number of records to include in a mini-batch for an HTTP inference request. A <i>record</i> <i/> is a single unit of input data that inference can be made on. For example, a single line in a CSV file is a record. </p> <p>To enable the batch strategy, you must set <code>SplitType</code> to <code>Line</code>, <code>RecordIO</code>, or <code>TFRecord</code>.</p>
     #[serde(rename = "BatchStrategy")]
@@ -1776,7 +1776,7 @@ pub struct DescribeWorkteamRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeWorkteamResponse {
     /// <p>A <code>Workteam</code> instance that contains information about the work team. </p>
     #[serde(rename = "Workteam")]
@@ -1801,7 +1801,7 @@ pub struct DesiredWeightAndCapacity {
 
 /// <p>Provides summary information for an endpoint configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EndpointConfigSummary {
     /// <p>A timestamp that shows when the endpoint configuration was created.</p>
     #[serde(rename = "CreationTime")]
@@ -1816,7 +1816,7 @@ pub struct EndpointConfigSummary {
 
 /// <p>Provides summary information for an endpoint.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EndpointSummary {
     /// <p>A timestamp that shows when the endpoint was created.</p>
     #[serde(rename = "CreationTime")]
@@ -1870,7 +1870,7 @@ pub struct Filter {
 
 /// <p>Shows the final value for the objective metric for a training job that was launched by a hyperparameter tuning job. You define the objective metric in the <code>HyperParameterTuningJobObjective</code> parameter of <a>HyperParameterTuningJobConfig</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FinalHyperParameterTuningJobObjectiveMetric {
     /// <p>The name of the objective metric.</p>
     #[serde(rename = "MetricName")]
@@ -1896,7 +1896,7 @@ pub struct GetSearchSuggestionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSearchSuggestionsResponse {
     /// <p>A list of property names for a <code>Resource</code> that match a <code>SuggestionQuery</code>.</p>
     #[serde(rename = "PropertyNameSuggestions")]
@@ -2074,7 +2074,7 @@ pub struct HyperParameterTrainingJobDefinition {
 
 /// <p>Specifies summary information about a training job.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct HyperParameterTrainingJobSummary {
     /// <p>The date and time that the training job was created.</p>
     #[serde(rename = "CreationTime")]
@@ -2154,7 +2154,7 @@ pub struct HyperParameterTuningJobObjective {
 
 /// <p>Provides summary information about a hyperparameter tuning job.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct HyperParameterTuningJobSummary {
     /// <p>The date and time that the tuning job was created.</p>
     #[serde(rename = "CreationTime")]
@@ -2267,7 +2267,7 @@ pub struct IntegerParameterRangeSpecification {
 
 /// <p>Provides a breakdown of the number of objects labeled.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct LabelCounters {
     /// <p>The total number of objects that could not be labeled due to an error.</p>
     #[serde(rename = "FailedNonRetryableError")]
@@ -2293,7 +2293,7 @@ pub struct LabelCounters {
 
 /// <p>Provides counts for human-labeled tasks in the labeling job.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct LabelCountersForWorkteam {
     /// <p>The total number of data objects labeled by a human worker.</p>
     #[serde(rename = "HumanLabeled")]
@@ -2344,7 +2344,7 @@ pub struct LabelingJobDataSource {
 
 /// <p>Provides summary information for a work team.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct LabelingJobForWorkteamSummary {
     /// <p>The date and time that the labeling job was created.</p>
     #[serde(rename = "CreationTime")]
@@ -2383,7 +2383,7 @@ pub struct LabelingJobInputConfig {
 
 /// <p>Specifies the location of the output produced by the labeling job. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct LabelingJobOutput {
     /// <p>The Amazon Resource Name (ARN) for the most recent Amazon SageMaker model trained as part of automated data labeling. </p>
     #[serde(rename = "FinalActiveLearningModelArn")]
@@ -2438,7 +2438,7 @@ pub struct LabelingJobStoppingConditions {
 
 /// <p>Provides summary information about a labeling job.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct LabelingJobSummary {
     /// <p>The Amazon Resource Name (ARN) of the Lambda function used to consolidate the annotations from individual workers into a label for a data object. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/sms-annotation-consolidation.html">Annotation Consolidation</a>.</p>
     #[serde(rename = "AnnotationConsolidationLambdaArn")]
@@ -2515,7 +2515,7 @@ pub struct ListAlgorithmsInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAlgorithmsOutput {
     /// <p>&gt;An array of <code>AlgorithmSummary</code> objects, each of which lists an algorithm.</p>
     #[serde(rename = "AlgorithmSummaryList")]
@@ -2567,7 +2567,7 @@ pub struct ListCodeRepositoriesInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListCodeRepositoriesOutput {
     /// <p><p>Gets a list of summaries of the Git repositories. Each summary specifies the following values for the repository: </p> <ul> <li> <p>Name</p> </li> <li> <p>Amazon Resource Name (ARN)</p> </li> <li> <p>Creation time</p> </li> <li> <p>Last modified time</p> </li> <li> <p>Configuration information, including the URL location of the repository and the ARN of the AWS Secrets Manager secret that contains the credentials used to access the repository.</p> </li> </ul></p>
     #[serde(rename = "CodeRepositorySummaryList")]
@@ -2623,7 +2623,7 @@ pub struct ListCompilationJobsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListCompilationJobsResponse {
     /// <p>An array of <a>CompilationJobSummary</a> objects, each describing a model compilation job. </p>
     #[serde(rename = "CompilationJobSummaries")]
@@ -2667,7 +2667,7 @@ pub struct ListEndpointConfigsInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListEndpointConfigsOutput {
     /// <p>An array of endpoint configurations.</p>
     #[serde(rename = "EndpointConfigs")]
@@ -2723,7 +2723,7 @@ pub struct ListEndpointsInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListEndpointsOutput {
     /// <p> An array or endpoint objects. </p>
     #[serde(rename = "Endpoints")]
@@ -2779,7 +2779,7 @@ pub struct ListHyperParameterTuningJobsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListHyperParameterTuningJobsResponse {
     /// <p>A list of <a>HyperParameterTuningJobSummary</a> objects that describe the tuning jobs that the <code>ListHyperParameterTuningJobs</code> request returned.</p>
     #[serde(rename = "HyperParameterTuningJobSummaries")]
@@ -2826,7 +2826,7 @@ pub struct ListLabelingJobsForWorkteamRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListLabelingJobsForWorkteamResponse {
     /// <p>An array of <code>LabelingJobSummary</code> objects, each describing a labeling job.</p>
     #[serde(rename = "LabelingJobSummaryList")]
@@ -2882,7 +2882,7 @@ pub struct ListLabelingJobsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListLabelingJobsResponse {
     /// <p>An array of <code>LabelingJobSummary</code> objects, each describing a labeling job.</p>
     #[serde(rename = "LabelingJobSummaryList")]
@@ -2927,7 +2927,7 @@ pub struct ListModelPackagesInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListModelPackagesOutput {
     /// <p>An array of <code>ModelPackageSummary</code> objects, each of which lists a model package.</p>
     #[serde(rename = "ModelPackageSummaryList")]
@@ -2971,7 +2971,7 @@ pub struct ListModelsInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListModelsOutput {
     /// <p>An array of <code>ModelSummary</code> objects, each of which lists a model.</p>
     #[serde(rename = "Models")]
@@ -3023,7 +3023,7 @@ pub struct ListNotebookInstanceLifecycleConfigsInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListNotebookInstanceLifecycleConfigsOutput {
     /// <p>If the response is truncated, Amazon SageMaker returns this token. To get the next set of lifecycle configurations, use it in the next request. </p>
     #[serde(rename = "NextToken")]
@@ -3092,7 +3092,7 @@ pub struct ListNotebookInstancesInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListNotebookInstancesOutput {
     /// <p>If the response to the previous <code>ListNotebookInstances</code> request was truncated, Amazon SageMaker returns this token. To retrieve the next set of notebook instances, use the token in the next request.</p>
     #[serde(rename = "NextToken")]
@@ -3121,7 +3121,7 @@ pub struct ListSubscribedWorkteamsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSubscribedWorkteamsResponse {
     /// <p>If the response is truncated, Amazon SageMaker returns this token. To retrieve the next set of work teams, use it in the subsequent request.</p>
     #[serde(rename = "NextToken")]
@@ -3148,7 +3148,7 @@ pub struct ListTagsInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsOutput {
     /// <p> If response is truncated, Amazon SageMaker includes a token in the response. You can use this token in your subsequent request to fetch next set of tokens. </p>
     #[serde(rename = "NextToken")]
@@ -3188,7 +3188,7 @@ pub struct ListTrainingJobsForHyperParameterTuningJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTrainingJobsForHyperParameterTuningJobResponse {
     /// <p>If the result of this <code>ListTrainingJobsForHyperParameterTuningJob</code> request was truncated, the response includes a <code>NextToken</code>. To retrieve the next set of training jobs, use the token in the next request.</p>
     #[serde(rename = "NextToken")]
@@ -3244,7 +3244,7 @@ pub struct ListTrainingJobsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTrainingJobsResponse {
     /// <p>If the response is truncated, Amazon SageMaker returns this token. To retrieve the next set of training jobs, use it in the subsequent request.</p>
     #[serde(rename = "NextToken")]
@@ -3300,7 +3300,7 @@ pub struct ListTransformJobsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTransformJobsResponse {
     /// <p>If the response is truncated, Amazon SageMaker returns this token. To retrieve the next set of transform jobs, use it in the next request.</p>
     #[serde(rename = "NextToken")]
@@ -3336,7 +3336,7 @@ pub struct ListWorkteamsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListWorkteamsResponse {
     /// <p>If the response is truncated, Amazon SageMaker returns this token. To retrieve the next set of work teams, use it in the subsequent request.</p>
     #[serde(rename = "NextToken")]
@@ -3358,7 +3358,7 @@ pub struct MemberDefinition {
 
 /// <p>The name, value, and date and time of a metric that was emitted to Amazon CloudWatch.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MetricData {
     /// <p>The name of the metric.</p>
     #[serde(rename = "MetricName")]
@@ -3387,7 +3387,7 @@ pub struct MetricDefinition {
 
 /// <p>Provides information about the location that is configured for storing model artifacts. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ModelArtifacts {
     /// <p>The path of the S3 object that contains the model artifacts. For example, <code>s3://bucket-name/keynameprefix/model.tar.gz</code>.</p>
     #[serde(rename = "S3ModelArtifacts")]
@@ -3420,7 +3420,7 @@ pub struct ModelPackageContainerDefinition {
 
 /// <p>Specifies the validation and image scan statuses of the model package.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ModelPackageStatusDetails {
     /// <p>The status of the scan of the Docker image container for the model package.</p>
     #[serde(rename = "ImageScanStatuses")]
@@ -3433,7 +3433,7 @@ pub struct ModelPackageStatusDetails {
 
 /// <p>Represents the overall status of a model package.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ModelPackageStatusItem {
     /// <p>if the overall status is <code>Failed</code>, the reason for the failure.</p>
     #[serde(rename = "FailureReason")]
@@ -3449,7 +3449,7 @@ pub struct ModelPackageStatusItem {
 
 /// <p>Provides summary information about a model package.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ModelPackageSummary {
     /// <p>A timestamp that shows when the model package was created.</p>
     #[serde(rename = "CreationTime")]
@@ -3493,7 +3493,7 @@ pub struct ModelPackageValidationSpecification {
 
 /// <p>Provides summary information about a model.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ModelSummary {
     /// <p>A timestamp that indicates when the model was created.</p>
     #[serde(rename = "CreationTime")]
@@ -3519,7 +3519,7 @@ pub struct NestedFilters {
 
 /// <p>Provides a summary of a notebook instance lifecycle configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct NotebookInstanceLifecycleConfigSummary {
     /// <p>A timestamp that tells when the lifecycle configuration was created.</p>
     #[serde(rename = "CreationTime")]
@@ -3548,7 +3548,7 @@ pub struct NotebookInstanceLifecycleHook {
 
 /// <p>Provides summary information for an Amazon SageMaker notebook instance.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct NotebookInstanceSummary {
     /// <p>An array of up to three Git repositories associated with the notebook instance. These can be either the names of Git repositories stored as resources in your account, or the URL of Git repositories in <a href="https://docs.aws.amazon.com/codecommit/latest/userguide/welcome.html">AWS CodeCommit</a> or in any other Git repository. These repositories are cloned at the same level as the default repository of your notebook instance. For more information, see <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/nbi-git-repo.html">Associating Git Repositories with Amazon SageMaker Notebook Instances</a>.</p>
     #[serde(rename = "AdditionalCodeRepositories")]
@@ -3601,7 +3601,7 @@ pub struct NotificationConfiguration {
 
 /// <p>Specifies the number of training jobs that this hyperparameter tuning job launched, categorized by the status of their objective metric. The objective metric status shows whether the final objective metric for the training job has been evaluated by the tuning job and used in the hyperparameter tuning process.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ObjectiveStatusCounters {
     /// <p>The number of training jobs whose final objective metric was not evaluated and used in the hyperparameter tuning process. This typically occurs when the training job failed or did not emit an objective metric.</p>
     #[serde(rename = "Failed")]
@@ -3710,7 +3710,7 @@ pub struct ProductionVariant {
 
 /// <p>Describes weight and capacities for a production variant associated with an endpoint. If you sent a request to the <code>UpdateEndpointWeightsAndCapacities</code> API and the endpoint status is <code>Updating</code>, you get different desired and current values. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ProductionVariantSummary {
     /// <p>The number of instances associated with the variant.</p>
     #[serde(rename = "CurrentInstanceCount")]
@@ -3747,7 +3747,7 @@ pub struct PropertyNameQuery {
 
 /// <p>A property name returned from a <code>GetSearchSuggestions</code> call that specifies a value in the <code>PropertyNameQuery</code> field.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PropertyNameSuggestion {
     /// <p>A suggested property name based on what you entered in the search textbox in the Amazon SageMaker console.</p>
     #[serde(rename = "PropertyName")]
@@ -3778,7 +3778,7 @@ pub struct RenderUiTemplateRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RenderUiTemplateResponse {
     /// <p>A list of one or more <code>RenderingError</code> objects if any were encountered while rendering the template. If there were no errors, the list is empty.</p>
     #[serde(rename = "Errors")]
@@ -3798,7 +3798,7 @@ pub struct RenderableTask {
 
 /// <p>A description of an error that occurred while rendering the template.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RenderingError {
     /// <p>A unique identifier for a specific class of errors.</p>
     #[serde(rename = "Code")]
@@ -3879,7 +3879,7 @@ pub struct SearchExpression {
 
 /// <p>An individual search result record that contains a single resource object.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SearchRecord {
     /// <p>A <code>TrainingJob</code> object that is returned as part of a <code>Search</code> request.</p>
     #[serde(rename = "TrainingJob")]
@@ -3915,7 +3915,7 @@ pub struct SearchRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SearchResponse {
     /// <p>If the result of the previous <code>Search</code> request was truncated, the response includes a NextToken. To retrieve the next set of results, use the token in the next request.</p>
     #[serde(rename = "NextToken")]
@@ -3929,7 +3929,7 @@ pub struct SearchResponse {
 
 /// <p><p>An array element of <a>DescribeTrainingJobResponse$SecondaryStatusTransitions</a>. It provides additional details about a status that the training job has transitioned through. A training job can be in one of several states, for example, starting, downloading, training, or uploading. Within each state, there are a number of intermediate states. For example, within the starting state, Amazon SageMaker could be starting the training job or launching the ML instances. These transitional states are referred to as the job&#39;s secondary status. </p> <p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SecondaryStatusTransition {
     /// <p>A timestamp that shows when the training job transitioned out of this secondary status state into another secondary status state or when the training job has ended.</p>
     #[serde(rename = "EndTime")]
@@ -4039,7 +4039,7 @@ pub struct StoppingCondition {
 
 /// <p>Describes a work team of a vendor that does the a labelling job.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SubscribedWorkteam {
     /// <p><p/></p>
     #[serde(rename = "ListingId")]
@@ -4084,7 +4084,7 @@ pub struct Tag {
 
 /// <p>Contains information about a training job.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TrainingJob {
     /// <p>Information about the algorithm used for training, and algorithm metadata.</p>
     #[serde(rename = "AlgorithmSpecification")]
@@ -4214,7 +4214,7 @@ pub struct TrainingJobDefinition {
 
 /// <p>The numbers of training jobs launched by a hyperparameter tuning job, categorized by status.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TrainingJobStatusCounters {
     /// <p>The number of completed training jobs launched by the hyperparameter tuning job.</p>
     #[serde(rename = "Completed")]
@@ -4240,7 +4240,7 @@ pub struct TrainingJobStatusCounters {
 
 /// <p>Provides summary information about a training job.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TrainingJobSummary {
     /// <p>A timestamp that shows when the training job was created.</p>
     #[serde(rename = "CreationTime")]
@@ -4358,7 +4358,7 @@ pub struct TransformJobDefinition {
 
 /// <p>Provides a summary of a transform job. Multiple <code>TransformJobSummary</code> objects are returned as a list after in response to a <a>ListTransformJobs</a> call.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TransformJobSummary {
     /// <p>A timestamp that shows when the transform Job was created.</p>
     #[serde(rename = "CreationTime")]
@@ -4477,7 +4477,7 @@ pub struct UpdateCodeRepositoryInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateCodeRepositoryOutput {
     /// <p>The ARN of the Git repository.</p>
     #[serde(rename = "CodeRepositoryArn")]
@@ -4495,7 +4495,7 @@ pub struct UpdateEndpointInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateEndpointOutput {
     /// <p>The Amazon Resource Name (ARN) of the endpoint.</p>
     #[serde(rename = "EndpointArn")]
@@ -4513,7 +4513,7 @@ pub struct UpdateEndpointWeightsAndCapacitiesInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateEndpointWeightsAndCapacitiesOutput {
     /// <p>The Amazon Resource Name (ARN) of the updated endpoint.</p>
     #[serde(rename = "EndpointArn")]
@@ -4591,11 +4591,11 @@ pub struct UpdateNotebookInstanceLifecycleConfigInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateNotebookInstanceLifecycleConfigOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateNotebookInstanceOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -4618,7 +4618,7 @@ pub struct UpdateWorkteamRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateWorkteamResponse {
     /// <p>A <code>Workteam</code> object that describes the updated work team.</p>
     #[serde(rename = "Workteam")]
@@ -4638,7 +4638,7 @@ pub struct VpcConfig {
 
 /// <p>Provides details about a labeling work team.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Workteam {
     /// <p>The date and time that the work team was created (timestamp).</p>
     #[serde(rename = "CreateDate")]

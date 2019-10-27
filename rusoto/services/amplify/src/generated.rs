@@ -26,7 +26,7 @@ use rusoto_core::signature::SignedRequest;
 use serde_json;
 /// <p> Amplify App represents different branches of a repository for building, deploying, and hosting. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct App {
     /// <p> ARN for the Amplify App. </p>
     #[serde(rename = "appArn")]
@@ -137,7 +137,7 @@ pub struct AutoBranchCreationConfig {
 
 /// <p> Branch for an Amplify App, which maps to a 3rd party repository branch. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Branch {
     /// <p> Id of the active job for a branch, part of an Amplify App. </p>
     #[serde(rename = "activeJobId")]
@@ -282,7 +282,7 @@ pub struct CreateAppRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateAppResult {
     #[serde(rename = "app")]
     pub app: App,
@@ -349,7 +349,7 @@ pub struct CreateBranchRequest {
 
 /// <p> Result structure for create branch request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateBranchResult {
     /// <p> Branch structure for an Amplify App. </p>
     #[serde(rename = "branch")]
@@ -373,7 +373,7 @@ pub struct CreateDeploymentRequest {
 
 /// <p> Result structure for create a new deployment. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDeploymentResult {
     /// <p> When the fileMap argument is provided in the request, the fileUploadUrls will contain a map of file names to upload url. </p>
     #[serde(rename = "fileUploadUrls")]
@@ -407,7 +407,7 @@ pub struct CreateDomainAssociationRequest {
 
 /// <p> Result structure for the create Domain Association request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDomainAssociationResult {
     /// <p> Domain Association structure. </p>
     #[serde(rename = "domainAssociation")]
@@ -431,7 +431,7 @@ pub struct CreateWebhookRequest {
 
 /// <p> Result structure for the create webhook request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateWebhookResult {
     /// <p> Webhook structure. </p>
     #[serde(rename = "webhook")]
@@ -467,7 +467,7 @@ pub struct DeleteAppRequest {
 
 /// <p> Result structure for an Amplify App delete request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteAppResult {
     #[serde(rename = "app")]
     pub app: App,
@@ -486,7 +486,7 @@ pub struct DeleteBranchRequest {
 
 /// <p> Result structure for delete branch request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteBranchResult {
     /// <p> Branch structure for an Amplify App. </p>
     #[serde(rename = "branch")]
@@ -505,7 +505,7 @@ pub struct DeleteDomainAssociationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDomainAssociationResult {
     #[serde(rename = "domainAssociation")]
     pub domain_association: DomainAssociation,
@@ -527,7 +527,7 @@ pub struct DeleteJobRequest {
 
 /// <p> Result structure for the delete job request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteJobResult {
     #[serde(rename = "jobSummary")]
     pub job_summary: JobSummary,
@@ -543,7 +543,7 @@ pub struct DeleteWebhookRequest {
 
 /// <p> Result structure for the delete webhook request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteWebhookResult {
     /// <p> Webhook structure. </p>
     #[serde(rename = "webhook")]
@@ -552,7 +552,7 @@ pub struct DeleteWebhookResult {
 
 /// <p> Structure for Domain Association, which associates a custom domain with an Amplify App. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DomainAssociation {
     /// <p> DNS Record for certificate verification. </p>
     #[serde(rename = "certificateVerificationDNSRecord")]
@@ -587,7 +587,7 @@ pub struct GetAppRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAppResult {
     #[serde(rename = "app")]
     pub app: App,
@@ -605,7 +605,7 @@ pub struct GetBranchRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetBranchResult {
     #[serde(rename = "branch")]
     pub branch: Branch,
@@ -624,7 +624,7 @@ pub struct GetDomainAssociationRequest {
 
 /// <p> Result structure for the get Domain Association request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDomainAssociationResult {
     /// <p> Domain Association structure. </p>
     #[serde(rename = "domainAssociation")]
@@ -646,7 +646,7 @@ pub struct GetJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetJobResult {
     #[serde(rename = "job")]
     pub job: Job,
@@ -662,7 +662,7 @@ pub struct GetWebhookRequest {
 
 /// <p> Result structure for the get webhook request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetWebhookResult {
     /// <p> Webhook structure. </p>
     #[serde(rename = "webhook")]
@@ -671,7 +671,7 @@ pub struct GetWebhookResult {
 
 /// <p> Structure for an execution job for an Amplify App. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Job {
     /// <p> Execution steps for an execution job, for an Amplify App. </p>
     #[serde(rename = "steps")]
@@ -683,7 +683,7 @@ pub struct Job {
 
 /// <p> Structure for the summary of a Job. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct JobSummary {
     /// <p> Commit Id from 3rd party repository provider for the Job. </p>
     #[serde(rename = "commitId")]
@@ -730,7 +730,7 @@ pub struct ListAppsRequest {
 
 /// <p> Result structure for an Amplify App list request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAppsResult {
     /// <p> List of Amplify Apps. </p>
     #[serde(rename = "apps")]
@@ -759,7 +759,7 @@ pub struct ListBranchesRequest {
 
 /// <p> Result structure for list branches request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListBranchesResult {
     /// <p> List of branches for an Amplify App. </p>
     #[serde(rename = "branches")]
@@ -788,7 +788,7 @@ pub struct ListDomainAssociationsRequest {
 
 /// <p> Result structure for the list Domain Association request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDomainAssociationsResult {
     /// <p> List of Domain Associations. </p>
     #[serde(rename = "domainAssociations")]
@@ -820,7 +820,7 @@ pub struct ListJobsRequest {
 
 /// <p> Maximum number of records to list in a single response. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListJobsResult {
     /// <p> Result structure for list job result request. </p>
     #[serde(rename = "jobSummaries")]
@@ -841,7 +841,7 @@ pub struct ListTagsForResourceRequest {
 
 /// <p> Response for list tags. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
     /// <p> Tags result for response. </p>
     #[serde(rename = "tags")]
@@ -867,7 +867,7 @@ pub struct ListWebhooksRequest {
 
 /// <p> Result structure for the list webhooks request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListWebhooksResult {
     /// <p> Pagination token. If non-null pagination token is returned in a result, then pass its value in another request to fetch more entries. </p>
     #[serde(rename = "nextToken")]
@@ -880,7 +880,7 @@ pub struct ListWebhooksResult {
 
 /// <p> Structure with Production Branch information. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ProductionBranch {
     /// <p> Branch Name for Production Branch. </p>
     #[serde(rename = "branchName")]
@@ -921,7 +921,7 @@ pub struct StartDeploymentRequest {
 
 /// <p> Result structure for start a deployment. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartDeploymentResult {
     /// <p> Summary for the Job. </p>
     #[serde(rename = "jobSummary")]
@@ -964,7 +964,7 @@ pub struct StartJobRequest {
 
 /// <p> Result structure for run job request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartJobResult {
     /// <p> Summary for the Job. </p>
     #[serde(rename = "jobSummary")]
@@ -973,7 +973,7 @@ pub struct StartJobResult {
 
 /// <p> Structure for an execution step for an execution job, for an Amplify App. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Step {
     /// <p> URL to the artifact for the execution step. </p>
     #[serde(rename = "artifactsUrl")]
@@ -1025,7 +1025,7 @@ pub struct StopJobRequest {
 
 /// <p> Result structure for the stop job request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopJobResult {
     /// <p> Summary for the Job. </p>
     #[serde(rename = "jobSummary")]
@@ -1034,7 +1034,7 @@ pub struct StopJobResult {
 
 /// <p> Subdomain for the Domain Association. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SubDomain {
     /// <p> DNS record for the Subdomain. </p>
     #[serde(rename = "dnsRecord")]
@@ -1071,7 +1071,7 @@ pub struct TagResourceRequest {
 
 /// <p> Response for tag resource. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
 
 /// <p> Request structure used to untag resource. </p>
@@ -1087,7 +1087,7 @@ pub struct UntagResourceRequest {
 
 /// <p> Response for untag resource. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
 /// <p> Request structure for update App request. </p>
@@ -1152,7 +1152,7 @@ pub struct UpdateAppRequest {
 
 /// <p> Result structure for an Amplify App update request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateAppResult {
     /// <p> App structure for the updated App. </p>
     #[serde(rename = "app")]
@@ -1216,7 +1216,7 @@ pub struct UpdateBranchRequest {
 
 /// <p> Result structure for update branch request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateBranchResult {
     /// <p> Branch structure for an Amplify App. </p>
     #[serde(rename = "branch")]
@@ -1243,7 +1243,7 @@ pub struct UpdateDomainAssociationRequest {
 
 /// <p> Result structure for the update Domain Association request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDomainAssociationResult {
     /// <p> Domain Association structure. </p>
     #[serde(rename = "domainAssociation")]
@@ -1268,7 +1268,7 @@ pub struct UpdateWebhookRequest {
 
 /// <p> Result structure for the update webhook request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateWebhookResult {
     /// <p> Webhook structure. </p>
     #[serde(rename = "webhook")]
@@ -1277,7 +1277,7 @@ pub struct UpdateWebhookResult {
 
 /// <p> Structure for webhook, which associates a webhook with an Amplify App. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Webhook {
     /// <p> Name for a branch, part of an Amplify App. </p>
     #[serde(rename = "branchName")]

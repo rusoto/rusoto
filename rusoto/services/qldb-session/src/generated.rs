@@ -29,7 +29,7 @@ pub struct AbortTransactionRequest {}
 
 /// <p>Contains the details of the aborted transaction.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AbortTransactionResult {}
 
 /// <p>Contains the details of the transaction to commit.</p>
@@ -50,7 +50,7 @@ pub struct CommitTransactionRequest {
 
 /// <p>Contains the details of the committed transaction.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CommitTransactionResult {
     /// <p>The commit digest of the committed transaction.</p>
     #[serde(rename = "CommitDigest")]
@@ -73,7 +73,7 @@ pub struct EndSessionRequest {}
 
 /// <p>Contains the details of the ended session.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EndSessionResult {}
 
 /// <p>Specifies a request to execute a statement.</p>
@@ -93,7 +93,7 @@ pub struct ExecuteStatementRequest {
 
 /// <p>Contains the details of the executed statement.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ExecuteStatementResult {
     /// <p>Contains the details of the first fetched page.</p>
     #[serde(rename = "FirstPage")]
@@ -114,7 +114,7 @@ pub struct FetchPageRequest {
 
 /// <p>Contains the page that was fetched.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FetchPageResult {
     /// <p>Contains details of the fetched page.</p>
     #[serde(rename = "Page")]
@@ -124,7 +124,7 @@ pub struct FetchPageResult {
 
 /// <p>Contains details of the fetched page.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Page {
     /// <p>The token of the next page.</p>
     #[serde(rename = "NextPageToken")]
@@ -173,7 +173,7 @@ pub struct SendCommandRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SendCommandResult {
     /// <p>Contains the details of the aborted transaction.</p>
     #[serde(rename = "AbortTransaction")]
@@ -215,7 +215,7 @@ pub struct StartSessionRequest {
 
 /// <p>Contains the details of the started session.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartSessionResult {
     /// <p>Session token of the started session. This <code>SessionToken</code> is required for every subsequent command that is issued during the current session.</p>
     #[serde(rename = "SessionToken")]
@@ -229,7 +229,7 @@ pub struct StartTransactionRequest {}
 
 /// <p>Contains the details of the started transaction.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartTransactionResult {
     /// <p>The transaction id of the started transaction.</p>
     #[serde(rename = "TransactionId")]

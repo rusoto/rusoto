@@ -41,7 +41,7 @@ pub struct AssociateDomainRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateDomainResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -59,7 +59,7 @@ pub struct AssociateWebsiteAuthorizationProviderRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateWebsiteAuthorizationProviderResponse {
     /// <p>A unique identifier for the authorization provider.</p>
     #[serde(rename = "AuthorizationProviderId")]
@@ -82,7 +82,7 @@ pub struct AssociateWebsiteCertificateAuthorityRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateWebsiteCertificateAuthorityResponse {
     /// <p>A unique identifier for the CA.</p>
     #[serde(rename = "WebsiteCaId")]
@@ -106,7 +106,7 @@ pub struct CreateFleetRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateFleetResponse {
     /// <p>The ARN of the fleet.</p>
     #[serde(rename = "FleetArn")]
@@ -122,7 +122,7 @@ pub struct DeleteFleetRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteFleetResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -133,7 +133,7 @@ pub struct DescribeAuditStreamConfigurationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAuditStreamConfigurationResponse {
     /// <p>The ARN of the Amazon Kinesis data stream that will receive the audit events.</p>
     #[serde(rename = "AuditStreamArn")]
@@ -149,7 +149,7 @@ pub struct DescribeCompanyNetworkConfigurationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeCompanyNetworkConfigurationResponse {
     /// <p>The security groups associated with access to the provided subnets.</p>
     #[serde(rename = "SecurityGroupIds")]
@@ -173,7 +173,7 @@ pub struct DescribeDevicePolicyConfigurationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDevicePolicyConfigurationResponse {
     /// <p>The certificate chain, including intermediate certificates and the root certificate authority certificate used to issue device certificates.</p>
     #[serde(rename = "DeviceCaCertificate")]
@@ -192,7 +192,7 @@ pub struct DescribeDeviceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDeviceResponse {
     /// <p>The date that the device first signed in to Amazon WorkLink.</p>
     #[serde(rename = "FirstAccessedTime")]
@@ -243,7 +243,7 @@ pub struct DescribeDomainRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDomainResponse {
     /// <p>The ARN of an issued ACM certificate that is valid for the domain being associated.</p>
     #[serde(rename = "AcmCertificateArn")]
@@ -275,7 +275,7 @@ pub struct DescribeFleetMetadataRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeFleetMetadataResponse {
     /// <p>The identifier used by users to sign in to the Amazon WorkLink app.</p>
     #[serde(rename = "CompanyCode")]
@@ -315,7 +315,7 @@ pub struct DescribeIdentityProviderConfigurationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeIdentityProviderConfigurationResponse {
     /// <p>The SAML metadata document provided by the user’s identity provider.</p>
     #[serde(rename = "IdentityProviderSamlMetadata")]
@@ -342,7 +342,7 @@ pub struct DescribeWebsiteCertificateAuthorityRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeWebsiteCertificateAuthorityResponse {
     /// <p>The root certificate of the certificate authority.</p>
     #[serde(rename = "Certificate")]
@@ -360,7 +360,7 @@ pub struct DescribeWebsiteCertificateAuthorityResponse {
 
 /// <p>The summary of devices.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeviceSummary {
     /// <p>The ID of the device.</p>
     #[serde(rename = "DeviceId")]
@@ -383,7 +383,7 @@ pub struct DisassociateDomainRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateDomainResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -397,7 +397,7 @@ pub struct DisassociateWebsiteAuthorizationProviderRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateWebsiteAuthorizationProviderResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -411,12 +411,12 @@ pub struct DisassociateWebsiteCertificateAuthorityRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateWebsiteCertificateAuthorityResponse {}
 
 /// <p>The summary of the domain.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DomainSummary {
     /// <p>The time that the domain was created.</p>
     #[serde(rename = "CreatedTime")]
@@ -435,7 +435,7 @@ pub struct DomainSummary {
 
 /// <p>The summary of the fleet.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FleetSummary {
     /// <p>The identifier used by users to sign into the Amazon WorkLink app.</p>
     #[serde(rename = "CompanyCode")]
@@ -483,7 +483,7 @@ pub struct ListDevicesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDevicesResponse {
     /// <p>Information about the devices.</p>
     #[serde(rename = "Devices")]
@@ -511,7 +511,7 @@ pub struct ListDomainsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDomainsResponse {
     /// <p>Information about the domains.</p>
     #[serde(rename = "Domains")]
@@ -536,7 +536,7 @@ pub struct ListFleetsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListFleetsResponse {
     /// <p>The summary list of the fleets.</p>
     #[serde(rename = "FleetSummaryList")]
@@ -564,7 +564,7 @@ pub struct ListWebsiteAuthorizationProvidersRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListWebsiteAuthorizationProvidersResponse {
     /// <p>The pagination token to use to retrieve the next page of results for this operation. If this value is null, it retrieves the first page.</p>
     #[serde(rename = "NextToken")]
@@ -592,7 +592,7 @@ pub struct ListWebsiteCertificateAuthoritiesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListWebsiteCertificateAuthoritiesResponse {
     /// <p>The pagination token used to retrieve the next page of results for this operation. If there are no more pages, this value is null.</p>
     #[serde(rename = "NextToken")]
@@ -615,7 +615,7 @@ pub struct RestoreDomainAccessRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RestoreDomainAccessResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -629,7 +629,7 @@ pub struct RevokeDomainAccessRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RevokeDomainAccessResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -643,7 +643,7 @@ pub struct SignOutUserRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SignOutUserResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -658,7 +658,7 @@ pub struct UpdateAuditStreamConfigurationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateAuditStreamConfigurationResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -678,7 +678,7 @@ pub struct UpdateCompanyNetworkConfigurationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateCompanyNetworkConfigurationResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -693,7 +693,7 @@ pub struct UpdateDevicePolicyConfigurationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDevicePolicyConfigurationResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -711,7 +711,7 @@ pub struct UpdateDomainMetadataRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDomainMetadataResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -730,7 +730,7 @@ pub struct UpdateFleetMetadataRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateFleetMetadataResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -748,12 +748,12 @@ pub struct UpdateIdentityProviderConfigurationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateIdentityProviderConfigurationResponse {}
 
 /// <p>The summary of the website authorization provider.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct WebsiteAuthorizationProviderSummary {
     /// <p>A unique identifier for the authorization provider.</p>
     #[serde(rename = "AuthorizationProviderId")]
@@ -774,7 +774,7 @@ pub struct WebsiteAuthorizationProviderSummary {
 
 /// <p>The summary of the certificate authority (CA).</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct WebsiteCaSummary {
     /// <p>The time when the CA was added.</p>
     #[serde(rename = "CreatedTime")]

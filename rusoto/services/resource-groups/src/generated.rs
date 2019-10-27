@@ -43,7 +43,7 @@ pub struct CreateGroupInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateGroupOutput {
     /// <p>A full description of the resource group after it is created.</p>
     #[serde(rename = "Group")]
@@ -67,7 +67,7 @@ pub struct DeleteGroupInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteGroupOutput {
     /// <p>A full description of the deleted resource group.</p>
     #[serde(rename = "Group")]
@@ -83,7 +83,7 @@ pub struct GetGroupInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetGroupOutput {
     /// <p>A full description of the resource group.</p>
     #[serde(rename = "Group")]
@@ -99,7 +99,7 @@ pub struct GetGroupQueryInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetGroupQueryOutput {
     /// <p>The resource query associated with the specified group.</p>
     #[serde(rename = "GroupQuery")]
@@ -115,7 +115,7 @@ pub struct GetTagsInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetTagsOutput {
     /// <p>The ARN of the tagged resource group.</p>
     #[serde(rename = "Arn")]
@@ -129,7 +129,7 @@ pub struct GetTagsOutput {
 
 /// <p>A resource group.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Group {
     /// <p>The description of the resource group.</p>
     #[serde(rename = "Description")]
@@ -156,7 +156,7 @@ pub struct GroupFilter {
 
 /// <p>The ARN and group name of a group.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GroupIdentifier {
     /// <p>The ARN of a resource group.</p>
     #[serde(rename = "GroupArn")]
@@ -170,7 +170,7 @@ pub struct GroupIdentifier {
 
 /// <p>The underlying resource query of a resource group. Resources that match query results are part of the group.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GroupQuery {
     /// <p>The name of a resource group that is associated with a specific resource query.</p>
     #[serde(rename = "GroupName")]
@@ -200,7 +200,7 @@ pub struct ListGroupResourcesInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListGroupResourcesOutput {
     /// <p>The NextToken value to include in a subsequent <code>ListGroupResources</code> request, to get more results.</p>
     #[serde(rename = "NextToken")]
@@ -233,7 +233,7 @@ pub struct ListGroupsInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListGroupsOutput {
     /// <p>A list of GroupIdentifier objects. Each identifier is an object that contains both the GroupName and the GroupArn.</p>
     #[serde(rename = "GroupIdentifiers")]
@@ -247,7 +247,7 @@ pub struct ListGroupsOutput {
 
 /// <p>A two-part error structure that can occur in <code>ListGroupResources</code> or <code>SearchResources</code> operations on CloudFormation stack-based queries. The error occurs if the CloudFormation stack on which the query is based either does not exist, or has a status that renders the stack inactive. A <code>QueryError</code> occurrence does not necessarily mean that AWS Resource Groups could not complete the operation, but the resulting group might have no member resources.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct QueryError {
     /// <p>Possible values are <code>CLOUDFORMATION_STACK_INACTIVE</code> and <code>CLOUDFORMATION_STACK_NOT_EXISTING</code>.</p>
     #[serde(rename = "ErrorCode")]
@@ -272,7 +272,7 @@ pub struct ResourceFilter {
 
 /// <p>The ARN of a resource, and its resource type.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResourceIdentifier {
     /// <p>The ARN of a resource.</p>
     #[serde(rename = "ResourceArn")]
@@ -311,7 +311,7 @@ pub struct SearchResourcesInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SearchResourcesOutput {
     /// <p>The NextToken value to include in a subsequent <code>SearchResources</code> request, to get more results.</p>
     #[serde(rename = "NextToken")]
@@ -338,7 +338,7 @@ pub struct TagInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagOutput {
     /// <p>The ARN of the tagged resource.</p>
     #[serde(rename = "Arn")]
@@ -361,7 +361,7 @@ pub struct UntagInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagOutput {
     /// <p>The ARN of the resource from which tags have been removed.</p>
     #[serde(rename = "Arn")]
@@ -385,7 +385,7 @@ pub struct UpdateGroupInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateGroupOutput {
     /// <p>The full description of the resource group after it has been updated.</p>
     #[serde(rename = "Group")]
@@ -404,7 +404,7 @@ pub struct UpdateGroupQueryInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateGroupQueryOutput {
     /// <p>The resource query associated with the resource group after the update.</p>
     #[serde(rename = "GroupQuery")]

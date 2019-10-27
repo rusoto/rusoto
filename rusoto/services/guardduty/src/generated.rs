@@ -38,12 +38,12 @@ pub struct AcceptInvitationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AcceptInvitationResponse {}
 
 /// <p>Contains information about the access keys.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AccessKeyDetails {
     /// <p>Access key ID of the user.</p>
     #[serde(rename = "AccessKeyId")]
@@ -76,7 +76,7 @@ pub struct AccountDetail {
 
 /// <p>Contains information about action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Action {
     /// <p>GuardDuty Finding activity type.</p>
     #[serde(rename = "ActionType")]
@@ -111,12 +111,12 @@ pub struct ArchiveFindingsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ArchiveFindingsResponse {}
 
 /// <p>Contains information about the API operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AwsApiCallAction {
     /// <p>AWS API name.</p>
     #[serde(rename = "Api")]
@@ -142,7 +142,7 @@ pub struct AwsApiCallAction {
 
 /// <p>Contains information about the city associated with the IP address.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct City {
     /// <p>City name of the remote IP address.</p>
     #[serde(rename = "CityName")]
@@ -181,7 +181,7 @@ pub struct Condition {
 
 /// <p>Contains information about the country.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Country {
     /// <p>Country code of the remote IP address.</p>
     #[serde(rename = "CountryCode")]
@@ -213,7 +213,7 @@ pub struct CreateDetectorRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDetectorResponse {
     /// <p>The unique ID of the created detector.</p>
     #[serde(rename = "DetectorId")]
@@ -255,7 +255,7 @@ pub struct CreateFilterRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateFilterResponse {
     /// <p>The name of the successfully created filter.</p>
     #[serde(rename = "Name")]
@@ -290,7 +290,7 @@ pub struct CreateIPSetRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateIPSetResponse {
     /// <p>The ID of the IPSet resource.</p>
     #[serde(rename = "IpSetId")]
@@ -308,7 +308,7 @@ pub struct CreateMembersRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateMembersResponse {
     /// <p>A list of objects containing the unprocessed account and a result string explaining why it was unprocessed.</p>
     #[serde(rename = "UnprocessedAccounts")]
@@ -327,7 +327,7 @@ pub struct CreateSampleFindingsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateSampleFindingsResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -358,7 +358,7 @@ pub struct CreateThreatIntelSetRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateThreatIntelSetResponse {
     /// <p>The ID of the ThreatIntelSet resource.</p>
     #[serde(rename = "ThreatIntelSetId")]
@@ -373,7 +373,7 @@ pub struct DeclineInvitationsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeclineInvitationsResponse {
     /// <p>A list of objects containing the unprocessed account and a result string explaining why it was unprocessed.</p>
     #[serde(rename = "UnprocessedAccounts")]
@@ -388,7 +388,7 @@ pub struct DeleteDetectorRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDetectorResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -402,7 +402,7 @@ pub struct DeleteFilterRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteFilterResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -416,7 +416,7 @@ pub struct DeleteIPSetRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteIPSetResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -427,7 +427,7 @@ pub struct DeleteInvitationsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteInvitationsResponse {
     /// <p>A list of objects containing the unprocessed account and a result string explaining why it was unprocessed.</p>
     #[serde(rename = "UnprocessedAccounts")]
@@ -445,7 +445,7 @@ pub struct DeleteMembersRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteMembersResponse {
     /// <p>The accounts that could not be processed.</p>
     #[serde(rename = "UnprocessedAccounts")]
@@ -463,7 +463,7 @@ pub struct DeleteThreatIntelSetRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteThreatIntelSetResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -474,7 +474,7 @@ pub struct DisassociateFromMasterAccountRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateFromMasterAccountResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -488,7 +488,7 @@ pub struct DisassociateMembersRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateMembersResponse {
     /// <p>A list of objects containing the unprocessed account and a result string explaining why it was unprocessed.</p>
     #[serde(rename = "UnprocessedAccounts")]
@@ -497,7 +497,7 @@ pub struct DisassociateMembersResponse {
 
 /// <p>Contains information about the DNS request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DnsRequestAction {
     /// <p>Domain information for the DNS request.</p>
     #[serde(rename = "Domain")]
@@ -507,7 +507,7 @@ pub struct DnsRequestAction {
 
 /// <p>Contains information about the domain.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DomainDetails {
     /// <p>Domain information for the AWS API call.</p>
     #[serde(rename = "Domain")]
@@ -517,7 +517,7 @@ pub struct DomainDetails {
 
 /// <p>Contains information about the reason that the finding was generated.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Evidence {
     /// <p>A list of threat intelligence details related to the evidence.</p>
     #[serde(rename = "ThreatIntelligenceDetails")]
@@ -527,7 +527,7 @@ pub struct Evidence {
 
 /// <p>Contains information about the finding.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Finding {
     /// <p>The ID of the account in which the finding was generated.</p>
     #[serde(rename = "AccountId")]
@@ -590,7 +590,7 @@ pub struct FindingCriteria {
 
 /// <p>Contains information about finding statistics.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FindingStatistics {
     /// <p>Represents a map of severity to count statistic for a set of findings</p>
     #[serde(rename = "CountBySeverity")]
@@ -600,7 +600,7 @@ pub struct FindingStatistics {
 
 /// <p>Contains information about the </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GeoLocation {
     /// <p>Latitude information of remote IP address.</p>
     #[serde(rename = "Lat")]
@@ -620,7 +620,7 @@ pub struct GetDetectorRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDetectorResponse {
     /// <p>Detector creation timestamp.</p>
     #[serde(rename = "CreatedAt")]
@@ -657,7 +657,7 @@ pub struct GetFilterRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetFilterResponse {
     /// <p>Specifies the action that is to be applied to the findings that match the filter.</p>
     #[serde(rename = "Action")]
@@ -697,7 +697,7 @@ pub struct GetFindingsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetFindingsResponse {
     /// <p>A list of findings.</p>
     #[serde(rename = "Findings")]
@@ -719,7 +719,7 @@ pub struct GetFindingsStatisticsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetFindingsStatisticsResponse {
     /// <p>Finding statistics object.</p>
     #[serde(rename = "FindingStatistics")]
@@ -737,7 +737,7 @@ pub struct GetIPSetRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetIPSetResponse {
     /// <p>The format of the file that contains the IPSet.</p>
     #[serde(rename = "Format")]
@@ -761,7 +761,7 @@ pub struct GetIPSetResponse {
 pub struct GetInvitationsCountRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetInvitationsCountResponse {
     /// <p>The number of received invitations.</p>
     #[serde(rename = "InvitationsCount")]
@@ -777,7 +777,7 @@ pub struct GetMasterAccountRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetMasterAccountResponse {
     /// <p>Master account details.</p>
     #[serde(rename = "Master")]
@@ -795,7 +795,7 @@ pub struct GetMembersRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetMembersResponse {
     /// <p>A list of members.</p>
     #[serde(rename = "Members")]
@@ -816,7 +816,7 @@ pub struct GetThreatIntelSetRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetThreatIntelSetResponse {
     /// <p>The format of the threatIntelSet.</p>
     #[serde(rename = "Format")]
@@ -838,7 +838,7 @@ pub struct GetThreatIntelSetResponse {
 
 /// <p>Contains information about the instance profile.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct IamInstanceProfile {
     /// <p>AWS EC2 instance profile ARN.</p>
     #[serde(rename = "Arn")]
@@ -852,7 +852,7 @@ pub struct IamInstanceProfile {
 
 /// <p>Contains information about the details of an instance.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InstanceDetails {
     /// <p>The availability zone of the EC2 instance.</p>
     #[serde(rename = "AvailabilityZone")]
@@ -906,7 +906,7 @@ pub struct InstanceDetails {
 
 /// <p>Contains information about the invitation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Invitation {
     /// <p>Inviter account ID</p>
     #[serde(rename = "AccountId")]
@@ -945,7 +945,7 @@ pub struct InviteMembersRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InviteMembersResponse {
     /// <p>A list of objects containing the unprocessed account and a result string explaining why it was unprocessed.</p>
     #[serde(rename = "UnprocessedAccounts")]
@@ -965,7 +965,7 @@ pub struct ListDetectorsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDetectorsResponse {
     /// <p>A list of detector Ids.</p>
     #[serde(rename = "DetectorIds")]
@@ -992,7 +992,7 @@ pub struct ListFiltersRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListFiltersResponse {
     /// <p>A list of filter names</p>
     #[serde(rename = "FilterNames")]
@@ -1027,7 +1027,7 @@ pub struct ListFindingsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListFindingsResponse {
     /// <p>The IDs of the findings you are listing.</p>
     #[serde(rename = "FindingIds")]
@@ -1054,7 +1054,7 @@ pub struct ListIPSetsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListIPSetsResponse {
     /// <p>The IDs of the IPSet resources.</p>
     #[serde(rename = "IpSetIds")]
@@ -1078,7 +1078,7 @@ pub struct ListInvitationsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListInvitationsResponse {
     /// <p>A list of invitation descriptions.</p>
     #[serde(rename = "Invitations")]
@@ -1110,7 +1110,7 @@ pub struct ListMembersRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListMembersResponse {
     /// <p>A list of members.</p>
     #[serde(rename = "Members")]
@@ -1130,7 +1130,7 @@ pub struct ListTagsForResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
     /// <p>The tags associated with the resource.</p>
     #[serde(rename = "Tags")]
@@ -1154,7 +1154,7 @@ pub struct ListThreatIntelSetsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListThreatIntelSetsResponse {
     /// <p>Pagination parameter to be used on the next list operation to retrieve more items.</p>
     #[serde(rename = "NextToken")]
@@ -1167,7 +1167,7 @@ pub struct ListThreatIntelSetsResponse {
 
 /// <p>Contains information about the port for the local connection.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct LocalPortDetails {
     /// <p>Port number of the local connection.</p>
     #[serde(rename = "Port")]
@@ -1181,7 +1181,7 @@ pub struct LocalPortDetails {
 
 /// <p>Contains information about the Master account and invitation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Master {
     /// <p>The ID of the account used as the Master account.</p>
     #[serde(rename = "AccountId")]
@@ -1203,7 +1203,7 @@ pub struct Master {
 
 /// <p>Continas information about the member account </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Member {
     /// <p>Member account ID.</p>
     #[serde(rename = "AccountId")]
@@ -1232,7 +1232,7 @@ pub struct Member {
 
 /// <p>Contains information about the network connection.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct NetworkConnectionAction {
     /// <p>Network connection blocked information.</p>
     #[serde(rename = "Blocked")]
@@ -1262,7 +1262,7 @@ pub struct NetworkConnectionAction {
 
 /// <p>Contains information about the network interface.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct NetworkInterface {
     /// <p>A list of EC2 instance IPv6 address information.</p>
     #[serde(rename = "Ipv6Addresses")]
@@ -1308,7 +1308,7 @@ pub struct NetworkInterface {
 
 /// <p>Continas information about the organization.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Organization {
     /// <p>Autonomous system number of the internet provider of the remote IP address.</p>
     #[serde(rename = "Asn")]
@@ -1330,7 +1330,7 @@ pub struct Organization {
 
 /// <p>Contains information about the port probe.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PortProbeAction {
     /// <p>Port probe blocked information.</p>
     #[serde(rename = "Blocked")]
@@ -1344,7 +1344,7 @@ pub struct PortProbeAction {
 
 /// <p>Contains information about the port probe details.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PortProbeDetail {
     /// <p>Local port information of the connection.</p>
     #[serde(rename = "LocalPortDetails")]
@@ -1358,7 +1358,7 @@ pub struct PortProbeDetail {
 
 /// <p>Contains information about the private IP address.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PrivateIpAddressDetails {
     /// <p>Private DNS name of the EC2 instance.</p>
     #[serde(rename = "PrivateDnsName")]
@@ -1372,7 +1372,7 @@ pub struct PrivateIpAddressDetails {
 
 /// <p>Contains information about the product code.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ProductCode {
     /// <p>Product code information.</p>
     #[serde(rename = "Code")]
@@ -1386,7 +1386,7 @@ pub struct ProductCode {
 
 /// <p>Continas information about the remote IP address.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RemoteIpDetails {
     /// <p>City information of the remote IP address.</p>
     #[serde(rename = "City")]
@@ -1412,7 +1412,7 @@ pub struct RemoteIpDetails {
 
 /// <p>Contains information about the remote port.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RemotePortDetails {
     /// <p>Port number of the remote connection.</p>
     #[serde(rename = "Port")]
@@ -1426,7 +1426,7 @@ pub struct RemotePortDetails {
 
 /// <p>Contains information about the resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Resource {
     /// <p>The IAM access key details (IAM user information) of a user that engaged in the activity that prompted GuardDuty to generate a finding.</p>
     #[serde(rename = "AccessKeyDetails")]
@@ -1444,7 +1444,7 @@ pub struct Resource {
 
 /// <p>Contains information about the security group.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SecurityGroup {
     /// <p>EC2 instance's security group ID.</p>
     #[serde(rename = "GroupId")]
@@ -1458,7 +1458,7 @@ pub struct SecurityGroup {
 
 /// <p>Contains information about the service.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Service {
     /// <p>Information about the activity described in a finding.</p>
     #[serde(rename = "Action")]
@@ -1526,7 +1526,7 @@ pub struct StartMonitoringMembersRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartMonitoringMembersResponse {
     /// <p>A list of objects containing the unprocessed account and a result string explaining why it was unprocessed.</p>
     #[serde(rename = "UnprocessedAccounts")]
@@ -1544,7 +1544,7 @@ pub struct StopMonitoringMembersRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopMonitoringMembersResponse {
     /// <p>A list of objects containing the unprocessed account and a result string explaining why it was unprocessed.</p>
     #[serde(rename = "UnprocessedAccounts")]
@@ -1553,7 +1553,7 @@ pub struct StopMonitoringMembersResponse {
 
 /// <p>Contains information about the tag associated with the resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Tag {
     /// <p>EC2 instance tag key.</p>
     #[serde(rename = "Key")]
@@ -1576,12 +1576,12 @@ pub struct TagResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
 
 /// <p>An instance of a threat intelligence detail that constitutes evidence for the finding.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ThreatIntelligenceDetail {
     /// <p>The name of the threat intelligence list that triggered the finding.</p>
     #[serde(rename = "ThreatListName")]
@@ -1604,12 +1604,12 @@ pub struct UnarchiveFindingsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UnarchiveFindingsResponse {}
 
 /// <p>Contains information about the accounts that were not processed.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UnprocessedAccount {
     /// <p>AWS Account ID.</p>
     #[serde(rename = "AccountId")]
@@ -1630,7 +1630,7 @@ pub struct UntagResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1649,7 +1649,7 @@ pub struct UpdateDetectorRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDetectorResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1679,7 +1679,7 @@ pub struct UpdateFilterRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateFilterResponse {
     /// <p>The name of the filter.</p>
     #[serde(rename = "Name")]
@@ -1704,7 +1704,7 @@ pub struct UpdateFindingsFeedbackRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateFindingsFeedbackResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1730,7 +1730,7 @@ pub struct UpdateIPSetRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateIPSetResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1756,7 +1756,7 @@ pub struct UpdateThreatIntelSetRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(any(test, serialize_structs), derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateThreatIntelSetResponse {}
 
 /// Errors returned by AcceptInvitation
