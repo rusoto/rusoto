@@ -8,27 +8,6 @@ jobs:
       matrix:
         os: [ubuntu-latest, macOS-latest, windows-latest]
         rust: [stable, beta, nightly]
-        include:
-          - os: ubuntu-latest
-            rust: stable
-          - os: ubuntu-latest
-            rust: beta
-          - os: ubuntu-latest
-            rust: nightly
-          - os: macOS-latest
-            rust: stable
-          - os: macOS-latest
-            rust: beta
-          - os: macOS-latest
-            rust: nightly
-          - os: ubuntu-latest
-            rust: nightly
-          - os: windows-latest
-            rust: stable
-          - os: windows-latest
-            rust: beta
-          - os: windows-latest
-            rust: nightly
     runs-on: ${{ matrix.os }}
     steps:
     - name: Checkout
