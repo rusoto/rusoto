@@ -22,12 +22,28 @@ jobs:
     - name: Run unit tests
       shell: bash
       run: RUST_VERSION=${{ matrix.rust }} make unit_test
-    - name: Run unit tests with rustls
-      shell: bash
-      run: RUST_VERSION=${{ matrix.rust }} make rustls_unit_test
     - name: Cargo check integration tests
       shell: bash
       run: RUST_VERSION=${{ matrix.rust }} make check_integration_test
+  rustls_unit_tests:
+    name: Rustls unit tests
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macOS-latest, windows-latest]
+        rust: [stable, beta, nightly]
+    runs-on: ${{ matrix.os }}
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v1
+      with:
+        fetch-depth: 5
+    - name: Set up Rust
+      uses: hecrj/setup-rust-action@v1
+      with:
+        rust-version: ${{ matrix.rust }}
+    - name: Run unit tests with rustls
+      shell: bash
+      run: RUST_VERSION=${{ matrix.rust }} make rustls_unit_test
   crate_gen:
     name: Crate generation
     strategy:
