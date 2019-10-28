@@ -194,7 +194,7 @@ impl<'b> Service<'b> {
                 path: Some("../../../mock".into()),
                 version: Some("0.41.0".into()),
                 optional: None,
-                default_features: None,
+                default_features: Some(false),
                 features: None,
             },
         );
