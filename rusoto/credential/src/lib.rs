@@ -24,7 +24,9 @@ pub use crate::container::{ContainerProvider, ContainerProviderFuture};
 pub use crate::environment::{EnvironmentProvider, EnvironmentProviderFuture};
 pub use crate::instance_metadata::{InstanceMetadataProvider, InstanceMetadataProviderFuture};
 pub use crate::profile::{ProfileProvider, ProfileProviderFuture};
+pub use crate::secrets::Secret;
 pub use crate::static_provider::StaticProvider;
+pub use crate::variable::Variable;
 
 pub mod claims;
 mod container;
@@ -32,16 +34,19 @@ mod environment;
 mod instance_metadata;
 mod profile;
 mod request;
+mod secrets;
 mod static_provider;
 pub(crate) mod test_utils;
+mod variable;
 
 use std::collections::BTreeMap;
-use std::env::var as env_var;
+use std::env::{var as env_var, VarError};
 use std::error::Error;
 use std::fmt;
 use std::io::Error as IoError;
 use std::ops::Deref;
 use std::rc::Rc;
+use std::string::FromUtf8Error;
 use std::sync::{Arc, Mutex};
 use std::time::Duration;
 
@@ -182,7 +187,7 @@ impl fmt::Debug for AwsCredentials {
 ///
 /// This generally is an error message from one of our underlying libraries, however
 /// we wrap it up with this type so we can export one single error type.
-#[derive(Debug, PartialEq)]
+#[derive(Clone, Debug, PartialEq)]
 pub struct CredentialsError {
     /// The underlying error message for the credentials error.
     pub message: String,
@@ -234,6 +239,18 @@ impl From<HyperError> for CredentialsError {
 
 impl From<serde_json::Error> for CredentialsError {
     fn from(err: serde_json::Error) -> CredentialsError {
+        CredentialsError::new(err.description())
+    }
+}
+
+impl From<VarError> for CredentialsError {
+    fn from(err: VarError) -> CredentialsError {
+        CredentialsError::new(err.description())
+    }
+}
+
+impl From<FromUtf8Error> for CredentialsError {
+    fn from(err: FromUtf8Error) -> CredentialsError {
         CredentialsError::new(err.description())
     }
 }
