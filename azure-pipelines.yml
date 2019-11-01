@@ -19,6 +19,8 @@ jobs:
       displayName: 'Run unit tests'
     - script: make check_integration_test
       displayName: 'Cargo check integration tests'
+    - script: make credential_integration_test
+      displayName: 'Credential integration tests'
 
 - job: 'rustls_unit_tests_linux'
   displayName: 'Rustls unit tests on Linux'
