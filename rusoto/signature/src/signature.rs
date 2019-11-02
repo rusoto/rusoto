@@ -170,7 +170,6 @@ impl SignedRequest {
         self.hostname = Some(build_hostname(&endpoint_prefix, &self.region));
     }
 
-    #[cfg(feature = "async-await")]
     /// Sets the new body (payload)
     pub fn set_payload<B: Into<Bytes>>(&mut self, payload: Option<B>) {
         self.payload = payload.map(|chunk| SignedRequestPayload::Buffer(chunk.into()));
