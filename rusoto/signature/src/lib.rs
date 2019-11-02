@@ -11,8 +11,15 @@
 #![cfg_attr(not(feature = "unstable"), deny(warnings))]
 pub extern crate rusoto_credential as credential;
 pub mod region;
+pub mod sign;
 pub mod signature;
+
+#[cfg(feature = "futures-01")]
 pub mod stream;
 pub use region::Region;
-pub use signature::{SignedRequest, SignedRequestPayload};
+pub use sign::Sign;
+pub use signature::SignedRequest;
+#[cfg(feature = "futures-01")]
+pub use signature::SignedRequestPayload;
+#[cfg(feature = "futures-01")]
 pub use stream::ByteStream;

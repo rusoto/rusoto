@@ -17,13 +17,24 @@ use std::fmt;
 use std::str;
 use std::time::Duration;
 
+#[cfg(feature = "async-await")]
+use futures::stream::Stream;
+#[cfg(feature = "async-await")]
+use hyper_alpha::Body;
+#[cfg(feature = "async-await")]
+use std::pin::Pin;
+
+#[cfg(feature = "futures-01")]
+use crate::stream::ByteStream;
+#[cfg(feature = "futures-01")]
+use hyper::Body;
+
 use base64;
 use bytes::Bytes;
 use hex;
 use hmac::{Hmac, Mac};
 use http::header::{HeaderMap, HeaderName, HeaderValue};
 use http::{HttpTryFrom, Method, Request};
-use hyper::Body;
 use log::{debug, log_enabled, Level::Debug};
 use md5;
 use percent_encoding::{percent_decode, utf8_percent_encode, AsciiSet, NON_ALPHANUMERIC};
@@ -33,7 +44,6 @@ use time::Tm;
 
 use crate::credential::AwsCredentials;
 use crate::region::Region;
-use crate::stream::ByteStream;
 
 pub type Params = BTreeMap<String, Option<String>>;
 
@@ -43,6 +53,7 @@ pub static UNSIGNED_PAYLOAD: &str = "UNSIGNED-PAYLOAD";
 pub static EMPTY_SHA256_HASH: &str =
     "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855";
 
+#[cfg(feature = "futures-01")]
 /// Possible payloads included in a `SignedRequest`.
 pub enum SignedRequestPayload {
     /// Transfer payload in a single chunk
@@ -51,6 +62,32 @@ pub enum SignedRequestPayload {
     Stream(ByteStream),
 }
 
+#[cfg(feature = "async-await")]
+/// Possible payloads included in a `SignedRequest`.
+pub enum SignedRequestPayload {
+    /// Transfer payload in a single chunk
+    Buffer(Bytes),
+    /// Transfer payload in multiple chunks
+    Stream(Pin<Box<dyn Stream<Item = Result<Bytes, std::io::Error>> + Send + Sync + 'static>>),
+}
+
+#[cfg(feature = "futures-01")]
+impl fmt::Debug for SignedRequestPayload {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            SignedRequestPayload::Buffer(ref buf) => {
+                write!(f, "SignedRequestPayload::Buffer(len = {})", buf.len())
+            }
+            SignedRequestPayload::Stream(ref stream) => write!(
+                f,
+                "SignedRequestPayload::Stream(size_hint = {:?})",
+                stream.size_hint()
+            ),
+        }
+    }
+}
+
+#[cfg(feature = "async-await")]
 impl fmt::Debug for SignedRequestPayload {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
@@ -86,7 +123,11 @@ pub struct SignedRequest {
     pub scheme: Option<String>,
     /// The AWS hostname
     pub hostname: Option<String>,
+    #[cfg(feature = "futures-01")]
     /// The HTTP Content
+    pub payload: Option<SignedRequestPayload>,
+    /// The HTTP Content
+    #[cfg(feature = "async-await")]
     pub payload: Option<SignedRequestPayload>,
     /// The Standardised query string
     pub canonical_query_string: String,
@@ -129,16 +170,45 @@ impl SignedRequest {
         self.hostname = Some(build_hostname(&endpoint_prefix, &self.region));
     }
 
+    #[cfg(feature = "async-await")]
     /// Sets the new body (payload)
     pub fn set_payload<B: Into<Bytes>>(&mut self, payload: Option<B>) {
         self.payload = payload.map(|chunk| SignedRequestPayload::Buffer(chunk.into()));
     }
 
-    /// Sets the new body (payload) as a stream
+    #[cfg(feature = "futures-01")]
+    /// Sets the new body (payload)
     pub fn set_payload_stream(&mut self, stream: ByteStream) {
         self.payload = Some(SignedRequestPayload::Stream(stream));
     }
 
+    #[cfg(feature = "async-await")]
+    /// Sets the new body (payload)
+    pub fn set_payload_stream(
+        &mut self,
+        payload: Pin<Box<dyn Stream<Item = Result<Bytes, std::io::Error>> + Send + Sync + 'static>>,
+    ) {
+        self.payload = Some(SignedRequestPayload::Stream(payload))
+    }
+
+    #[cfg(feature = "futures-01")]
+    /// Computes and sets the Content-MD5 header based on the current payload.
+    ///
+    /// Has no effect if the payload is not set, or is not a buffer.
+    pub fn set_content_md5_header(&mut self) {
+        let digest;
+        if let Some(SignedRequestPayload::Buffer(ref payload)) = self.payload {
+            digest = Some(md5::compute(payload));
+        } else {
+            digest = None;
+        }
+        if let Some(digest) = digest {
+            // need to deref digest and then pass that reference:
+            self.add_header("Content-MD5", &base64::encode(&(*digest)));
+        }
+    }
+
+    #[cfg(feature = "async-await")]
     /// Computes and sets the Content-MD5 header based on the current payload.
     ///
     /// Has no effect if the payload is not set, or is not a buffer.
@@ -418,6 +488,15 @@ impl SignedRequest {
             values.push(b"application/octet-stream".to_vec());
             entry.insert(values);
         }
+
+        #[cfg(feature = "async-await")]
+        let len = match self.payload {
+            None => Some(0),
+            Some(SignedRequestPayload::Buffer(ref payload)) => Some(payload.len()),
+            Some(SignedRequestPayload::Stream(ref stream)) => Some(stream.size_hint().0),
+        };
+
+        #[cfg(feature = "futures-01")]
         let len = match self.payload {
             None => Some(0),
             Some(SignedRequestPayload::Buffer(ref payload)) => Some(payload.len()),
@@ -510,6 +589,76 @@ impl SignedRequest {
     }
 }
 
+#[cfg(feature = "futures-01")]
+impl TryInto<Request<Body>> for SignedRequest {
+    type Error = http::Error;
+
+    fn try_into(self) -> Result<Request<Body>, Self::Error> {
+        let method = Method::try_from(self.method.as_str())?;
+
+        let headers = self
+            .headers()
+            .iter()
+            .try_fold::<_, _, Result<_, Self::Error>>(HeaderMap::new(), |mut headers, (k, v)| {
+                let name = HeaderName::from_bytes(k.as_bytes())?;
+                for v in v.iter() {
+                    let value = HeaderValue::from_bytes(v)?;
+                    headers.append(&name, value);
+                }
+                Ok(headers)
+            })?;
+
+        let mut final_uri = format!(
+            "{}://{}{}",
+            self.scheme(),
+            self.hostname(),
+            self.canonical_path()
+        );
+        if !self.canonical_query_string().is_empty() {
+            final_uri = final_uri + &format!("?{}", self.canonical_query_string());
+        }
+
+        if log_enabled!(Debug) {
+            let payload = match self.payload {
+                Some(SignedRequestPayload::Buffer(ref payload_bytes)) => {
+                    String::from_utf8(payload_bytes.as_ref().to_owned())
+                        .unwrap_or_else(|_| String::from("<non-UTF-8 data>"))
+                }
+                Some(SignedRequestPayload::Stream(ref stream)) => {
+                    format!("<stream size_hint={:?}>", stream.size_hint())
+                }
+                None => "".to_owned(),
+            };
+
+            debug!(
+                "Full request: \n method: {}\n final_uri: {}\n payload: {}\nHeaders:\n",
+                method, final_uri, payload
+            );
+            for (h, v) in headers.iter() {
+                debug!("{}:{:?}", h.as_str(), v);
+            }
+        }
+
+        let mut builder = Request::builder();
+        builder.method(method);
+        builder.uri(final_uri);
+
+        let body = if let Some(payload) = self.payload {
+            match payload {
+                SignedRequestPayload::Buffer(bytes) => Body::from(bytes),
+                SignedRequestPayload::Stream(stream) => Body::wrap_stream(stream),
+            }
+        } else {
+            Body::empty()
+        };
+        let mut request = builder.body(body)?;
+
+        *request.headers_mut() = headers;
+        Ok(request)
+    }
+}
+
+#[cfg(feature = "async-await")]
 impl TryInto<Request<Body>> for SignedRequest {
     type Error = http::Error;
 
