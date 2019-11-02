@@ -37,7 +37,7 @@ pub trait Sign: Sized {
 /// ```rust,edition2018
 /// use rusoto_signature::{Sign, Region, credential::AwsCredentials};
 /// use http::request;
-/// # use hyper_alpha::Body;
+/// # use hyper::Body;
 /// # use std::error::Error;
 ///
 /// # fn main() -> Result<(), Box<dyn Error>> {

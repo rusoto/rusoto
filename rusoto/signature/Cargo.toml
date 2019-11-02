@@ -31,11 +31,11 @@ rustc_version = "0.2.1"
 [dependencies]
 bytes = "0.4.12"
 futures-preview = { version = "=0.3.0-alpha.19", features = ["async-await"], optional = true }
-hyper-alpha = { package = "hyper", features = ["unstable-stream"], version = "=0.13.0-alpha.4", optional = true }
+hyper-alpha = { package = "hyper", version = "=0.13.0-alpha.4", default_features = false, features = ["unstable-stream"], optional = true }
 
 futures = { version = "0.1.16", optional = true }
 tokio = { version = "0.1.7", optional = true }
-hyper = { version = "0.12", optional = true }
+hyper = { package = "hyper", default_features = false, optional = true }
 
 hmac = "0.7.1"
 http = "0.1.17"
