@@ -35,7 +35,7 @@ hyper-alpha = { package = "hyper", version = "=0.13.0-alpha.4", default_features
 
 futures = { version = "0.1.16", optional = true }
 tokio = { version = "0.1.7", optional = true }
-hyper = { package = "hyper", default_features = false, optional = true }
+hyper = { version = "0.12.35", default_features = false, optional = true }
 
 hmac = "0.7.1"
 http = "0.1.17"
