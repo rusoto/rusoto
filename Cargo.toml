@@ -4,6 +4,7 @@ members = [
     "rusoto/credential_service_mock",
     "rusoto/core",
     "rusoto/credential",
+    "rusoto/signature",
     "rusoto/services/acm",
     "rusoto/services/acm-pca",
     "rusoto/services/alexaforbusiness",

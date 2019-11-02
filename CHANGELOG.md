@@ -13,6 +13,7 @@ params for s3 `list_objects` methods
 - Update CloudDirectory API definition to `2017-01-11`
 - Add SecurityHub service
 - Add Transfer service
+- Introducing `rusoto_signature`, a standalone crate for signing HTTP requests.
 
 ## [0.41.0] - 2019-10-07
 
