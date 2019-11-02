@@ -10,9 +10,9 @@ use std::process::Command;
 use dirs::home_dir;
 use futures::future::{result, FutureResult};
 use futures::{Future, Poll};
+use lazy_static::lazy_static;
 use regex::Regex;
 use tokio_process::{CommandExt, OutputAsync};
-use lazy_static::lazy_static;
 
 use crate::{non_empty_env_var, AwsCredentials, CredentialsError, ProvideAwsCredentials};
 
@@ -23,7 +23,8 @@ const DEFAULT: &str = "default";
 const REGION: &str = "region";
 
 lazy_static! {
-    static ref PROFILE_REGEX: Regex = Regex::new(r"^\[(profile )?([^\]]+)\]$").expect("Failed to compile regex");
+    static ref PROFILE_REGEX: Regex =
+        Regex::new(r"^\[(profile )?([^\]]+)\]$").expect("Failed to compile regex");
 }
 
 /// Provides AWS credentials from a profile in a credentials file, or from a credential process.
