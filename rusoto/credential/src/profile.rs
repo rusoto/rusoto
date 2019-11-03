@@ -43,6 +43,9 @@ pub struct ProfileProvider {
     file_path: PathBuf,
     /// The Profile Path to parse out of the Credentials File.
     profile: String,
+    /// If `true` disable [`credential_process`][credential_process] option, making sure not to
+    /// call any external process.
+    secure: bool,
 }
 
 impl ProfileProvider {
@@ -64,6 +67,7 @@ impl ProfileProvider {
         ProfileProvider {
             file_path: file_path.into(),
             profile: profile.into(),
+            secure: false,
         }
     }
 
@@ -171,6 +175,17 @@ impl ProfileProvider {
     {
         self.profile = profile.into();
     }
+
+    /// Returns `true` if this provider instance will not execute any external processes to obtain
+    /// credentials.
+    pub fn is_secure(&self) -> bool {
+        self.secure
+    }
+
+    /// Ensure this provider instance does not call any external processes to obtain credentials.
+    pub fn secure(&mut self) {
+        self.secure = true;
+    }
 }
 
 /// Provides AWS credentials from a profile in a credentials file as a Future.
@@ -217,14 +232,14 @@ impl ProvideAwsCredentials for ProfileProvider {
                     .map(std::borrow::ToOwned::to_owned)
             })
         }) {
-            Ok(Some(command)) => {
+            Ok(Some(ref command)) if !self.is_secure() => {
                 // credential_process is set, create the future
                 match parse_command_str(&command) {
                     Ok(mut command) => ProfileProviderFutureInner::Future(command.output_async()),
                     Err(err) => ProfileProviderFutureInner::Result(result(Err(err))),
                 }
             }
-            Ok(None) => {
+            Ok(Some(_)) | Ok(None) => {
                 // credential_process is not set, parse the credentials file
                 ProfileProviderFutureInner::Result(result(
                     parse_credentials_file(self.file_path()).and_then(|mut profiles| {
