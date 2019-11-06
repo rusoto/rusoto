@@ -530,6 +530,38 @@ fn test_list_objects_encoding() {
     test_delete_object(&test_client.s3, &bucket_name, &key);
 }
 
+#[test]
+fn test_name_space_truncate() {
+    init_logging();
+
+    let bucket_name = format!("test-name-space-{}", get_time().sec);
+    let test_client = TestS3Client::new(bucket_name.clone());
+
+    test_client.create_test_bucket(bucket_name.clone());
+
+    let filename_spaces = "spaces     ".to_owned();
+    test_client.put_test_object(filename_spaces.clone());
+
+    let req = ListObjectsV2Request {
+        bucket: bucket_name.clone(),
+        ..Default::default()
+    };
+
+    let key = &test_client
+        .s3
+        .list_objects_v2(req)
+        .sync()
+        .unwrap()
+        .contents
+        .unwrap()[0]
+        .clone()
+        .key
+        .unwrap();
+
+    assert_eq!(*key, filename_spaces);
+    test_delete_object(&test_client.s3, &bucket_name, &filename_spaces);
+}
+
 fn test_multipart_upload(
     client: &S3Client,
     region: &Region,
