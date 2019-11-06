@@ -55,3 +55,7 @@ time_credentials:
 .PHONY: bench_s3
 bench_s3:
 	(cd rusoto/services/s3 && cargo +nightly bench)
+
+.PHONY: credential_integration_test
+credential_integration_test:
+	(cd rusoto/credential_service_mock && ./run-and-test.sh )

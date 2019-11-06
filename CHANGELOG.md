@@ -13,6 +13,7 @@ params for s3 `list_objects` methods
 - Update CloudDirectory API definition to `2017-01-11`
 - Add SecurityHub service
 - Add Transfer service
+- Introducing `rusoto_signature`, a standalone crate for signing HTTP requests.
 - Don't trim whitepsace when parsing xml payload. Fixes truncating of items with spaces in payloads
 such as an S3 key returned in `list_objects_v2`
 
