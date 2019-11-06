@@ -14,6 +14,7 @@ params for s3 `list_objects` methods
 - Add SecurityHub service
 - Add Transfer service
 - Introducing `rusoto_signature`, a standalone crate for signing HTTP requests.
+- Add anonymous credentials support for S3
 
 ## [0.41.0] - 2019-10-07
 
