@@ -13,6 +13,7 @@
 
 - Encode request payload optionally with Gzip : https://github.com/rusoto/rusoto/pull/1615
 - Add Debug trait to generated Clients
+- Add `rusoto_ec2::filter!` macro
 
 ## [0.42.0] - 2019-11-18
 
