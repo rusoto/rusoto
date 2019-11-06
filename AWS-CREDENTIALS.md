@@ -10,7 +10,7 @@ Much like the [standard AWS toolchain](https://docs.aws.amazon.com/cli/latest/us
 
 1. Environment variables via [`rusoto_core::EnvironmentProvider`](https://docs.rs/rusoto_credential/latest/rusoto_credential/struct.EnvironmentProvider.html) (`AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`)
 2. AWS credentials file via [`rusoto_core::ProfileProvider`](https://docs.rs/rusoto_credential/latest/rusoto_credential/struct.ProfileProvider.html)
-3. IAM ECS container profile via [`rusoto_core::ContainerProvider`](https://docs.rs/rusoto_credential/latestrusoto_credential/struct.ContainerProvider.html)
+3. IAM ECS container profile via [`rusoto_core::ContainerProvider`](https://docs.rs/rusoto_credential/latest/rusoto_credential/struct.ContainerProvider.html)
 4. IAM EC2 instance profile via [`rusoto_core::InstanceMetadataProvider`](https://docs.rs/rusoto_credential/latest/rusoto_credential/struct.InstanceMetadataProvider.html)
 
 The [`rusoto_core::ChainProvider`](https://docs.rs/rusoto_credential/latest/rusoto_credential/struct.ChainProvider.html) is a convenience for attempting to source access credentials using all the methods above in that order.
