@@ -11,6 +11,7 @@ extern crate rusoto_s3;
 use std::clone::Clone;
 use std::ops::{Deref, DerefMut};
 
+use rand::distributions::Alphanumeric;
 use rand::Rng;
 use rusoto_core::Region;
 use rusoto_elastictranscoder::{Ets, EtsClient};
@@ -128,11 +129,12 @@ fn create_client() -> TestEtsClient {
 /// ASCII characters to the specified prefix.
 /// Keeps it lower case to work with S3 requirements as of 3/1/2018.
 fn generate_unique_name(prefix: &str) -> String {
+    let mut rng = rand::thread_rng();
     format!(
         "{}-{}",
         prefix,
-        rand::thread_rng()
-            .gen_ascii_chars()
+        std::iter::repeat(())
+            .map(|()| rng.sample(Alphanumeric))
             .take(AWS_SERVICE_RANDOM_SUFFIX_LENGTH)
             .collect::<String>()
     )
