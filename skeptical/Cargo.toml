@@ -3,6 +3,7 @@ name = "skeptical"
 version = "0.1.0"
 authors = ["Matthew Mayer <matthewkmayer@gmail.com>"]
 build = "build.rs"
+edition = "2018"
 
 [dependencies]
 rusoto_core = "0.41"

@@ -28,7 +28,7 @@ It's also possible to implement your own credentials sourcing mechanism by creat
 
 If your aws account belongs to an organization and you need to use sts:AssumeRole, you're probably looking for `rusoto_sts::StsAssumeRoleSessionCredentialsProvider`. A simple program that uses sts:AssumeRole looks like this:
 
-```rust,no_run,edition2018
+```rust,no_run
 use std::default::Default;
 
 use rusoto_core::{Region, HttpClient};
