@@ -27,6 +27,11 @@ docs:
 unit_test:
 	cargo +$$RUST_VERSION test --all
 
+# Doctests can be very slow to compile and run. This option lets us skip those if needed.
+.PHONY: unit_test_no_doctests
+unit_test_no_doctests:
+	cargo +$$RUST_VERSION test --all --lib
+
 .PHONY: skeptical
 skeptical:
 	(cd skeptical && cargo +$$RUST_VERSION test)
