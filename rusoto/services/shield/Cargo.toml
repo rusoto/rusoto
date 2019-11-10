@@ -34,3 +34,4 @@ default-features = false
 default = ["native-tls"]
 native-tls = ["rusoto_core/native-tls"]
 rustls = ["rusoto_core/rustls"]
+serialize_structs = []

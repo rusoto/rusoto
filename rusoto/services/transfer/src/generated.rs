@@ -56,7 +56,7 @@ pub struct CreateServerRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateServerResponse {
     /// <p>The service-assigned ID of the SFTP server that is created.</p>
     #[serde(rename = "ServerId")]
@@ -93,7 +93,7 @@ pub struct CreateUserRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateUserResponse {
     /// <p>The ID of the SFTP server that the user is attached to.</p>
     #[serde(rename = "ServerId")]
@@ -141,7 +141,7 @@ pub struct DescribeServerRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeServerResponse {
     /// <p>An array containing the properties of the server with the <code>ServerID</code> you specified.</p>
     #[serde(rename = "Server")]
@@ -159,7 +159,7 @@ pub struct DescribeUserRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeUserResponse {
     /// <p>A system-assigned unique identifier for an SFTP server that has this user assigned.</p>
     #[serde(rename = "ServerId")]
@@ -171,7 +171,7 @@ pub struct DescribeUserResponse {
 
 /// <p>Describes the properties of the server that was specified. Information returned includes the following: the server Amazon Resource Name (ARN), the authentication configuration and type, the logging role, the server ID and state, and assigned tags or metadata. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribedServer {
     /// <p>Specifies the unique Amazon Resource Name (ARN) for the server to be described.</p>
     #[serde(rename = "Arn")]
@@ -220,7 +220,7 @@ pub struct DescribedServer {
 
 /// <p>Returns properties of the user that you want to describe.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribedUser {
     /// <p>This property contains the unique Amazon Resource Name (ARN) for the user that was requested to be described.</p>
     #[serde(rename = "Arn")]
@@ -288,7 +288,7 @@ pub struct ImportSshPublicKeyRequest {
 
 /// <p>This response identifies the user, the server they belong to, and the identifier of the SSH public key associated with that user. A user can have more than one key on each server that they are associated with.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ImportSshPublicKeyResponse {
     /// <p>A system-assigned unique identifier for an SFTP server.</p>
     #[serde(rename = "ServerId")]
@@ -314,7 +314,7 @@ pub struct ListServersRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListServersResponse {
     /// <p>When you can get additional results from the <code>ListServers</code> operation, a <code>NextToken</code> parameter is returned in the output. In a following command, you can pass in the <code>NextToken</code> parameter to continue listing additional servers.</p>
     #[serde(rename = "NextToken")]
@@ -341,7 +341,7 @@ pub struct ListTagsForResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
     /// <p>This value is the ARN you specified to list the tags of.</p>
     #[serde(rename = "Arn")]
@@ -373,7 +373,7 @@ pub struct ListUsersRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListUsersResponse {
     /// <p>When you can get additional results from the <code>ListUsers</code> call, a <code>NextToken</code> parameter is returned in the output. You can then pass in a subsequent command to the <code>NextToken</code> parameter to continue listing additional users.</p>
     #[serde(rename = "NextToken")]
@@ -389,7 +389,7 @@ pub struct ListUsersResponse {
 
 /// <p>Returns properties of the server that was specified.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListedServer {
     /// <p>The unique Amazon Resource Name (ARN) for the server to be listed.</p>
     #[serde(rename = "Arn")]
@@ -422,7 +422,7 @@ pub struct ListedServer {
 
 /// <p>Returns properties of the user that you specify.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListedUser {
     /// <p>This property is the unique Amazon Resource Name (ARN) for the user that you want to learn about.</p>
     #[serde(rename = "Arn")]
@@ -447,7 +447,7 @@ pub struct ListedUser {
 
 /// <p>Provides information about the public Secure Shell (SSH) key that is associated with a user account for a specific server (as identified by <code>ServerId</code>). The information returned includes the date the key was imported, the public key contents, and the public key ID. A user can store more than one SSH public key associated with their user name on a specific SFTP server.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SshPublicKey {
     /// <p>The date that the public key was added to the user account.</p>
     #[serde(rename = "DateImported")]
@@ -510,7 +510,7 @@ pub struct TestIdentityProviderRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TestIdentityProviderResponse {
     /// <p>A message that indicates whether the test was successful or not. </p>
     #[serde(rename = "Message")]
@@ -566,7 +566,7 @@ pub struct UpdateServerRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateServerResponse {
     /// <p>A system-assigned unique identifier for an SFTP server that the user account is assigned to.</p>
     #[serde(rename = "ServerId")]
@@ -597,7 +597,7 @@ pub struct UpdateUserRequest {
 
 /// <p> <code>UpdateUserResponse</code> returns the user name and server identifier for the request to update a user's properties.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateUserResponse {
     /// <p>A system-assigned unique identifier for an SFTP server instance that the user account is assigned to.</p>
     #[serde(rename = "ServerId")]

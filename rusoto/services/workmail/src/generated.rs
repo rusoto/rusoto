@@ -37,7 +37,7 @@ pub struct AssociateDelegateToResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateDelegateToResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -54,7 +54,7 @@ pub struct AssociateMemberToGroupRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateMemberToGroupResponse {}
 
 /// <p>At least one delegate must be associated to the resource to disable automatic replies from the resource.</p>
@@ -88,7 +88,7 @@ pub struct CreateAliasRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateAliasResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -102,7 +102,7 @@ pub struct CreateGroupRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateGroupResponse {
     /// <p>The identifier of the group.</p>
     #[serde(rename = "GroupId")]
@@ -124,7 +124,7 @@ pub struct CreateResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateResourceResponse {
     /// <p>The identifier of the new resource.</p>
     #[serde(rename = "ResourceId")]
@@ -149,7 +149,7 @@ pub struct CreateUserRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateUserResponse {
     /// <p>The identifier for the new user.</p>
     #[serde(rename = "UserId")]
@@ -159,7 +159,7 @@ pub struct CreateUserResponse {
 
 /// <p>The name of the attribute, which is one of the values defined in the UserAttribute enumeration.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Delegate {
     /// <p>The identifier for the user or group associated as the resource's delegate.</p>
     #[serde(rename = "Id")]
@@ -183,7 +183,7 @@ pub struct DeleteAliasRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteAliasResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -197,7 +197,7 @@ pub struct DeleteGroupRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteGroupResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -214,7 +214,7 @@ pub struct DeleteMailboxPermissionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteMailboxPermissionsResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -228,7 +228,7 @@ pub struct DeleteResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -242,7 +242,7 @@ pub struct DeleteUserRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteUserResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -256,7 +256,7 @@ pub struct DeregisterFromWorkMailRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeregisterFromWorkMailResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -270,7 +270,7 @@ pub struct DescribeGroupRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeGroupResponse {
     /// <p>The date and time when a user was deregistered from WorkMail, in UNIX epoch time format.</p>
     #[serde(rename = "DisabledDate")]
@@ -306,7 +306,7 @@ pub struct DescribeOrganizationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeOrganizationResponse {
     /// <p>The alias for an organization.</p>
     #[serde(rename = "Alias")]
@@ -353,7 +353,7 @@ pub struct DescribeResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeResourceResponse {
     /// <p>The booking options for the described resource.</p>
     #[serde(rename = "BookingOptions")]
@@ -400,7 +400,7 @@ pub struct DescribeUserRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeUserResponse {
     /// <p>The date and time at which the user was disabled for Amazon WorkMail usage, in UNIX epoch time format.</p>
     #[serde(rename = "DisabledDate")]
@@ -450,7 +450,7 @@ pub struct DisassociateDelegateFromResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateDelegateFromResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -467,7 +467,7 @@ pub struct DisassociateMemberFromGroupRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateMemberFromGroupResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -481,7 +481,7 @@ pub struct GetMailboxDetailsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetMailboxDetailsResponse {
     /// <p>The maximum allowed mailbox size, in MB, for the specified user.</p>
     #[serde(rename = "MailboxQuota")]
@@ -495,7 +495,7 @@ pub struct GetMailboxDetailsResponse {
 
 /// <p>The representation of an Amazon WorkMail group.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Group {
     /// <p>The date indicating when the group was disabled from Amazon WorkMail use.</p>
     #[serde(rename = "DisabledDate")]
@@ -542,7 +542,7 @@ pub struct ListAliasesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAliasesResponse {
     /// <p>The entity's paginated aliases.</p>
     #[serde(rename = "Aliases")]
@@ -573,7 +573,7 @@ pub struct ListGroupMembersRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListGroupMembersResponse {
     /// <p>The members associated to the group.</p>
     #[serde(rename = "Members")]
@@ -601,7 +601,7 @@ pub struct ListGroupsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListGroupsResponse {
     /// <p>The overview of groups for an organization.</p>
     #[serde(rename = "Groups")]
@@ -632,7 +632,7 @@ pub struct ListMailboxPermissionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListMailboxPermissionsResponse {
     /// <p>The token to use to retrieve the next page of results. The value is "null" when there are no more results to return.</p>
     #[serde(rename = "NextToken")]
@@ -657,7 +657,7 @@ pub struct ListOrganizationsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListOrganizationsResponse {
     /// <p>The token to use to retrieve the next page of results. The value is "null" when there are no more results to return.</p>
     #[serde(rename = "NextToken")]
@@ -688,7 +688,7 @@ pub struct ListResourceDelegatesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListResourceDelegatesResponse {
     /// <p>One page of the resource's delegates.</p>
     #[serde(rename = "Delegates")]
@@ -716,7 +716,7 @@ pub struct ListResourcesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListResourcesResponse {
     /// <p> The token used to paginate through all the organization's resources. While results are still available, it has an associated value. When the last page is reached, the token is empty.</p>
     #[serde(rename = "NextToken")]
@@ -744,7 +744,7 @@ pub struct ListUsersRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListUsersResponse {
     /// <p> The token to use to retrieve the next page of results. This value is `null` when there are no more results to return.</p>
     #[serde(rename = "NextToken")]
@@ -758,7 +758,7 @@ pub struct ListUsersResponse {
 
 /// <p>The representation of a user or group.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Member {
     /// <p>The date indicating when the member was disabled from Amazon WorkMail use.</p>
     #[serde(rename = "DisabledDate")]
@@ -788,7 +788,7 @@ pub struct Member {
 
 /// <p>The representation of an organization.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct OrganizationSummary {
     /// <p>The alias associated with the organization.</p>
     #[serde(rename = "Alias")]
@@ -810,7 +810,7 @@ pub struct OrganizationSummary {
 
 /// <p>Permission granted to a user, group, or resource to access a certain aspect of another user, group, or resource mailbox.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Permission {
     /// <p>The identifier of the user, group, or resource to which the permissions are granted.</p>
     #[serde(rename = "GranteeId")]
@@ -840,7 +840,7 @@ pub struct PutMailboxPermissionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutMailboxPermissionsResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -857,7 +857,7 @@ pub struct RegisterToWorkMailRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RegisterToWorkMailResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -874,12 +874,12 @@ pub struct ResetPasswordRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResetPasswordResponse {}
 
 /// <p>The representation of a resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Resource {
     /// <p>The date indicating when the resource was disabled from Amazon WorkMail use.</p>
     #[serde(rename = "DisabledDate")]
@@ -925,7 +925,7 @@ pub struct UpdateMailboxQuotaRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateMailboxQuotaResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -942,7 +942,7 @@ pub struct UpdatePrimaryEmailAddressRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdatePrimaryEmailAddressResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -964,12 +964,12 @@ pub struct UpdateResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateResourceResponse {}
 
 /// <p>The representation of an Amazon WorkMail user.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct User {
     /// <p>The date indicating when the user was disabled from Amazon WorkMail use.</p>
     #[serde(rename = "DisabledDate")]

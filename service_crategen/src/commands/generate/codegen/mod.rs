@@ -464,7 +464,7 @@ where
     let test_attributes = if derived.iter().any(|&x| x == "Deserialize")
         && !derived.iter().any(|&x| x == "Serialize")
     {
-        "\n#[cfg_attr(test, derive(Serialize))]"
+        "\n#[cfg_attr(any(test, feature = \"serialize_structs\"), derive(Serialize))]"
     } else {
         ""
     };

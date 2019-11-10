@@ -43,7 +43,7 @@ pub struct CreateLedgerRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateLedgerResponse {
     /// <p>The Amazon Resource Name (ARN) for the ledger.</p>
     #[serde(rename = "Arn")]
@@ -85,7 +85,7 @@ pub struct DescribeJournalS3ExportRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeJournalS3ExportResponse {
     /// <p>Information about the journal export job returned by a <code>DescribeJournalS3Export</code> request.</p>
     #[serde(rename = "ExportDescription")]
@@ -100,7 +100,7 @@ pub struct DescribeLedgerRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeLedgerResponse {
     /// <p>The Amazon Resource Name (ARN) for the ledger.</p>
     #[serde(rename = "Arn")]
@@ -144,7 +144,7 @@ pub struct ExportJournalToS3Request {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ExportJournalToS3Response {
     /// <p>The unique ID that QLDB assigns to each journal export job.</p> <p>To describe your export request and check the status of the job, you can use <code>ExportId</code> to call <code>DescribeJournalS3Export</code>.</p>
     #[serde(rename = "ExportId")]
@@ -166,7 +166,7 @@ pub struct GetBlockRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetBlockResponse {
     /// <p>The block data object in Amazon Ion format.</p>
     #[serde(rename = "Block")]
@@ -185,7 +185,7 @@ pub struct GetDigestRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDigestResponse {
     /// <p>The 256-bit hash value representing the digest returned by a <code>GetDigest</code> request.</p>
     #[serde(rename = "Digest")]
@@ -218,7 +218,7 @@ pub struct GetRevisionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRevisionResponse {
     /// <p>The proof object in Amazon Ion format returned by a <code>GetRevision</code> request. A proof contains the list of hash values that are required to recalculate the specified digest using a Merkle tree, starting with the specified document revision.</p>
     #[serde(rename = "Proof")]
@@ -231,7 +231,7 @@ pub struct GetRevisionResponse {
 
 /// <p>The information about a journal export job, including the ledger name, export ID, when it was created, current status, and its start and end time export parameters.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct JournalS3ExportDescription {
     /// <p>The exclusive end date and time for the range of journal contents that are specified in the original export request.</p>
     #[serde(rename = "ExclusiveEndTime")]
@@ -260,7 +260,7 @@ pub struct JournalS3ExportDescription {
 
 /// <p>Information about a ledger, including its name, state, and when it was created.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct LedgerSummary {
     /// <p>The date and time, in epoch time format, when the ledger was created. (Epoch time format is the number of seconds elapsed since 12:00:00 AM January 1, 1970 UTC.)</p>
     #[serde(rename = "CreationDateTime")]
@@ -292,7 +292,7 @@ pub struct ListJournalS3ExportsForLedgerRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListJournalS3ExportsForLedgerResponse {
     /// <p>The array of journal export job descriptions that are associated with the specified ledger.</p>
     #[serde(rename = "JournalS3Exports")]
@@ -317,7 +317,7 @@ pub struct ListJournalS3ExportsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListJournalS3ExportsResponse {
     /// <p>The array of journal export job descriptions for all ledgers that are associated with the current AWS account and Region.</p>
     #[serde(rename = "JournalS3Exports")]
@@ -342,7 +342,7 @@ pub struct ListLedgersRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListLedgersResponse {
     /// <p>The array of ledger summaries that are associated with the current AWS account and Region.</p>
     #[serde(rename = "Ledgers")]
@@ -362,7 +362,7 @@ pub struct ListTagsForResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
     /// <p>The tags that are currently associated with the specified Amazon QLDB resource.</p>
     #[serde(rename = "Tags")]
@@ -407,7 +407,7 @@ pub struct TagResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -421,7 +421,7 @@ pub struct UntagResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -436,7 +436,7 @@ pub struct UpdateLedgerRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateLedgerResponse {
     /// <p>The Amazon Resource Name (ARN) for the ledger.</p>
     #[serde(rename = "Arn")]

@@ -31,7 +31,7 @@ pub struct BatchDeleteBuildsInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchDeleteBuildsOutput {
     /// <p>The IDs of the builds that were successfully deleted.</p>
     #[serde(rename = "buildsDeleted")]
@@ -51,7 +51,7 @@ pub struct BatchGetBuildsInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGetBuildsOutput {
     /// <p>Information about the requested builds.</p>
     #[serde(rename = "builds")]
@@ -71,7 +71,7 @@ pub struct BatchGetProjectsInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGetProjectsOutput {
     /// <p>Information about the requested build projects.</p>
     #[serde(rename = "projects")]
@@ -85,7 +85,7 @@ pub struct BatchGetProjectsOutput {
 
 /// <p>Information about a build.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Build {
     /// <p>The Amazon Resource Name (ARN) of the build.</p>
     #[serde(rename = "arn")]
@@ -195,7 +195,7 @@ pub struct Build {
 
 /// <p>Information about build output artifacts.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BuildArtifacts {
     /// <p> An identifier for this artifact definition. </p>
     #[serde(rename = "artifactIdentifier")]
@@ -225,7 +225,7 @@ pub struct BuildArtifacts {
 
 /// <p>Information about a build that could not be successfully deleted.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BuildNotDeleted {
     /// <p>The ID of the build that could not be successfully deleted.</p>
     #[serde(rename = "id")]
@@ -239,7 +239,7 @@ pub struct BuildNotDeleted {
 
 /// <p>Information about a stage for a build.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BuildPhase {
     /// <p>Additional information about a build phase, especially to help troubleshoot a failed build.</p>
     #[serde(rename = "contexts")]
@@ -355,7 +355,7 @@ pub struct CreateProjectInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateProjectOutput {
     /// <p>Information about the build project that was created.</p>
     #[serde(rename = "project")]
@@ -379,7 +379,7 @@ pub struct CreateWebhookInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateWebhookOutput {
     /// <p>Information about a webhook that connects repository events to a build project in AWS CodeBuild.</p>
     #[serde(rename = "webhook")]
@@ -395,7 +395,7 @@ pub struct DeleteProjectInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteProjectOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -406,7 +406,7 @@ pub struct DeleteSourceCredentialsInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteSourceCredentialsOutput {
     /// <p> The Amazon Resource Name (ARN) of the token. </p>
     #[serde(rename = "arn")]
@@ -422,12 +422,12 @@ pub struct DeleteWebhookInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteWebhookOutput {}
 
 /// <p>Information about a Docker image that is managed by AWS CodeBuild.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EnvironmentImage {
     /// <p>The description of the Docker image.</p>
     #[serde(rename = "description")]
@@ -445,7 +445,7 @@ pub struct EnvironmentImage {
 
 /// <p>A set of Docker images that are related by programming language and are managed by AWS CodeBuild.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EnvironmentLanguage {
     /// <p>The list of Docker images that are related by the specified programming language.</p>
     #[serde(rename = "images")]
@@ -459,7 +459,7 @@ pub struct EnvironmentLanguage {
 
 /// <p>A set of Docker images that are related by platform and are managed by AWS CodeBuild.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EnvironmentPlatform {
     /// <p>The list of programming languages that are available for the specified platform.</p>
     #[serde(rename = "languages")]
@@ -516,7 +516,7 @@ pub struct ImportSourceCredentialsInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ImportSourceCredentialsOutput {
     /// <p> The Amazon Resource Name (ARN) of the token. </p>
     #[serde(rename = "arn")]
@@ -532,7 +532,7 @@ pub struct InvalidateProjectCacheInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InvalidateProjectCacheOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -551,7 +551,7 @@ pub struct ListBuildsForProjectInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListBuildsForProjectOutput {
     /// <p>A list of build IDs for the specified build project, with each build ID representing a single build.</p>
     #[serde(rename = "ids")]
@@ -576,7 +576,7 @@ pub struct ListBuildsInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListBuildsOutput {
     /// <p>A list of build IDs, with each build ID representing a single build.</p>
     #[serde(rename = "ids")]
@@ -592,7 +592,7 @@ pub struct ListBuildsOutput {
 pub struct ListCuratedEnvironmentImagesInput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListCuratedEnvironmentImagesOutput {
     /// <p>Information about supported platforms for Docker images that are managed by AWS CodeBuild.</p>
     #[serde(rename = "platforms")]
@@ -617,7 +617,7 @@ pub struct ListProjectsInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListProjectsOutput {
     /// <p>If there are more than 100 items in the list, only the first 100 items are returned, along with a unique string called a <i>next token</i>. To get the next batch of items in the list, call this operation again, adding the next token to the call.</p>
     #[serde(rename = "nextToken")]
@@ -633,7 +633,7 @@ pub struct ListProjectsOutput {
 pub struct ListSourceCredentialsInput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSourceCredentialsOutput {
     /// <p> A list of <code>SourceCredentialsInfo</code> objects. Each <code>SourceCredentialsInfo</code> object includes the authentication type, token ARN, and type of source provider for one set of credentials. </p>
     #[serde(rename = "sourceCredentialsInfos")]
@@ -656,7 +656,7 @@ pub struct LogsConfig {
 
 /// <p>Information about build logs in Amazon CloudWatch Logs.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct LogsLocation {
     /// <p> Information about Amazon CloudWatch Logs for a build project. </p>
     #[serde(rename = "cloudWatchLogs")]
@@ -686,7 +686,7 @@ pub struct LogsLocation {
 
 /// <p>Describes a network interface.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct NetworkInterface {
     /// <p>The ID of the network interface.</p>
     #[serde(rename = "networkInterfaceId")]
@@ -700,7 +700,7 @@ pub struct NetworkInterface {
 
 /// <p>Additional information about a build phase that has an error. You can use this information for troubleshooting.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PhaseContext {
     /// <p>An explanation of the build phase's context. This might include a command ID and an exit code.</p>
     #[serde(rename = "message")]
@@ -714,7 +714,7 @@ pub struct PhaseContext {
 
 /// <p>Information about a build project.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Project {
     /// <p>The Amazon Resource Name (ARN) of the build project.</p>
     #[serde(rename = "arn")]
@@ -848,7 +848,7 @@ pub struct ProjectArtifacts {
 
 /// <p>Information about the build badge for the build project.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ProjectBadge {
     /// <p>Set this to true to generate a publicly accessible URL for your project's build badge.</p>
     #[serde(rename = "badgeEnabled")]
@@ -1002,7 +1002,7 @@ pub struct SourceAuth {
 
 /// <p> Information about the credentials for a GitHub, GitHub Enterprise, or Bitbucket repository. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SourceCredentialsInfo {
     /// <p> The Amazon Resource Name (ARN) of the token. </p>
     #[serde(rename = "arn")]
@@ -1134,7 +1134,7 @@ pub struct StartBuildInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartBuildOutput {
     /// <p>Information about the build to be run.</p>
     #[serde(rename = "build")]
@@ -1150,7 +1150,7 @@ pub struct StopBuildInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopBuildOutput {
     /// <p>Information about the build.</p>
     #[serde(rename = "build")]
@@ -1247,7 +1247,7 @@ pub struct UpdateProjectInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateProjectOutput {
     /// <p>Information about the build project that was changed.</p>
     #[serde(rename = "project")]
@@ -1275,7 +1275,7 @@ pub struct UpdateWebhookInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateWebhookOutput {
     /// <p> Information about a repository's webhook that is associated with a project in AWS CodeBuild. </p>
     #[serde(rename = "webhook")]
@@ -1302,7 +1302,7 @@ pub struct VpcConfig {
 
 /// <p>Information about a webhook that connects repository events to a build project in AWS CodeBuild.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Webhook {
     /// <p><p>A regular expression used to determine which repository branches are built when a webhook is triggered. If the name of a branch matches the regular expression, then it is built. If <code>branchFilter</code> is empty, then all branches are built.</p> <note> <p> It is recommended that you use <code>filterGroups</code> instead of <code>branchFilter</code>. </p> </note></p>
     #[serde(rename = "branchFilter")]

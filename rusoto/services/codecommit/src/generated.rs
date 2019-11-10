@@ -25,7 +25,7 @@ use rusoto_core::signature::SignedRequest;
 use serde_json;
 /// <p>Information about errors in a BatchDescribeMergeConflicts operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CodeCommitBatchDescribeMergeConflictsError {
     /// <p>The name of the exception.</p>
     #[serde(rename = "exceptionName")]
@@ -79,7 +79,7 @@ pub struct BatchDescribeMergeConflictsInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchDescribeMergeConflictsOutput {
     /// <p>The commit ID of the merge base.</p>
     #[serde(rename = "baseCommitId")]
@@ -106,7 +106,7 @@ pub struct BatchDescribeMergeConflictsOutput {
 
 /// <p>Returns information about errors in a BatchGetCommits operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CodeCommitBatchGetCommitsError {
     /// <p>A commit ID that either could not be found or was not in a valid format.</p>
     #[serde(rename = "commitId")]
@@ -133,7 +133,7 @@ pub struct BatchGetCommitsInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGetCommitsOutput {
     /// <p>An array of commit data type objects, each of which contains information about a specified commit.</p>
     #[serde(rename = "commits")]
@@ -155,7 +155,7 @@ pub struct BatchGetRepositoriesInput {
 
 /// <p>Represents the output of a batch get repositories operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGetRepositoriesOutput {
     /// <p>A list of repositories returned by the batch get repositories operation.</p>
     #[serde(rename = "repositories")]
@@ -169,7 +169,7 @@ pub struct BatchGetRepositoriesOutput {
 
 /// <p>Returns information about a specific Git blob object.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BlobMetadata {
     /// <p>The full ID of the blob.</p>
     #[serde(rename = "blobId")]
@@ -187,7 +187,7 @@ pub struct BlobMetadata {
 
 /// <p>Returns information about a branch.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BranchInfo {
     /// <p>The name of the branch.</p>
     #[serde(rename = "branchName")]
@@ -201,7 +201,7 @@ pub struct BranchInfo {
 
 /// <p>Returns information about a specific comment.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Comment {
     /// <p>The Amazon Resource Name (ARN) of the person who posted the comment.</p>
     #[serde(rename = "authorArn")]
@@ -239,7 +239,7 @@ pub struct Comment {
 
 /// <p>Returns information about comments on the comparison between two commits.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CommentsForComparedCommit {
     /// <p>The full blob ID of the commit used to establish the 'after' of the comparison.</p>
     #[serde(rename = "afterBlobId")]
@@ -273,7 +273,7 @@ pub struct CommentsForComparedCommit {
 
 /// <p>Returns information about comments on a pull request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CommentsForPullRequest {
     /// <p>The full blob ID of the file on which you want to comment on the source commit.</p>
     #[serde(rename = "afterBlobId")]
@@ -311,7 +311,7 @@ pub struct CommentsForPullRequest {
 
 /// <p>Returns information about a specific commit.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Commit {
     /// <p>Any additional data associated with the specified commit.</p>
     #[serde(rename = "additionalData")]
@@ -345,7 +345,7 @@ pub struct Commit {
 
 /// <p>Information about conflicts in a merge operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Conflict {
     /// <p>Metadata about a conflict in a merge operation.</p>
     #[serde(rename = "conflictMetadata")]
@@ -359,7 +359,7 @@ pub struct Conflict {
 
 /// <p>Information about the metadata for a conflict in a merge operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ConflictMetadata {
     /// <p>A boolean value indicating whether there are conflicts in the content of a file.</p>
     #[serde(rename = "contentConflict")]
@@ -477,7 +477,7 @@ pub struct CreateCommitInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateCommitOutput {
     /// <p>The full commit ID of the commit that contains your committed file changes.</p>
     #[serde(rename = "commitId")]
@@ -520,7 +520,7 @@ pub struct CreatePullRequestInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreatePullRequestOutput {
     /// <p>Information about the newly created pull request.</p>
     #[serde(rename = "pullRequest")]
@@ -545,7 +545,7 @@ pub struct CreateRepositoryInput {
 
 /// <p>Represents the output of a create repository operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateRepositoryOutput {
     /// <p>Information about the newly created repository.</p>
     #[serde(rename = "repositoryMetadata")]
@@ -598,7 +598,7 @@ pub struct CreateUnreferencedMergeCommitInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateUnreferencedMergeCommitOutput {
     /// <p>The full commit ID of the commit that contains your merge results.</p>
     #[serde(rename = "commitId")]
@@ -623,7 +623,7 @@ pub struct DeleteBranchInput {
 
 /// <p>Represents the output of a delete branch operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteBranchOutput {
     /// <p>Information about the branch deleted by the operation, including the branch name and the commit ID that was the tip of the branch.</p>
     #[serde(rename = "deletedBranch")]
@@ -639,7 +639,7 @@ pub struct DeleteCommentContentInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteCommentContentOutput {
     /// <p>Information about the comment you just deleted.</p>
     #[serde(rename = "comment")]
@@ -688,7 +688,7 @@ pub struct DeleteFileInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteFileOutput {
     /// <p>The blob ID removed from the tree as part of deleting the file.</p>
     #[serde(rename = "blobId")]
@@ -714,7 +714,7 @@ pub struct DeleteRepositoryInput {
 
 /// <p>Represents the output of a delete repository operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteRepositoryOutput {
     /// <p>The ID of the repository that was deleted.</p>
     #[serde(rename = "repositoryId")]
@@ -758,7 +758,7 @@ pub struct DescribeMergeConflictsInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeMergeConflictsOutput {
     /// <p>The commit ID of the merge base.</p>
     #[serde(rename = "baseCommitId")]
@@ -806,7 +806,7 @@ pub struct DescribePullRequestEventsInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribePullRequestEventsOutput {
     /// <p>An enumeration token that can be used in a request to return the next batch of the results.</p>
     #[serde(rename = "nextToken")]
@@ -819,7 +819,7 @@ pub struct DescribePullRequestEventsOutput {
 
 /// <p>Returns information about a set of differences for a commit specifier.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Difference {
     /// <p>Information about an <code>afterBlob</code> data type object, including the ID, the file mode permission code, and the path.</p>
     #[serde(rename = "afterBlob")]
@@ -837,7 +837,7 @@ pub struct Difference {
 
 /// <p>Returns information about a file in a repository.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct File {
     /// <p>The fully-qualified path to the file in the repository.</p>
     #[serde(rename = "absolutePath")]
@@ -859,7 +859,7 @@ pub struct File {
 
 /// <p>A file that will be added, updated, or deleted as part of a commit.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FileMetadata {
     /// <p>The full path to the file that will be added or updated, including the name of the file.</p>
     #[serde(rename = "absolutePath")]
@@ -877,7 +877,7 @@ pub struct FileMetadata {
 
 /// <p>Information about file modes in a merge or pull request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FileModes {
     /// <p>The file mode of a file in the base of a merge or pull request.</p>
     #[serde(rename = "base")]
@@ -895,7 +895,7 @@ pub struct FileModes {
 
 /// <p>Information about the size of files in a merge or pull request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FileSizes {
     /// <p>The size of a file in the base of a merge or pull request.</p>
     #[serde(rename = "base")]
@@ -913,7 +913,7 @@ pub struct FileSizes {
 
 /// <p>Returns information about a folder in a repository.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Folder {
     /// <p>The fully-qualified path of the folder in the repository.</p>
     #[serde(rename = "absolutePath")]
@@ -942,7 +942,7 @@ pub struct GetBlobInput {
 
 /// <p>Represents the output of a get blob operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetBlobOutput {
     /// <p>The content of the blob, usually a file.</p>
     #[serde(rename = "content")]
@@ -969,7 +969,7 @@ pub struct GetBranchInput {
 
 /// <p>Represents the output of a get branch operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetBranchOutput {
     /// <p>The name of the branch.</p>
     #[serde(rename = "branch")]
@@ -985,7 +985,7 @@ pub struct GetCommentInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetCommentOutput {
     /// <p>The contents of the comment.</p>
     #[serde(rename = "comment")]
@@ -1016,7 +1016,7 @@ pub struct GetCommentsForComparedCommitInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetCommentsForComparedCommitOutput {
     /// <p>A list of comment objects on the compared commit.</p>
     #[serde(rename = "commentsForComparedCommitData")]
@@ -1056,7 +1056,7 @@ pub struct GetCommentsForPullRequestInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetCommentsForPullRequestOutput {
     /// <p>An array of comment objects on the pull request.</p>
     #[serde(rename = "commentsForPullRequestData")]
@@ -1081,7 +1081,7 @@ pub struct GetCommitInput {
 
 /// <p>Represents the output of a get commit operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetCommitOutput {
     /// <p>A commit data type object that contains information about the specified commit.</p>
     #[serde(rename = "commit")]
@@ -1119,7 +1119,7 @@ pub struct GetDifferencesInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDifferencesOutput {
     /// <p>An enumeration token that can be used in a request to return the next batch of the results.</p>
     #[serde(rename = "NextToken")]
@@ -1146,7 +1146,7 @@ pub struct GetFileInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetFileOutput {
     /// <p>The blob ID of the object that represents the file content.</p>
     #[serde(rename = "blobId")]
@@ -1188,7 +1188,7 @@ pub struct GetFolderInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetFolderOutput {
     /// <p>The full commit ID used as a reference for which version of the folder content is returned.</p>
     #[serde(rename = "commitId")]
@@ -1240,7 +1240,7 @@ pub struct GetMergeCommitInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetMergeCommitOutput {
     /// <p>The commit ID of the merge base.</p>
     #[serde(rename = "baseCommitId")]
@@ -1293,7 +1293,7 @@ pub struct GetMergeConflictsInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetMergeConflictsOutput {
     /// <p>The commit ID of the merge base.</p>
     #[serde(rename = "baseCommitId")]
@@ -1339,7 +1339,7 @@ pub struct GetMergeOptionsInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetMergeOptionsOutput {
     /// <p>The commit ID of the merge base.</p>
     #[serde(rename = "baseCommitId")]
@@ -1363,7 +1363,7 @@ pub struct GetPullRequestInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetPullRequestOutput {
     /// <p>Information about the specified pull request.</p>
     #[serde(rename = "pullRequest")]
@@ -1380,7 +1380,7 @@ pub struct GetRepositoryInput {
 
 /// <p>Represents the output of a get repository operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRepositoryOutput {
     /// <p>Information about the repository.</p>
     #[serde(rename = "repositoryMetadata")]
@@ -1398,7 +1398,7 @@ pub struct GetRepositoryTriggersInput {
 
 /// <p>Represents the output of a get repository triggers operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRepositoryTriggersOutput {
     /// <p>The system-generated unique ID for the trigger.</p>
     #[serde(rename = "configurationId")]
@@ -1412,7 +1412,7 @@ pub struct GetRepositoryTriggersOutput {
 
 /// <p>Information about whether a file is binary or textual in a merge or pull request operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct IsBinaryFile {
     /// <p>The binary or non-binary status of a file in the base of a merge or pull request.</p>
     #[serde(rename = "base")]
@@ -1442,7 +1442,7 @@ pub struct ListBranchesInput {
 
 /// <p>Represents the output of a list branches operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListBranchesOutput {
     /// <p>The list of branch names.</p>
     #[serde(rename = "branches")]
@@ -1478,7 +1478,7 @@ pub struct ListPullRequestsInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPullRequestsOutput {
     /// <p>An enumeration token that when provided in a request, returns the next batch of the results.</p>
     #[serde(rename = "nextToken")]
@@ -1508,7 +1508,7 @@ pub struct ListRepositoriesInput {
 
 /// <p>Represents the output of a list repositories operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListRepositoriesOutput {
     /// <p>An enumeration token that allows the operation to batch the results of the operation. Batch sizes are 1,000 for list repository operations. When the client sends the token back to AWS CodeCommit, another page of 1,000 records is retrieved.</p>
     #[serde(rename = "nextToken")]
@@ -1532,7 +1532,7 @@ pub struct ListTagsForResourceInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceOutput {
     /// <p>An enumeration token that allows the operation to batch the next results of the operation.</p>
     #[serde(rename = "nextToken")]
@@ -1579,7 +1579,7 @@ pub struct MergeBranchesByFastForwardInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MergeBranchesByFastForwardOutput {
     /// <p>The commit ID of the merge in the destination or target branch.</p>
     #[serde(rename = "commitId")]
@@ -1637,7 +1637,7 @@ pub struct MergeBranchesBySquashInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MergeBranchesBySquashOutput {
     /// <p>The commit ID of the merge in the destination or target branch.</p>
     #[serde(rename = "commitId")]
@@ -1695,7 +1695,7 @@ pub struct MergeBranchesByThreeWayInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MergeBranchesByThreeWayOutput {
     /// <p>The commit ID of the merge in the destination or target branch.</p>
     #[serde(rename = "commitId")]
@@ -1709,7 +1709,7 @@ pub struct MergeBranchesByThreeWayOutput {
 
 /// <p>Information about merge hunks in a merge or pull request operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MergeHunk {
     /// <p>Information about the merge hunk in the base of a merge or pull request.</p>
     #[serde(rename = "base")]
@@ -1731,7 +1731,7 @@ pub struct MergeHunk {
 
 /// <p>Information about the details of a merge hunk that contains a conflict in a merge or pull request operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MergeHunkDetail {
     /// <p>The end position of the hunk in the merge result.</p>
     #[serde(rename = "endLine")]
@@ -1749,7 +1749,7 @@ pub struct MergeHunkDetail {
 
 /// <p>Returns information about a merge or potential merge between a source reference and a destination reference in a pull request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MergeMetadata {
     /// <p>A Boolean value indicating whether the merge has been made.</p>
     #[serde(rename = "isMerged")]
@@ -1771,7 +1771,7 @@ pub struct MergeMetadata {
 
 /// <p>Information about the file operation conflicts in a merge operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MergeOperations {
     /// <p>The operation on a file in the destination of a merge or pull request.</p>
     #[serde(rename = "destination")]
@@ -1798,7 +1798,7 @@ pub struct MergePullRequestByFastForwardInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MergePullRequestByFastForwardOutput {
     /// <p>Information about the specified pull request, including information about the merge.</p>
     #[serde(rename = "pullRequest")]
@@ -1849,7 +1849,7 @@ pub struct MergePullRequestBySquashInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MergePullRequestBySquashOutput {
     #[serde(rename = "pullRequest")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1899,7 +1899,7 @@ pub struct MergePullRequestByThreeWayInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MergePullRequestByThreeWayOutput {
     #[serde(rename = "pullRequest")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1908,7 +1908,7 @@ pub struct MergePullRequestByThreeWayOutput {
 
 /// <p>Information about the type of an object in a merge operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ObjectTypes {
     /// <p>The type of the object in the base commit of the merge.</p>
     #[serde(rename = "base")]
@@ -1950,7 +1950,7 @@ pub struct PostCommentForComparedCommitInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PostCommentForComparedCommitOutput {
     /// <p>In the directionality you established, the blob ID of the 'after' blob.</p>
     #[serde(rename = "afterBlobId")]
@@ -2010,7 +2010,7 @@ pub struct PostCommentForPullRequestInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PostCommentForPullRequestOutput {
     /// <p>In the directionality of the pull request, the blob ID of the 'after' blob.</p>
     #[serde(rename = "afterBlobId")]
@@ -2061,7 +2061,7 @@ pub struct PostCommentReplyInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PostCommentReplyOutput {
     /// <p>Information about the reply to a comment.</p>
     #[serde(rename = "comment")]
@@ -2071,7 +2071,7 @@ pub struct PostCommentReplyOutput {
 
 /// <p>Returns information about a pull request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PullRequest {
     /// <p>The Amazon Resource Name (ARN) of the user who created the pull request.</p>
     #[serde(rename = "authorArn")]
@@ -2113,7 +2113,7 @@ pub struct PullRequest {
 
 /// <p>Metadata about the pull request that is used when comparing the pull request source with its destination.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PullRequestCreatedEventMetadata {
     /// <p>The commit ID of the tip of the branch specified as the destination branch when the pull request was created.</p>
     #[serde(rename = "destinationCommitId")]
@@ -2135,7 +2135,7 @@ pub struct PullRequestCreatedEventMetadata {
 
 /// <p>Returns information about a pull request event.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PullRequestEvent {
     /// <p>The Amazon Resource Name (ARN) of the user whose actions resulted in the event. Examples include updating the pull request with additional commits or changing the status of a pull request.</p>
     #[serde(rename = "actorArn")]
@@ -2175,7 +2175,7 @@ pub struct PullRequestEvent {
 
 /// <p>Returns information about the change in the merge state for a pull request event. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PullRequestMergedStateChangedEventMetadata {
     /// <p>The name of the branch that the pull request will be merged into.</p>
     #[serde(rename = "destinationReference")]
@@ -2193,7 +2193,7 @@ pub struct PullRequestMergedStateChangedEventMetadata {
 
 /// <p>Information about an update to the source branch of a pull request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PullRequestSourceReferenceUpdatedEventMetadata {
     /// <p>The full commit ID of the commit in the source branch that was the tip of the branch at the time the pull request was updated.</p>
     #[serde(rename = "afterCommitId")]
@@ -2215,7 +2215,7 @@ pub struct PullRequestSourceReferenceUpdatedEventMetadata {
 
 /// <p>Information about a change to the status of a pull request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PullRequestStatusChangedEventMetadata {
     /// <p>The changed status of the pull request.</p>
     #[serde(rename = "pullRequestStatus")]
@@ -2225,7 +2225,7 @@ pub struct PullRequestStatusChangedEventMetadata {
 
 /// <p>Returns information about a pull request target.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PullRequestTarget {
     /// <p>The full commit ID that is the tip of the destination branch. This is the commit where the pull request was or will be merged.</p>
     #[serde(rename = "destinationCommit")]
@@ -2324,7 +2324,7 @@ pub struct PutFileInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutFileOutput {
     /// <p>The ID of the blob, which is its SHA-1 pointer.</p>
     #[serde(rename = "blobId")]
@@ -2350,7 +2350,7 @@ pub struct PutRepositoryTriggersInput {
 
 /// <p>Represents the output of a put repository triggers operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutRepositoryTriggersOutput {
     /// <p>The system-generated unique ID for the create or update operation.</p>
     #[serde(rename = "configurationId")]
@@ -2384,7 +2384,7 @@ pub struct ReplaceContentEntry {
 
 /// <p>Information about a repository.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RepositoryMetadata {
     /// <p>The Amazon Resource Name (ARN) of the repository.</p>
     #[serde(rename = "Arn")]
@@ -2430,7 +2430,7 @@ pub struct RepositoryMetadata {
 
 /// <p>Information about a repository name and ID.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RepositoryNameIdPair {
     /// <p>The ID associated with the repository.</p>
     #[serde(rename = "repositoryId")]
@@ -2466,7 +2466,7 @@ pub struct RepositoryTrigger {
 
 /// <p>A trigger failed to run.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RepositoryTriggerExecutionFailure {
     /// <p>Additional message information about the trigger that did not run.</p>
     #[serde(rename = "failureMessage")]
@@ -2503,7 +2503,7 @@ pub struct SourceFileSpecifier {
 
 /// <p>Returns information about a submodule reference in a repository folder.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SubModule {
     /// <p>The fully qualified path to the folder that contains the reference to the submodule.</p>
     #[serde(rename = "absolutePath")]
@@ -2521,7 +2521,7 @@ pub struct SubModule {
 
 /// <p>Returns information about a symbolic link in a repository folder.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SymbolicLink {
     /// <p>The fully-qualified path to the folder that contains the symbolic link.</p>
     #[serde(rename = "absolutePath")]
@@ -2579,7 +2579,7 @@ pub struct TestRepositoryTriggersInput {
 
 /// <p>Represents the output of a test repository triggers operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TestRepositoryTriggersOutput {
     /// <p>The list of triggers that were not able to be tested. This list provides the names of the triggers that could not be tested, separated by commas.</p>
     #[serde(rename = "failedExecutions")]
@@ -2612,7 +2612,7 @@ pub struct UpdateCommentInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateCommentOutput {
     /// <p>Information about the updated comment.</p>
     #[serde(rename = "comment")]
@@ -2642,7 +2642,7 @@ pub struct UpdatePullRequestDescriptionInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdatePullRequestDescriptionOutput {
     /// <p>Information about the updated pull request.</p>
     #[serde(rename = "pullRequest")]
@@ -2660,7 +2660,7 @@ pub struct UpdatePullRequestStatusInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdatePullRequestStatusOutput {
     /// <p>Information about the pull request.</p>
     #[serde(rename = "pullRequest")]
@@ -2678,7 +2678,7 @@ pub struct UpdatePullRequestTitleInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdatePullRequestTitleOutput {
     /// <p>Information about the updated pull request.</p>
     #[serde(rename = "pullRequest")]
@@ -2710,7 +2710,7 @@ pub struct UpdateRepositoryNameInput {
 
 /// <p>Information about the user who made a specified commit.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UserInfo {
     /// <p>The date when the specified commit was commited, in timestamp format with GMT offset.</p>
     #[serde(rename = "date")]
