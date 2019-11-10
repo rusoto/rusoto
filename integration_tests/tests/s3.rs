@@ -19,7 +19,7 @@ use time::get_time;
 
 use futures::{Future, Stream};
 use futures_fs::FsPool;
-use rusoto_core::credential::{AwsCredentials, DefaultCredentialsProvider};
+use rusoto_core::credential::{AwsCredentials, DefaultCredentialsProvider, StaticProvider};
 use rusoto_core::{ProvideAwsCredentials, Region, RusotoError};
 use rusoto_s3::util::{PreSignedRequest, PreSignedRequestOption};
 use rusoto_s3::{
@@ -63,9 +63,36 @@ impl TestS3Client {
         }
     }
 
+    // construct an anonymous client for testing acls
+    fn create_anonymous_client(&self) -> S3Client {
+        if cfg!(feature = "disable_minio_unsupported") {
+            // Minio does not support setting acls, so to make tests pass, return a client that has
+            // the credentials of the bucket owner.
+            self.s3.clone()
+        } else {
+            S3Client::new_with(
+                rusoto_core::request::HttpClient::new().expect("Failed to creat HTTP client"),
+                StaticProvider::from(AwsCredentials::default()),
+                self.region.clone(),
+            )
+        }
+    }
+
     fn create_test_bucket(&self, name: String) {
         let create_bucket_req = CreateBucketRequest {
             bucket: name.clone(),
+            ..Default::default()
+        };
+        self.s3
+            .create_bucket(create_bucket_req)
+            .sync()
+            .expect("Failed to create test bucket");
+    }
+
+    fn create_test_bucket_with_acl(&self, name: String, acl: Option<String>) {
+        let create_bucket_req = CreateBucketRequest {
+            bucket: name.clone(),
+            acl,
             ..Default::default()
         };
         self.s3
@@ -180,7 +207,7 @@ fn test_puts_gets_deletes() {
 
     let bucket_name = format!("test-bucket-{}-{}", "default".to_owned(), get_time().sec);
     let test_client = TestS3Client::new(bucket_name.clone());
-    test_client.create_test_bucket(bucket_name.clone());
+    test_client.create_test_bucket_with_acl(bucket_name.clone(), Some("public-read".to_owned()));
 
     // modify the bucket's CORS properties
     if cfg!(not(feature = "disable_minio_unsupported")) {
@@ -190,24 +217,45 @@ fn test_puts_gets_deletes() {
 
     // file used for testing puts/gets
     let filename = format!("test_file_{}", get_time().sec);
+    let filename2 = format!("test_file_2_{}", get_time().sec);
 
     // test failure responses on empty bucket
     test_get_object_no_such_object(&test_client.s3, &test_client.bucket_name, &filename);
 
     // PUT an object via buffer (no_credentials is an arbitrary choice)
-    test_put_object_with_filename(
+    test_put_object_with_filename_and_acl(
         &test_client.s3,
         &test_client.bucket_name,
         &filename,
         &"tests/sample-data/no_credentials",
+        Some("public-read".to_owned()),
     );
 
+    // PUT a second copy of the object with tighter acls
+    test_put_object_with_filename(
+        &test_client.s3,
+        &test_client.bucket_name,
+        &filename2,
+        &"tests/sample-data/no_credentials",
+    );
+
+    // create an anonymous reader to test the acls
+    let ro_s3client = test_client.create_anonymous_client();
+
     // HEAD the object that was PUT
-    test_head_object(&test_client.s3, &test_client.bucket_name, &filename);
+    test_head_object(&ro_s3client, &test_client.bucket_name, &filename);
+
+    if cfg!(not(feature = "disable_minio_unsupported")) {
+        // HEAD the object that cannot be read, should return 403
+        assert!(try_head_object(&ro_s3client, &test_client.bucket_name, &filename2).is_err());
+    }
+
+    // ... but it can be as the original owner
+    test_head_object(&test_client.s3, &test_client.bucket_name, &filename2);
 
     // GET the object
-    test_get_object(&test_client.s3, &test_client.bucket_name, &filename);
-    test_get_object_range(&test_client.s3, &test_client.bucket_name, &filename);
+    test_get_object(&ro_s3client, &test_client.bucket_name, &filename);
+    test_get_object_range(&ro_s3client, &test_client.bucket_name, &filename);
 
     // add two objects to test the listing by paging
     for i in 1..3 {
@@ -215,12 +263,12 @@ fn test_puts_gets_deletes() {
     }
 
     // list items with paging using list object API v1
-    list_items_in_bucket_paged_v1(&test_client.s3, &test_client.bucket_name);
+    list_items_in_bucket_paged_v1(&ro_s3client, &test_client.bucket_name);
 
     // list items with paging using list object API v2
     if cfg!(not(feature = "disable_ceph_unsupported")) {
         // Ceph support: this test depends on the list object v2 API which is not implemented by Ceph
-        list_items_in_bucket_paged_v2(&test_client.s3, &test_client.bucket_name);
+        list_items_in_bucket_paged_v2(&ro_s3client, &test_client.bucket_name);
     }
 
     // copy the object to change its settings
@@ -737,6 +785,31 @@ fn test_put_object_with_filename(
     }
 }
 
+fn test_put_object_with_filename_and_acl(
+    client: &S3Client,
+    bucket: &str,
+    dest_filename: &str,
+    local_filename: &str,
+    acl: Option<String>,
+) {
+    let mut f = File::open(local_filename).unwrap();
+    let mut contents: Vec<u8> = Vec::new();
+    match f.read_to_end(&mut contents) {
+        Err(why) => panic!("Error opening file to send to S3: {}", why),
+        Ok(_) => {
+            let req = PutObjectRequest {
+                bucket: bucket.to_owned(),
+                key: dest_filename.to_owned(),
+                body: Some(contents.into()),
+                acl,
+                ..Default::default()
+            };
+            let result = client.put_object(req).sync().expect("Couldn't PUT object");
+            println!("{:#?}", result);
+        }
+    }
+}
+
 fn test_put_object_stream_with_filename(
     client: &S3Client,
     bucket: &str,
@@ -757,17 +830,22 @@ fn test_put_object_stream_with_filename(
     println!("{:#?}", result);
 }
 
-fn test_head_object(client: &S3Client, bucket: &str, filename: &str) {
+fn try_head_object(
+    client: &S3Client,
+    bucket: &str,
+    filename: &str,
+) -> Result<rusoto_s3::HeadObjectOutput, rusoto_core::RusotoError<rusoto_s3::HeadObjectError>> {
     let head_req = HeadObjectRequest {
         bucket: bucket.to_owned(),
         key: filename.to_owned(),
         ..Default::default()
     };
 
-    let result = client
-        .head_object(head_req)
-        .sync()
-        .expect("Couldn't HEAD object");
+    client.head_object(head_req).sync()
+}
+
+fn test_head_object(client: &S3Client, bucket: &str, filename: &str) {
+    let result = try_head_object(client, bucket, filename).expect("Couldn't HEAD object");
     println!("{:#?}", result);
 }
 
