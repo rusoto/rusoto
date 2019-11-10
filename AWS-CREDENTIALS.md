@@ -77,16 +77,6 @@ let provider = StsAssumeRoleSessionCredentialsProvider::new(
 let auto_refreshing_provider = rusoto_credential::AutoRefreshingProvider::new(provider);
 ```
 
-#### Credential refreshing
-
-Credentials obtained from environment variables and credential files expire **ten minutes** after being acquired and are refreshed on subsequent calls to `credentials()`, a method from the `ProvideAwsCredentials` trait.
-
-IAM instance profile credentials are refreshed as needed.
-Upon calling `credentials()`, the provider will determine if they are expired or not.
-If expired, it attempts to get new credentials from the metadata service.
-If that process fails, an error will be returned.
-The IAM credentials expiration time comes from the IAM metadata response.
-
 #### Local integration testing of IAM credentials
 
 Edit the relevant `address`/IP locations in [credential/src/container.rs](credential/src/container.rs) and [credential/src/instance_metadata.rs](credential/src/instance_metadata.rs).
