@@ -72,12 +72,14 @@ impl Anonymous for AwsCredentials {
 /// cases you can use a default set which are considered anonymous
 ///
 /// ```rust,2018edition
+/// use rusoto_core::request::HttpClient;
+/// use rusoto_s3::S3Client;
 /// use rusoto_credential::{StaticProvider, AwsCredentials};
 /// # use std::error::Error;
 ///
 /// # fn main() -> Result<(), Box<dyn Error>> {
-/// let s3 = rusoto_s3::S3Client::new_with(
-///     rusoto_core::request::HttpClient::new()?,
+/// let s3 = S3Client::new_with(
+///     HttpClient::new()?,
 ///     StaticProvider::from(AwsCredentials::default()),
 ///     Default::default()
 /// );
