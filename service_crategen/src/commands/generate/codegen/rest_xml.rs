@@ -155,13 +155,10 @@ fn generate_documentation(operation: &Operation, service: &Service<'_>) -> Strin
     };
 
     // Specialized docs for services:
-    match service.name().to_ascii_lowercase().as_ref() {
-        "route 53" => {
+    if let "route 53" = service.name().to_ascii_lowercase().as_ref() {
             if operation.name == "ChangeResourceRecordSets" {
                 docs = format!("/// For TXT records, see <a href=\"./util/fn.quote_txt_record.html\">util::quote_txt_record</a>\n{}", docs);
             }
-        }
-        _ => (),
     }
 
     docs
