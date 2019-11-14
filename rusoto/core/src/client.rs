@@ -4,7 +4,7 @@ use std::time::Duration;
 use futures::{Async, Future, Poll};
 
 use crate::credential::{
-    CredentialsError, DefaultCredentialsProvider, ProvideAwsCredentials, StaticProvider,
+    Anonymous, CredentialsError, DefaultCredentialsProvider, ProvideAwsCredentials, StaticProvider,
 };
 use crate::error::RusotoError;
 use crate::future::{self, RusotoFuture};
@@ -208,7 +208,11 @@ where
                     Ok(Async::NotReady)
                 }
                 Ok(Async::Ready(credentials)) => {
-                    request.sign_with_plus(&credentials, true);
+                    if credentials.is_anonymous() {
+                        request.complement_with_plus(true);
+                    } else {
+                        request.sign_with_plus(&credentials, true);
+                    }
                     let future = self.inner.dispatcher.dispatch(request, self.timeout);
                     self.state = Some(SignAndDispatchState::Dispatching { future });
                     self.poll()

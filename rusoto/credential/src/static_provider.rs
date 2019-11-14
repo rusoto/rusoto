@@ -77,6 +77,12 @@ impl ProvideAwsCredentials for StaticProvider {
     }
 }
 
+impl From<AwsCredentials> for StaticProvider {
+    fn from(credentials: AwsCredentials) -> Self {
+        StaticProvider{ credentials, valid_for: None }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use futures::Future;
@@ -86,6 +92,13 @@ mod tests {
     use super::*;
     use crate::test_utils::{is_secret_hidden_behind_asterisks, SECRET};
     use crate::ProvideAwsCredentials;
+
+    #[test]
+    fn static_provider_impl_from_for_awscredentials() {
+        let provider = StaticProvider::from(AwsCredentials::default());
+        assert_eq!(provider.get_aws_access_key_id(), "");
+        assert_eq!(*provider.is_valid_for(), None);
+    }
 
     #[test]
     fn test_static_provider_creation() {
