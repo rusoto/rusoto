@@ -1639,7 +1639,7 @@ impl ImportExport for ImportExportClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -1690,7 +1690,7 @@ impl ImportExport for ImportExportClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -1744,7 +1744,7 @@ impl ImportExport for ImportExportClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -1797,7 +1797,7 @@ impl ImportExport for ImportExportClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -1844,7 +1844,7 @@ impl ImportExport for ImportExportClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -1894,7 +1894,7 @@ impl ImportExport for ImportExportClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();

@@ -16,6 +16,8 @@ params for s3 `list_objects` methods
 - Introducing `rusoto_signature`, a standalone crate for signing HTTP requests.
 - Make static credentials into a credential provider
 - Add anonymous credentials support
+- Don't trim whitepsace when parsing xml payload. Fixes truncating of items with spaces in payloads
+such as an S3 key returned in `list_objects_v2`
 
 ## [0.41.0] - 2019-10-07
 
