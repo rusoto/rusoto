@@ -29,8 +29,7 @@ test_script:
   - cargo update
   - set RUST_VERSION=%CHANNEL%
   - echo using rust_version %RUST_VERSION%
-  - make unit_test
-  - make rustls_unit_test
+  - make unit_test_no_doctests
   - make check_integration_test
 
 branches:

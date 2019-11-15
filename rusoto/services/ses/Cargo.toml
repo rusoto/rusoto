@@ -17,7 +17,7 @@ exclude = ["test_resources/*"]
 [dependencies]
 bytes = "0.4.12"
 futures = "0.1.16"
-serde_urlencoded = "0.5"
+serde_urlencoded = "0.6"
 xml-rs = "0.8"
 
 [dependencies.rusoto_core]
@@ -33,3 +33,4 @@ default-features = false
 default = ["native-tls"]
 native-tls = ["rusoto_core/native-tls"]
 rustls = ["rusoto_core/rustls"]
+serialize_structs = []

@@ -645,11 +645,11 @@ optional = true
 path = "../rusoto/services/ram"
 
 [dev-dependencies]
-env_logger = "0.5"
+env_logger = "0.7"
 futures = "0.1.16"
 futures-fs = "0.0.3"
 log = "0.4.1"
-rand = "^0.3.14"
+rand = "^0.7.2"
 time = "0.1.37"
 reqwest = "0.9"
 http = "0.1.17"

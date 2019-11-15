@@ -151,7 +151,7 @@ impl<'b> Service<'b> {
             "query" | "ec2" => {
                 dependencies.insert(
                     "serde_urlencoded".to_owned(),
-                    cargo::Dependency::Simple("0.5".into()),
+                    cargo::Dependency::Simple("0.6".into()),
                 );
                 dependencies.insert("xml-rs".to_owned(), cargo::Dependency::Simple("0.8".into()));
             }

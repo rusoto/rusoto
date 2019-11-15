@@ -40,7 +40,7 @@ pub struct SendSSHPublicKeyRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SendSSHPublicKeyResponse {
     /// <p>The request ID as logged by EC2 Connect. Please provide this when contacting AWS Support.</p>
     #[serde(rename = "RequestId")]

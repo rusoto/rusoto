@@ -75,7 +75,7 @@ pub struct AppSpecContent {
 
 /// <p>Information about an application.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ApplicationInfo {
     /// <p>The application ID.</p>
     #[serde(rename = "applicationId")]
@@ -118,7 +118,7 @@ pub struct AutoRollbackConfiguration {
 
 /// <p>Information about an Auto Scaling group.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AutoScalingGroup {
     /// <p>An Auto Scaling lifecycle event hook name.</p>
     #[serde(rename = "hook")]
@@ -143,7 +143,7 @@ pub struct BatchGetApplicationRevisionsInput {
 
 /// <p>Represents the output of a BatchGetApplicationRevisions operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGetApplicationRevisionsOutput {
     /// <p>The name of the application that corresponds to the revisions.</p>
     #[serde(rename = "applicationName")]
@@ -169,7 +169,7 @@ pub struct BatchGetApplicationsInput {
 
 /// <p>Represents the output of a BatchGetApplications operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGetApplicationsOutput {
     /// <p>Information about the applications.</p>
     #[serde(rename = "applicationsInfo")]
@@ -190,7 +190,7 @@ pub struct BatchGetDeploymentGroupsInput {
 
 /// <p>Represents the output of a BatchGetDeploymentGroups operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGetDeploymentGroupsOutput {
     /// <p>Information about the deployment groups.</p>
     #[serde(rename = "deploymentGroupsInfo")]
@@ -215,7 +215,7 @@ pub struct BatchGetDeploymentInstancesInput {
 
 /// <p>Represents the output of a BatchGetDeploymentInstances operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGetDeploymentInstancesOutput {
     /// <p>Information about errors that might have occurred during the API call.</p>
     #[serde(rename = "errorMessage")]
@@ -240,7 +240,7 @@ pub struct BatchGetDeploymentTargetsInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGetDeploymentTargetsOutput {
     /// <p><p> A list of target objects for a deployment. Each target object contains details about the target, such as its status and lifecycle events. The type of the target objects depends on the deployment&#39; compute platform. </p> <ul> <li> <p> <b>EC2/On-premises</b>: Each target object is an EC2 or on-premises instance. </p> </li> <li> <p> <b>AWS Lambda</b>: The target object is a specific version of an AWS Lambda function. </p> </li> <li> <p> <b>Amazon ECS</b>: The target object is an Amazon ECS service. </p> </li> </ul></p>
     #[serde(rename = "deploymentTargets")]
@@ -258,7 +258,7 @@ pub struct BatchGetDeploymentsInput {
 
 /// <p> Represents the output of a BatchGetDeployments operation. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGetDeploymentsOutput {
     /// <p> Information about the deployments. </p>
     #[serde(rename = "deploymentsInfo")]
@@ -276,7 +276,7 @@ pub struct BatchGetOnPremisesInstancesInput {
 
 /// <p>Represents the output of a BatchGetOnPremisesInstances operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchGetOnPremisesInstancesOutput {
     /// <p>Information about the on-premises instances.</p>
     #[serde(rename = "instanceInfos")]
@@ -344,7 +344,7 @@ pub struct CreateApplicationInput {
 
 /// <p>Represents the output of a CreateApplication operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateApplicationOutput {
     /// <p>A unique application ID.</p>
     #[serde(rename = "applicationId")]
@@ -374,7 +374,7 @@ pub struct CreateDeploymentConfigInput {
 
 /// <p>Represents the output of a CreateDeploymentConfig operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDeploymentConfigOutput {
     /// <p>A unique deployment configuration ID.</p>
     #[serde(rename = "deploymentConfigId")]
@@ -454,7 +454,7 @@ pub struct CreateDeploymentGroupInput {
 
 /// <p>Represents the output of a CreateDeploymentGroup operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDeploymentGroupOutput {
     /// <p>A unique deployment group ID.</p>
     #[serde(rename = "deploymentGroupId")]
@@ -508,7 +508,7 @@ pub struct CreateDeploymentInput {
 
 /// <p> Represents the output of a CreateDeployment operation. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDeploymentOutput {
     /// <p> The unique ID of a deployment. </p>
     #[serde(rename = "deploymentId")]
@@ -545,7 +545,7 @@ pub struct DeleteDeploymentGroupInput {
 
 /// <p>Represents the output of a DeleteDeploymentGroup operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDeploymentGroupOutput {
     /// <p>If the output contains no data, and the corresponding deployment group contained at least one Auto Scaling group, AWS CodeDeploy successfully removed all corresponding Auto Scaling lifecycle event hooks from the Amazon EC2 instances in the Auto Scaling group. If the output contains data, AWS CodeDeploy could not remove some Auto Scaling lifecycle event hooks from the Amazon EC2 instances in the Auto Scaling group.</p>
     #[serde(rename = "hooksNotCleanedUp")]
@@ -564,7 +564,7 @@ pub struct DeleteGitHubAccountTokenInput {
 
 /// <p>Represents the output of a DeleteGitHubAccountToken operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteGitHubAccountTokenOutput {
     /// <p>The name of the GitHub account connection that was deleted.</p>
     #[serde(rename = "tokenName")]
@@ -574,7 +574,7 @@ pub struct DeleteGitHubAccountTokenOutput {
 
 /// <p>Information about a deployment configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeploymentConfigInfo {
     /// <p>The destination platform type for the deployment (<code>Lambda</code>, <code>Server</code>, or <code>ECS</code>).</p>
     #[serde(rename = "computePlatform")]
@@ -604,7 +604,7 @@ pub struct DeploymentConfigInfo {
 
 /// <p>Information about a deployment group.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeploymentGroupInfo {
     /// <p>A list of alarms associated with the deployment group.</p>
     #[serde(rename = "alarmConfiguration")]
@@ -694,7 +694,7 @@ pub struct DeploymentGroupInfo {
 
 /// <p>Information about a deployment.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeploymentInfo {
     /// <p>Provides information about the results of a deployment, such as whether instances in the original environment in a blue/green deployment were not terminated.</p>
     #[serde(rename = "additionalDeploymentStatusInfo")]
@@ -808,7 +808,7 @@ pub struct DeploymentInfo {
 
 /// <p>Information about the deployment status of the instances in the deployment.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeploymentOverview {
     /// <p>The number of instances in the deployment in a failed state.</p>
     #[serde(rename = "Failed")]
@@ -864,7 +864,7 @@ pub struct DeploymentStyle {
 
 /// <p> Information about the deployment target. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeploymentTarget {
     /// <p> The deployment type that is specific to the deployment's compute platform. </p>
     #[serde(rename = "deploymentTargetType")]
@@ -894,7 +894,7 @@ pub struct DeregisterOnPremisesInstanceInput {
 
 /// <p>Diagnostic information about executable scripts that are part of a deployment.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Diagnostics {
     /// <p><p>The associated error code:</p> <ul> <li> <p>Success: The specified script ran.</p> </li> <li> <p>ScriptMissing: The specified script was not found in the specified location.</p> </li> <li> <p>ScriptNotExecutable: The specified script is not a recognized executable file type.</p> </li> <li> <p>ScriptTimedOut: The specified script did not finish running in the specified time period.</p> </li> <li> <p>ScriptFailed: The specified script failed to run as expected.</p> </li> <li> <p>UnknownError: The specified script did not run for an unknown reason.</p> </li> </ul></p>
     #[serde(rename = "errorCode")]
@@ -955,7 +955,7 @@ pub struct ECSService {
 
 /// <p> Information about the target of an Amazon ECS deployment. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ECSTarget {
     /// <p> The unique ID of a deployment. </p>
     #[serde(rename = "deploymentId")]
@@ -989,7 +989,7 @@ pub struct ECSTarget {
 
 /// <p> Information about a set of Amazon ECS tasks in an AWS CodeDeploy deployment. An Amazon ECS task set includes details such as the desired number of tasks, how many tasks are running, and whether the task set serves production traffic. An AWS CodeDeploy application that uses the Amazon ECS compute platform deploys a containerized application in an Amazon ECS service as a task set. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ECSTaskSet {
     /// <p> The number of tasks in a task set. During a deployment that uses the Amazon ECS compute type, CodeDeploy instructs Amazon ECS to create a new task set and uses this value to determine how many tasks to create. After the updated task set is created, CodeDeploy shifts traffic to the new task set. </p>
     #[serde(rename = "desiredCount")]
@@ -1036,7 +1036,7 @@ pub struct ELBInfo {
 
 /// <p>Information about a deployment error.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ErrorInformation {
     /// <p><p>For more information, see <a href="https://docs.aws.amazon.com/codedeploy/latest/userguide/error-codes.html">Error Codes for AWS CodeDeploy</a> in the <a href="https://docs.aws.amazon.com/codedeploy/latest/userguide">AWS CodeDeploy User Guide</a>.</p> <p>The error code:</p> <ul> <li> <p>APPLICATION<em>MISSING: The application was missing. This error code is most likely raised if the application is deleted after the deployment is created, but before it is started.</p> </li> <li> <p>DEPLOYMENT</em>GROUP<em>MISSING: The deployment group was missing. This error code is most likely raised if the deployment group is deleted after the deployment is created, but before it is started.</p> </li> <li> <p>HEALTH</em>CONSTRAINTS: The deployment failed on too many instances to be successfully deployed within the instance health constraints specified.</p> </li> <li> <p>HEALTH<em>CONSTRAINTS</em>INVALID: The revision cannot be successfully deployed within the instance health constraints specified.</p> </li> <li> <p>IAM<em>ROLE</em>MISSING: The service role cannot be accessed.</p> </li> <li> <p>IAM<em>ROLE</em>PERMISSIONS: The service role does not have the correct permissions.</p> </li> <li> <p>INTERNAL<em>ERROR: There was an internal error.</p> </li> <li> <p>NO</em>EC2<em>SUBSCRIPTION: The calling account is not subscribed to Amazon EC2.</p> </li> <li> <p>NO</em>INSTANCES: No instances were specified, or no instances can be found.</p> </li> <li> <p>OVER<em>MAX</em>INSTANCES: The maximum number of instances was exceeded.</p> </li> <li> <p>THROTTLED: The operation was throttled because the calling account exceeded the throttling limits of one or more AWS services.</p> </li> <li> <p>TIMEOUT: The deployment has timed out.</p> </li> <li> <p>REVISION_MISSING: The revision ID was missing. This error code is most likely raised if the revision is deleted after the deployment is created, but before it is started.</p> </li> </ul></p>
     #[serde(rename = "code")]
@@ -1050,7 +1050,7 @@ pub struct ErrorInformation {
 
 /// <p>Information about an application revision.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GenericRevisionInfo {
     /// <p>The deployment groups for which this is the current target revision.</p>
     #[serde(rename = "deploymentGroups")]
@@ -1084,7 +1084,7 @@ pub struct GetApplicationInput {
 
 /// <p>Represents the output of a GetApplication operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetApplicationOutput {
     /// <p>Information about the application.</p>
     #[serde(rename = "application")]
@@ -1105,7 +1105,7 @@ pub struct GetApplicationRevisionInput {
 
 /// <p>Represents the output of a GetApplicationRevision operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetApplicationRevisionOutput {
     /// <p>The name of the application that corresponds to the revision.</p>
     #[serde(rename = "applicationName")]
@@ -1131,7 +1131,7 @@ pub struct GetDeploymentConfigInput {
 
 /// <p>Represents the output of a GetDeploymentConfig operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDeploymentConfigOutput {
     /// <p>Information about the deployment configuration.</p>
     #[serde(rename = "deploymentConfigInfo")]
@@ -1152,7 +1152,7 @@ pub struct GetDeploymentGroupInput {
 
 /// <p>Represents the output of a GetDeploymentGroup operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDeploymentGroupOutput {
     /// <p>Information about the deployment group.</p>
     #[serde(rename = "deploymentGroupInfo")]
@@ -1181,7 +1181,7 @@ pub struct GetDeploymentInstanceInput {
 
 /// <p> Represents the output of a GetDeploymentInstance operation. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDeploymentInstanceOutput {
     /// <p> Information about the instance. </p>
     #[serde(rename = "instanceSummary")]
@@ -1191,7 +1191,7 @@ pub struct GetDeploymentInstanceOutput {
 
 /// <p>Represents the output of a GetDeployment operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDeploymentOutput {
     /// <p>Information about the deployment.</p>
     #[serde(rename = "deploymentInfo")]
@@ -1212,7 +1212,7 @@ pub struct GetDeploymentTargetInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDeploymentTargetOutput {
     /// <p> A deployment target that contains information about a deployment such as its status, lifecyle events, and when it was last updated. It also contains metadata about the deployment target. The deployment target metadata depends on the deployment target's type (<code>instanceTarget</code>, <code>lambdaTarget</code>, or <code>ecsTarget</code>). </p>
     #[serde(rename = "deploymentTarget")]
@@ -1230,7 +1230,7 @@ pub struct GetOnPremisesInstanceInput {
 
 /// <p> Represents the output of a GetOnPremisesInstance operation. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetOnPremisesInstanceOutput {
     /// <p> Information about the on-premises instance. </p>
     #[serde(rename = "instanceInfo")]
@@ -1262,7 +1262,7 @@ pub struct GreenFleetProvisioningOption {
 
 /// <p>Information about an on-premises instance.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InstanceInfo {
     /// <p>If the on-premises instance was deregistered, the time at which the on-premises instance was deregistered.</p>
     #[serde(rename = "deregisterTime")]
@@ -1296,7 +1296,7 @@ pub struct InstanceInfo {
 
 /// <p>Information about an instance in a deployment.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InstanceSummary {
     /// <p> The unique ID of a deployment. </p>
     #[serde(rename = "deploymentId")]
@@ -1326,7 +1326,7 @@ pub struct InstanceSummary {
 
 /// <p> A target Amazon EC2 or on-premises instance during a deployment that uses the EC2/On-premises compute platform. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InstanceTarget {
     /// <p> The unique ID of a deployment. </p>
     #[serde(rename = "deploymentId")]
@@ -1360,7 +1360,7 @@ pub struct InstanceTarget {
 
 /// <p> Information about a Lambda function specified in a deployment. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct LambdaFunctionInfo {
     /// <p> The version of a Lambda function that production traffic points to. </p>
     #[serde(rename = "currentVersion")]
@@ -1386,7 +1386,7 @@ pub struct LambdaFunctionInfo {
 
 /// <p> Information about the target AWS Lambda function during an AWS Lambda deployment. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct LambdaTarget {
     /// <p> The unique ID of a deployment. </p>
     #[serde(rename = "deploymentId")]
@@ -1420,7 +1420,7 @@ pub struct LambdaTarget {
 
 /// <p>Information about the most recent attempted or successful deployment to a deployment group.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct LastDeploymentInfo {
     /// <p>A timestamp that indicates when the most recent deployment to the deployment group started.</p>
     #[serde(rename = "createTime")]
@@ -1442,7 +1442,7 @@ pub struct LastDeploymentInfo {
 
 /// <p>Information about a deployment lifecycle event.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct LifecycleEvent {
     /// <p>Diagnostic information about the deployment lifecycle event.</p>
     #[serde(rename = "diagnostics")]
@@ -1500,7 +1500,7 @@ pub struct ListApplicationRevisionsInput {
 
 /// <p>Represents the output of a ListApplicationRevisions operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListApplicationRevisionsOutput {
     /// <p>If a large amount of information is returned, an identifier is also returned. It can be used in a subsequent list application revisions call to return the next set of application revisions in the list.</p>
     #[serde(rename = "nextToken")]
@@ -1523,7 +1523,7 @@ pub struct ListApplicationsInput {
 
 /// <p>Represents the output of a ListApplications operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListApplicationsOutput {
     /// <p>A list of application names.</p>
     #[serde(rename = "applications")]
@@ -1546,7 +1546,7 @@ pub struct ListDeploymentConfigsInput {
 
 /// <p>Represents the output of a ListDeploymentConfigs operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDeploymentConfigsOutput {
     /// <p>A list of deployment configurations, including built-in configurations such as CodeDeployDefault.OneAtATime.</p>
     #[serde(rename = "deploymentConfigsList")]
@@ -1572,7 +1572,7 @@ pub struct ListDeploymentGroupsInput {
 
 /// <p>Represents the output of a ListDeploymentGroups operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDeploymentGroupsOutput {
     /// <p>The application name.</p>
     #[serde(rename = "applicationName")]
@@ -1610,7 +1610,7 @@ pub struct ListDeploymentInstancesInput {
 
 /// <p>Represents the output of a ListDeploymentInstances operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDeploymentInstancesOutput {
     /// <p>A list of instance IDs.</p>
     #[serde(rename = "instancesList")]
@@ -1639,7 +1639,7 @@ pub struct ListDeploymentTargetsInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDeploymentTargetsOutput {
     /// <p> If a large amount of information is returned, a token identifier is also returned. It can be used in a subsequent <code>ListDeploymentTargets</code> call to return the next set of deployment targets in the list. </p>
     #[serde(rename = "nextToken")]
@@ -1678,7 +1678,7 @@ pub struct ListDeploymentsInput {
 
 /// <p>Represents the output of a ListDeployments operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDeploymentsOutput {
     /// <p>A list of deployment IDs.</p>
     #[serde(rename = "deployments")]
@@ -1701,7 +1701,7 @@ pub struct ListGitHubAccountTokenNamesInput {
 
 /// <p>Represents the output of a ListGitHubAccountTokenNames operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListGitHubAccountTokenNamesOutput {
     /// <p>If a large amount of information is returned, an identifier is also returned. It can be used in a subsequent ListGitHubAccountTokenNames call to return the next set of names in the list. </p>
     #[serde(rename = "nextToken")]
@@ -1732,7 +1732,7 @@ pub struct ListOnPremisesInstancesInput {
 
 /// <p>Represents the output of the list on-premises instances operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListOnPremisesInstancesOutput {
     /// <p>The list of matching on-premises instance names.</p>
     #[serde(rename = "instanceNames")]
@@ -1756,7 +1756,7 @@ pub struct ListTagsForResourceInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceOutput {
     /// <p>If a large amount of information is returned, an identifier is also returned. It can be used in a subsequent list application revisions call to return the next set of application revisions in the list.</p>
     #[serde(rename = "NextToken")]
@@ -1824,7 +1824,7 @@ pub struct PutLifecycleEventHookExecutionStatusInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutLifecycleEventHookExecutionStatusOutput {
     /// <p>The execution ID of the lifecycle event hook. A hook is specified in the <code>hooks</code> section of the deployment's AppSpec file.</p>
     #[serde(rename = "lifecycleEventHookExecutionId")]
@@ -1889,7 +1889,7 @@ pub struct RemoveTagsFromOnPremisesInstancesInput {
 
 /// <p>Information about an application revision.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RevisionInfo {
     /// <p>Information about an application revision, including usage details and associated deployment groups.</p>
     #[serde(rename = "genericRevisionInfo")]
@@ -1928,7 +1928,7 @@ pub struct RevisionLocation {
 
 /// <p>Information about a deployment rollback.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RollbackInfo {
     /// <p>The ID of the deployment rollback.</p>
     #[serde(rename = "rollbackDeploymentId")]
@@ -1991,7 +1991,7 @@ pub struct StopDeploymentInput {
 
 /// <p> Represents the output of a StopDeployment operation. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopDeploymentOutput {
     /// <p><p>The status of the stop deployment operation:</p> <ul> <li> <p>Pending: The stop operation is pending.</p> </li> <li> <p>Succeeded: The stop operation was successful.</p> </li> </ul></p>
     #[serde(rename = "status")]
@@ -2044,7 +2044,7 @@ pub struct TagResourceInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceOutput {}
 
 /// <p>Information about a target group in Elastic Load Balancing to use in a deployment. Instances are registered as targets in a target group, and traffic is routed to the target group.</p>
@@ -2183,7 +2183,7 @@ pub struct UntagResourceInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceOutput {}
 
 /// <p>Represents the input of an UpdateApplication operation.</p>
@@ -2272,7 +2272,7 @@ pub struct UpdateDeploymentGroupInput {
 
 /// <p>Represents the output of an UpdateDeploymentGroup operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDeploymentGroupOutput {
     /// <p>If the output contains no data, and the corresponding deployment group contained at least one Auto Scaling group, AWS CodeDeploy successfully removed all corresponding Auto Scaling lifecycle event hooks from the AWS account. If the output contains data, AWS CodeDeploy could not remove some Auto Scaling lifecycle event hooks from the AWS account.</p>
     #[serde(rename = "hooksNotCleanedUp")]

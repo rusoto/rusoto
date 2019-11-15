@@ -1,7 +1,6 @@
 //! The Credentials Provider for Credentials stored in a profile inside of a Credentials file.
 
 use std::collections::HashMap;
-use std::fs;
 use std::fs::File;
 use std::io::{BufRead, BufReader};
 use std::path::{Path, PathBuf};
@@ -10,9 +9,9 @@ use std::process::Command;
 use dirs::home_dir;
 use futures::future::{result, FutureResult};
 use futures::{Future, Poll};
+use lazy_static::lazy_static;
 use regex::Regex;
 use tokio_process::{CommandExt, OutputAsync};
-use lazy_static::lazy_static;
 
 use crate::{non_empty_env_var, AwsCredentials, CredentialsError, ProvideAwsCredentials};
 
@@ -23,7 +22,8 @@ const DEFAULT: &str = "default";
 const REGION: &str = "region";
 
 lazy_static! {
-    static ref PROFILE_REGEX: Regex = Regex::new(r"^\[(profile )?([^\]]+)\]$").expect("Failed to compile regex");
+    static ref PROFILE_REGEX: Regex =
+        Regex::new(r"^\[(profile )?([^\]]+)\]$").expect("Failed to compile regex");
 }
 
 /// Provides AWS credentials from a profile in a credentials file, or from a credential process.
@@ -261,15 +261,13 @@ fn parse_credential_process_output(v: &[u8]) -> Result<AwsCredentials, Credentia
     }
 }
 
-fn parse_config_file(file_path: &Path) -> Option<HashMap<String, HashMap<String, String>>> {
-    match fs::metadata(file_path) {
-        Err(_) => return None,
-        Ok(metadata) => {
-            if !metadata.is_file() {
-                return None;
-            }
-        }
-    };
+fn parse_config_file<P>(file_path: P) -> Option<HashMap<String, HashMap<String, String>>>
+where
+    P: AsRef<Path>,
+{
+    if !file_path.as_ref().exists() || !file_path.as_ref().is_file() {
+        return None;
+    }
 
     let file = File::open(file_path).expect("expected file");
     let file_lines = BufReader::new(&file);
@@ -307,107 +305,51 @@ fn parse_config_file(file_path: &Path) -> Option<HashMap<String, HashMap<String,
 }
 
 /// Parses a Credentials file into a Map of <`ProfileName`, `AwsCredentials`>
-fn parse_credentials_file(
-    file_path: &Path,
-) -> Result<HashMap<String, AwsCredentials>, CredentialsError> {
-    match fs::metadata(file_path) {
-        Err(_) => {
-            return Err(CredentialsError::new(format!(
-                "Couldn't stat credentials file: [ {:?} ]. Non existant, or no permission.",
-                file_path
+fn parse_credentials_file<P>(
+    file_path: P,
+) -> Result<HashMap<String, AwsCredentials>, CredentialsError>
+where
+    P: AsRef<Path>,
+{
+    let profiles: HashMap<_, _> = parse_config_file(&file_path)
+        .map(|data| {
+            Ok(data
+                .into_iter()
+                .filter_map(|(profile, properties)| {
+                    if let (Some(key), Some(secret)) = (
+                        properties.get("aws_access_key_id"),
+                        properties.get("aws_secret_access_key"),
+                    ) {
+                        Some((
+                            profile,
+                            AwsCredentials::new(
+                                key,
+                                secret,
+                                properties
+                                    .get("aws_session_token")
+                                    .or_else(|| properties.get("aws_security_token"))
+                                    .map(String::to_owned),
+                                None,
+                            ),
+                        ))
+                    } else {
+                        None
+                    }
+                })
+                .collect())
+        })
+        .unwrap_or_else(|| {
+            Err(CredentialsError::new(format!(
+                "Invalid credentials file: [ {} ].",
+                file_path.as_ref().display()
             )))
-        }
-        Ok(metadata) => {
-            if !metadata.is_file() {
-                return Err(CredentialsError::new(format!(
-                    "Credentials file: [ {:?} ] is not a file.",
-                    file_path
-                )));
-            }
-        }
-    };
-
-    let file = File::open(file_path)?;
-
-    let mut profiles: HashMap<String, AwsCredentials> = HashMap::new();
-    let mut access_key: Option<String> = None;
-    let mut secret_key: Option<String> = None;
-    let mut token: Option<String> = None;
-    let mut profile_name: Option<String> = None;
-
-    let file_lines = BufReader::new(&file);
-    for (line_no, line) in file_lines.lines().enumerate() {
-        let unwrapped_line: String =
-            line.unwrap_or_else(|_| panic!("Failed to read credentials file, line: {}", line_no));
-
-        // skip empty lines
-        if unwrapped_line.is_empty() {
-            continue;
-        }
-
-        // skip comments
-        if unwrapped_line.starts_with('#') {
-            continue;
-        }
-
-        // handle the opening of named profile blocks
-        if PROFILE_REGEX.is_match(&unwrapped_line) {
-            if let (Some(profile), Some(key), Some(secret)) = (profile_name, access_key, secret_key)
-            {
-                let creds = AwsCredentials::new(key, secret, token, None);
-                profiles.insert(profile, creds);
-            }
-
-            access_key = None;
-            secret_key = None;
-            token = None;
-
-            let caps = PROFILE_REGEX.captures(&unwrapped_line).unwrap();
-            profile_name = Some(caps.get(2).unwrap().as_str().to_string());
-            continue;
-        }
-
-        // otherwise look for key=value pairs we care about
-        let lower_case_line = unwrapped_line.to_ascii_lowercase().to_string();
-
-        if lower_case_line.contains("aws_access_key_id") && access_key.is_none() {
-            let v: Vec<&str> = unwrapped_line.split('=').collect();
-            if !v.is_empty() {
-                access_key = Some(v[1].trim_matches(' ').to_string());
-            }
-        } else if lower_case_line.contains("aws_secret_access_key") && secret_key.is_none() {
-            let v: Vec<&str> = unwrapped_line.split('=').collect();
-            if !v.is_empty() {
-                secret_key = Some(v[1].trim_matches(' ').to_string());
-            }
-        } else if lower_case_line.contains("aws_session_token") && token.is_none() {
-            let v: Vec<&str> = unwrapped_line.split('=').collect();
-            if !v.is_empty() {
-                token = Some(v[1].trim_matches(' ').to_string());
-            }
-        } else if lower_case_line.contains("aws_security_token") {
-            if token.is_none() {
-                let v: Vec<&str> = unwrapped_line.split('=').collect();
-                if !v.is_empty() {
-                    token = Some(v[1].trim_matches(' ').to_string());
-                }
-            }
-        } else {
-            // Ignore unrecognized fields
-            continue;
-        }
-    }
-
-    if let (Some(profile), Some(key), Some(secret)) = (profile_name, access_key, secret_key) {
-        let creds = AwsCredentials::new(key, secret, token, None);
-        profiles.insert(profile, creds);
-    }
+        })?;
 
     if profiles.is_empty() {
-        return Err(CredentialsError::new("No credentials found."));
+        Err(CredentialsError::new("No credentials found."))
+    } else {
+        Ok(profiles)
     }
-
-    Ok(profiles)
 }
 
 fn parse_command_str(s: &str) -> Result<Command, CredentialsError> {
@@ -670,22 +612,22 @@ mod tests {
 
     #[test]
     fn parse_credentials_bad_path() {
-        let result = super::parse_credentials_file(Path::new("/bad/file/path"));
+        let result = super::parse_credentials_file("/bad/file/path");
         assert_eq!(
             result.err(),
             Some(CredentialsError::new(
-                "Couldn\'t stat credentials file: [ \"/bad/file/path\" ]. Non existant, or no permission.",
+                "Invalid credentials file: [ /bad/file/path ].",
             ))
         );
     }
 
     #[test]
     fn parse_credentials_directory_path() {
-        let result = super::parse_credentials_file(Path::new("tests/"));
+        let result = super::parse_credentials_file("tests/");
         assert_eq!(
             result.err(),
             Some(CredentialsError::new(
-                "Credentials file: [ \"tests/\" ] is not a file.",
+                "Invalid credentials file: [ tests/ ].",
             ))
         );
     }

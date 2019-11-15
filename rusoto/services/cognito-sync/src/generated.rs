@@ -34,7 +34,7 @@ pub struct BulkPublishRequest {
 
 /// <p>The output for the BulkPublish operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BulkPublishResponse {
     /// <p>A name-spaced GUID (for example, us-east-1:23EC4050-6AEA-7089-A2DD-08002EXAMPLE) created by Amazon Cognito. GUID generation is unique within a region.</p>
     #[serde(rename = "IdentityPoolId")]
@@ -61,7 +61,7 @@ pub struct CognitoStreams {
 
 /// <p>A collection of data for an identity pool. An identity pool can have multiple datasets. A dataset is per identity and can be general or associated with a particular entity in an application (like a saved game). Datasets are automatically created if they don&#39;t exist. Data is synced by dataset, and a dataset can hold up to 1MB of key-value pairs.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Dataset {
     /// <p>Date on which the dataset was created.</p>
     #[serde(rename = "CreationDate")]
@@ -109,7 +109,7 @@ pub struct DeleteDatasetRequest {
 
 /// <p>Response to a successful DeleteDataset request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDatasetResponse {
     /// <p>A collection of data for an identity pool. An identity pool can have multiple datasets. A dataset is per identity and can be general or associated with a particular entity in an application (like a saved game). Datasets are automatically created if they don&#39;t exist. Data is synced by dataset, and a dataset can hold up to 1MB of key-value pairs.</p>
     #[serde(rename = "Dataset")]
@@ -133,7 +133,7 @@ pub struct DescribeDatasetRequest {
 
 /// <p>Response to a successful DescribeDataset request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDatasetResponse {
     /// <p>Meta data for a collection of data for an identity. An identity can have multiple datasets. A dataset can be general or associated with a particular entity in an application (like a saved game). Datasets are automatically created if they don&#39;t exist. Data is synced by dataset, and a dataset can hold up to 1MB of key-value pairs.</p>
     #[serde(rename = "Dataset")]
@@ -151,7 +151,7 @@ pub struct DescribeIdentityPoolUsageRequest {
 
 /// <p>Response to a successful DescribeIdentityPoolUsage request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeIdentityPoolUsageResponse {
     /// <p>Information about the usage of the identity pool.</p>
     #[serde(rename = "IdentityPoolUsage")]
@@ -172,7 +172,7 @@ pub struct DescribeIdentityUsageRequest {
 
 /// <p>The response to a successful DescribeIdentityUsage request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeIdentityUsageResponse {
     /// <p>Usage information for the identity.</p>
     #[serde(rename = "IdentityUsage")]
@@ -190,7 +190,7 @@ pub struct GetBulkPublishDetailsRequest {
 
 /// <p>The output for the GetBulkPublishDetails operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetBulkPublishDetailsResponse {
     /// <p>If BulkPublishStatus is SUCCEEDED, the time the last bulk publish operation completed.</p>
     #[serde(rename = "BulkPublishCompleteTime")]
@@ -224,7 +224,7 @@ pub struct GetCognitoEventsRequest {
 
 /// <p>The response from the GetCognitoEvents request</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetCognitoEventsResponse {
     /// <p>The Cognito Events returned from the GetCognitoEvents request</p>
     #[serde(rename = "Events")]
@@ -242,7 +242,7 @@ pub struct GetIdentityPoolConfigurationRequest {
 
 /// <p>The output for the GetIdentityPoolConfiguration operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetIdentityPoolConfigurationResponse {
     /// <p>Options to apply to this identity pool for Amazon Cognito streams.</p>
     #[serde(rename = "CognitoStreams")]
@@ -260,7 +260,7 @@ pub struct GetIdentityPoolConfigurationResponse {
 
 /// <p>Usage information for the identity pool.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct IdentityPoolUsage {
     /// <p>Data storage information for the identity pool.</p>
     #[serde(rename = "DataStorage")]
@@ -282,7 +282,7 @@ pub struct IdentityPoolUsage {
 
 /// <p>Usage information for the identity.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct IdentityUsage {
     /// <p>Total data storage for this identity.</p>
     #[serde(rename = "DataStorage")]
@@ -327,7 +327,7 @@ pub struct ListDatasetsRequest {
 
 /// <p>Returned for a successful ListDatasets request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDatasetsResponse {
     /// <p>Number of datasets returned.</p>
     #[serde(rename = "Count")]
@@ -358,7 +358,7 @@ pub struct ListIdentityPoolUsageRequest {
 
 /// <p>Returned for a successful ListIdentityPoolUsage request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListIdentityPoolUsageResponse {
     /// <p>Total number of identities for the identity pool.</p>
     #[serde(rename = "Count")]
@@ -410,7 +410,7 @@ pub struct ListRecordsRequest {
 
 /// <p>Returned for a successful ListRecordsRequest.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListRecordsResponse {
     /// <p>Total number of records.</p>
     #[serde(rename = "Count")]
@@ -465,7 +465,7 @@ pub struct PushSync {
 
 /// <p>The basic data structure of a dataset.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Record {
     /// <p>The last modified date of the client device.</p>
     #[serde(rename = "DeviceLastModifiedDate")]
@@ -534,7 +534,7 @@ pub struct RegisterDeviceRequest {
 
 /// <p>Response to a RegisterDevice request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RegisterDeviceResponse {
     /// <p>The unique ID generated for this device by Cognito.</p>
     #[serde(rename = "DeviceId")]
@@ -571,7 +571,7 @@ pub struct SetIdentityPoolConfigurationRequest {
 
 /// <p>The output for the SetIdentityPoolConfiguration operation</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SetIdentityPoolConfigurationResponse {
     /// <p>Options to apply to this identity pool for Amazon Cognito streams.</p>
     #[serde(rename = "CognitoStreams")]
@@ -606,7 +606,7 @@ pub struct SubscribeToDatasetRequest {
 
 /// <p>Response to a SubscribeToDataset request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SubscribeToDatasetResponse {}
 
 /// <p>A request to UnsubscribeFromDataset.</p>
@@ -628,7 +628,7 @@ pub struct UnsubscribeFromDatasetRequest {
 
 /// <p>Response to an UnsubscribeFromDataset request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UnsubscribeFromDatasetResponse {}
 
 /// <p>A request to post updates to records or add and delete records for a dataset and user.</p>
@@ -662,7 +662,7 @@ pub struct UpdateRecordsRequest {
 
 /// <p>Returned for a successful UpdateRecordsRequest.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateRecordsResponse {
     /// <p>A list of records that have been updated.</p>
     #[serde(rename = "Records")]
