@@ -1911,7 +1911,7 @@ impl SubscriptionAttributesMapSerializer {
         for (index, (key, value)) in obj.iter().enumerate() {
             let prefix = format!("{}.entry.{}", name, index + 1);
             params.put(&format!("{}.{}", prefix, "key"), &key);
-            params.put(&format!("{}.{}", prefix, "Value"), &value);
+            params.put(&format!("{}.{}", prefix, "value"), &value);
         }
     }
 }
@@ -2147,7 +2147,7 @@ impl TopicAttributesMapSerializer {
         for (index, (key, value)) in obj.iter().enumerate() {
             let prefix = format!("{}.entry.{}", name, index + 1);
             params.put(&format!("{}.{}", prefix, "key"), &key);
-            params.put(&format!("{}.{}", prefix, "Value"), &value);
+            params.put(&format!("{}.{}", prefix, "value"), &value);
         }
     }
 }
