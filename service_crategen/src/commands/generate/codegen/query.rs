@@ -243,9 +243,15 @@ fn generate_map_serializer(service: &Service<'_>, shape: &Shape) -> String {
     let primitive_value = value_shape.is_primitive();
 
     if primitive_value {
-        parts.push(format!(
-            "params.put(&format!(\"{{}}.{{}}\", prefix, \"Value\"), &value);"
-        ));
+        if service.service_id() == Some("SNS") {
+            parts.push(format!(
+                "params.put(&format!(\"{{}}.{{}}\", prefix, \"value\"), &value);"
+            ));
+        } else {
+            parts.push(format!(
+                "params.put(&format!(\"{{}}.{{}}\", prefix, \"Value\"), &value);"
+            ));
+        }
     } else {
         parts.push(format!(
             "{value_type}Serializer::serialize(
@@ -409,7 +415,7 @@ fn required_complex_field_serializer(
     let tag_name = member_location(service, member, member_name);
     if service.service_id() == Some("SNS") && member.shape == "MapStringToString" {
         tag_snip = format!(
-            "&format!(\"{{}}.entry.{{}}\", prefix, \"{tag_name}\")",
+            "&format!(\"{{}}{{}}.entry\", prefix, \"{tag_name}\")",
             tag_name = tag_name
         );
     } else {
@@ -436,17 +442,30 @@ fn optional_complex_field_serializer(
     member_name: &str,
     member: &Member,
 ) -> String {
+    let tag_snip: String;
+    let tag_name = member_location(service, member, member_name);
+    if service.service_id() == Some("SNS") && member.shape == "MapStringToString" {
+        tag_snip = format!(
+            "&format!(\"{{}}{{}}.entry\", prefix, \"{tag_name}\")",
+            tag_name = tag_name
+        );
+    } else {
+        tag_snip = format!(
+            "&format!(\"{{}}{{}}\", prefix, \"{tag_name}\")",
+            tag_name = tag_name
+        );
+    }
     format!(
         "if let Some(ref field_value) = obj.{field_name} {{
                 {member_shape_name}Serializer::serialize(
                     params,
-                    &format!(\"{{}}{{}}\", prefix, \"{tag_name}\"),
+                    {tag_snip},
                     field_value,
                 );
             }}",
         field_name = generate_field_name(member_name),
         member_shape_name = member.shape,
-        tag_name = member_location(service, member, member_name)
+        tag_snip = tag_snip,
     )
 }
 
