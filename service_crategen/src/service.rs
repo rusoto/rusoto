@@ -151,7 +151,7 @@ impl<'b> Service<'b> {
             "query" | "ec2" => {
                 dependencies.insert(
                     "serde_urlencoded".to_owned(),
-                    cargo::Dependency::Simple("0.5".into()),
+                    cargo::Dependency::Simple("0.6".into()),
                 );
                 dependencies.insert("xml-rs".to_owned(), cargo::Dependency::Simple("0.8".into()));
             }
@@ -192,9 +192,9 @@ impl<'b> Service<'b> {
             "rusoto_mock".to_owned(),
             cargo::Dependency::Extended {
                 path: Some("../../../mock".into()),
-                version: Some("0.40.0".into()),
+                version: Some("0.41.0".into()),
                 optional: None,
-                default_features: None,
+                default_features: Some(false),
                 features: None,
             },
         );

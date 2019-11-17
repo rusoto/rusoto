@@ -51,7 +51,7 @@ pub struct CreateStreamInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateStreamOutput {
     /// <p>The Amazon Resource Name (ARN) of the stream.</p>
     #[serde(rename = "StreamARN")]
@@ -71,7 +71,7 @@ pub struct DeleteStreamInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteStreamOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -87,7 +87,7 @@ pub struct DescribeStreamInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeStreamOutput {
     /// <p>An object that describes the stream.</p>
     #[serde(rename = "StreamInfo")]
@@ -111,7 +111,7 @@ pub struct GetDataEndpointInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDataEndpointOutput {
     /// <p>The endpoint value. To read data from the stream or to write data to it, specify this endpoint in your application.</p>
     #[serde(rename = "DataEndpoint")]
@@ -136,7 +136,7 @@ pub struct ListStreamsInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListStreamsOutput {
     /// <p>If the response is truncated, the call returns this element with a token. To get the next batch of streams, use this token in your next request. </p>
     #[serde(rename = "NextToken")]
@@ -165,7 +165,7 @@ pub struct ListTagsForStreamInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForStreamOutput {
     /// <p>If you specify this parameter and the result of a <code>ListTags</code> call is truncated, the response includes a token that you can use in the next request to fetch the next set of tags.</p>
     #[serde(rename = "NextToken")]
@@ -179,7 +179,7 @@ pub struct ListTagsForStreamOutput {
 
 /// <p>An object describing a Kinesis video stream.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StreamInfo {
     /// <p>A time stamp that indicates when the stream was created.</p>
     #[serde(rename = "CreationTime")]
@@ -248,7 +248,7 @@ pub struct TagStreamInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagStreamOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -267,7 +267,7 @@ pub struct UntagStreamInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagStreamOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -292,7 +292,7 @@ pub struct UpdateDataRetentionInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDataRetentionOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -319,7 +319,7 @@ pub struct UpdateStreamInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateStreamOutput {}
 
 /// Errors returned by CreateStream

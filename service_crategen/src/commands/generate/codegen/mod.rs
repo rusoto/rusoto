@@ -347,7 +347,7 @@ fn find_shapes_to_generate(service: &Service<'_>) -> BTreeSet<String> {
             }
         }
     }
-    return shapes_to_generate;
+    shapes_to_generate
 }
 
 fn generate_types<P>(
@@ -464,7 +464,7 @@ where
     let test_attributes = if derived.iter().any(|&x| x == "Deserialize")
         && !derived.iter().any(|&x| x == "Serialize")
     {
-        "\n#[cfg_attr(test, derive(Serialize))]"
+        "\n#[cfg_attr(any(test, feature = \"serialize_structs\"), derive(Serialize))]"
     } else {
         ""
     };

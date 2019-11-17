@@ -3,7 +3,7 @@ use toml;
 use serde_derive::{Deserialize, Serialize};
 use std::collections::BTreeMap;
 
-#[derive(Debug, Default, Clone, Deserialize, Serialize)]
+#[derive(Debug, Default, Deserialize, Serialize)]
 pub struct Manifest {
     pub package: Metadata,
     pub badges: Option<BTreeMap<String, Badge>>,
@@ -18,7 +18,7 @@ pub struct Manifest {
     pub features: Option<BTreeMap<String, Vec<String>>>,
 }
 
-#[derive(Debug, Default, Clone, Deserialize, Serialize)]
+#[derive(Debug, Default, Deserialize, Serialize)]
 pub struct Metadata {
     pub authors: Option<Vec<String>>,
     pub description: Option<String>,
@@ -34,7 +34,7 @@ pub struct Metadata {
     pub exclude: Option<Vec<String>>,
 }
 
-#[derive(Debug, Clone, Deserialize, Serialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct Badge {
     pub repository: String,
     pub branch: String,

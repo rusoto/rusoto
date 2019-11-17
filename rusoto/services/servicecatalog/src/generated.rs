@@ -39,7 +39,7 @@ pub struct AcceptPortfolioShareInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AcceptPortfolioShareOutput {}
 
 /// <p>The access level to use to filter results.</p>
@@ -66,7 +66,7 @@ pub struct AssociateBudgetWithResourceInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateBudgetWithResourceOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -87,7 +87,7 @@ pub struct AssociatePrincipalWithPortfolioInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociatePrincipalWithPortfolioOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -109,7 +109,7 @@ pub struct AssociateProductWithPortfolioInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateProductWithPortfolioOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -130,7 +130,7 @@ pub struct AssociateServiceActionWithProvisioningArtifactInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateServiceActionWithProvisioningArtifactOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -144,7 +144,7 @@ pub struct AssociateTagOptionWithResourceInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateTagOptionWithResourceOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -159,7 +159,7 @@ pub struct BatchAssociateServiceActionWithProvisioningArtifactInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchAssociateServiceActionWithProvisioningArtifactOutput {
     /// <p>An object that contains a list of errors, along with information to help you identify the self-service action.</p>
     #[serde(rename = "FailedServiceActionAssociations")]
@@ -179,7 +179,7 @@ pub struct BatchDisassociateServiceActionFromProvisioningArtifactInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchDisassociateServiceActionFromProvisioningArtifactOutput {
     /// <p>An object that contains a list of errors, along with information to help you identify the self-service action.</p>
     #[serde(rename = "FailedServiceActionAssociations")]
@@ -189,7 +189,7 @@ pub struct BatchDisassociateServiceActionFromProvisioningArtifactOutput {
 
 /// <p>Information about a budget.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BudgetDetail {
     /// <p>Name of the associated budget.</p>
     #[serde(rename = "BudgetName")]
@@ -199,7 +199,7 @@ pub struct BudgetDetail {
 
 /// <p>Information about a CloudWatch dashboard.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CloudWatchDashboard {
     /// <p>The name of the CloudWatch dashboard.</p>
     #[serde(rename = "Name")]
@@ -209,7 +209,7 @@ pub struct CloudWatchDashboard {
 
 /// <p>Information about a constraint.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ConstraintDetail {
     /// <p>The identifier of the constraint.</p>
     #[serde(rename = "ConstraintId")]
@@ -231,7 +231,7 @@ pub struct ConstraintDetail {
 
 /// <p>Summary information about a constraint.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ConstraintSummary {
     /// <p>The description of the constraint.</p>
     #[serde(rename = "Description")]
@@ -275,7 +275,7 @@ pub struct CopyProductInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CopyProductOutput {
     /// <p>The token to use to track the progress of the operation.</p>
     #[serde(rename = "CopyProductToken")]
@@ -311,7 +311,7 @@ pub struct CreateConstraintInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateConstraintOutput {
     /// <p>Information about the constraint.</p>
     #[serde(rename = "ConstraintDetail")]
@@ -353,7 +353,7 @@ pub struct CreatePortfolioInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreatePortfolioOutput {
     /// <p>Information about the portfolio.</p>
     #[serde(rename = "PortfolioDetail")]
@@ -385,7 +385,7 @@ pub struct CreatePortfolioShareInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreatePortfolioShareOutput {
     /// <p>The portfolio share unique identifier. This will only be returned if portfolio is shared to an organization node.</p>
     #[serde(rename = "PortfolioShareToken")]
@@ -441,7 +441,7 @@ pub struct CreateProductInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateProductOutput {
     /// <p>Information about the product view.</p>
     #[serde(rename = "ProductViewDetail")]
@@ -500,7 +500,7 @@ pub struct CreateProvisionedProductPlanInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateProvisionedProductPlanOutput {
     /// <p>The plan identifier.</p>
     #[serde(rename = "PlanId")]
@@ -542,7 +542,7 @@ pub struct CreateProvisioningArtifactInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateProvisioningArtifactOutput {
     /// <p>The URL of the CloudFormation template in Amazon S3, in JSON format.</p>
     #[serde(rename = "Info")]
@@ -583,7 +583,7 @@ pub struct CreateServiceActionInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateServiceActionOutput {
     /// <p>An object containing information about the self-service action.</p>
     #[serde(rename = "ServiceActionDetail")]
@@ -602,7 +602,7 @@ pub struct CreateTagOptionInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateTagOptionOutput {
     /// <p>Information about the TagOption.</p>
     #[serde(rename = "TagOptionDetail")]
@@ -622,7 +622,7 @@ pub struct DeleteConstraintInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteConstraintOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -637,7 +637,7 @@ pub struct DeletePortfolioInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeletePortfolioOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -660,7 +660,7 @@ pub struct DeletePortfolioShareInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeletePortfolioShareOutput {
     /// <p>The portfolio share unique identifier. This will only be returned if delete is made to an organization node.</p>
     #[serde(rename = "PortfolioShareToken")]
@@ -680,7 +680,7 @@ pub struct DeleteProductInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteProductOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -699,7 +699,7 @@ pub struct DeleteProvisionedProductPlanInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteProvisionedProductPlanOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -717,7 +717,7 @@ pub struct DeleteProvisioningArtifactInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteProvisioningArtifactOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -732,7 +732,7 @@ pub struct DeleteServiceActionInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteServiceActionOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -743,7 +743,7 @@ pub struct DeleteTagOptionInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteTagOptionOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -758,7 +758,7 @@ pub struct DescribeConstraintInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeConstraintOutput {
     /// <p>Information about the constraint.</p>
     #[serde(rename = "ConstraintDetail")]
@@ -786,7 +786,7 @@ pub struct DescribeCopyProductStatusInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeCopyProductStatusOutput {
     /// <p>The status of the copy product operation.</p>
     #[serde(rename = "CopyProductStatus")]
@@ -814,7 +814,7 @@ pub struct DescribePortfolioInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribePortfolioOutput {
     /// <p>Information about the associated budgets.</p>
     #[serde(rename = "Budgets")]
@@ -842,7 +842,7 @@ pub struct DescribePortfolioShareStatusInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribePortfolioShareStatusOutput {
     /// <p>Organization node identifier. It can be either account id, organizational unit id or organization id.</p>
     #[serde(rename = "OrganizationNodeValue")]
@@ -878,7 +878,7 @@ pub struct DescribeProductAsAdminInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeProductAsAdminOutput {
     /// <p>Information about the associated budgets.</p>
     #[serde(rename = "Budgets")]
@@ -914,7 +914,7 @@ pub struct DescribeProductInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeProductOutput {
     /// <p>Information about the associated budgets.</p>
     #[serde(rename = "Budgets")]
@@ -942,7 +942,7 @@ pub struct DescribeProductViewInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeProductViewOutput {
     /// <p>Summary information about the product.</p>
     #[serde(rename = "ProductViewSummary")]
@@ -966,7 +966,7 @@ pub struct DescribeProvisionedProductInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeProvisionedProductOutput {
     /// <p>Any CloudWatch dashboards that were created when provisioning the product.</p>
     #[serde(rename = "CloudWatchDashboards")]
@@ -998,7 +998,7 @@ pub struct DescribeProvisionedProductPlanInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeProvisionedProductPlanOutput {
     /// <p>The page token to use to retrieve the next set of results. If there are no additional results, this value is null.</p>
     #[serde(rename = "NextPageToken")]
@@ -1033,7 +1033,7 @@ pub struct DescribeProvisioningArtifactInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeProvisioningArtifactOutput {
     /// <p>The URL of the CloudFormation template in Amazon S3.</p>
     #[serde(rename = "Info")]
@@ -1068,7 +1068,7 @@ pub struct DescribeProvisioningParametersInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeProvisioningParametersOutput {
     /// <p>Information about the constraints used to provision the product.</p>
     #[serde(rename = "ConstraintSummaries")]
@@ -1112,7 +1112,7 @@ pub struct DescribeRecordInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeRecordOutput {
     /// <p>The page token to use to retrieve the next set of results. If there are no additional results, this value is null.</p>
     #[serde(rename = "NextPageToken")]
@@ -1140,7 +1140,7 @@ pub struct DescribeServiceActionExecutionParametersInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeServiceActionExecutionParametersOutput {
     #[serde(rename = "ServiceActionParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1159,7 +1159,7 @@ pub struct DescribeServiceActionInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeServiceActionOutput {
     /// <p>Detailed information about the self-service action.</p>
     #[serde(rename = "ServiceActionDetail")]
@@ -1175,7 +1175,7 @@ pub struct DescribeTagOptionInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeTagOptionOutput {
     /// <p>Information about the TagOption.</p>
     #[serde(rename = "TagOptionDetail")]
@@ -1187,7 +1187,7 @@ pub struct DescribeTagOptionOutput {
 pub struct DisableAWSOrganizationsAccessInput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisableAWSOrganizationsAccessOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1201,7 +1201,7 @@ pub struct DisassociateBudgetFromResourceInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateBudgetFromResourceOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1219,7 +1219,7 @@ pub struct DisassociatePrincipalFromPortfolioInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociatePrincipalFromPortfolioOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1237,7 +1237,7 @@ pub struct DisassociateProductFromPortfolioInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateProductFromPortfolioOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1258,7 +1258,7 @@ pub struct DisassociateServiceActionFromProvisioningArtifactInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateServiceActionFromProvisioningArtifactOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1272,14 +1272,14 @@ pub struct DisassociateTagOptionFromResourceInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateTagOptionFromResourceOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct EnableAWSOrganizationsAccessInput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EnableAWSOrganizationsAccessOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1297,7 +1297,7 @@ pub struct ExecuteProvisionedProductPlanInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ExecuteProvisionedProductPlanOutput {
     /// <p>Information about the result of provisioning the product.</p>
     #[serde(rename = "RecordDetail")]
@@ -1326,7 +1326,7 @@ pub struct ExecuteProvisionedProductServiceActionInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ExecuteProvisionedProductServiceActionOutput {
     /// <p>An object containing detailed information about the result of provisioning the product.</p>
     #[serde(rename = "RecordDetail")]
@@ -1335,7 +1335,7 @@ pub struct ExecuteProvisionedProductServiceActionOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ExecutionParameter {
     #[serde(rename = "DefaultValues")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1350,7 +1350,7 @@ pub struct ExecutionParameter {
 
 /// <p>An object containing information about the error, along with identifying information about the self-service action and its associations.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FailedServiceActionAssociation {
     /// <p>The error code. Valid values are listed below.</p>
     #[serde(rename = "ErrorCode")]
@@ -1378,7 +1378,7 @@ pub struct FailedServiceActionAssociation {
 pub struct GetAWSOrganizationsAccessStatusInput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAWSOrganizationsAccessStatusOutput {
     /// <p>The status of the portfolio share feature.</p>
     #[serde(rename = "AccessStatus")]
@@ -1388,7 +1388,7 @@ pub struct GetAWSOrganizationsAccessStatusOutput {
 
 /// <p>Summary information about a product path for a user.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct LaunchPathSummary {
     /// <p>The constraints on the portfolio-product relationship.</p>
     #[serde(rename = "ConstraintSummaries")]
@@ -1429,7 +1429,7 @@ pub struct ListAcceptedPortfolioSharesInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAcceptedPortfolioSharesOutput {
     /// <p>The page token to use to retrieve the next set of results. If there are no additional results, this value is null.</p>
     #[serde(rename = "NextPageToken")]
@@ -1461,7 +1461,7 @@ pub struct ListBudgetsForResourceInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListBudgetsForResourceOutput {
     /// <p>Information about the associated budgets.</p>
     #[serde(rename = "Budgets")]
@@ -1497,7 +1497,7 @@ pub struct ListConstraintsForPortfolioInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListConstraintsForPortfolioOutput {
     /// <p>Information about the constraints.</p>
     #[serde(rename = "ConstraintDetails")]
@@ -1529,7 +1529,7 @@ pub struct ListLaunchPathsInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListLaunchPathsOutput {
     /// <p>Information about the launch path.</p>
     #[serde(rename = "LaunchPathSummaries")]
@@ -1564,7 +1564,7 @@ pub struct ListOrganizationPortfolioAccessInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListOrganizationPortfolioAccessOutput {
     /// <p>The page token to use to retrieve the next set of results. If there are no additional results, this value is null.</p>
     #[serde(rename = "NextPageToken")]
@@ -1588,7 +1588,7 @@ pub struct ListPortfolioAccessInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPortfolioAccessOutput {
     /// <p>Information about the AWS accounts with access to the portfolio.</p>
     #[serde(rename = "AccountIds")]
@@ -1620,7 +1620,7 @@ pub struct ListPortfoliosForProductInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPortfoliosForProductOutput {
     /// <p>The page token to use to retrieve the next set of results. If there are no additional results, this value is null.</p>
     #[serde(rename = "NextPageToken")]
@@ -1649,7 +1649,7 @@ pub struct ListPortfoliosInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPortfoliosOutput {
     /// <p>The page token to use to retrieve the next set of results. If there are no additional results, this value is null.</p>
     #[serde(rename = "NextPageToken")]
@@ -1681,7 +1681,7 @@ pub struct ListPrincipalsForPortfolioInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListPrincipalsForPortfolioOutput {
     /// <p>The page token to use to retrieve the next set of results. If there are no additional results, this value is null.</p>
     #[serde(rename = "NextPageToken")]
@@ -1718,7 +1718,7 @@ pub struct ListProvisionedProductPlansInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListProvisionedProductPlansOutput {
     /// <p>The page token to use to retrieve the next set of results. If there are no additional results, this value is null.</p>
     #[serde(rename = "NextPageToken")]
@@ -1750,7 +1750,7 @@ pub struct ListProvisioningArtifactsForServiceActionInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListProvisioningArtifactsForServiceActionOutput {
     /// <p>The page token to use to retrieve the next set of results. If there are no additional results, this value is null.</p>
     #[serde(rename = "NextPageToken")]
@@ -1774,7 +1774,7 @@ pub struct ListProvisioningArtifactsInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListProvisioningArtifactsOutput {
     /// <p>The page token to use to retrieve the next set of results. If there are no additional results, this value is null.</p>
     #[serde(rename = "NextPageToken")]
@@ -1811,7 +1811,7 @@ pub struct ListRecordHistoryInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListRecordHistoryOutput {
     /// <p>The page token to use to retrieve the next set of results. If there are no additional results, this value is null.</p>
     #[serde(rename = "NextPageToken")]
@@ -1856,7 +1856,7 @@ pub struct ListResourcesForTagOptionInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListResourcesForTagOptionOutput {
     /// <p>The page token for the next set of results. To retrieve the first set of results, use null.</p>
     #[serde(rename = "PageToken")]
@@ -1891,7 +1891,7 @@ pub struct ListServiceActionsForProvisioningArtifactInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListServiceActionsForProvisioningArtifactOutput {
     /// <p>The page token to use to retrieve the next set of results. If there are no additional results, this value is null.</p>
     #[serde(rename = "NextPageToken")]
@@ -1920,7 +1920,7 @@ pub struct ListServiceActionsInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListServiceActionsOutput {
     /// <p>The page token to use to retrieve the next set of results. If there are no additional results, this value is null.</p>
     #[serde(rename = "NextPageToken")]
@@ -1952,7 +1952,7 @@ pub struct ListStackInstancesForProvisionedProductInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListStackInstancesForProvisionedProductOutput {
     /// <p>The page token to use to retrieve the next set of results. If there are no additional results, this value is null.</p>
     #[serde(rename = "NextPageToken")]
@@ -1998,7 +1998,7 @@ pub struct ListTagOptionsInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagOptionsOutput {
     /// <p>The page token for the next set of results. To retrieve the first set of results, use null.</p>
     #[serde(rename = "PageToken")]
@@ -2025,7 +2025,7 @@ pub struct OrganizationNode {
 
 /// <p>The constraints that the administrator has put on the parameter.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ParameterConstraints {
     /// <p>The values that the administrator has allowed for the parameter.</p>
     #[serde(rename = "AllowedValues")]
@@ -2035,7 +2035,7 @@ pub struct ParameterConstraints {
 
 /// <p>Information about a portfolio.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PortfolioDetail {
     /// <p>The ARN assigned to the portfolio.</p>
     #[serde(rename = "ARN")]
@@ -2065,7 +2065,7 @@ pub struct PortfolioDetail {
 
 /// <p>Information about a principal.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Principal {
     /// <p>The ARN of the principal (IAM user, role, or group).</p>
     #[serde(rename = "PrincipalARN")]
@@ -2079,7 +2079,7 @@ pub struct Principal {
 
 /// <p>A single product view aggregation value/count pair, containing metadata about each product to which the calling user has access.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ProductViewAggregationValue {
     /// <p>An approximate count of the products that match the value.</p>
     #[serde(rename = "ApproximateCount")]
@@ -2093,7 +2093,7 @@ pub struct ProductViewAggregationValue {
 
 /// <p>Information about a product view.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ProductViewDetail {
     /// <p>The UTC time stamp of the creation time.</p>
     #[serde(rename = "CreatedTime")]
@@ -2115,7 +2115,7 @@ pub struct ProductViewDetail {
 
 /// <p>Summary information about a product view.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ProductViewSummary {
     /// <p>The distributor of the product. Contact the product administrator for the significance of this value.</p>
     #[serde(rename = "Distributor")]
@@ -2204,7 +2204,7 @@ pub struct ProvisionProductInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ProvisionProductOutput {
     /// <p>Information about the result of provisioning the product.</p>
     #[serde(rename = "RecordDetail")]
@@ -2214,7 +2214,7 @@ pub struct ProvisionProductOutput {
 
 /// <p>Information about a provisioned product.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ProvisionedProductAttribute {
     /// <p>The ARN of the provisioned product.</p>
     #[serde(rename = "Arn")]
@@ -2280,7 +2280,7 @@ pub struct ProvisionedProductAttribute {
 
 /// <p>Information about a provisioned product.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ProvisionedProductDetail {
     /// <p>The ARN of the provisioned product.</p>
     #[serde(rename = "Arn")]
@@ -2330,7 +2330,7 @@ pub struct ProvisionedProductDetail {
 
 /// <p>Information about a plan.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ProvisionedProductPlanDetails {
     /// <p>The UTC time stamp of the creation time.</p>
     #[serde(rename = "CreatedTime")]
@@ -2396,7 +2396,7 @@ pub struct ProvisionedProductPlanDetails {
 
 /// <p>Summary information about a plan.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ProvisionedProductPlanSummary {
     /// <p>The plan identifier.</p>
     #[serde(rename = "PlanId")]
@@ -2426,7 +2426,7 @@ pub struct ProvisionedProductPlanSummary {
 
 /// <p>Information about a provisioning artifact. A provisioning artifact is also known as a product version.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ProvisioningArtifact {
     /// <p>The UTC time stamp of the creation time.</p>
     #[serde(rename = "CreatedTime")]
@@ -2452,7 +2452,7 @@ pub struct ProvisioningArtifact {
 
 /// <p>Information about a provisioning artifact (also known as a version) for a product.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ProvisioningArtifactDetail {
     /// <p>Indicates whether the product version is active.</p>
     #[serde(rename = "Active")]
@@ -2486,7 +2486,7 @@ pub struct ProvisioningArtifactDetail {
 
 /// <p>Information about a parameter used to provision a product.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ProvisioningArtifactParameter {
     /// <p>The default value.</p>
     #[serde(rename = "DefaultValue")]
@@ -2516,7 +2516,7 @@ pub struct ProvisioningArtifactParameter {
 
 /// <p>The user-defined preferences that will be applied during product provisioning, unless overridden by <code>ProvisioningPreferences</code> or <code>UpdateProvisioningPreferences</code>.</p> <p>For more information on maximum concurrent accounts and failure tolerance, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-concepts.html#stackset-ops-options">Stack set operation options</a> in the <i>AWS CloudFormation User Guide</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ProvisioningArtifactPreferences {
     /// <p>One or more AWS accounts where stack instances are deployed from the stack set. These accounts can be scoped in <code>ProvisioningPreferences$StackSetAccounts</code> and <code>UpdateProvisioningPreferences$StackSetAccounts</code>.</p> <p>Applicable only to a <code>CFN_STACKSET</code> provisioned product type.</p>
     #[serde(rename = "StackSetAccounts")]
@@ -2554,7 +2554,7 @@ pub struct ProvisioningArtifactProperties {
 
 /// <p>Summary information about a provisioning artifact (also known as a version) for a product.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ProvisioningArtifactSummary {
     /// <p>The UTC time stamp of the creation time.</p>
     #[serde(rename = "CreatedTime")]
@@ -2580,7 +2580,7 @@ pub struct ProvisioningArtifactSummary {
 
 /// <p>An object that contains summary information about a product view and a provisioning artifact.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ProvisioningArtifactView {
     /// <p>Summary information about a product view.</p>
     #[serde(rename = "ProductViewSummary")]
@@ -2636,7 +2636,7 @@ pub struct ProvisioningPreferences {
 
 /// <p>Information about a request operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RecordDetail {
     /// <p>The UTC time stamp of the creation time.</p>
     #[serde(rename = "CreatedTime")]
@@ -2694,7 +2694,7 @@ pub struct RecordDetail {
 
 /// <p>The error code and description resulting from an operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RecordError {
     /// <p>The numeric value of the error.</p>
     #[serde(rename = "Code")]
@@ -2708,7 +2708,7 @@ pub struct RecordError {
 
 /// <p>The output for the product created as the result of a request. For example, the output for a CloudFormation-backed product that creates an S3 bucket would include the S3 bucket URL.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RecordOutput {
     /// <p>The description of the output.</p>
     #[serde(rename = "Description")]
@@ -2726,7 +2726,7 @@ pub struct RecordOutput {
 
 /// <p>Information about a tag, which is a key-value pair.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RecordTag {
     /// <p>The key for this tag.</p>
     #[serde(rename = "Key")]
@@ -2754,12 +2754,12 @@ pub struct RejectPortfolioShareInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RejectPortfolioShareOutput {}
 
 /// <p>Information about a resource change that will occur when a plan is executed.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResourceChange {
     /// <p>The change action.</p>
     #[serde(rename = "Action")]
@@ -2793,7 +2793,7 @@ pub struct ResourceChange {
 
 /// <p>Information about a change to a resource attribute.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResourceChangeDetail {
     /// <p>The ID of the entity that caused the change.</p>
     #[serde(rename = "CausingEntity")]
@@ -2811,7 +2811,7 @@ pub struct ResourceChangeDetail {
 
 /// <p>Information about a resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResourceDetail {
     /// <p>The ARN of the resource.</p>
     #[serde(rename = "ARN")]
@@ -2837,7 +2837,7 @@ pub struct ResourceDetail {
 
 /// <p>Information about a change to a resource attribute.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResourceTargetDefinition {
     /// <p>The attribute to be changed.</p>
     #[serde(rename = "Attribute")]
@@ -2874,7 +2874,7 @@ pub struct ScanProvisionedProductsInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ScanProvisionedProductsOutput {
     /// <p>The page token to use to retrieve the next set of results. If there are no additional results, this value is null.</p>
     #[serde(rename = "NextPageToken")]
@@ -2923,7 +2923,7 @@ pub struct SearchProductsAsAdminInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SearchProductsAsAdminOutput {
     /// <p>The page token to use to retrieve the next set of results. If there are no additional results, this value is null.</p>
     #[serde(rename = "NextPageToken")]
@@ -2964,7 +2964,7 @@ pub struct SearchProductsInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SearchProductsOutput {
     /// <p>The page token to use to retrieve the next set of results. If there are no additional results, this value is null.</p>
     #[serde(rename = "NextPageToken")]
@@ -3014,7 +3014,7 @@ pub struct SearchProvisionedProductsInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SearchProvisionedProductsOutput {
     /// <p>The page token to use to retrieve the next set of results. If there are no additional results, this value is null.</p>
     #[serde(rename = "NextPageToken")]
@@ -3046,7 +3046,7 @@ pub struct ServiceActionAssociation {
 
 /// <p>An object containing detailed information about the self-service action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ServiceActionDetail {
     /// <p>A map that defines the self-service action.</p>
     #[serde(rename = "Definition")]
@@ -3060,7 +3060,7 @@ pub struct ServiceActionDetail {
 
 /// <p>Detailed information about the self-service action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ServiceActionSummary {
     /// <p>The self-service action definition type. For example, <code>SSM_AUTOMATION</code>.</p>
     #[serde(rename = "DefinitionType")]
@@ -3082,7 +3082,7 @@ pub struct ServiceActionSummary {
 
 /// <p>Information about the portfolio share operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ShareDetails {
     /// <p>List of errors.</p>
     #[serde(rename = "ShareErrors")]
@@ -3096,7 +3096,7 @@ pub struct ShareDetails {
 
 /// <p>Errors that occurred during the portfolio share operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ShareError {
     /// <p>List of accounts impacted by the error.</p>
     #[serde(rename = "Accounts")]
@@ -3114,7 +3114,7 @@ pub struct ShareError {
 
 /// <p>An AWS CloudFormation stack, in a specific account and region, that's part of a stack set operation. A stack instance is a reference to an attempted or actual stack in a given account within a given region. A stack instance can exist without a stack—for example, if the stack couldn't be created for some reason. A stack instance is associated with only one stack set. Each stack instance contains the ID of its associated stack set, as well as the ID of the actual stack and the stack status. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StackInstance {
     /// <p>The name of the AWS account that the stack instance is associated with.</p>
     #[serde(rename = "Account")]
@@ -3143,7 +3143,7 @@ pub struct Tag {
 
 /// <p>Information about a TagOption.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagOptionDetail {
     /// <p>The TagOption active state.</p>
     #[serde(rename = "Active")]
@@ -3165,7 +3165,7 @@ pub struct TagOptionDetail {
 
 /// <p>Summary information about a TagOption.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagOptionSummary {
     /// <p>The TagOption key.</p>
     #[serde(rename = "Key")]
@@ -3201,7 +3201,7 @@ pub struct TerminateProvisionedProductInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TerminateProvisionedProductOutput {
     /// <p>Information about the result of this request.</p>
     #[serde(rename = "RecordDetail")]
@@ -3229,7 +3229,7 @@ pub struct UpdateConstraintInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateConstraintOutput {
     /// <p>Information about the constraint.</p>
     #[serde(rename = "ConstraintDetail")]
@@ -3277,7 +3277,7 @@ pub struct UpdatePortfolioInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdatePortfolioOutput {
     /// <p>Information about the portfolio.</p>
     #[serde(rename = "PortfolioDetail")]
@@ -3337,7 +3337,7 @@ pub struct UpdateProductInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateProductOutput {
     /// <p>Information about the product view.</p>
     #[serde(rename = "ProductViewDetail")]
@@ -3393,7 +3393,7 @@ pub struct UpdateProvisionedProductInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateProvisionedProductOutput {
     /// <p>Information about the result of the request.</p>
     #[serde(rename = "RecordDetail")]
@@ -3419,7 +3419,7 @@ pub struct UpdateProvisionedProductPropertiesInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateProvisionedProductPropertiesOutput {
     /// <p>The provisioned product identifier.</p>
     #[serde(rename = "ProvisionedProductId")]
@@ -3470,7 +3470,7 @@ pub struct UpdateProvisioningArtifactInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateProvisioningArtifactOutput {
     /// <p>The URL of the CloudFormation template in Amazon S3.</p>
     #[serde(rename = "Info")]
@@ -3560,7 +3560,7 @@ pub struct UpdateServiceActionInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateServiceActionOutput {
     /// <p>Detailed information about the self-service action.</p>
     #[serde(rename = "ServiceActionDetail")]
@@ -3584,7 +3584,7 @@ pub struct UpdateTagOptionInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateTagOptionOutput {
     /// <p>Information about the TagOption.</p>
     #[serde(rename = "TagOptionDetail")]
@@ -3594,7 +3594,7 @@ pub struct UpdateTagOptionOutput {
 
 /// <p>Additional information provided by the administrator.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UsageInstruction {
     /// <p>The usage instruction type for the value.</p>
     #[serde(rename = "Type")]

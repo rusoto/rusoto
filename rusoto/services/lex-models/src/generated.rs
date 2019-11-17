@@ -26,7 +26,7 @@ use rusoto_core::signature::SignedRequest;
 use serde_json;
 /// <p>Provides information about a bot alias.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BotAliasMetadata {
     /// <p>The name of the bot to which the alias points.</p>
     #[serde(rename = "botName")]
@@ -60,7 +60,7 @@ pub struct BotAliasMetadata {
 
 /// <p>Represents an association between an Amazon Lex bot and an external messaging platform.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BotChannelAssociation {
     /// <p>An alias pointing to the specific version of the Amazon Lex bot to which this association is being made. </p>
     #[serde(rename = "botAlias")]
@@ -102,7 +102,7 @@ pub struct BotChannelAssociation {
 
 /// <p>Provides information about a bot. .</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BotMetadata {
     /// <p>The date that the bot was created.</p>
     #[serde(rename = "createdDate")]
@@ -132,7 +132,7 @@ pub struct BotMetadata {
 
 /// <p>Provides metadata for a built-in intent.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BuiltinIntentMetadata {
     /// <p>A unique identifier for the built-in intent. To find the signature for an intent, see <a href="https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/built-in-intent-ref/standard-intents">Standard Built-in Intents</a> in the <i>Alexa Skills Kit</i>.</p>
     #[serde(rename = "signature")]
@@ -146,7 +146,7 @@ pub struct BuiltinIntentMetadata {
 
 /// <p>Provides information about a slot used in a built-in intent.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BuiltinIntentSlot {
     /// <p>A list of the slots defined for the intent.</p>
     #[serde(rename = "name")]
@@ -156,7 +156,7 @@ pub struct BuiltinIntentSlot {
 
 /// <p>Provides information about a built in slot type.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BuiltinSlotTypeMetadata {
     /// <p>A unique identifier for the built-in slot type. To find the signature for a slot type, see <a href="https://developer.amazon.com/public/solutions/alexa/alexa-skills-kit/docs/built-in-intent-ref/slot-type-reference">Slot Type Reference</a> in the <i>Alexa Skills Kit</i>.</p>
     #[serde(rename = "signature")]
@@ -191,7 +191,7 @@ pub struct CreateBotVersionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateBotVersionResponse {
     /// <p>The message that Amazon Lex uses to abort a conversation. For more information, see <a>PutBot</a>.</p>
     #[serde(rename = "abortStatement")]
@@ -267,7 +267,7 @@ pub struct CreateIntentVersionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateIntentVersionResponse {
     /// <p>Checksum of the intent version created.</p>
     #[serde(rename = "checksum")]
@@ -343,7 +343,7 @@ pub struct CreateSlotTypeVersionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateSlotTypeVersionResponse {
     /// <p>Checksum of the <code>$LATEST</code> version of the slot type.</p>
     #[serde(rename = "checksum")]
@@ -509,7 +509,7 @@ pub struct GetBotAliasRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetBotAliasResponse {
     /// <p>The name of the bot that the alias points to.</p>
     #[serde(rename = "botName")]
@@ -561,7 +561,7 @@ pub struct GetBotAliasesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetBotAliasesResponse {
     /// <p>An array of <code>BotAliasMetadata</code> objects, each describing a bot alias.</p>
     #[serde(rename = "BotAliases")]
@@ -587,7 +587,7 @@ pub struct GetBotChannelAssociationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetBotChannelAssociationResponse {
     /// <p>An alias pointing to the specific version of the Amazon Lex bot to which this association is being made.</p>
     #[serde(rename = "botAlias")]
@@ -650,7 +650,7 @@ pub struct GetBotChannelAssociationsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetBotChannelAssociationsResponse {
     /// <p>An array of objects, one for each association, that provides information about the Amazon Lex bot and its association with the channel. </p>
     #[serde(rename = "botChannelAssociations")]
@@ -673,7 +673,7 @@ pub struct GetBotRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetBotResponse {
     /// <p>The message that Amazon Lex returns when the user elects to end the conversation without completing it. For more information, see <a>PutBot</a>.</p>
     #[serde(rename = "abortStatement")]
@@ -753,7 +753,7 @@ pub struct GetBotVersionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetBotVersionsResponse {
     /// <p>An array of <code>BotMetadata</code> objects, one for each numbered version of the bot plus one for the <code>$LATEST</code> version.</p>
     #[serde(rename = "bots")]
@@ -782,7 +782,7 @@ pub struct GetBotsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetBotsResponse {
     /// <p>An array of <code>botMetadata</code> objects, with one entry for each bot. </p>
     #[serde(rename = "bots")]
@@ -802,7 +802,7 @@ pub struct GetBuiltinIntentRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetBuiltinIntentResponse {
     /// <p>The unique identifier for a built-in intent.</p>
     #[serde(rename = "signature")]
@@ -839,7 +839,7 @@ pub struct GetBuiltinIntentsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetBuiltinIntentsResponse {
     /// <p>An array of <code>builtinIntentMetadata</code> objects, one for each intent in the response.</p>
     #[serde(rename = "intents")]
@@ -872,7 +872,7 @@ pub struct GetBuiltinSlotTypesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetBuiltinSlotTypesResponse {
     /// <p>If the response is truncated, the response includes a pagination token that you can use in your next request to fetch the next page of slot types.</p>
     #[serde(rename = "nextToken")]
@@ -901,7 +901,7 @@ pub struct GetExportRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetExportResponse {
     /// <p><p>The status of the export. </p> <ul> <li> <p> <code>IN_PROGRESS</code> - The export is in progress.</p> </li> <li> <p> <code>READY</code> - The export is complete.</p> </li> <li> <p> <code>FAILED</code> - The export could not be completed.</p> </li> </ul></p>
     #[serde(rename = "exportStatus")]
@@ -941,7 +941,7 @@ pub struct GetImportRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetImportResponse {
     /// <p>A timestamp for the date and time that the import job was created.</p>
     #[serde(rename = "createdDate")]
@@ -984,7 +984,7 @@ pub struct GetIntentRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetIntentResponse {
     /// <p>Checksum of the intent.</p>
     #[serde(rename = "checksum")]
@@ -1064,7 +1064,7 @@ pub struct GetIntentVersionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetIntentVersionsResponse {
     /// <p>An array of <code>IntentMetadata</code> objects, one for each numbered version of the intent plus one for the <code>$LATEST</code> version.</p>
     #[serde(rename = "intents")]
@@ -1093,7 +1093,7 @@ pub struct GetIntentsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetIntentsResponse {
     /// <p>An array of <code>Intent</code> objects. For more information, see <a>PutBot</a>.</p>
     #[serde(rename = "intents")]
@@ -1116,7 +1116,7 @@ pub struct GetSlotTypeRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSlotTypeResponse {
     /// <p>Checksum of the <code>$LATEST</code> version of the slot type.</p>
     #[serde(rename = "checksum")]
@@ -1168,7 +1168,7 @@ pub struct GetSlotTypeVersionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSlotTypeVersionsResponse {
     /// <p>A pagination token for fetching the next page of slot type versions. If the response to this call is truncated, Amazon Lex returns a pagination token in the response. To fetch the next page of versions, specify the pagination token in the next request. </p>
     #[serde(rename = "nextToken")]
@@ -1197,7 +1197,7 @@ pub struct GetSlotTypesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSlotTypesResponse {
     /// <p>If the response is truncated, it includes a pagination token that you can specify in your next request to fetch the next page of slot types.</p>
     #[serde(rename = "nextToken")]
@@ -1223,7 +1223,7 @@ pub struct GetUtterancesViewRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetUtterancesViewResponse {
     /// <p>The name of the bot for which utterance information was returned.</p>
     #[serde(rename = "botName")]
@@ -1248,7 +1248,7 @@ pub struct Intent {
 
 /// <p>Provides information about an intent.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct IntentMetadata {
     /// <p>The date that the intent was created.</p>
     #[serde(rename = "createdDate")]
@@ -1324,7 +1324,7 @@ pub struct PutBotAliasRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutBotAliasResponse {
     /// <p>The name of the bot that the alias points to.</p>
     #[serde(rename = "botName")]
@@ -1405,7 +1405,7 @@ pub struct PutBotRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutBotResponse {
     /// <p>The message that Amazon Lex uses to abort a conversation. For more information, see <a>PutBot</a>.</p>
     #[serde(rename = "abortStatement")]
@@ -1527,7 +1527,7 @@ pub struct PutIntentRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutIntentResponse {
     /// <p>Checksum of the <code>$LATEST</code>version of the intent created or updated.</p>
     #[serde(rename = "checksum")]
@@ -1621,7 +1621,7 @@ pub struct PutSlotTypeRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutSlotTypeResponse {
     /// <p>Checksum of the <code>$LATEST</code> version of the slot type.</p>
     #[serde(rename = "checksum")]
@@ -1710,7 +1710,7 @@ pub struct Slot {
 
 /// <p>Provides information about a slot type..</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SlotTypeMetadata {
     /// <p>The date that the slot type was created.</p>
     #[serde(rename = "createdDate")]
@@ -1753,7 +1753,7 @@ pub struct StartImportRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartImportResponse {
     /// <p>A timestamp for the date and time that the import job was requested.</p>
     #[serde(rename = "createdDate")]
@@ -1795,7 +1795,7 @@ pub struct Statement {
 
 /// <p>Provides information about a single utterance that was made to your bot. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UtteranceData {
     /// <p>The number of times that the utterance was processed.</p>
     #[serde(rename = "count")]
@@ -1821,7 +1821,7 @@ pub struct UtteranceData {
 
 /// <p>Provides a list of utterances that have been made to a specific version of your bot. The list contains a maximum of 100 utterances.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UtteranceList {
     /// <p>The version of the bot that processed the list.</p>
     #[serde(rename = "botVersion")]

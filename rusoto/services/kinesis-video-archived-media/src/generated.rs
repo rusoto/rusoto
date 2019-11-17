@@ -51,7 +51,7 @@ pub struct DASHTimestampRange {
 
 /// <p>Represents a segment of video or other time-delimited data.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Fragment {
     /// <p>The playback duration or other time value associated with the fragment.</p>
     #[serde(rename = "FragmentLengthInMilliseconds")]
@@ -123,7 +123,7 @@ pub struct GetDASHStreamingSessionURLInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDASHStreamingSessionURLOutput {
     /// <p>The URL (containing the session token) that a media player can use to retrieve the MPEG-DASH manifest.</p>
     #[serde(rename = "DASHStreamingSessionURL")]
@@ -172,7 +172,7 @@ pub struct GetHLSStreamingSessionURLInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetHLSStreamingSessionURLOutput {
     /// <p>The URL (containing the session token) that a media player can use to retrieve the HLS master playlist.</p>
     #[serde(rename = "HLSStreamingSessionURL")]
@@ -244,7 +244,7 @@ pub struct ListFragmentsInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListFragmentsOutput {
     /// <p>A list of archived <a>Fragment</a> objects from the stream that meet the selector criteria. Results are in no specific order, even across pages.</p>
     #[serde(rename = "Fragments")]

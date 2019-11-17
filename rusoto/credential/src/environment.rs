@@ -192,7 +192,7 @@ fn get_critical_variable(var_name: String) -> Result<String, CredentialsError> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::test_utils::{lock, ENV_MUTEX};
+    use crate::test_utils::lock_env;
     use chrono::Utc;
     use std::env;
 
@@ -207,7 +207,7 @@ mod tests {
 
     #[test]
     fn get_temporary_credentials_from_env() {
-        let _guard = lock(&ENV_MUTEX);
+        let _guard = lock_env();
         env::set_var(AWS_ACCESS_KEY_ID, "id");
         env::set_var(AWS_SECRET_ACCESS_KEY, "secret");
         env::set_var(AWS_SESSION_TOKEN, "token");
@@ -224,7 +224,7 @@ mod tests {
 
     #[test]
     fn get_non_temporary_credentials_from_env() {
-        let _guard = lock(&ENV_MUTEX);
+        let _guard = lock_env();
         env::set_var(AWS_ACCESS_KEY_ID, "id");
         env::set_var(AWS_SECRET_ACCESS_KEY, "secret");
         env::remove_var(AWS_SESSION_TOKEN);
@@ -240,7 +240,7 @@ mod tests {
 
     #[test]
     fn environment_provider_missing_key_id() {
-        let _guard = lock(&ENV_MUTEX);
+        let _guard = lock_env();
         env::remove_var(AWS_ACCESS_KEY_ID);
         env::set_var(AWS_SECRET_ACCESS_KEY, "secret");
         env::remove_var(AWS_SESSION_TOKEN);
@@ -255,7 +255,7 @@ mod tests {
 
     #[test]
     fn environment_provider_missing_secret() {
-        let _guard = lock(&ENV_MUTEX);
+        let _guard = lock_env();
         env::remove_var(AWS_SECRET_ACCESS_KEY);
         env::set_var(AWS_ACCESS_KEY_ID, "id");
         env::remove_var(AWS_SESSION_TOKEN);
@@ -270,7 +270,7 @@ mod tests {
 
     #[test]
     fn environment_provider_missing_credentials() {
-        let _guard = lock(&ENV_MUTEX);
+        let _guard = lock_env();
         env::remove_var(AWS_SECRET_ACCESS_KEY);
         env::remove_var(AWS_ACCESS_KEY_ID);
         env::remove_var(AWS_SESSION_TOKEN);
@@ -284,7 +284,7 @@ mod tests {
 
     #[test]
     fn environment_provider_bad_expiration() {
-        let _guard = lock(&ENV_MUTEX);
+        let _guard = lock_env();
         env::set_var(AWS_ACCESS_KEY_ID, "id");
         env::set_var(AWS_SECRET_ACCESS_KEY, "secret");
         env::set_var(AWS_SESSION_TOKEN, "token");
@@ -303,7 +303,7 @@ mod tests {
 
     #[test]
     fn get_temporary_credentials_with_expiration_from_env() {
-        let _guard = lock(&ENV_MUTEX);
+        let _guard = lock_env();
         let now = Utc::now();
         let now_str = now.to_rfc3339();
         env::set_var(AWS_ACCESS_KEY_ID, "id");
@@ -325,7 +325,7 @@ mod tests {
 
     #[test]
     fn regression_test_rfc_3339_compat() {
-        let _guard = lock(&ENV_MUTEX);
+        let _guard = lock_env();
         // RFC 3339 expiration times with lower case 't' could not be parsed by earlier
         // implementations.
         env::set_var(AWS_CREDENTIAL_EXPIRATION, "1996-12-19t16:39:57-08:00");
@@ -347,7 +347,7 @@ mod tests {
         // NOTE: not strictly neccessary here, since we are using a non-standard
         // prefix, so we shouldn't collide with the other env interactions in
         // the other tests.
-        let _guard = lock(&ENV_MUTEX);
+        let _guard = lock_env();
 
         let now = Utc::now();
         let now_str = now.to_rfc3339();

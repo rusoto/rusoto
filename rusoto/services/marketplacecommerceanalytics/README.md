@@ -23,8 +23,15 @@ To use `rusoto_marketplacecommerceanalytics` in your application, add it as a de
 
 ```toml
 [dependencies]
-rusoto_marketplacecommerceanalytics = "0.40.0"
+rusoto_marketplacecommerceanalytics = "0.41.0"
 ```
+
+## Crate Features
+- `native-tls` - use platform-specific TLS implementation.
+- `rustls` - use rustls TLS implementation.
+- `serialize_structs` - output structs of most operations get `derive(Serialize)`.
+
+Note: the crate will use the `native-tls` TLS implementation by default.
 
 ## Contributing
 

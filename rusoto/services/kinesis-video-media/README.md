@@ -23,8 +23,15 @@ To use `rusoto_kinesis_video_media` in your application, add it as a dependency 
 
 ```toml
 [dependencies]
-rusoto_kinesis_video_media = "0.40.0"
+rusoto_kinesis_video_media = "0.41.0"
 ```
+
+## Crate Features
+- `native-tls` - use platform-specific TLS implementation.
+- `rustls` - use rustls TLS implementation.
+- `serialize_structs` - output structs of most operations get `derive(Serialize)`.
+
+Note: the crate will use the `native-tls` TLS implementation by default.
 
 ## Contributing
 

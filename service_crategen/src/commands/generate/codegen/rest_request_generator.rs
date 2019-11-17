@@ -194,10 +194,8 @@ fn generate_snake_case_uri(request_uri: &str) -> String {
     // convert fooBar to foo_bar
     for caps in URI_ARGS_SNAKE_REGEX.captures_iter(request_uri) {
         let to_find = caps.get(0).expect("nothing captured").as_str();
-        // this silliness is because {fooBar} gets converted to {foo_bar_} and sometimes {_foo_bar}.
-        let replacement = Inflector::to_snake_case(caps.get(0).unwrap().as_str())
-            .replace("_}", "}")
-            .replace("{_", "{");
+        // Wrap with curly braces again:
+        let replacement = format!("{{{}}}", Inflector::to_snake_case(caps.get(0).unwrap().as_str()));
         snake = snake.replace(to_find, &replacement);
     }
 
