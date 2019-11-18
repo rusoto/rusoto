@@ -18,6 +18,15 @@ params for s3 `list_objects` methods
 - Add anonymous credentials support
 - Don't trim whitepsace when parsing xml payload. Fixes truncating of items with spaces in payloads
 such as an S3 key returned in `list_objects_v2`
+- Region deserialization format matches what Region serializers expect: https://github.com/rusoto/rusoto/pull/1544
+- Fixed regression of `x-amz-content-sha256` header not being signed: https://github.com/rusoto/rusoto/pull/1545
+- Allow `rustls` to be used in `rusoto_mock`: https://github.com/rusoto/rusoto/pull/1557
+- Added opt-in ability for service objects to be serialized: https://github.com/rusoto/rusoto/pull/1560
+- Avoid panicking in credential provider when parsing credentials file: https://github.com/rusoto/rusoto/pull/1573
+
+## [0.41.1] - 2019-10-11
+
+- Fixed regression in `rusoto_credential` session token handling: https://github.com/rusoto/rusoto/pull/1528
 
 ## [0.41.0] - 2019-10-07
 
