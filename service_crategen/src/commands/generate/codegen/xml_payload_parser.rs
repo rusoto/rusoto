@@ -187,7 +187,7 @@ fn xml_body_parser(
             }} else {{
                 let reader = EventReader::new_with_config(
                     response.body.as_ref(),
-                    ParserConfig::new().trim_whitespace(true)
+                    ParserConfig::new().trim_whitespace(false)
                 );
                 let mut stack = XmlResponse::new(reader.into_iter().peekable());
                 let _start_document = stack.next();
@@ -205,16 +205,15 @@ fn xml_body_parser(
 }
 
 fn generate_deserializer_body(name: &str, shape: &Shape, service: &Service<'_>) -> String {
-    match (service.endpoint_prefix(), name) {
-        ("s3", "GetBucketLocationOutput") => {
+    if let ("s3", "GetBucketLocationOutput") = (service.endpoint_prefix(), name) {
             // override custom deserializer
             let struct_field_deserializers = shape
                 .members
                 .as_ref()
                 .unwrap()
                 .iter()
-                .filter_map(|(member_name, member)| {
-                    Some(format!(
+                .map(|(member_name, member)| {
+                    format!(
                         "obj.{field_name} = {parse_expression};",
                         field_name = generate_field_name(member_name),
                         parse_expression = generate_struct_field_parse_expression(
@@ -225,7 +224,7 @@ fn generate_deserializer_body(name: &str, shape: &Shape, service: &Service<'_>) 
                             &member_name.to_string(),
                             false
                         )
-                    ))
+                    )
                 })
                 .collect::<Vec<String>>()
                 .join("\n");
@@ -236,8 +235,6 @@ fn generate_deserializer_body(name: &str, shape: &Shape, service: &Service<'_>) 
                 name = name,
                 struct_field_deserializers = struct_field_deserializers
             );
-        }
-        _ => {}
     }
     match shape.shape_type {
         ShapeType::List => generate_list_deserializer(shape, service),

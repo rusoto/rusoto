@@ -9,24 +9,23 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
+#![allow(warnings)]
 
-use std::error::Error;
-use std::fmt;
-
-#[allow(warnings)]
 use futures::future;
 use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
+use std::error::Error;
+use std::fmt;
 
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
 /// <p>Details about license consumption.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ConsumedLicenseSummary {
     /// <p>Number of licenses consumed by a resource.</p>
     #[serde(rename = "ConsumedLicenses")]
@@ -69,7 +68,7 @@ pub struct CreateLicenseConfigurationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateLicenseConfigurationResponse {
     /// <p>ARN of the license configuration object after its creation.</p>
     #[serde(rename = "LicenseConfigurationArn")]
@@ -85,7 +84,7 @@ pub struct DeleteLicenseConfigurationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteLicenseConfigurationResponse {}
 
 /// <p>A filter name and value pair that is used to return a more specific list of results from a describe operation. Filters can be used to match a set of resources by specific criteria, such as tags, attributes, or IDs. The filters supported by a <code>Describe</code> operation are documented with the <code>Describe</code> operation.</p>
@@ -109,7 +108,7 @@ pub struct GetLicenseConfigurationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetLicenseConfigurationResponse {
     /// <p>List of summaries for consumed licenses used by various resources.</p>
     #[serde(rename = "ConsumedLicenseSummaryList")]
@@ -173,7 +172,7 @@ pub struct GetLicenseConfigurationResponse {
 pub struct GetServiceSettingsRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetServiceSettingsResponse {
     /// <p>Indicates whether cross-account discovery has been enabled.</p>
     #[serde(rename = "EnableCrossAccountsDiscovery")]
@@ -210,7 +209,7 @@ pub struct InventoryFilter {
 
 /// <p>A license configuration is an abstraction of a customer license agreement that can be consumed and enforced by License Manager. Components include specifications for the license type (licensing by instance, socket, CPU, or VCPU), tenancy (shared tenancy, Amazon EC2 Dedicated Instance, Amazon EC2 Dedicated Host, or any of these), host affinity (how long a VM must be associated with a host), the number of licenses purchased and used.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct LicenseConfiguration {
     /// <p>List of summaries for licenses consumed by various resources.</p>
     #[serde(rename = "ConsumedLicenseSummaryList")]
@@ -268,7 +267,7 @@ pub struct LicenseConfiguration {
 
 /// <p>Describes a server resource that is associated with a license configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct LicenseConfigurationAssociation {
     /// <p>Time when the license configuration was associated with the resource.</p>
     #[serde(rename = "AssociationTime")]
@@ -290,7 +289,7 @@ pub struct LicenseConfigurationAssociation {
 
 /// <p>Contains details of the usage of each resource from the license pool.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct LicenseConfigurationUsage {
     /// <p>Time when the license configuration was initially associated with a resource.</p>
     #[serde(rename = "AssociationTime")]
@@ -342,7 +341,7 @@ pub struct ListAssociationsForLicenseConfigurationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAssociationsForLicenseConfigurationResponse {
     /// <p>Lists association objects for the license configuration, each containing the association time, number of consumed licenses, resource ARN, resource ID, account ID that owns the resource, resource size, and resource type.</p>
     #[serde(rename = "LicenseConfigurationAssociations")]
@@ -375,7 +374,7 @@ pub struct ListLicenseConfigurationsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListLicenseConfigurationsResponse {
     /// <p>Array of license configuration objects.</p>
     #[serde(rename = "LicenseConfigurations")]
@@ -403,7 +402,7 @@ pub struct ListLicenseSpecificationsForResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListLicenseSpecificationsForResourceResponse {
     /// <p>License configurations associated with a resource.</p>
     #[serde(rename = "LicenseSpecifications")]
@@ -432,7 +431,7 @@ pub struct ListResourceInventoryRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListResourceInventoryResponse {
     /// <p>Token for the next set of results.</p>
     #[serde(rename = "NextToken")]
@@ -452,7 +451,7 @@ pub struct ListTagsForResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
     /// <p>List of tags attached to the resource.</p>
     #[serde(rename = "Tags")]
@@ -480,7 +479,7 @@ pub struct ListUsageForLicenseConfigurationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListUsageForLicenseConfigurationResponse {
     /// <p>An array of <code>LicenseConfigurationUsage</code> objects.</p>
     #[serde(rename = "LicenseConfigurationUsageList")]
@@ -494,7 +493,7 @@ pub struct ListUsageForLicenseConfigurationResponse {
 
 /// <p>Summary for a resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ManagedResourceSummary {
     /// <p>Number of resources associated with licenses.</p>
     #[serde(rename = "AssociationCount")]
@@ -516,7 +515,7 @@ pub struct OrganizationConfiguration {
 
 /// <p>A set of attributes that describe a resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResourceInventory {
     /// <p>The platform of the resource.</p>
     #[serde(rename = "Platform")]
@@ -568,7 +567,7 @@ pub struct TagResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -582,7 +581,7 @@ pub struct UntagResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -617,7 +616,7 @@ pub struct UpdateLicenseConfigurationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateLicenseConfigurationResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -636,7 +635,7 @@ pub struct UpdateLicenseSpecificationsForResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateLicenseSpecificationsForResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -660,7 +659,7 @@ pub struct UpdateServiceSettingsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateServiceSettingsResponse {}
 
 /// Errors returned by CreateLicenseConfiguration
@@ -1812,10 +1811,7 @@ impl LicenseManagerClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> LicenseManagerClient {
-        LicenseManagerClient {
-            client: Client::shared(),
-            region,
-        }
+        Self::new_with_client(Client::shared(), region)
     }
 
     pub fn new_with<P, D>(
@@ -1829,10 +1825,14 @@ impl LicenseManagerClient {
         D: DispatchSignedRequest + Send + Sync + 'static,
         D::Future: Send,
     {
-        LicenseManagerClient {
-            client: Client::new_with(credentials_provider, request_dispatcher),
+        Self::new_with_client(
+            Client::new_with(credentials_provider, request_dispatcher),
             region,
-        }
+        )
+    }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> LicenseManagerClient {
+        LicenseManagerClient { client, region }
     }
 }
 

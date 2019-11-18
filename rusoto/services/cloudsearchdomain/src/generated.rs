@@ -9,24 +9,23 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
+#![allow(warnings)]
 
-use std::error::Error;
-use std::fmt;
-
-#[allow(warnings)]
 use futures::future;
 use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
+use std::error::Error;
+use std::fmt;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 /// <p>A container for facet information. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Bucket {
     /// <p>The number of hits that contain the facet value in the specified facet field.</p>
     #[serde(rename = "count")]
@@ -40,7 +39,7 @@ pub struct Bucket {
 
 /// <p>A container for the calculated facet values and counts.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BucketInfo {
     /// <p>A list of the calculated facet values and counts.</p>
     #[serde(rename = "buckets")]
@@ -50,7 +49,7 @@ pub struct BucketInfo {
 
 /// <p>A warning returned by the document service when an issue is discovered while processing an upload request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DocumentServiceWarning {
     /// <p>The description for a warning returned by the document service.</p>
     #[serde(rename = "message")]
@@ -60,7 +59,7 @@ pub struct DocumentServiceWarning {
 
 /// <p>The statistics for a field calculated in the request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FieldStats {
     /// <p>The number of documents that contain a value in the specified field in the result set.</p>
     #[serde(rename = "count")]
@@ -98,7 +97,7 @@ pub struct FieldStats {
 
 /// <p>Information about a document that matches the search request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Hit {
     /// <p>The expressions returned from a document that matches the search request.</p>
     #[serde(rename = "exprs")]
@@ -120,7 +119,7 @@ pub struct Hit {
 
 /// <p>The collection of documents that match the search request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Hits {
     /// <p>A cursor that can be used to retrieve the next set of matching documents when you want to page through a large result set.</p>
     #[serde(rename = "cursor")]
@@ -202,7 +201,7 @@ pub struct SearchRequest {
 
 /// <p>The result of a <code>Search</code> request. Contains the documents that match the specified search criteria and any requested fields, highlights, and facet information.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SearchResponse {
     /// <p>The requested facet information.</p>
     #[serde(rename = "facets")]
@@ -224,7 +223,7 @@ pub struct SearchResponse {
 
 /// <p>Contains the resource id (<code>rid</code>) and the time it took to process the request (<code>timems</code>).</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SearchStatus {
     /// <p>The encrypted resource ID for the request.</p>
     #[serde(rename = "rid")]
@@ -238,7 +237,7 @@ pub struct SearchStatus {
 
 /// <p>Container for the suggestion information returned in a <code>SuggestResponse</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SuggestModel {
     /// <p>The number of documents that were found to match the query string.</p>
     #[serde(rename = "found")]
@@ -271,7 +270,7 @@ pub struct SuggestRequest {
 
 /// <p>Contains the response to a <code>Suggest</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SuggestResponse {
     /// <p>The status of a <code>SuggestRequest</code>. Contains the resource ID (<code>rid</code>) and how long it took to process the request (<code>timems</code>).</p>
     #[serde(rename = "status")]
@@ -285,7 +284,7 @@ pub struct SuggestResponse {
 
 /// <p>Contains the resource id (<code>rid</code>) and the time it took to process the request (<code>timems</code>).</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SuggestStatus {
     /// <p>The encrypted resource ID for the request.</p>
     #[serde(rename = "rid")]
@@ -299,7 +298,7 @@ pub struct SuggestStatus {
 
 /// <p>An autocomplete suggestion that matches the query string specified in a <code>SuggestRequest</code>. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SuggestionMatch {
     /// <p>The document ID of the suggested document.</p>
     #[serde(rename = "id")]
@@ -333,7 +332,7 @@ pub struct UploadDocumentsRequest {
 
 /// <p>Contains the response to an <code>UploadDocuments</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UploadDocumentsResponse {
     /// <p>The number of documents that were added to the search domain.</p>
     #[serde(rename = "adds")]
@@ -474,10 +473,7 @@ impl CloudSearchDomainClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> CloudSearchDomainClient {
-        CloudSearchDomainClient {
-            client: Client::shared(),
-            region,
-        }
+        Self::new_with_client(Client::shared(), region)
     }
 
     pub fn new_with<P, D>(
@@ -491,10 +487,14 @@ impl CloudSearchDomainClient {
         D: DispatchSignedRequest + Send + Sync + 'static,
         D::Future: Send,
     {
-        CloudSearchDomainClient {
-            client: Client::new_with(credentials_provider, request_dispatcher),
+        Self::new_with_client(
+            Client::new_with(credentials_provider, request_dispatcher),
             region,
-        }
+        )
+    }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> CloudSearchDomainClient {
+        CloudSearchDomainClient { client, region }
     }
 }
 
@@ -549,7 +549,8 @@ impl CloudSearchDomain for CloudSearchDomainClient {
         if let Some(ref x) = input.stats {
             params.put("stats", x);
         }
-        params.put("format", "sdk&pretty");
+        params.put("format", "sdk");
+        params.put("pretty", "true");
         request.set_params(params);
 
         self.client.sign_and_dispatch(request, |response| {
@@ -586,7 +587,8 @@ impl CloudSearchDomain for CloudSearchDomainClient {
             params.put("size", x);
         }
         params.put("suggester", &input.suggester);
-        params.put("format", "sdk&pretty");
+        params.put("format", "sdk");
+        params.put("pretty", "true");
         request.set_params(params);
 
         self.client.sign_and_dispatch(request, |response| {

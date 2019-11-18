@@ -1,6 +1,6 @@
 
-# Rusoto CloudWatchEvents
-Rust SDK for Amazon CloudWatch Events
+# Rusoto EventBridge
+Rust SDK for Amazon EventBridge
 
 You may be looking for:
 
@@ -23,8 +23,15 @@ To use `rusoto_events` in your application, add it as a dependency in your `Carg
 
 ```toml
 [dependencies]
-rusoto_events = "0.40.0"
+rusoto_events = "0.41.0"
 ```
+
+## Crate Features
+- `native-tls` - use platform-specific TLS implementation.
+- `rustls` - use rustls TLS implementation.
+- `serialize_structs` - output structs of most operations get `derive(Serialize)`.
+
+Note: the crate will use the `native-tls` TLS implementation by default.
 
 ## Contributing
 

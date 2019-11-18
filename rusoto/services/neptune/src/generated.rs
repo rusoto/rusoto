@@ -9,17 +9,16 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
+#![allow(warnings)]
 
-use std::error::Error;
-use std::fmt;
-
-#[allow(warnings)]
 use futures::future;
 use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
+use std::error::Error;
+use std::fmt;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto::xml::error::*;
@@ -368,7 +367,7 @@ impl CharacterSetDeserializer {
         })
     }
 }
-/// <p>The configuration setting for the log types to be enabled for export to CloudWatch Logs for a specific DB instance or DB cluster.</p>
+/// <p>The configuration setting for the log types to be enabled for export to CloudWatch Logs for a specific DB instance or DB cluster.</p> <p>The <code>EnableLogTypes</code> and <code>DisableLogTypes</code> arrays determine which logs will be exported (or not exported) to CloudWatch Logs.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CloudwatchLogsExportConfiguration {
     /// <p>The list of log types to disable.</p>
@@ -636,6 +635,8 @@ pub struct CreateDBClusterMessage {
     pub db_subnet_group_name: Option<String>,
     /// <p>The name for your database of up to 64 alpha-numeric characters. If you do not provide a name, Amazon Neptune will not create a database in the DB cluster you are creating.</p>
     pub database_name: Option<String>,
+    /// <p>The list of log types that need to be enabled for exporting to CloudWatch Logs.</p>
+    pub enable_cloudwatch_logs_exports: Option<Vec<String>>,
     /// <p>True to enable mapping of AWS Identity and Access Management (IAM) accounts to database accounts, and otherwise false.</p> <p>Default: <code>false</code> </p>
     pub enable_iam_database_authentication: Option<bool>,
     /// <p>The name of the database engine to be used for this DB cluster.</p> <p>Valid Values: <code>neptune</code> </p>
@@ -708,6 +709,13 @@ impl CreateDBClusterMessageSerializer {
         }
         if let Some(ref field_value) = obj.database_name {
             params.put(&format!("{}{}", prefix, "DatabaseName"), &field_value);
+        }
+        if let Some(ref field_value) = obj.enable_cloudwatch_logs_exports {
+            LogTypeListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "EnableCloudwatchLogsExports"),
+                field_value,
+            );
         }
         if let Some(ref field_value) = obj.enable_iam_database_authentication {
             params.put(
@@ -1471,6 +1479,8 @@ pub struct DBCluster {
     pub db_cluster_resource_id: Option<String>,
     /// <p>Specifies the earliest time to which a database can be restored with point-in-time restore.</p>
     pub earliest_restorable_time: Option<String>,
+    /// <p>A list of log types that this DB cluster is configured to export to CloudWatch Logs.</p>
+    pub enabled_cloudwatch_logs_exports: Option<Vec<String>>,
     /// <p>Specifies the connection endpoint for the primary instance of the DB cluster.</p>
     pub endpoint: Option<String>,
     /// <p>Provides the name of the database engine to be used for this DB cluster.</p>
@@ -1602,6 +1612,14 @@ impl DBClusterDeserializer {
                         "EarliestRestorableTime",
                         stack,
                     )?);
+                }
+                "EnabledCloudwatchLogsExports" => {
+                    obj.enabled_cloudwatch_logs_exports
+                        .get_or_insert(vec![])
+                        .extend(LogTypeListDeserializer::deserialize(
+                            "EnabledCloudwatchLogsExports",
+                            stack,
+                        )?);
                 }
                 "Endpoint" => {
                     obj.endpoint = Some(StringDeserializer::deserialize("Endpoint", stack)?);
@@ -5475,6 +5493,8 @@ pub struct ModifyDBClusterMessage {
     pub apply_immediately: Option<bool>,
     /// <p><p>The number of days for which automated backups are retained. You must specify a minimum value of 1.</p> <p>Default: 1</p> <p>Constraints:</p> <ul> <li> <p>Must be a value from 1 to 35</p> </li> </ul></p>
     pub backup_retention_period: Option<i64>,
+    /// <p>The configuration setting for the log types to be enabled for export to CloudWatch Logs for a specific DB cluster.</p>
+    pub cloudwatch_logs_export_configuration: Option<CloudwatchLogsExportConfiguration>,
     /// <p><p>The DB cluster identifier for the cluster being modified. This parameter is not case-sensitive.</p> <p>Constraints:</p> <ul> <li> <p>Must match the identifier of an existing DBCluster.</p> </li> </ul></p>
     pub db_cluster_identifier: String,
     /// <p>The name of the DB cluster parameter group to use for the DB cluster.</p>
@@ -5515,6 +5535,13 @@ impl ModifyDBClusterMessageSerializer {
             params.put(
                 &format!("{}{}", prefix, "BackupRetentionPeriod"),
                 &field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.cloudwatch_logs_export_configuration {
+            CloudwatchLogsExportConfigurationSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "CloudwatchLogsExportConfiguration"),
+                field_value,
             );
         }
         params.put(
@@ -7308,6 +7335,8 @@ pub struct RestoreDBClusterFromSnapshotMessage {
     pub db_subnet_group_name: Option<String>,
     /// <p>Not supported.</p>
     pub database_name: Option<String>,
+    /// <p>The list of logs that the restored DB cluster is to export to Amazon CloudWatch Logs.</p>
+    pub enable_cloudwatch_logs_exports: Option<Vec<String>>,
     /// <p>True to enable mapping of AWS Identity and Access Management (IAM) accounts to database accounts, and otherwise false.</p> <p>Default: <code>false</code> </p>
     pub enable_iam_database_authentication: Option<bool>,
     /// <p>The database engine to use for the new DB cluster.</p> <p>Default: The same as source</p> <p>Constraint: Must be compatible with the engine of the source</p>
@@ -7359,6 +7388,13 @@ impl RestoreDBClusterFromSnapshotMessageSerializer {
         }
         if let Some(ref field_value) = obj.database_name {
             params.put(&format!("{}{}", prefix, "DatabaseName"), &field_value);
+        }
+        if let Some(ref field_value) = obj.enable_cloudwatch_logs_exports {
+            LogTypeListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "EnableCloudwatchLogsExports"),
+                field_value,
+            );
         }
         if let Some(ref field_value) = obj.enable_iam_database_authentication {
             params.put(
@@ -7432,6 +7468,8 @@ pub struct RestoreDBClusterToPointInTimeMessage {
     pub db_cluster_parameter_group_name: Option<String>,
     /// <p>The DB subnet group name to use for the new DB cluster.</p> <p>Constraints: If supplied, must match the name of an existing DBSubnetGroup.</p> <p>Example: <code>mySubnetgroup</code> </p>
     pub db_subnet_group_name: Option<String>,
+    /// <p>The list of logs that the restored DB cluster is to export to CloudWatch Logs.</p>
+    pub enable_cloudwatch_logs_exports: Option<Vec<String>>,
     /// <p>True to enable mapping of AWS Identity and Access Management (IAM) accounts to database accounts, and otherwise false.</p> <p>Default: <code>false</code> </p>
     pub enable_iam_database_authentication: Option<bool>,
     /// <p>The AWS KMS key identifier to use when restoring an encrypted DB cluster from an encrypted DB cluster.</p> <p>The KMS key identifier is the Amazon Resource Name (ARN) for the KMS encryption key. If you are restoring a DB cluster with the same AWS account that owns the KMS encryption key used to encrypt the new DB cluster, then you can use the KMS key alias instead of the ARN for the KMS encryption key.</p> <p>You can restore to a new DB cluster and encrypt the new DB cluster with a KMS key that is different than the KMS key used to encrypt the source DB cluster. The new DB cluster is encrypted with the KMS key identified by the <code>KmsKeyId</code> parameter.</p> <p>If you do not specify a value for the <code>KmsKeyId</code> parameter, then the following will occur:</p> <ul> <li> <p>If the DB cluster is encrypted, then the restored DB cluster is encrypted using the KMS key that was used to encrypt the source DB cluster.</p> </li> <li> <p>If the DB cluster is not encrypted, then the restored DB cluster is not encrypted.</p> </li> </ul> <p>If <code>DBClusterIdentifier</code> refers to a DB cluster that is not encrypted, then the restore request is rejected.</p>
@@ -7442,7 +7480,7 @@ pub struct RestoreDBClusterToPointInTimeMessage {
     pub port: Option<i64>,
     /// <p>The date and time to restore the DB cluster to.</p> <p>Valid Values: Value must be a time in Universal Coordinated Time (UTC) format</p> <p>Constraints:</p> <ul> <li> <p>Must be before the latest restorable time for the DB instance</p> </li> <li> <p>Must be specified if <code>UseLatestRestorableTime</code> parameter is not provided</p> </li> <li> <p>Cannot be specified if <code>UseLatestRestorableTime</code> parameter is true</p> </li> <li> <p>Cannot be specified if <code>RestoreType</code> parameter is <code>copy-on-write</code> </p> </li> </ul> <p>Example: <code>2015-03-07T23:45:00Z</code> </p>
     pub restore_to_time: Option<String>,
-    /// <p>The type of restore to be performed. The only type of restore currently supported is <code>full-copy</code> (the default).</p>
+    /// <p>The type of restore to be performed. You can specify one of the following values:</p> <ul> <li> <p> <code>full-copy</code> - The new DB cluster is restored as a full copy of the source DB cluster.</p> </li> <li> <p> <code>copy-on-write</code> - The new DB cluster is restored as a clone of the source DB cluster.</p> </li> </ul> <p>If you don't specify a <code>RestoreType</code> value, then the new DB cluster is restored as a full copy of the source DB cluster.</p>
     pub restore_type: Option<String>,
     /// <p><p>The identifier of the source DB cluster from which to restore.</p> <p>Constraints:</p> <ul> <li> <p>Must match the identifier of an existing DBCluster.</p> </li> </ul></p>
     pub source_db_cluster_identifier: String,
@@ -7475,6 +7513,13 @@ impl RestoreDBClusterToPointInTimeMessageSerializer {
         }
         if let Some(ref field_value) = obj.db_subnet_group_name {
             params.put(&format!("{}{}", prefix, "DBSubnetGroupName"), &field_value);
+        }
+        if let Some(ref field_value) = obj.enable_cloudwatch_logs_exports {
+            LogTypeListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "EnableCloudwatchLogsExports"),
+                field_value,
+            );
         }
         if let Some(ref field_value) = obj.enable_iam_database_authentication {
             params.put(
@@ -12453,7 +12498,7 @@ pub trait Neptune {
         input: DeleteDBClusterSnapshotMessage,
     ) -> RusotoFuture<DeleteDBClusterSnapshotResult, DeleteDBClusterSnapshotError>;
 
-    /// <p><p>The DeleteDBInstance action deletes a previously provisioned DB instance. When you delete a DB instance, all automated backups for that instance are deleted and can&#39;t be recovered. Manual DB snapshots of the DB instance to be deleted by <code>DeleteDBInstance</code> are not deleted.</p> <p> If you request a final DB snapshot the status of the Amazon Neptune DB instance is <code>deleting</code> until the DB snapshot is created. The API action <code>DescribeDBInstance</code> is used to monitor the status of this operation. The action can&#39;t be canceled or reverted once submitted.</p> <p>Note that when a DB instance is in a failure state and has a status of <code>failed</code>, <code>incompatible-restore</code>, or <code>incompatible-network</code>, you can only delete it when the <code>SkipFinalSnapshot</code> parameter is set to <code>true</code>.</p> <p>If the specified DB instance is part of a DB cluster, you can&#39;t delete the DB instance if both of the following conditions are true:</p> <ul> <li> <p>The DB instance is the only instance in the DB cluster.</p> </li> </ul></p>
+    /// <p>The DeleteDBInstance action deletes a previously provisioned DB instance. When you delete a DB instance, all automated backups for that instance are deleted and can't be recovered. Manual DB snapshots of the DB instance to be deleted by <code>DeleteDBInstance</code> are not deleted.</p> <p> If you request a final DB snapshot the status of the Amazon Neptune DB instance is <code>deleting</code> until the DB snapshot is created. The API action <code>DescribeDBInstance</code> is used to monitor the status of this operation. The action can't be canceled or reverted once submitted.</p> <p>Note that when a DB instance is in a failure state and has a status of <code>failed</code>, <code>incompatible-restore</code>, or <code>incompatible-network</code>, you can only delete it when the <code>SkipFinalSnapshot</code> parameter is set to <code>true</code>.</p> <p>You can't delete a DB instance if it is the only instance in the DB cluster.</p>
     fn delete_db_instance(
         &self,
         input: DeleteDBInstanceMessage,
@@ -12717,10 +12762,7 @@ impl NeptuneClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> NeptuneClient {
-        NeptuneClient {
-            client: Client::shared(),
-            region,
-        }
+        Self::new_with_client(Client::shared(), region)
     }
 
     pub fn new_with<P, D>(
@@ -12734,10 +12776,14 @@ impl NeptuneClient {
         D: DispatchSignedRequest + Send + Sync + 'static,
         D::Future: Send,
     {
-        NeptuneClient {
-            client: Client::new_with(credentials_provider, request_dispatcher),
+        Self::new_with_client(
+            Client::new_with(credentials_provider, request_dispatcher),
             region,
-        }
+        )
+    }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> NeptuneClient {
+        NeptuneClient { client, region }
     }
 }
 
@@ -12802,7 +12848,7 @@ impl Neptune for NeptuneClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -12878,7 +12924,7 @@ impl Neptune for NeptuneClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -12926,7 +12972,7 @@ impl Neptune for NeptuneClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -12974,7 +13020,7 @@ impl Neptune for NeptuneClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -13024,7 +13070,7 @@ impl Neptune for NeptuneClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -13075,7 +13121,7 @@ impl Neptune for NeptuneClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -13123,7 +13169,7 @@ impl Neptune for NeptuneClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -13171,7 +13217,7 @@ impl Neptune for NeptuneClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -13222,7 +13268,7 @@ impl Neptune for NeptuneClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -13270,7 +13316,7 @@ impl Neptune for NeptuneClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -13320,7 +13366,7 @@ impl Neptune for NeptuneClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -13368,7 +13414,7 @@ impl Neptune for NeptuneClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -13419,7 +13465,7 @@ impl Neptune for NeptuneClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -13492,7 +13538,7 @@ impl Neptune for NeptuneClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -13511,7 +13557,7 @@ impl Neptune for NeptuneClient {
         })
     }
 
-    /// <p><p>The DeleteDBInstance action deletes a previously provisioned DB instance. When you delete a DB instance, all automated backups for that instance are deleted and can&#39;t be recovered. Manual DB snapshots of the DB instance to be deleted by <code>DeleteDBInstance</code> are not deleted.</p> <p> If you request a final DB snapshot the status of the Amazon Neptune DB instance is <code>deleting</code> until the DB snapshot is created. The API action <code>DescribeDBInstance</code> is used to monitor the status of this operation. The action can&#39;t be canceled or reverted once submitted.</p> <p>Note that when a DB instance is in a failure state and has a status of <code>failed</code>, <code>incompatible-restore</code>, or <code>incompatible-network</code>, you can only delete it when the <code>SkipFinalSnapshot</code> parameter is set to <code>true</code>.</p> <p>If the specified DB instance is part of a DB cluster, you can&#39;t delete the DB instance if both of the following conditions are true:</p> <ul> <li> <p>The DB instance is the only instance in the DB cluster.</p> </li> </ul></p>
+    /// <p>The DeleteDBInstance action deletes a previously provisioned DB instance. When you delete a DB instance, all automated backups for that instance are deleted and can't be recovered. Manual DB snapshots of the DB instance to be deleted by <code>DeleteDBInstance</code> are not deleted.</p> <p> If you request a final DB snapshot the status of the Amazon Neptune DB instance is <code>deleting</code> until the DB snapshot is created. The API action <code>DescribeDBInstance</code> is used to monitor the status of this operation. The action can't be canceled or reverted once submitted.</p> <p>Note that when a DB instance is in a failure state and has a status of <code>failed</code>, <code>incompatible-restore</code>, or <code>incompatible-network</code>, you can only delete it when the <code>SkipFinalSnapshot</code> parameter is set to <code>true</code>.</p> <p>You can't delete a DB instance if it is the only instance in the DB cluster.</p>
     fn delete_db_instance(
         &self,
         input: DeleteDBInstanceMessage,
@@ -13543,7 +13589,7 @@ impl Neptune for NeptuneClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -13643,7 +13689,7 @@ impl Neptune for NeptuneClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -13693,7 +13739,7 @@ impl Neptune for NeptuneClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -13741,7 +13787,7 @@ impl Neptune for NeptuneClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -13794,7 +13840,7 @@ impl Neptune for NeptuneClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -13842,7 +13888,7 @@ impl Neptune for NeptuneClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -13893,7 +13939,7 @@ impl Neptune for NeptuneClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -13941,7 +13987,7 @@ impl Neptune for NeptuneClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -13991,7 +14037,7 @@ impl Neptune for NeptuneClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -14039,7 +14085,7 @@ impl Neptune for NeptuneClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -14089,7 +14135,7 @@ impl Neptune for NeptuneClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -14137,7 +14183,7 @@ impl Neptune for NeptuneClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -14190,7 +14236,7 @@ impl Neptune for NeptuneClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -14241,7 +14287,7 @@ impl Neptune for NeptuneClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -14289,7 +14335,7 @@ impl Neptune for NeptuneClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -14337,7 +14383,7 @@ impl Neptune for NeptuneClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -14388,7 +14434,7 @@ impl Neptune for NeptuneClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -14437,7 +14483,7 @@ impl Neptune for NeptuneClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -14488,7 +14534,7 @@ impl Neptune for NeptuneClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -14541,7 +14587,7 @@ impl Neptune for NeptuneClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -14592,7 +14638,7 @@ impl Neptune for NeptuneClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -14642,7 +14688,7 @@ impl Neptune for NeptuneClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -14693,7 +14739,7 @@ impl Neptune for NeptuneClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -14741,7 +14787,7 @@ impl Neptune for NeptuneClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -14792,7 +14838,7 @@ impl Neptune for NeptuneClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -14843,7 +14889,7 @@ impl Neptune for NeptuneClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -14891,7 +14937,7 @@ impl Neptune for NeptuneClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -14941,7 +14987,7 @@ impl Neptune for NeptuneClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -14989,7 +15035,7 @@ impl Neptune for NeptuneClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -15037,7 +15083,7 @@ impl Neptune for NeptuneClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -15088,7 +15134,7 @@ impl Neptune for NeptuneClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -15166,7 +15212,7 @@ impl Neptune for NeptuneClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -15239,7 +15285,7 @@ impl Neptune for NeptuneClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -15287,7 +15333,7 @@ impl Neptune for NeptuneClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -15335,7 +15381,7 @@ impl Neptune for NeptuneClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -15383,7 +15429,7 @@ impl Neptune for NeptuneClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();

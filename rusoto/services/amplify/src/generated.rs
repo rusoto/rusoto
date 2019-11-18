@@ -9,17 +9,16 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
+#![allow(warnings)]
 
-use std::error::Error;
-use std::fmt;
-
-#[allow(warnings)]
 use futures::future;
 use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
+use std::error::Error;
+use std::fmt;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
@@ -27,7 +26,7 @@ use rusoto_core::signature::SignedRequest;
 use serde_json;
 /// <p> Amplify App represents different branches of a repository for building, deploying, and hosting. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct App {
     /// <p> ARN for the Amplify App. </p>
     #[serde(rename = "appArn")]
@@ -35,6 +34,14 @@ pub struct App {
     /// <p> Unique Id for the Amplify App. </p>
     #[serde(rename = "appId")]
     pub app_id: String,
+    /// <p> Automated branch creation config for the Amplify App. </p>
+    #[serde(rename = "autoBranchCreationConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auto_branch_creation_config: Option<AutoBranchCreationConfig>,
+    /// <p> Automated branch creation glob patterns for the Amplify App. </p>
+    #[serde(rename = "autoBranchCreationPatterns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auto_branch_creation_patterns: Option<Vec<String>>,
     /// <p> Basic Authorization credentials for branches for the Amplify App. </p>
     #[serde(rename = "basicAuthCredentials")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -56,6 +63,10 @@ pub struct App {
     /// <p> Description for the Amplify App. </p>
     #[serde(rename = "description")]
     pub description: String,
+    /// <p> Enables automated branch creation for the Amplify App. </p>
+    #[serde(rename = "enableAutoBranchCreation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enable_auto_branch_creation: Option<bool>,
     /// <p> Enables Basic Authorization for branches for the Amplify App. </p>
     #[serde(rename = "enableBasicAuth")]
     pub enable_basic_auth: bool,
@@ -91,13 +102,50 @@ pub struct App {
     pub update_time: f64,
 }
 
+/// <p> Structure with auto branch creation config. </p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AutoBranchCreationConfig {
+    /// <p> Basic Authorization credentials for the auto created branch. </p>
+    #[serde(rename = "basicAuthCredentials")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub basic_auth_credentials: Option<String>,
+    /// <p> BuildSpec for the auto created branch. </p>
+    #[serde(rename = "buildSpec")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub build_spec: Option<String>,
+    /// <p> Enables auto building for the auto created branch. </p>
+    #[serde(rename = "enableAutoBuild")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enable_auto_build: Option<bool>,
+    /// <p> Enables Basic Auth for the auto created branch. </p>
+    #[serde(rename = "enableBasicAuth")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enable_basic_auth: Option<bool>,
+    /// <p> Environment Variables for the auto created branch. </p>
+    #[serde(rename = "environmentVariables")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub environment_variables: Option<::std::collections::HashMap<String, String>>,
+    /// <p> Framework for the auto created branch. </p>
+    #[serde(rename = "framework")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub framework: Option<String>,
+    /// <p> Stage for the auto created branch. </p>
+    #[serde(rename = "stage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stage: Option<String>,
+}
+
 /// <p> Branch for an Amplify App, which maps to a 3rd party repository branch. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Branch {
     /// <p> Id of the active job for a branch, part of an Amplify App. </p>
     #[serde(rename = "activeJobId")]
     pub active_job_id: String,
+    /// <p> List of custom resources that are linked to this branch. </p>
+    #[serde(rename = "associatedResources")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub associated_resources: Option<Vec<String>>,
     /// <p> Basic Authorization credentials for a branch, part of an Amplify App. </p>
     #[serde(rename = "basicAuthCredentials")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -121,10 +169,9 @@ pub struct Branch {
     /// <p> Description for a branch, part of an Amplify App. </p>
     #[serde(rename = "description")]
     pub description: String,
-    /// <p> Display name for a branch, part of an Amplify App. </p>
+    /// <p> Display name for a branch, will use as the default domain prefix. </p>
     #[serde(rename = "displayName")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub display_name: Option<String>,
+    pub display_name: String,
     /// <p> Enables auto-building on push for a branch, part of an Amplify App. </p>
     #[serde(rename = "enableAutoBuild")]
     pub enable_auto_build: bool,
@@ -147,7 +194,7 @@ pub struct Branch {
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
-    /// <p> Thumbnail Url for the branch. </p>
+    /// <p> Thumbnail URL for the branch. </p>
     #[serde(rename = "thumbnailUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub thumbnail_url: Option<String>,
@@ -165,6 +212,18 @@ pub struct Branch {
 /// <p> Request structure used to create Apps in Amplify. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateAppRequest {
+    /// <p> Personal Access token for 3rd party source control system for an Amplify App, used to create webhook and read-only deploy key. Token is not stored. </p>
+    #[serde(rename = "accessToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub access_token: Option<String>,
+    /// <p> Automated branch creation config for the Amplify App. </p>
+    #[serde(rename = "autoBranchCreationConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auto_branch_creation_config: Option<AutoBranchCreationConfig>,
+    /// <p> Automated branch creation glob patterns for the Amplify App. </p>
+    #[serde(rename = "autoBranchCreationPatterns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auto_branch_creation_patterns: Option<Vec<String>>,
     /// <p> Credentials for Basic Authorization for an Amplify App. </p>
     #[serde(rename = "basicAuthCredentials")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -181,6 +240,10 @@ pub struct CreateAppRequest {
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// <p> Enables automated branch creation for the Amplify App. </p>
+    #[serde(rename = "enableAutoBranchCreation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enable_auto_branch_creation: Option<bool>,
     /// <p> Enable Basic Authorization for an Amplify App, this will apply to all branches part of this App. </p>
     #[serde(rename = "enableBasicAuth")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -202,13 +265,16 @@ pub struct CreateAppRequest {
     pub name: String,
     /// <p> OAuth token for 3rd party source control system for an Amplify App, used to create webhook and read-only deploy key. OAuth token is not stored. </p>
     #[serde(rename = "oauthToken")]
-    pub oauth_token: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub oauth_token: Option<String>,
     /// <p> Platform / framework for an Amplify App </p>
     #[serde(rename = "platform")]
-    pub platform: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub platform: Option<String>,
     /// <p> Repository for an Amplify App </p>
     #[serde(rename = "repository")]
-    pub repository: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub repository: Option<String>,
     /// <p> Tag for an Amplify App </p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -216,7 +282,7 @@ pub struct CreateAppRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateAppResult {
     #[serde(rename = "app")]
     pub app: App,
@@ -243,6 +309,10 @@ pub struct CreateBranchRequest {
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// <p> Display name for a branch, will use as the default domain prefix. </p>
+    #[serde(rename = "displayName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub display_name: Option<String>,
     /// <p> Enables auto building for the branch. </p>
     #[serde(rename = "enableAutoBuild")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -279,11 +349,42 @@ pub struct CreateBranchRequest {
 
 /// <p> Result structure for create branch request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateBranchResult {
     /// <p> Branch structure for an Amplify App. </p>
     #[serde(rename = "branch")]
     pub branch: Branch,
+}
+
+/// <p> Request structure for create a new deployment. </p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CreateDeploymentRequest {
+    /// <p> Unique Id for an Amplify App. </p>
+    #[serde(rename = "appId")]
+    pub app_id: String,
+    /// <p> Name for the branch, for the Job. </p>
+    #[serde(rename = "branchName")]
+    pub branch_name: String,
+    /// <p> Optional file map that contains file name as the key and file content md5 hash as the value. If this argument is provided, the service will generate different upload url per file. Otherwise, the service will only generate a single upload url for the zipped files. </p>
+    #[serde(rename = "fileMap")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file_map: Option<::std::collections::HashMap<String, String>>,
+}
+
+/// <p> Result structure for create a new deployment. </p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateDeploymentResult {
+    /// <p> When the fileMap argument is provided in the request, the fileUploadUrls will contain a map of file names to upload url. </p>
+    #[serde(rename = "fileUploadUrls")]
+    pub file_upload_urls: ::std::collections::HashMap<String, String>,
+    /// <p> The jobId for this deployment, will supply to start deployment api. </p>
+    #[serde(rename = "jobId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_id: Option<String>,
+    /// <p> When the fileMap argument is NOT provided. This zipUploadUrl will be returned. </p>
+    #[serde(rename = "zipUploadUrl")]
+    pub zip_upload_url: String,
 }
 
 /// <p> Request structure for create Domain Association request. </p>
@@ -306,11 +407,35 @@ pub struct CreateDomainAssociationRequest {
 
 /// <p> Result structure for the create Domain Association request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDomainAssociationResult {
     /// <p> Domain Association structure. </p>
     #[serde(rename = "domainAssociation")]
     pub domain_association: DomainAssociation,
+}
+
+/// <p> Request structure for create webhook request. </p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CreateWebhookRequest {
+    /// <p> Unique Id for an Amplify App. </p>
+    #[serde(rename = "appId")]
+    pub app_id: String,
+    /// <p> Name for a branch, part of an Amplify App. </p>
+    #[serde(rename = "branchName")]
+    pub branch_name: String,
+    /// <p> Description for a webhook. </p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+}
+
+/// <p> Result structure for the create webhook request. </p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateWebhookResult {
+    /// <p> Webhook structure. </p>
+    #[serde(rename = "webhook")]
+    pub webhook: Webhook,
 }
 
 /// <p> Custom rewrite / redirect rule. </p>
@@ -342,7 +467,7 @@ pub struct DeleteAppRequest {
 
 /// <p> Result structure for an Amplify App delete request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteAppResult {
     #[serde(rename = "app")]
     pub app: App,
@@ -361,7 +486,7 @@ pub struct DeleteBranchRequest {
 
 /// <p> Result structure for delete branch request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteBranchResult {
     /// <p> Branch structure for an Amplify App. </p>
     #[serde(rename = "branch")]
@@ -380,7 +505,7 @@ pub struct DeleteDomainAssociationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDomainAssociationResult {
     #[serde(rename = "domainAssociation")]
     pub domain_association: DomainAssociation,
@@ -402,19 +527,37 @@ pub struct DeleteJobRequest {
 
 /// <p> Result structure for the delete job request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteJobResult {
     #[serde(rename = "jobSummary")]
     pub job_summary: JobSummary,
 }
 
+/// <p> Request structure for the delete webhook request. </p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DeleteWebhookRequest {
+    /// <p> Unique Id for a webhook. </p>
+    #[serde(rename = "webhookId")]
+    pub webhook_id: String,
+}
+
+/// <p> Result structure for the delete webhook request. </p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteWebhookResult {
+    /// <p> Webhook structure. </p>
+    #[serde(rename = "webhook")]
+    pub webhook: Webhook,
+}
+
 /// <p> Structure for Domain Association, which associates a custom domain with an Amplify App. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DomainAssociation {
     /// <p> DNS Record for certificate verification. </p>
     #[serde(rename = "certificateVerificationDNSRecord")]
-    pub certificate_verification_dns_record: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub certificate_verification_dns_record: Option<String>,
     /// <p> ARN for the Domain Association. </p>
     #[serde(rename = "domainAssociationArn")]
     pub domain_association_arn: String,
@@ -444,7 +587,7 @@ pub struct GetAppRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAppResult {
     #[serde(rename = "app")]
     pub app: App,
@@ -462,7 +605,7 @@ pub struct GetBranchRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetBranchResult {
     #[serde(rename = "branch")]
     pub branch: Branch,
@@ -481,7 +624,7 @@ pub struct GetDomainAssociationRequest {
 
 /// <p> Result structure for the get Domain Association request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDomainAssociationResult {
     /// <p> Domain Association structure. </p>
     #[serde(rename = "domainAssociation")]
@@ -503,15 +646,32 @@ pub struct GetJobRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetJobResult {
     #[serde(rename = "job")]
     pub job: Job,
 }
 
+/// <p> Request structure for the get webhook request. </p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetWebhookRequest {
+    /// <p> Unique Id for a webhook. </p>
+    #[serde(rename = "webhookId")]
+    pub webhook_id: String,
+}
+
+/// <p> Result structure for the get webhook request. </p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetWebhookResult {
+    /// <p> Webhook structure. </p>
+    #[serde(rename = "webhook")]
+    pub webhook: Webhook,
+}
+
 /// <p> Structure for an execution job for an Amplify App. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Job {
     /// <p> Execution steps for an execution job, for an Amplify App. </p>
     #[serde(rename = "steps")]
@@ -523,7 +683,7 @@ pub struct Job {
 
 /// <p> Structure for the summary of a Job. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct JobSummary {
     /// <p> Commit Id from 3rd party repository provider for the Job. </p>
     #[serde(rename = "commitId")]
@@ -544,7 +704,7 @@ pub struct JobSummary {
     /// <p> Unique Id for the Job. </p>
     #[serde(rename = "jobId")]
     pub job_id: String,
-    /// <p> Type for the Job. </p>
+    /// <p> Type for the Job. \n "RELEASE": Manually released from source by using StartJob API. "RETRY": Manually retried by using StartJob API. "WEB_HOOK": Automatically triggered by WebHooks. </p>
     #[serde(rename = "jobType")]
     pub job_type: String,
     /// <p> Start date / time for the Job. </p>
@@ -570,7 +730,7 @@ pub struct ListAppsRequest {
 
 /// <p> Result structure for an Amplify App list request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAppsResult {
     /// <p> List of Amplify Apps. </p>
     #[serde(rename = "apps")]
@@ -599,7 +759,7 @@ pub struct ListBranchesRequest {
 
 /// <p> Result structure for list branches request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListBranchesResult {
     /// <p> List of branches for an Amplify App. </p>
     #[serde(rename = "branches")]
@@ -628,7 +788,7 @@ pub struct ListDomainAssociationsRequest {
 
 /// <p> Result structure for the list Domain Association request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDomainAssociationsResult {
     /// <p> List of Domain Associations. </p>
     #[serde(rename = "domainAssociations")]
@@ -660,7 +820,7 @@ pub struct ListJobsRequest {
 
 /// <p> Maximum number of records to list in a single response. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListJobsResult {
     /// <p> Result structure for list job result request. </p>
     #[serde(rename = "jobSummaries")]
@@ -671,9 +831,56 @@ pub struct ListJobsResult {
     pub next_token: Option<String>,
 }
 
+/// <p> Request structure used to list tags for resource. </p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListTagsForResourceRequest {
+    /// <p> Resource arn used to list tags. </p>
+    #[serde(rename = "resourceArn")]
+    pub resource_arn: String,
+}
+
+/// <p> Response for list tags. </p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListTagsForResourceResponse {
+    /// <p> Tags result for response. </p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
+/// <p> Request structure for the list webhooks request. </p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListWebhooksRequest {
+    /// <p> Unique Id for an Amplify App. </p>
+    #[serde(rename = "appId")]
+    pub app_id: String,
+    /// <p> Maximum number of records to list in a single response. </p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p> Pagination token. Set to null to start listing webhooks from start. If non-null pagination token is returned in a result, then pass its value in here to list more webhooks. </p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+/// <p> Result structure for the list webhooks request. </p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListWebhooksResult {
+    /// <p> Pagination token. If non-null pagination token is returned in a result, then pass its value in another request to fetch more entries. </p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p> List of webhooks. </p>
+    #[serde(rename = "webhooks")]
+    pub webhooks: Vec<Webhook>,
+}
+
 /// <p> Structure with Production Branch information. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ProductionBranch {
     /// <p> Branch Name for Production Branch. </p>
     #[serde(rename = "branchName")]
@@ -687,10 +894,38 @@ pub struct ProductionBranch {
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    /// <p> Thumbnail Url for Production Branch. </p>
+    /// <p> Thumbnail URL for Production Branch. </p>
     #[serde(rename = "thumbnailUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub thumbnail_url: Option<String>,
+}
+
+/// <p> Request structure for start a deployment. </p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct StartDeploymentRequest {
+    /// <p> Unique Id for an Amplify App. </p>
+    #[serde(rename = "appId")]
+    pub app_id: String,
+    /// <p> Name for the branch, for the Job. </p>
+    #[serde(rename = "branchName")]
+    pub branch_name: String,
+    /// <p> The job id for this deployment, generated by create deployment request. </p>
+    #[serde(rename = "jobId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_id: Option<String>,
+    /// <p> The sourceUrl for this deployment, used when calling start deployment without create deployment. SourceUrl can be any HTTP GET url that is public accessible and downloads a single zip. </p>
+    #[serde(rename = "sourceUrl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_url: Option<String>,
+}
+
+/// <p> Result structure for start a deployment. </p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct StartDeploymentResult {
+    /// <p> Summary for the Job. </p>
+    #[serde(rename = "jobSummary")]
+    pub job_summary: JobSummary,
 }
 
 /// <p> Request structure for Start job request. </p>
@@ -714,22 +949,22 @@ pub struct StartJobRequest {
     #[serde(rename = "commitTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub commit_time: Option<f64>,
-    /// <p> Unique Id for the Job. </p>
+    /// <p> Unique Id for an existing job. Required for "RETRY" JobType. </p>
     #[serde(rename = "jobId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_id: Option<String>,
-    /// <p> Reason for the Job. </p>
+    /// <p> Descriptive reason for starting this job. </p>
     #[serde(rename = "jobReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_reason: Option<String>,
-    /// <p> Type for the Job. </p>
+    /// <p> Type for the Job. Available JobTypes are: \n "RELEASE": Start a new job with the latest change from the specified branch. Only available for apps that have connected to a repository. "RETRY": Retry an existing job. JobId is required for this type of job. </p>
     #[serde(rename = "jobType")]
     pub job_type: String,
 }
 
 /// <p> Result structure for run job request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartJobResult {
     /// <p> Summary for the Job. </p>
     #[serde(rename = "jobSummary")]
@@ -738,20 +973,24 @@ pub struct StartJobResult {
 
 /// <p> Structure for an execution step for an execution job, for an Amplify App. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Step {
-    /// <p> Url to teh artifact for the execution step. </p>
+    /// <p> URL to the artifact for the execution step. </p>
     #[serde(rename = "artifactsUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub artifacts_url: Option<String>,
+    /// <p> The context for current step, will include build image if step is build. </p>
+    #[serde(rename = "context")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub context: Option<String>,
     /// <p> End date/ time of the execution step. </p>
     #[serde(rename = "endTime")]
     pub end_time: f64,
-    /// <p> Url to the logs for the execution step. </p>
+    /// <p> URL to the logs for the execution step. </p>
     #[serde(rename = "logUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub log_url: Option<String>,
-    /// <p> List of screenshot Urls for the execution step, if relevant. </p>
+    /// <p> List of screenshot URLs for the execution step, if relevant. </p>
     #[serde(rename = "screenshots")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub screenshots: Option<::std::collections::HashMap<String, String>>,
@@ -761,6 +1000,10 @@ pub struct Step {
     /// <p> Status of the execution step. </p>
     #[serde(rename = "status")]
     pub status: String,
+    /// <p> The reason for current step status. </p>
+    #[serde(rename = "statusReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status_reason: Option<String>,
     /// <p> Name of the execution step. </p>
     #[serde(rename = "stepName")]
     pub step_name: String,
@@ -782,7 +1025,7 @@ pub struct StopJobRequest {
 
 /// <p> Result structure for the stop job request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopJobResult {
     /// <p> Summary for the Job. </p>
     #[serde(rename = "jobSummary")]
@@ -791,7 +1034,7 @@ pub struct StopJobResult {
 
 /// <p> Subdomain for the Domain Association. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SubDomain {
     /// <p> DNS record for the Subdomain. </p>
     #[serde(rename = "dnsRecord")]
@@ -815,12 +1058,52 @@ pub struct SubDomainSetting {
     pub prefix: String,
 }
 
+/// <p> Request structure used to tag resource. </p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct TagResourceRequest {
+    /// <p> Resource arn used to tag resource. </p>
+    #[serde(rename = "resourceArn")]
+    pub resource_arn: String,
+    /// <p> Tags used to tag resource. </p>
+    #[serde(rename = "tags")]
+    pub tags: ::std::collections::HashMap<String, String>,
+}
+
+/// <p> Response for tag resource. </p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct TagResourceResponse {}
+
+/// <p> Request structure used to untag resource. </p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UntagResourceRequest {
+    /// <p> Resource arn used to untag resource. </p>
+    #[serde(rename = "resourceArn")]
+    pub resource_arn: String,
+    /// <p> Tag keys used to untag resource. </p>
+    #[serde(rename = "tagKeys")]
+    pub tag_keys: Vec<String>,
+}
+
+/// <p> Response for untag resource. </p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UntagResourceResponse {}
+
 /// <p> Request structure for update App request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateAppRequest {
     /// <p> Unique Id for an Amplify App. </p>
     #[serde(rename = "appId")]
     pub app_id: String,
+    /// <p> Automated branch creation config for the Amplify App. </p>
+    #[serde(rename = "autoBranchCreationConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auto_branch_creation_config: Option<AutoBranchCreationConfig>,
+    /// <p> Automated branch creation glob patterns for the Amplify App. </p>
+    #[serde(rename = "autoBranchCreationPatterns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auto_branch_creation_patterns: Option<Vec<String>>,
     /// <p> Basic Authorization credentials for an Amplify App. </p>
     #[serde(rename = "basicAuthCredentials")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -837,6 +1120,10 @@ pub struct UpdateAppRequest {
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// <p> Enables automated branch creation for the Amplify App. </p>
+    #[serde(rename = "enableAutoBranchCreation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enable_auto_branch_creation: Option<bool>,
     /// <p> Enables Basic Authorization for an Amplify App. </p>
     #[serde(rename = "enableBasicAuth")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -865,7 +1152,7 @@ pub struct UpdateAppRequest {
 
 /// <p> Result structure for an Amplify App update request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateAppResult {
     /// <p> App structure for the updated App. </p>
     #[serde(rename = "app")]
@@ -893,6 +1180,10 @@ pub struct UpdateBranchRequest {
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// <p> Display name for a branch, will use as the default domain prefix. </p>
+    #[serde(rename = "displayName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub display_name: Option<String>,
     /// <p> Enables auto building for the branch. </p>
     #[serde(rename = "enableAutoBuild")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -925,7 +1216,7 @@ pub struct UpdateBranchRequest {
 
 /// <p> Result structure for update branch request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateBranchResult {
     /// <p> Branch structure for an Amplify App. </p>
     #[serde(rename = "branch")]
@@ -952,11 +1243,63 @@ pub struct UpdateDomainAssociationRequest {
 
 /// <p> Result structure for the update Domain Association request. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDomainAssociationResult {
     /// <p> Domain Association structure. </p>
     #[serde(rename = "domainAssociation")]
     pub domain_association: DomainAssociation,
+}
+
+/// <p> Request structure for update webhook request. </p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UpdateWebhookRequest {
+    /// <p> Name for a branch, part of an Amplify App. </p>
+    #[serde(rename = "branchName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub branch_name: Option<String>,
+    /// <p> Description for a webhook. </p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p> Unique Id for a webhook. </p>
+    #[serde(rename = "webhookId")]
+    pub webhook_id: String,
+}
+
+/// <p> Result structure for the update webhook request. </p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateWebhookResult {
+    /// <p> Webhook structure. </p>
+    #[serde(rename = "webhook")]
+    pub webhook: Webhook,
+}
+
+/// <p> Structure for webhook, which associates a webhook with an Amplify App. </p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct Webhook {
+    /// <p> Name for a branch, part of an Amplify App. </p>
+    #[serde(rename = "branchName")]
+    pub branch_name: String,
+    /// <p> Create date / time for a webhook. </p>
+    #[serde(rename = "createTime")]
+    pub create_time: f64,
+    /// <p> Description for a webhook. </p>
+    #[serde(rename = "description")]
+    pub description: String,
+    /// <p> Update date / time for a webhook. </p>
+    #[serde(rename = "updateTime")]
+    pub update_time: f64,
+    /// <p> ARN for the webhook. </p>
+    #[serde(rename = "webhookArn")]
+    pub webhook_arn: String,
+    /// <p> Id of the webhook. </p>
+    #[serde(rename = "webhookId")]
+    pub webhook_id: String,
+    /// <p> Url of the webhook. </p>
+    #[serde(rename = "webhookUrl")]
+    pub webhook_url: String,
 }
 
 /// Errors returned by CreateApp
@@ -1081,6 +1424,57 @@ impl Error for CreateBranchError {
         }
     }
 }
+/// Errors returned by CreateDeployment
+#[derive(Debug, PartialEq)]
+pub enum CreateDeploymentError {
+    /// <p> Exception thrown when a request contains unexpected data. </p>
+    BadRequest(String),
+    /// <p> Exception thrown when the service fails to perform an operation due to an internal issue. </p>
+    InternalFailure(String),
+    /// <p> Exception thrown when a resource could not be created because of service limits. </p>
+    LimitExceeded(String),
+    /// <p> Exception thrown when an operation fails due to a lack of access. </p>
+    Unauthorized(String),
+}
+
+impl CreateDeploymentError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDeploymentError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(CreateDeploymentError::BadRequest(err.msg))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(CreateDeploymentError::InternalFailure(err.msg))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(CreateDeploymentError::LimitExceeded(err.msg))
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(CreateDeploymentError::Unauthorized(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for CreateDeploymentError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateDeploymentError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateDeploymentError::BadRequest(ref cause) => cause,
+            CreateDeploymentError::InternalFailure(ref cause) => cause,
+            CreateDeploymentError::LimitExceeded(ref cause) => cause,
+            CreateDeploymentError::Unauthorized(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by CreateDomainAssociation
 #[derive(Debug, PartialEq)]
 pub enum CreateDomainAssociationError {
@@ -1149,6 +1543,71 @@ impl Error for CreateDomainAssociationError {
             CreateDomainAssociationError::LimitExceeded(ref cause) => cause,
             CreateDomainAssociationError::NotFound(ref cause) => cause,
             CreateDomainAssociationError::Unauthorized(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by CreateWebhook
+#[derive(Debug, PartialEq)]
+pub enum CreateWebhookError {
+    /// <p> Exception thrown when a request contains unexpected data. </p>
+    BadRequest(String),
+    /// <p> Exception thrown when an operation fails due to a dependent service throwing an exception. </p>
+    DependentServiceFailure(String),
+    /// <p> Exception thrown when the service fails to perform an operation due to an internal issue. </p>
+    InternalFailure(String),
+    /// <p> Exception thrown when a resource could not be created because of service limits. </p>
+    LimitExceeded(String),
+    /// <p> Exception thrown when an entity has not been found during an operation. </p>
+    NotFound(String),
+    /// <p> Exception thrown when an operation fails due to a lack of access. </p>
+    Unauthorized(String),
+}
+
+impl CreateWebhookError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateWebhookError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(CreateWebhookError::BadRequest(err.msg))
+                }
+                "DependentServiceFailureException" => {
+                    return RusotoError::Service(CreateWebhookError::DependentServiceFailure(
+                        err.msg,
+                    ))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(CreateWebhookError::InternalFailure(err.msg))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(CreateWebhookError::LimitExceeded(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(CreateWebhookError::NotFound(err.msg))
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(CreateWebhookError::Unauthorized(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for CreateWebhookError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateWebhookError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateWebhookError::BadRequest(ref cause) => cause,
+            CreateWebhookError::DependentServiceFailure(ref cause) => cause,
+            CreateWebhookError::InternalFailure(ref cause) => cause,
+            CreateWebhookError::LimitExceeded(ref cause) => cause,
+            CreateWebhookError::NotFound(ref cause) => cause,
+            CreateWebhookError::Unauthorized(ref cause) => cause,
         }
     }
 }
@@ -1388,6 +1847,63 @@ impl Error for DeleteJobError {
         }
     }
 }
+/// Errors returned by DeleteWebhook
+#[derive(Debug, PartialEq)]
+pub enum DeleteWebhookError {
+    /// <p> Exception thrown when a request contains unexpected data. </p>
+    BadRequest(String),
+    /// <p> Exception thrown when the service fails to perform an operation due to an internal issue. </p>
+    InternalFailure(String),
+    /// <p> Exception thrown when a resource could not be created because of service limits. </p>
+    LimitExceeded(String),
+    /// <p> Exception thrown when an entity has not been found during an operation. </p>
+    NotFound(String),
+    /// <p> Exception thrown when an operation fails due to a lack of access. </p>
+    Unauthorized(String),
+}
+
+impl DeleteWebhookError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteWebhookError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(DeleteWebhookError::BadRequest(err.msg))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(DeleteWebhookError::InternalFailure(err.msg))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(DeleteWebhookError::LimitExceeded(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(DeleteWebhookError::NotFound(err.msg))
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(DeleteWebhookError::Unauthorized(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DeleteWebhookError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteWebhookError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteWebhookError::BadRequest(ref cause) => cause,
+            DeleteWebhookError::InternalFailure(ref cause) => cause,
+            DeleteWebhookError::LimitExceeded(ref cause) => cause,
+            DeleteWebhookError::NotFound(ref cause) => cause,
+            DeleteWebhookError::Unauthorized(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by GetApp
 #[derive(Debug, PartialEq)]
 pub enum GetAppError {
@@ -1596,6 +2112,63 @@ impl Error for GetJobError {
         }
     }
 }
+/// Errors returned by GetWebhook
+#[derive(Debug, PartialEq)]
+pub enum GetWebhookError {
+    /// <p> Exception thrown when a request contains unexpected data. </p>
+    BadRequest(String),
+    /// <p> Exception thrown when the service fails to perform an operation due to an internal issue. </p>
+    InternalFailure(String),
+    /// <p> Exception thrown when a resource could not be created because of service limits. </p>
+    LimitExceeded(String),
+    /// <p> Exception thrown when an entity has not been found during an operation. </p>
+    NotFound(String),
+    /// <p> Exception thrown when an operation fails due to a lack of access. </p>
+    Unauthorized(String),
+}
+
+impl GetWebhookError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetWebhookError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(GetWebhookError::BadRequest(err.msg))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(GetWebhookError::InternalFailure(err.msg))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(GetWebhookError::LimitExceeded(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(GetWebhookError::NotFound(err.msg))
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(GetWebhookError::Unauthorized(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for GetWebhookError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetWebhookError {
+    fn description(&self) -> &str {
+        match *self {
+            GetWebhookError::BadRequest(ref cause) => cause,
+            GetWebhookError::InternalFailure(ref cause) => cause,
+            GetWebhookError::LimitExceeded(ref cause) => cause,
+            GetWebhookError::NotFound(ref cause) => cause,
+            GetWebhookError::Unauthorized(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by ListApps
 #[derive(Debug, PartialEq)]
 pub enum ListAppsError {
@@ -1784,6 +2357,161 @@ impl Error for ListJobsError {
         }
     }
 }
+/// Errors returned by ListTagsForResource
+#[derive(Debug, PartialEq)]
+pub enum ListTagsForResourceError {
+    /// <p> Exception thrown when a request contains unexpected data. </p>
+    BadRequest(String),
+    /// <p> Exception thrown when the service fails to perform an operation due to an internal issue. </p>
+    InternalFailure(String),
+    /// <p> Exception thrown when an operation fails due to non-existent resource. </p>
+    ResourceNotFound(String),
+}
+
+impl ListTagsForResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(ListTagsForResourceError::BadRequest(err.msg))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(ListTagsForResourceError::InternalFailure(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(ListTagsForResourceError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ListTagsForResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListTagsForResourceError {
+    fn description(&self) -> &str {
+        match *self {
+            ListTagsForResourceError::BadRequest(ref cause) => cause,
+            ListTagsForResourceError::InternalFailure(ref cause) => cause,
+            ListTagsForResourceError::ResourceNotFound(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by ListWebhooks
+#[derive(Debug, PartialEq)]
+pub enum ListWebhooksError {
+    /// <p> Exception thrown when a request contains unexpected data. </p>
+    BadRequest(String),
+    /// <p> Exception thrown when the service fails to perform an operation due to an internal issue. </p>
+    InternalFailure(String),
+    /// <p> Exception thrown when a resource could not be created because of service limits. </p>
+    LimitExceeded(String),
+    /// <p> Exception thrown when an operation fails due to a lack of access. </p>
+    Unauthorized(String),
+}
+
+impl ListWebhooksError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListWebhooksError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(ListWebhooksError::BadRequest(err.msg))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(ListWebhooksError::InternalFailure(err.msg))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(ListWebhooksError::LimitExceeded(err.msg))
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(ListWebhooksError::Unauthorized(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ListWebhooksError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListWebhooksError {
+    fn description(&self) -> &str {
+        match *self {
+            ListWebhooksError::BadRequest(ref cause) => cause,
+            ListWebhooksError::InternalFailure(ref cause) => cause,
+            ListWebhooksError::LimitExceeded(ref cause) => cause,
+            ListWebhooksError::Unauthorized(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by StartDeployment
+#[derive(Debug, PartialEq)]
+pub enum StartDeploymentError {
+    /// <p> Exception thrown when a request contains unexpected data. </p>
+    BadRequest(String),
+    /// <p> Exception thrown when the service fails to perform an operation due to an internal issue. </p>
+    InternalFailure(String),
+    /// <p> Exception thrown when a resource could not be created because of service limits. </p>
+    LimitExceeded(String),
+    /// <p> Exception thrown when an entity has not been found during an operation. </p>
+    NotFound(String),
+    /// <p> Exception thrown when an operation fails due to a lack of access. </p>
+    Unauthorized(String),
+}
+
+impl StartDeploymentError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartDeploymentError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(StartDeploymentError::BadRequest(err.msg))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(StartDeploymentError::InternalFailure(err.msg))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(StartDeploymentError::LimitExceeded(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(StartDeploymentError::NotFound(err.msg))
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(StartDeploymentError::Unauthorized(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for StartDeploymentError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for StartDeploymentError {
+    fn description(&self) -> &str {
+        match *self {
+            StartDeploymentError::BadRequest(ref cause) => cause,
+            StartDeploymentError::InternalFailure(ref cause) => cause,
+            StartDeploymentError::LimitExceeded(ref cause) => cause,
+            StartDeploymentError::NotFound(ref cause) => cause,
+            StartDeploymentError::Unauthorized(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by StartJob
 #[derive(Debug, PartialEq)]
 pub enum StartJobError {
@@ -1895,6 +2623,96 @@ impl Error for StopJobError {
             StopJobError::LimitExceeded(ref cause) => cause,
             StopJobError::NotFound(ref cause) => cause,
             StopJobError::Unauthorized(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by TagResource
+#[derive(Debug, PartialEq)]
+pub enum TagResourceError {
+    /// <p> Exception thrown when a request contains unexpected data. </p>
+    BadRequest(String),
+    /// <p> Exception thrown when the service fails to perform an operation due to an internal issue. </p>
+    InternalFailure(String),
+    /// <p> Exception thrown when an operation fails due to non-existent resource. </p>
+    ResourceNotFound(String),
+}
+
+impl TagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(TagResourceError::BadRequest(err.msg))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(TagResourceError::InternalFailure(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(TagResourceError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for TagResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for TagResourceError {
+    fn description(&self) -> &str {
+        match *self {
+            TagResourceError::BadRequest(ref cause) => cause,
+            TagResourceError::InternalFailure(ref cause) => cause,
+            TagResourceError::ResourceNotFound(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by UntagResource
+#[derive(Debug, PartialEq)]
+pub enum UntagResourceError {
+    /// <p> Exception thrown when a request contains unexpected data. </p>
+    BadRequest(String),
+    /// <p> Exception thrown when the service fails to perform an operation due to an internal issue. </p>
+    InternalFailure(String),
+    /// <p> Exception thrown when an operation fails due to non-existent resource. </p>
+    ResourceNotFound(String),
+}
+
+impl UntagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(UntagResourceError::BadRequest(err.msg))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(UntagResourceError::InternalFailure(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(UntagResourceError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for UntagResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UntagResourceError {
+    fn description(&self) -> &str {
+        match *self {
+            UntagResourceError::BadRequest(ref cause) => cause,
+            UntagResourceError::InternalFailure(ref cause) => cause,
+            UntagResourceError::ResourceNotFound(ref cause) => cause,
         }
     }
 }
@@ -2071,6 +2889,65 @@ impl Error for UpdateDomainAssociationError {
         }
     }
 }
+/// Errors returned by UpdateWebhook
+#[derive(Debug, PartialEq)]
+pub enum UpdateWebhookError {
+    /// <p> Exception thrown when a request contains unexpected data. </p>
+    BadRequest(String),
+    /// <p> Exception thrown when an operation fails due to a dependent service throwing an exception. </p>
+    DependentServiceFailure(String),
+    /// <p> Exception thrown when the service fails to perform an operation due to an internal issue. </p>
+    InternalFailure(String),
+    /// <p> Exception thrown when an entity has not been found during an operation. </p>
+    NotFound(String),
+    /// <p> Exception thrown when an operation fails due to a lack of access. </p>
+    Unauthorized(String),
+}
+
+impl UpdateWebhookError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateWebhookError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(UpdateWebhookError::BadRequest(err.msg))
+                }
+                "DependentServiceFailureException" => {
+                    return RusotoError::Service(UpdateWebhookError::DependentServiceFailure(
+                        err.msg,
+                    ))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(UpdateWebhookError::InternalFailure(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(UpdateWebhookError::NotFound(err.msg))
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(UpdateWebhookError::Unauthorized(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for UpdateWebhookError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateWebhookError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateWebhookError::BadRequest(ref cause) => cause,
+            UpdateWebhookError::DependentServiceFailure(ref cause) => cause,
+            UpdateWebhookError::InternalFailure(ref cause) => cause,
+            UpdateWebhookError::NotFound(ref cause) => cause,
+            UpdateWebhookError::Unauthorized(ref cause) => cause,
+        }
+    }
+}
 /// Trait representing the capabilities of the Amplify API. Amplify clients implement this trait.
 pub trait Amplify {
     /// <p> Creates a new Amplify App. </p>
@@ -2082,11 +2959,23 @@ pub trait Amplify {
         input: CreateBranchRequest,
     ) -> RusotoFuture<CreateBranchResult, CreateBranchError>;
 
+    /// <p> Create a deployment for manual deploy apps. (Apps are not connected to repository) </p>
+    fn create_deployment(
+        &self,
+        input: CreateDeploymentRequest,
+    ) -> RusotoFuture<CreateDeploymentResult, CreateDeploymentError>;
+
     /// <p> Create a new DomainAssociation on an App </p>
     fn create_domain_association(
         &self,
         input: CreateDomainAssociationRequest,
     ) -> RusotoFuture<CreateDomainAssociationResult, CreateDomainAssociationError>;
+
+    /// <p> Create a new webhook on an App. </p>
+    fn create_webhook(
+        &self,
+        input: CreateWebhookRequest,
+    ) -> RusotoFuture<CreateWebhookResult, CreateWebhookError>;
 
     /// <p> Delete an existing Amplify App by appId. </p>
     fn delete_app(&self, input: DeleteAppRequest) -> RusotoFuture<DeleteAppResult, DeleteAppError>;
@@ -2106,6 +2995,12 @@ pub trait Amplify {
     /// <p> Delete a job, for an Amplify branch, part of Amplify App. </p>
     fn delete_job(&self, input: DeleteJobRequest) -> RusotoFuture<DeleteJobResult, DeleteJobError>;
 
+    /// <p> Deletes a webhook. </p>
+    fn delete_webhook(
+        &self,
+        input: DeleteWebhookRequest,
+    ) -> RusotoFuture<DeleteWebhookResult, DeleteWebhookError>;
+
     /// <p> Retrieves an existing Amplify App by appId. </p>
     fn get_app(&self, input: GetAppRequest) -> RusotoFuture<GetAppResult, GetAppError>;
 
@@ -2120,6 +3015,12 @@ pub trait Amplify {
 
     /// <p> Get a job for a branch, part of an Amplify App. </p>
     fn get_job(&self, input: GetJobRequest) -> RusotoFuture<GetJobResult, GetJobError>;
+
+    /// <p> Retrieves webhook info that corresponds to a webhookId. </p>
+    fn get_webhook(
+        &self,
+        input: GetWebhookRequest,
+    ) -> RusotoFuture<GetWebhookResult, GetWebhookError>;
 
     /// <p> Lists existing Amplify Apps. </p>
     fn list_apps(&self, input: ListAppsRequest) -> RusotoFuture<ListAppsResult, ListAppsError>;
@@ -2139,11 +3040,41 @@ pub trait Amplify {
     /// <p> List Jobs for a branch, part of an Amplify App. </p>
     fn list_jobs(&self, input: ListJobsRequest) -> RusotoFuture<ListJobsResult, ListJobsError>;
 
+    /// <p> List tags for resource. </p>
+    fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError>;
+
+    /// <p> List webhooks with an app. </p>
+    fn list_webhooks(
+        &self,
+        input: ListWebhooksRequest,
+    ) -> RusotoFuture<ListWebhooksResult, ListWebhooksError>;
+
+    /// <p> Start a deployment for manual deploy apps. (Apps are not connected to repository) </p>
+    fn start_deployment(
+        &self,
+        input: StartDeploymentRequest,
+    ) -> RusotoFuture<StartDeploymentResult, StartDeploymentError>;
+
     /// <p> Starts a new job for a branch, part of an Amplify App. </p>
     fn start_job(&self, input: StartJobRequest) -> RusotoFuture<StartJobResult, StartJobError>;
 
     /// <p> Stop a job that is in progress, for an Amplify branch, part of Amplify App. </p>
     fn stop_job(&self, input: StopJobRequest) -> RusotoFuture<StopJobResult, StopJobError>;
+
+    /// <p> Tag resource with tag key and value. </p>
+    fn tag_resource(
+        &self,
+        input: TagResourceRequest,
+    ) -> RusotoFuture<TagResourceResponse, TagResourceError>;
+
+    /// <p> Untag resource with resourceArn. </p>
+    fn untag_resource(
+        &self,
+        input: UntagResourceRequest,
+    ) -> RusotoFuture<UntagResourceResponse, UntagResourceError>;
 
     /// <p> Updates an existing Amplify App. </p>
     fn update_app(&self, input: UpdateAppRequest) -> RusotoFuture<UpdateAppResult, UpdateAppError>;
@@ -2159,6 +3090,12 @@ pub trait Amplify {
         &self,
         input: UpdateDomainAssociationRequest,
     ) -> RusotoFuture<UpdateDomainAssociationResult, UpdateDomainAssociationError>;
+
+    /// <p> Update a webhook. </p>
+    fn update_webhook(
+        &self,
+        input: UpdateWebhookRequest,
+    ) -> RusotoFuture<UpdateWebhookResult, UpdateWebhookError>;
 }
 /// A client for the Amplify API.
 #[derive(Clone)]
@@ -2172,10 +3109,7 @@ impl AmplifyClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> AmplifyClient {
-        AmplifyClient {
-            client: Client::shared(),
-            region,
-        }
+        Self::new_with_client(Client::shared(), region)
     }
 
     pub fn new_with<P, D>(
@@ -2189,10 +3123,14 @@ impl AmplifyClient {
         D: DispatchSignedRequest + Send + Sync + 'static,
         D::Future: Send,
     {
-        AmplifyClient {
-            client: Client::new_with(credentials_provider, request_dispatcher),
+        Self::new_with_client(
+            Client::new_with(credentials_provider, request_dispatcher),
             region,
-        }
+        )
+    }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> AmplifyClient {
+        AmplifyClient { client, region }
     }
 }
 
@@ -2258,6 +3196,42 @@ impl Amplify for AmplifyClient {
         })
     }
 
+    /// <p> Create a deployment for manual deploy apps. (Apps are not connected to repository) </p>
+    fn create_deployment(
+        &self,
+        input: CreateDeploymentRequest,
+    ) -> RusotoFuture<CreateDeploymentResult, CreateDeploymentError> {
+        let request_uri = format!(
+            "/apps/{app_id}/branches/{branch_name}/deployments",
+            app_id = input.app_id,
+            branch_name = input.branch_name
+        );
+
+        let mut request = SignedRequest::new("POST", "amplify", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CreateDeploymentResult, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateDeploymentError::from_response(response))),
+                )
+            }
+        })
+    }
+
     /// <p> Create a new DomainAssociation on an App </p>
     fn create_domain_association(
         &self,
@@ -2283,6 +3257,38 @@ impl Amplify for AmplifyClient {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateDomainAssociationError::from_response(response))
                 }))
+            }
+        })
+    }
+
+    /// <p> Create a new webhook on an App. </p>
+    fn create_webhook(
+        &self,
+        input: CreateWebhookRequest,
+    ) -> RusotoFuture<CreateWebhookResult, CreateWebhookError> {
+        let request_uri = format!("/apps/{app_id}/webhooks", app_id = input.app_id);
+
+        let mut request = SignedRequest::new("POST", "amplify", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CreateWebhookResult, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateWebhookError::from_response(response))),
+                )
             }
         })
     }
@@ -2407,6 +3413,35 @@ impl Amplify for AmplifyClient {
         })
     }
 
+    /// <p> Deletes a webhook. </p>
+    fn delete_webhook(
+        &self,
+        input: DeleteWebhookRequest,
+    ) -> RusotoFuture<DeleteWebhookResult, DeleteWebhookError> {
+        let request_uri = format!("/webhooks/{webhook_id}", webhook_id = input.webhook_id);
+
+        let mut request = SignedRequest::new("DELETE", "amplify", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteWebhookResult, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteWebhookError::from_response(response))),
+                )
+            }
+        })
+    }
+
     /// <p> Retrieves an existing Amplify App by appId. </p>
     fn get_app(&self, input: GetAppRequest) -> RusotoFuture<GetAppResult, GetAppError> {
         let request_uri = format!("/apps/{app_id}", app_id = input.app_id);
@@ -2521,6 +3556,35 @@ impl Amplify for AmplifyClient {
                         .buffer()
                         .from_err()
                         .and_then(|response| Err(GetJobError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p> Retrieves webhook info that corresponds to a webhookId. </p>
+    fn get_webhook(
+        &self,
+        input: GetWebhookRequest,
+    ) -> RusotoFuture<GetWebhookResult, GetWebhookError> {
+        let request_uri = format!("/webhooks/{webhook_id}", webhook_id = input.webhook_id);
+
+        let mut request = SignedRequest::new("GET", "amplify", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetWebhookResult, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetWebhookError::from_response(response))),
                 )
             }
         })
@@ -2675,6 +3739,108 @@ impl Amplify for AmplifyClient {
         })
     }
 
+    /// <p> List tags for resource. </p>
+    fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError> {
+        let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
+
+        let mut request = SignedRequest::new("GET", "amplify", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListTagsForResourceResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ListTagsForResourceError::from_response(response))
+                    }),
+                )
+            }
+        })
+    }
+
+    /// <p> List webhooks with an app. </p>
+    fn list_webhooks(
+        &self,
+        input: ListWebhooksRequest,
+    ) -> RusotoFuture<ListWebhooksResult, ListWebhooksError> {
+        let request_uri = format!("/apps/{app_id}/webhooks", app_id = input.app_id);
+
+        let mut request = SignedRequest::new("GET", "amplify", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("maxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("nextToken", x);
+        }
+        request.set_params(params);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListWebhooksResult, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListWebhooksError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p> Start a deployment for manual deploy apps. (Apps are not connected to repository) </p>
+    fn start_deployment(
+        &self,
+        input: StartDeploymentRequest,
+    ) -> RusotoFuture<StartDeploymentResult, StartDeploymentError> {
+        let request_uri = format!(
+            "/apps/{app_id}/branches/{branch_name}/deployments/start",
+            app_id = input.app_id,
+            branch_name = input.branch_name
+        );
+
+        let mut request = SignedRequest::new("POST", "amplify", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<StartDeploymentResult, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(StartDeploymentError::from_response(response))),
+                )
+            }
+        })
+    }
+
     /// <p> Starts a new job for a branch, part of an Amplify App. </p>
     fn start_job(&self, input: StartJobRequest) -> RusotoFuture<StartJobResult, StartJobError> {
         let request_uri = format!(
@@ -2734,6 +3900,73 @@ impl Amplify for AmplifyClient {
                         .buffer()
                         .from_err()
                         .and_then(|response| Err(StopJobError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p> Tag resource with tag key and value. </p>
+    fn tag_resource(
+        &self,
+        input: TagResourceRequest,
+    ) -> RusotoFuture<TagResourceResponse, TagResourceError> {
+        let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
+
+        let mut request = SignedRequest::new("POST", "amplify", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<TagResourceResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(TagResourceError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p> Untag resource with resourceArn. </p>
+    fn untag_resource(
+        &self,
+        input: UntagResourceRequest,
+    ) -> RusotoFuture<UntagResourceResponse, UntagResourceError> {
+        let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
+
+        let mut request = SignedRequest::new("DELETE", "amplify", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        for item in input.tag_keys.iter() {
+            params.put("tagKeys", item);
+        }
+        request.set_params(params);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UntagResourceResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UntagResourceError::from_response(response))),
                 )
             }
         })
@@ -2833,6 +4066,38 @@ impl Amplify for AmplifyClient {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateDomainAssociationError::from_response(response))
                 }))
+            }
+        })
+    }
+
+    /// <p> Update a webhook. </p>
+    fn update_webhook(
+        &self,
+        input: UpdateWebhookRequest,
+    ) -> RusotoFuture<UpdateWebhookResult, UpdateWebhookError> {
+        let request_uri = format!("/webhooks/{webhook_id}", webhook_id = input.webhook_id);
+
+        let mut request = SignedRequest::new("POST", "amplify", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdateWebhookResult, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdateWebhookError::from_response(response))),
+                )
             }
         })
     }

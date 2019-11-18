@@ -1,6 +1,6 @@
 
 # Rusoto Eks
-Rust SDK for Amazon Elastic Container Service for Kubernetes
+Rust SDK for Amazon Elastic Kubernetes Service
 
 You may be looking for:
 
@@ -23,8 +23,15 @@ To use `rusoto_eks` in your application, add it as a dependency in your `Cargo.t
 
 ```toml
 [dependencies]
-rusoto_eks = "0.40.0"
+rusoto_eks = "0.41.0"
 ```
+
+## Crate Features
+- `native-tls` - use platform-specific TLS implementation.
+- `rustls` - use rustls TLS implementation.
+- `serialize_structs` - output structs of most operations get `derive(Serialize)`.
+
+Note: the crate will use the `native-tls` TLS implementation by default.
 
 ## Contributing
 

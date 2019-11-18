@@ -1,13 +1,13 @@
 [package]
 authors = ["Anthony DiMarco <ocramida@gmail.com>", "Jimmy Cuadra <jimmy@jimmycuadra.com>", "Matthew Mayer <matthewkmayer@gmail.com>", "Nikita Pekin <contact@nikitapek.in>"]
-description = "AWS SDK for Rust - AWS OpsWorks for Chef Automate @ 2016-11-01"
+description = "AWS SDK for Rust - AWS OpsWorks CM @ 2016-11-01"
 documentation = "https://docs.rs/rusoto_opsworkscm"
 keywords = ["AWS", "Amazon", "opsworkscm"]
 license = "MIT"
 name = "rusoto_opsworkscm"
 readme = "README.md"
 repository = "https://github.com/rusoto/rusoto"
-version = "0.40.0"
+version = "0.41.0"
 homepage = "https://www.rusoto.org/"
 edition = "2018"
 exclude = ["test_resources/*"]
@@ -22,14 +22,16 @@ serde_derive = "1.0.2"
 serde_json = "1.0.1"
 
 [dependencies.rusoto_core]
-version = "0.40.0"
+version = "0.41.0"
 path = "../../core"
 default-features = false
 [dev-dependencies.rusoto_mock]
-version = "0.40.0"
+version = "0.41.0"
 path = "../../../mock"
+default-features = false
 
 [features]
 default = ["native-tls"]
 native-tls = ["rusoto_core/native-tls"]
 rustls = ["rusoto_core/rustls"]
+serialize_structs = []

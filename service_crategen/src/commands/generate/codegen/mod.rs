@@ -34,7 +34,11 @@ pub trait GenerateProtocol {
     /// Generate the various `use` statements required by the module generatedfor this service
     fn generate_prelude(&self, writer: &mut FileWriter, service: &Service<'_>) -> IoResult;
 
-    fn generate_method_signatures(&self, writer: &mut FileWriter, service: &Service<'_>) -> IoResult;
+    fn generate_method_signatures(
+        &self,
+        writer: &mut FileWriter,
+        service: &Service<'_>,
+    ) -> IoResult;
 
     /// Generate a method for each `Operation` in the `Service` to execute that method remotely
     ///
@@ -94,7 +98,7 @@ pub fn generate_source(service: &Service<'_>, writer: &mut FileWriter) -> IoResu
 /// escape reserved words with an underscore
 pub fn generate_field_name(member_name: &str) -> String {
     let name = member_name.to_snake_case();
-    if name == "return" || name == "type" {
+    if name == "return" || name == "type" || name == "match" {
         name + "_"
     } else {
         name
@@ -127,11 +131,10 @@ where
         //  must be updated to generate the changes.
         //
         // =================================================================
+        #![allow(warnings)]
 
         use std::error::Error;
         use std::fmt;
-
-        #[allow(warnings)]
         use futures::future;
         use futures::Future;
         use rusoto_core::request::{{BufferedHttpResponse, DispatchSignedRequest}};
@@ -184,10 +187,7 @@ where
             ///
             /// The client will use the default credentials provider and tls client.
             pub fn new(region: region::Region) -> {type_name} {{
-                {type_name} {{
-                    client: Client::shared(),
-                    region
-                }}
+                Self::new_with_client(Client::shared(), region)
             }}
 
             pub fn new_with<P, D>(request_dispatcher: D, credentials_provider: P, region: region::Region) -> {type_name}
@@ -196,8 +196,13 @@ where
                       D: DispatchSignedRequest + Send + Sync + 'static,
                       D::Future: Send
             {{
+                Self::new_with_client(Client::new_with(credentials_provider, request_dispatcher), region)
+            }}
+
+            pub fn new_with_client(client: Client, region: region::Region) -> {type_name}
+            {{
                 {type_name} {{
-                    client: Client::new_with(credentials_provider, request_dispatcher),
+                    client,
                     region
                 }}
             }}
@@ -280,7 +285,7 @@ fn is_streaming_shape(service: &Service<'_>, name: &str) -> bool {
         .any(|(_, shape)| streaming_members(shape).any(|member| member.shape == name))
 }
 
-// do any type name mutation needed to avoid collisions with Rust types
+// do any type name mutation for shapes needed to avoid collisions with Rust types and Error enum types
 fn mutate_type_name(service: &Service<'_>, type_name: &str) -> String {
     let capitalized = util::capitalize_first(type_name.to_owned());
 
@@ -306,6 +311,12 @@ fn mutate_type_name(service: &Service<'_>, type_name: &str) -> String {
         // EC2 has an CreateFleetError struct, avoid collision with our error enum
         "CreateFleetError" => "EC2CreateFleetError".to_owned(),
 
+        // codecommit has a BatchDescribeMergeConflictsError, avoid collision with our error enum
+        "BatchDescribeMergeConflictsError" => "CodeCommitBatchDescribeMergeConflictsError".to_owned(),
+
+        // codecommit has a BatchGetCommitsError, avoid collision with our error enum
+        "BatchGetCommitsError" => "CodeCommitBatchGetCommitsError".to_owned(),
+
         // otherwise make sure it's rust-idiomatic and capitalized
         _ => without_underscores,
     }
@@ -318,10 +329,12 @@ pub fn mutate_type_name_for_streaming(type_name: &str) -> String {
 
 fn find_shapes_to_generate(service: &Service<'_>) -> BTreeSet<String> {
     let mut shapes_to_generate = BTreeSet::<String>::new();
+
     let mut visitor = |shape_name: &str, _shape: &Shape| {
         shapes_to_generate.insert(shape_name.to_owned())
     };
-    for (_, operation) in service.operations() {
+
+    for operation in service.operations().values() {
         if let Some(ref input) = operation.input {
             service.visit_shapes(&input.shape, &mut visitor);
         }
@@ -334,10 +347,14 @@ fn find_shapes_to_generate(service: &Service<'_>) -> BTreeSet<String> {
             }
         }
     }
-    return shapes_to_generate;
-} 
+    shapes_to_generate
+}
 
-fn generate_types<P>(writer: &mut FileWriter, service: &Service<'_>, protocol_generator: &P) -> IoResult
+fn generate_types<P>(
+    writer: &mut FileWriter,
+    service: &Service<'_>,
+    protocol_generator: &P,
+) -> IoResult
 where
     P: GenerateProtocol,
 {
@@ -447,7 +464,7 @@ where
     let test_attributes = if derived.iter().any(|&x| x == "Deserialize")
         && !derived.iter().any(|&x| x == "Serialize")
     {
-        "\n#[cfg_attr(test, derive(Serialize))]"
+        "\n#[cfg_attr(any(test, feature = \"serialize_structs\"), derive(Serialize))]"
     } else {
         ""
     };
@@ -556,6 +573,10 @@ fn generate_struct_fields<P: GenerateProtocol>(
             // See https://github.com/rusoto/rusoto/issues/1419 for more information
             if service.name() == "CodePipeline" && shape_name == "ActionRevision" && name == "revision_change_id" || name == "created" {
                 lines.push(format!("pub {}: Option<{}>,", name, rs_type))
+            // In pratice, Lex can return null values for slots that are not filled. The documentation
+            // does not mention that the slot values themselves can be null.
+            } else if service.name() == "Amazon Lex Runtime Service"  && shape_name == "PostTextResponse" && name == "slots"{
+                lines.push(format!("pub {}: Option<::std::collections::HashMap<String, Option<String>>>,", name))
             } else if shape.required(member_name) {
                 lines.push(format!("pub {}: {},", name, rs_type))
             } else if name == "type" {

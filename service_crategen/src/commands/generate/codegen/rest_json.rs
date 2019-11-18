@@ -31,7 +31,7 @@ impl GenerateProtocol for RestJsonGenerator {
                       RusotoFuture<{output_type}, {error_type}>;
                 ",
                 documentation = generate_documentation(operation).unwrap_or_else(|| "".to_owned()),
-                method_signature = generate_method_signature(operation, input_shape),
+                method_signature = generate_method_signature(operation, *input_shape),
                 error_type = error_type_name(service, operation_name),
                 output_type = output_type
             )?
@@ -80,7 +80,7 @@ impl GenerateProtocol for RestJsonGenerator {
                 }}
                 ",
                 documentation = generate_documentation(operation).unwrap_or_else(|| "".to_owned()),
-                method_signature = generate_method_signature(operation, input_shape),
+                method_signature = generate_method_signature(operation, *input_shape),
                 endpoint_prefix = service.signing_name(),
                 modify_endpoint_prefix = generate_endpoint_modification(service).unwrap_or_else(|| "".to_owned()),
                 http_method = operation.http.method,
@@ -97,7 +97,7 @@ impl GenerateProtocol for RestJsonGenerator {
                     service,
                     operation
                 ).unwrap_or_else(|| "".to_string()),
-                load_payload = generate_payload(service, input_shape).unwrap_or_else(|| "".to_string()),
+                load_payload = generate_payload(service, *input_shape).unwrap_or_else(|| "".to_string()),
                 load_params = rest_request_generator::generate_params_loading_string(service, operation).unwrap_or_else(|| "".to_string()),
                 default_headers = generate_default_headers(service),
                 set_headers = generate_headers(service).unwrap_or_else(|| "".to_string()),
@@ -182,7 +182,7 @@ fn generate_endpoint_modification(service: &Service<'_>) -> Option<String> {
 
 // IoT defines a lot of empty (and therefore unnecessary) request shapes
 // don't clutter method signatures with them
-fn generate_method_signature(operation: &Operation, shape: &Option<&Shape>) -> String {
+fn generate_method_signature(operation: &Operation, shape: Option<&Shape>) -> String {
     match shape {
         Some(s) => match s.members {
             Some(ref members) if !members.is_empty() => format!(
@@ -203,7 +203,7 @@ fn generate_method_signature(operation: &Operation, shape: &Option<&Shape>) -> S
 }
 
 // Figure out what, if anything, should be sent as the body of the http request
-fn generate_payload(service: &Service<'_>, input_shape: &Option<&Shape>) -> Option<String> {
+fn generate_payload(service: &Service<'_>, input_shape: Option<&Shape>) -> Option<String> {
     let i = input_shape.as_ref()?;
     let declare_payload = match i.payload {
         // if the input shape explicitly specifies a payload field, use that
@@ -226,10 +226,9 @@ fn generate_payload(service: &Service<'_>, input_shape: &Option<&Shape>) -> Opti
         }
     };
 
-    if declare_payload.is_some() {
-        Some(declare_payload.unwrap() + "request.set_payload(encoded);")
-    } else {
-        None
+    match declare_payload {
+        Some(value) => Some(value + "request.set_payload(encoded);"),
+        _ => None
     }
 }
 
@@ -355,9 +354,7 @@ fn generate_body_parser(operation: &Operation, service: &Service<'_>) -> String 
             // is the shape required?
             let payload_shape_required = match output_shape.required {
                 Some(ref s) => {
-                    // if there's any required shape present the body payload parser will handle it
-                    // This can't be converted to `s.is_empty()`. TODO: find out why.
-                    s.len() > 0
+                    !s.is_empty()
                 }
                 None => false,
             };
@@ -388,15 +385,16 @@ fn payload_body_parser(
     mutable_result: bool,
     payload_required: bool,
 ) -> String {
-    let response_body = match payload_required {
-        true => match payload_type {
+    let response_body = if payload_required {
+        match payload_type {
             ShapeType::Blob => "response.body",
             _ => "String::from_utf8_lossy(response.body.as_ref())",
-        },
-        false => match payload_type {
+        }
+    } else {
+        match payload_type {
             ShapeType::Blob => "Some(response.body)",
             _ => "Some(String::from_utf8_lossy(response.body.as_ref()).into_owned())",
-        },
+        }
     };
 
     format!(

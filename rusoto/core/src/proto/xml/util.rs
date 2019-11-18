@@ -352,5 +352,4 @@ mod tests {
         find_start_element(&mut reader);
         assert_eq!(peek_at_name(&mut reader).unwrap(), "ListQueuesResponse");
     }
-
 }

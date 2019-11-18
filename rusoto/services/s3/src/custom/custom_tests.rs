@@ -2,11 +2,11 @@ extern crate rusoto_mock;
 
 use crate::generated::*;
 
+use self::rusoto_mock::*;
 use bytes::Bytes;
 use futures::{Future, Stream};
-use rusoto_core::{Region, RusotoError};
 use rusoto_core::signature::SignedRequest;
-use self::rusoto_mock::*;
+use rusoto_core::{Region, RusotoError};
 
 #[test]
 fn test_multipart_upload_copy_response() {
@@ -30,8 +30,14 @@ fn test_multipart_upload_copy_response() {
         .upload_part_copy(upload_part_copy_req)
         .sync()
         .unwrap();
-    assert!(result.copy_part_result.is_some(), "Should have result in etag field");
-    assert_eq!(result.copy_part_result.unwrap().e_tag.unwrap(), "\"9a9d1bbe80188883302bff764b4cb321\"");
+    assert!(
+        result.copy_part_result.is_some(),
+        "Should have result in etag field"
+    );
+    assert_eq!(
+        result.copy_part_result.unwrap().e_tag.unwrap(),
+        "\"9a9d1bbe80188883302bff764b4cb321\""
+    );
 }
 
 #[test]
@@ -64,39 +70,51 @@ fn test_list_object_versions_with_multiple_versions() {
 
 #[test]
 fn initiate_multipart_upload_happy_path() {
-    let body = MockResponseReader::read_response("test_resources/custom", "s3_initiate_multipart_upload.xml");
+    let body = MockResponseReader::read_response(
+        "test_resources/custom",
+        "s3_initiate_multipart_upload.xml",
+    );
     let mock = MockRequestDispatcher::with_status(200).with_body(&body);
 
     let client = S3Client::new_with(mock, MockCredentialsProvider, Region::UsEast1);
-    let result = client.create_multipart_upload(CreateMultipartUploadRequest {
-        bucket: "example-bucket".to_owned(),
-        key: "example-object".to_owned(),
-        ..Default::default()
-    }).sync();
+    let result = client
+        .create_multipart_upload(CreateMultipartUploadRequest {
+            bucket: "example-bucket".to_owned(),
+            key: "example-object".to_owned(),
+            ..Default::default()
+        })
+        .sync();
 
     match result {
         Err(_) => panic!("Couldn't parse initiate_multipart_upload"),
         Ok(result) => {
             assert_eq!(sstr("example-bucket"), result.bucket);
             assert_eq!(sstr("example-object"), result.key);
-            assert_eq!(sstr("VXBsb2FkIElEIGZvciA2aWWpbmcncyBteS1tb3ZpZS5tMnRzIHVwbG9hZA"),
-                        result.upload_id);
+            assert_eq!(
+                sstr("VXBsb2FkIElEIGZvciA2aWWpbmcncyBteS1tb3ZpZS5tMnRzIHVwbG9hZA"),
+                result.upload_id
+            );
         }
     }
 }
 
 #[test]
 fn complete_multipart_upload_happy_path() {
-    let body = MockResponseReader::read_response("test_resources/custom", "s3_complete_multipart_upload.xml");
+    let body = MockResponseReader::read_response(
+        "test_resources/custom",
+        "s3_complete_multipart_upload.xml",
+    );
     let mock = MockRequestDispatcher::with_status(200).with_body(&body);
 
     let client = S3Client::new_with(mock, MockCredentialsProvider, Region::UsEast1);
-    let result = client.complete_multipart_upload(CompleteMultipartUploadRequest {
-        bucket: "example-bucket".to_owned(),
-        key: "example-object".to_owned(),
-        upload_id: "VXBsb2FkIElEIGZvciA2aWWpbmcncyBteS1tb3ZpZS5tMnRzIHVwbG9hZA".to_owned(),
-        ..Default::default()
-    }).sync();
+    let result = client
+        .complete_multipart_upload(CompleteMultipartUploadRequest {
+            bucket: "example-bucket".to_owned(),
+            key: "example-object".to_owned(),
+            upload_id: "VXBsb2FkIElEIGZvciA2aWWpbmcncyBteS1tb3ZpZS5tMnRzIHVwbG9hZA".to_owned(),
+            ..Default::default()
+        })
+        .sync();
 
     match result {
         Err(_) => panic!("Couldn't parse s3_complete_multipart_upload"),
@@ -110,14 +128,17 @@ fn complete_multipart_upload_happy_path() {
 
 #[test]
 fn list_multipart_upload_happy_path() {
-    let body = MockResponseReader::read_response("test_resources/custom", "s3_list_multipart_uploads.xml");
+    let body =
+        MockResponseReader::read_response("test_resources/custom", "s3_list_multipart_uploads.xml");
     let mock = MockRequestDispatcher::with_status(200).with_body(&body);
 
     let client = S3Client::new_with(mock, MockCredentialsProvider, Region::UsEast1);
-    let result = client.list_multipart_uploads(ListMultipartUploadsRequest {
-        bucket: "example-bucket".to_owned(),
-        ..Default::default()
-    }).sync();
+    let result = client
+        .list_multipart_uploads(ListMultipartUploadsRequest {
+            bucket: "example-bucket".to_owned(),
+            ..Default::default()
+        })
+        .sync();
 
     match result {
         Err(_) => panic!("Couldn't parse s3_list_multipart_uploads.xml"),
@@ -136,8 +157,10 @@ fn list_multipart_upload_happy_path() {
             };
 
             assert_eq!(an_upload.initiator.as_ref().unwrap().id, test_initiator.id);
-            assert_eq!(an_upload.initiator.as_ref().unwrap().display_name,
-                        test_initiator.display_name);
+            assert_eq!(
+                an_upload.initiator.as_ref().unwrap().display_name,
+                test_initiator.display_name
+            );
 
             assert_eq!(an_upload.initiated, sstr("2015-09-01T19:22:56.000Z"));
 
@@ -147,8 +170,10 @@ fn list_multipart_upload_happy_path() {
             };
 
             assert_eq!(an_upload.owner.as_ref().unwrap().id, test_owner.id);
-            assert_eq!(an_upload.owner.as_ref().unwrap().display_name,
-                        test_owner.display_name);
+            assert_eq!(
+                an_upload.owner.as_ref().unwrap().display_name,
+                test_owner.display_name
+            );
 
             assert_eq!(an_upload.storage_class, sstr("STANDARD"));
         }
@@ -213,8 +238,10 @@ fn list_multipart_upload_parts_happy_path() {
     };
 
     assert_eq!(result.initiator.as_ref().unwrap().id, test_initiator.id);
-    assert_eq!(result.initiator.as_ref().unwrap().display_name,
-                test_initiator.display_name);
+    assert_eq!(
+        result.initiator.as_ref().unwrap().display_name,
+        test_initiator.display_name
+    );
 
     let test_owner = Owner {
         id: sstr("b84c6b0c308085829b6562b586f6664fc00faab6cfd441e90ad418ea916eed83"),
@@ -222,8 +249,10 @@ fn list_multipart_upload_parts_happy_path() {
     };
 
     assert_eq!(result.owner.as_ref().unwrap().id, test_owner.id);
-    assert_eq!(result.owner.as_ref().unwrap().display_name,
-                test_owner.display_name);
+    assert_eq!(
+        result.owner.as_ref().unwrap().display_name,
+        test_owner.display_name
+    );
 
     assert_eq!(result.storage_class, sstr("STANDARD"));
 
@@ -240,7 +269,8 @@ fn list_multipart_upload_parts_happy_path() {
 
 #[test]
 fn list_multipart_uploads_no_uploads() {
-    let mock = MockRequestDispatcher::with_status(200).with_body(r#"
+    let mock = MockRequestDispatcher::with_status(200).with_body(
+        r#"
         <?xml version="1.0" encoding="UTF-8"?>
         <ListMultipartUploadsResult xmlns="http://s3.amazonaws.com/doc/2006-03-01/">
             <Bucket>rusoto1440826568</Bucket>
@@ -251,7 +281,8 @@ fn list_multipart_uploads_no_uploads() {
             <MaxUploads>1000</MaxUploads>
             <IsTruncated>false</IsTruncated>
         </ListMultipartUploadsResult>
-    "#);
+    "#,
+    );
 
     let mut req = ListMultipartUploadsRequest::default();
     req.bucket = "test-bucket".to_owned();
@@ -263,13 +294,13 @@ fn list_multipart_uploads_no_uploads() {
     assert!(result.uploads.is_none());
 }
 
-
 #[cfg(nightly)]
 #[bench]
 fn bench_parse_list_buckets_response(b: &mut Bencher) {
     use test::Bencher;
     let mock = MockRequestDispatcher::with_status(200)
-        .with_body(r#"
+        .with_body(
+            r#"
         <?xml version="1.0" encoding="UTF-8"?>
         <ListAllMyBucketsResult xmlns="http://s3.amazonaws.com/doc/2006-03-01">
             <Owner>
@@ -287,7 +318,8 @@ fn bench_parse_list_buckets_response(b: &mut Bencher) {
             </Bucket>
             </Buckets>
         </ListAllMyBucketsResult>
-        "#)
+        "#,
+        )
         .with_request_checker(|request: &SignedRequest| {
             assert_eq!(request.method, "GET");
             assert_eq!(request.path, "/");
@@ -304,7 +336,8 @@ fn bench_parse_list_buckets_response(b: &mut Bencher) {
 // tests the model generation and deserialization end-to-end
 fn should_parse_sample_list_buckets_response() {
     let mock = MockRequestDispatcher::with_status(200)
-        .with_body(r#"
+        .with_body(
+            r#"
         <?xml version="1.0" encoding="UTF-8"?>
         <ListAllMyBucketsResult xmlns="http://s3.amazonaws.com/doc/2006-03-01">
             <Owner>
@@ -322,7 +355,8 @@ fn should_parse_sample_list_buckets_response() {
             </Bucket>
             </Buckets>
         </ListAllMyBucketsResult>
-        "#)
+        "#,
+        )
         .with_request_checker(|request: &SignedRequest| {
             assert_eq!(request.method, "GET");
             assert_eq!(request.path, "/");
@@ -341,8 +375,10 @@ fn should_parse_sample_list_buckets_response() {
 
     let bucket1 = buckets.get(0).unwrap();
     assert_eq!(bucket1.name, Some("quotes".to_string()));
-    assert_eq!(bucket1.creation_date,
-                Some("2006-02-03T16:45:09.000Z".to_string()));
+    assert_eq!(
+        bucket1.creation_date,
+        Some("2006-02-03T16:45:09.000Z".to_string())
+    );
 }
 
 #[test]
@@ -389,9 +425,15 @@ fn should_serialize_complicated_request() {
         .with_request_checker(|request: &SignedRequest| {
             assert_eq!(request.method, "GET");
             assert_eq!(request.path, "/bucket/key");
-            assert_eq!(*request.params.get("response-content-type").unwrap(),
-                        sstr("response_content_type"));
-            assert!(request.headers.get("range").unwrap().contains(&Vec::from("range")));
+            assert_eq!(
+                *request.params.get("response-content-type").unwrap(),
+                sstr("response_content_type")
+            );
+            assert!(request
+                .headers
+                .get("range")
+                .unwrap()
+                .contains(&Vec::from("range")));
             assert!(request.payload.is_none());
         });
 
@@ -401,13 +443,18 @@ fn should_serialize_complicated_request() {
 
 #[test]
 fn should_parse_location_constraint() {
-    let body = MockResponseReader::read_response("test_resources/generated/valid", "s3-get-bucket-location.xml");
+    let body = MockResponseReader::read_response(
+        "test_resources/generated/valid",
+        "s3-get-bucket-location.xml",
+    );
     let mock = MockRequestDispatcher::with_status(200).with_body(&body);
 
     let client = S3Client::new_with(mock, MockCredentialsProvider, Region::UsEast1);
-    let result = client.get_bucket_location(GetBucketLocationRequest {
-        bucket: "example-bucket".to_owned()
-    }).sync();
+    let result = client
+        .get_bucket_location(GetBucketLocationRequest {
+            bucket: "example-bucket".to_owned(),
+        })
+        .sync();
 
     match result {
         Err(_) => panic!("Couldn't parse get_bucket_location"),
@@ -444,13 +491,14 @@ fn sstr(value: &'static str) -> Option<String> {
 
 #[test]
 fn test_parse_no_such_bucket_error() {
-    let mock = MockRequestDispatcher::with_status(404)
-        .with_body(r#"<?xml version="1.0" encoding="UTF-8"?>
+    let mock = MockRequestDispatcher::with_status(404).with_body(
+        r#"<?xml version="1.0" encoding="UTF-8"?>
         <Error>
             <Code>NoSuchBucket</Code>
             <Message>The specified bucket does not exist</Message>
             <RequestId>4442587FB7D0A2F9</RequestId>
-        </Error>"#);
+        </Error>"#,
+    );
 
     let request = ListObjectsV2Request {
         bucket: "no-such-bucket".to_owned(),
@@ -461,5 +509,10 @@ fn test_parse_no_such_bucket_error() {
     let result = client.list_objects_v2(request).sync();
     assert!(result.is_err());
     let err = result.err().unwrap();
-    assert_eq!(RusotoError::Service(ListObjectsV2Error::NoSuchBucket("The specified bucket does not exist".to_owned())), err);
+    assert_eq!(
+        RusotoError::Service(ListObjectsV2Error::NoSuchBucket(
+            "The specified bucket does not exist".to_owned()
+        )),
+        err
+    );
 }

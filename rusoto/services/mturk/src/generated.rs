@@ -9,17 +9,16 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
+#![allow(warnings)]
 
-use std::error::Error;
-use std::fmt;
-
-#[allow(warnings)]
 use futures::future;
 use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
+use std::error::Error;
+use std::fmt;
 
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
@@ -36,7 +35,7 @@ pub struct AcceptQualificationRequestRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AcceptQualificationRequestResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -55,12 +54,12 @@ pub struct ApproveAssignmentRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ApproveAssignmentResponse {}
 
 /// <p> The Assignment data structure represents a single assignment of a HIT to a Worker. The assignment tracks the Worker's efforts to complete the HIT, and contains the results for later retrieval. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Assignment {
     /// <p> The date and time the Worker accepted the assignment.</p>
     #[serde(rename = "AcceptTime")]
@@ -131,12 +130,12 @@ pub struct AssociateQualificationWithWorkerRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateQualificationWithWorkerResponse {}
 
 /// <p>An object representing a Bonus payment paid to a Worker.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BonusPayment {
     /// <p>The ID of the assignment associated with this bonus payment.</p>
     #[serde(rename = "AssignmentId")]
@@ -174,7 +173,7 @@ pub struct CreateAdditionalAssignmentsForHITRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateAdditionalAssignmentsForHITResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -241,7 +240,7 @@ pub struct CreateHITRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateHITResponse {
     /// <p> Contains the newly created HIT data. For a description of the HIT data structure as it appears in responses, see the HIT Data Structure documentation. </p>
     #[serde(rename = "HIT")]
@@ -278,7 +277,7 @@ pub struct CreateHITTypeRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateHITTypeResponse {
     /// <p> The ID of the newly registered HIT type.</p>
     #[serde(rename = "HITTypeId")]
@@ -329,7 +328,7 @@ pub struct CreateHITWithHITTypeRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateHITWithHITTypeResponse {
     /// <p> Contains the newly created HIT data. For a description of the HIT data structure as it appears in responses, see the HIT Data Structure documentation. </p>
     #[serde(rename = "HIT")]
@@ -379,7 +378,7 @@ pub struct CreateQualificationTypeRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateQualificationTypeResponse {
     /// <p>The created Qualification type, returned as a QualificationType data structure.</p>
     #[serde(rename = "QualificationType")]
@@ -398,7 +397,7 @@ pub struct CreateWorkerBlockRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateWorkerBlockResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -409,7 +408,7 @@ pub struct DeleteHITRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteHITResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -420,7 +419,7 @@ pub struct DeleteQualificationTypeRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteQualificationTypeResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -435,7 +434,7 @@ pub struct DeleteWorkerBlockRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteWorkerBlockResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -453,14 +452,14 @@ pub struct DisassociateQualificationFromWorkerRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateQualificationFromWorkerResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetAccountBalanceRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAccountBalanceResponse {
     #[serde(rename = "AvailableBalance")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -478,7 +477,7 @@ pub struct GetAssignmentRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAssignmentResponse {
     /// <p> The assignment. The response includes one Assignment element. </p>
     #[serde(rename = "Assignment")]
@@ -501,7 +500,7 @@ pub struct GetFileUploadURLRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetFileUploadURLResponse {
     /// <p> A temporary URL for the file that the Worker uploaded for the answer. </p>
     #[serde(rename = "FileUploadURL")]
@@ -517,7 +516,7 @@ pub struct GetHITRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetHITResponse {
     /// <p> Contains the requested HIT data.</p>
     #[serde(rename = "HIT")]
@@ -536,7 +535,7 @@ pub struct GetQualificationScoreRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetQualificationScoreResponse {
     /// <p> The Qualification data structure of the Qualification assigned to a user, including the Qualification type and the value (score). </p>
     #[serde(rename = "Qualification")]
@@ -552,7 +551,7 @@ pub struct GetQualificationTypeRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetQualificationTypeResponse {
     /// <p> The returned Qualification Type</p>
     #[serde(rename = "QualificationType")]
@@ -562,7 +561,7 @@ pub struct GetQualificationTypeResponse {
 
 /// <p> The HIT data structure represents a single HIT, including all the information necessary for a Worker to accept and complete the HIT.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct HIT {
     /// <p> The length of time, in seconds, that a Worker has to complete the HIT after accepting it.</p>
     #[serde(rename = "AssignmentDurationInSeconds")]
@@ -679,7 +678,7 @@ pub struct ListAssignmentsForHITRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAssignmentsForHITResponse {
     /// <p> The collection of Assignment data structures returned by this call.</p>
     #[serde(rename = "Assignments")]
@@ -714,7 +713,7 @@ pub struct ListBonusPaymentsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListBonusPaymentsResponse {
     /// <p>A successful request to the ListBonusPayments operation returns a list of BonusPayment objects. </p>
     #[serde(rename = "BonusPayments")]
@@ -745,7 +744,7 @@ pub struct ListHITsForQualificationTypeRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListHITsForQualificationTypeResponse {
     /// <p> The list of HIT elements returned by the query.</p>
     #[serde(rename = "HITs")]
@@ -772,7 +771,7 @@ pub struct ListHITsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListHITsResponse {
     /// <p> The list of HIT elements returned by the query.</p>
     #[serde(rename = "HITs")]
@@ -803,7 +802,7 @@ pub struct ListQualificationRequestsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListQualificationRequestsResponse {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -841,7 +840,7 @@ pub struct ListQualificationTypesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListQualificationTypesResponse {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -884,7 +883,7 @@ pub struct ListReviewPolicyResultsForHITRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListReviewPolicyResultsForHITResponse {
     /// <p> The name of the Assignment-level Review Policy. This contains only the PolicyName element. </p>
     #[serde(rename = "AssignmentReviewPolicy")]
@@ -932,7 +931,7 @@ pub struct ListReviewableHITsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListReviewableHITsResponse {
     /// <p> The list of HIT elements returned by the query.</p>
     #[serde(rename = "HITs")]
@@ -959,7 +958,7 @@ pub struct ListWorkerBlocksRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListWorkerBlocksResponse {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -994,7 +993,7 @@ pub struct ListWorkersWithQualificationTypeRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListWorkersWithQualificationTypeResponse {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1040,7 +1039,7 @@ pub struct NotificationSpecification {
 
 /// <p> When MTurk encounters an issue with notifying the Workers you specified, it returns back this object with failure details. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct NotifyWorkersFailureStatus {
     /// <p> Encoded value for the failure type. </p>
     #[serde(rename = "NotifyWorkersFailureCode")]
@@ -1070,7 +1069,7 @@ pub struct NotifyWorkersRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct NotifyWorkersResponse {
     /// <p> When MTurk sends notifications to the list of Workers, it returns back any failures it encounters in this list of NotifyWorkersFailureStatus objects. </p>
     #[serde(rename = "NotifyWorkersFailureStatuses")]
@@ -1110,7 +1109,7 @@ pub struct PolicyParameter {
 
 /// <p>The Qualification data structure represents a Qualification assigned to a user, including the Qualification type and the value (score).</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Qualification {
     /// <p> The date and time the Qualification was granted to the Worker. If the Worker's Qualification was revoked, and then re-granted based on a new Qualification request, GrantTime is the date and time of the last call to the AcceptQualificationRequest operation.</p>
     #[serde(rename = "GrantTime")]
@@ -1139,7 +1138,7 @@ pub struct Qualification {
 
 /// <p> The QualificationRequest data structure represents a request a Worker has made for a Qualification. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct QualificationRequest {
     /// <p> The Worker's answers for the Qualification type's test contained in a QuestionFormAnswers document, if the type has a test and the Worker has submitted answers. If the Worker does not provide any answers, Answer may be empty. </p>
     #[serde(rename = "Answer")]
@@ -1192,7 +1191,7 @@ pub struct QualificationRequirement {
 
 /// <p> The QualificationType data structure represents a Qualification type, a description of a property of a Worker that must match the requirements of a HIT for the Worker to be able to accept the HIT. The type also describes how a Worker can obtain a Qualification of that type, such as through a Qualification test. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct QualificationType {
     /// <p>The answers to the Qualification test specified in the Test parameter.</p>
     #[serde(rename = "AnswerKey")]
@@ -1259,7 +1258,7 @@ pub struct RejectAssignmentRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RejectAssignmentResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1274,12 +1273,12 @@ pub struct RejectQualificationRequestRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RejectQualificationRequestResponse {}
 
 /// <p> Both the AssignmentReviewReport and the HITReviewReport elements contains the ReviewActionDetail data structure. This structure is returned multiple times for each action specified in the Review Policy. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ReviewActionDetail {
     /// <p>The unique identifier for the action.</p>
     #[serde(rename = "ActionId")]
@@ -1329,7 +1328,7 @@ pub struct ReviewPolicy {
 
 /// <p> Contains both ReviewResult and ReviewAction elements for a particular HIT. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ReviewReport {
     /// <p> A list of ReviewAction objects for each action specified in the Review Policy. </p>
     #[serde(rename = "ReviewActions")]
@@ -1343,7 +1342,7 @@ pub struct ReviewReport {
 
 /// <p> This data structure is returned multiple times for each result specified in the Review Policy. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ReviewResultDetail {
     /// <p> A unique identifier of the Review action result. </p>
     #[serde(rename = "ActionId")]
@@ -1392,7 +1391,7 @@ pub struct SendBonusRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SendBonusResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1406,7 +1405,7 @@ pub struct SendTestEventNotificationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SendTestEventNotificationResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1420,7 +1419,7 @@ pub struct UpdateExpirationForHITRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateExpirationForHITResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1435,7 +1434,7 @@ pub struct UpdateHITReviewStatusRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateHITReviewStatusResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1449,7 +1448,7 @@ pub struct UpdateHITTypeOfHITRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateHITTypeOfHITResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1468,7 +1467,7 @@ pub struct UpdateNotificationSettingsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateNotificationSettingsResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1511,7 +1510,7 @@ pub struct UpdateQualificationTypeRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateQualificationTypeResponse {
     /// <p> Contains a QualificationType data structure.</p>
     #[serde(rename = "QualificationType")]
@@ -1521,7 +1520,7 @@ pub struct UpdateQualificationTypeResponse {
 
 /// <p> The WorkerBlock data structure represents a Worker who has been blocked. It has two elements: the WorkerId and the Reason for the block. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct WorkerBlock {
     /// <p> A message explaining the reason the Worker was blocked. </p>
     #[serde(rename = "Reason")]
@@ -3371,10 +3370,7 @@ impl MechanicalTurkClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> MechanicalTurkClient {
-        MechanicalTurkClient {
-            client: Client::shared(),
-            region,
-        }
+        Self::new_with_client(Client::shared(), region)
     }
 
     pub fn new_with<P, D>(
@@ -3388,10 +3384,14 @@ impl MechanicalTurkClient {
         D: DispatchSignedRequest + Send + Sync + 'static,
         D::Future: Send,
     {
-        MechanicalTurkClient {
-            client: Client::new_with(credentials_provider, request_dispatcher),
+        Self::new_with_client(
+            Client::new_with(credentials_provider, request_dispatcher),
             region,
-        }
+        )
+    }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> MechanicalTurkClient {
+        MechanicalTurkClient { client, region }
     }
 }
 

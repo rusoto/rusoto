@@ -9,17 +9,16 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
+#![allow(warnings)]
 
-use std::error::Error;
-use std::fmt;
-
-#[allow(warnings)]
 use futures::future;
 use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
+use std::error::Error;
+use std::fmt;
 
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
@@ -32,7 +31,7 @@ pub struct AcceptDirectConnectGatewayAssociationProposalRequest {
     /// <p>The ID of the Direct Connect gateway.</p>
     #[serde(rename = "directConnectGatewayId")]
     pub direct_connect_gateway_id: String,
-    /// <p>Overrides the existing Amazon VPC prefixes advertised to the Direct Connect gateway.</p>
+    /// <p>Overrides the Amazon VPC prefixes advertised to the Direct Connect gateway.</p> <p>For information about how to set the prefixes, see <a href="https://docs.aws.amazon.com/directconnect/latest/UserGuide/multi-account-associate-vgw.html#allowed-prefixes">Allowed Prefixes</a> in the <i>AWS Direct Connect User Guide</i>.</p>
     #[serde(rename = "overrideAllowedPrefixesToDirectConnectGateway")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub override_allowed_prefixes_to_direct_connect_gateway: Option<Vec<RouteFilterPrefix>>,
@@ -42,7 +41,7 @@ pub struct AcceptDirectConnectGatewayAssociationProposalRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AcceptDirectConnectGatewayAssociationProposalResult {
     #[serde(rename = "directConnectGatewayAssociation")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -82,6 +81,10 @@ pub struct AllocateHostedConnectionRequest {
     /// <p>The ID of the AWS account ID of the customer for the connection.</p>
     #[serde(rename = "ownerAccount")]
     pub owner_account: String,
+    /// <p>The tags to assign to the hosted connection.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
     /// <p>The dedicated VLAN provisioned to the hosted connection.</p>
     #[serde(rename = "vlan")]
     pub vlan: i64,
@@ -127,7 +130,7 @@ pub struct AllocateTransitVirtualInterfaceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AllocateTransitVirtualInterfaceResult {
     #[serde(rename = "virtualInterface")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -166,7 +169,7 @@ pub struct AssociateVirtualInterfaceRequest {
 
 /// <p>Information about the associated gateway.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociatedGateway {
     /// <p>The ID of the associated gateway.</p>
     #[serde(rename = "id")]
@@ -188,7 +191,7 @@ pub struct AssociatedGateway {
 
 /// <p>Information about a BGP peer.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BGPPeer {
     /// <p>The address family for the BGP peer.</p>
     #[serde(rename = "addressFamily")]
@@ -202,7 +205,7 @@ pub struct BGPPeer {
     #[serde(rename = "asn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub asn: Option<i64>,
-    /// <p>The authentication key for BGP configuration.</p>
+    /// <p>The authentication key for BGP configuration. This string has a minimum length of 6 characters and and a maximun lenth of 80 characters.</p>
     #[serde(rename = "authKey")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auth_key: Option<String>,
@@ -236,7 +239,7 @@ pub struct ConfirmConnectionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ConfirmConnectionResponse {
     /// <p><p>The state of the connection. The following are the possible values:</p> <ul> <li> <p> <code>ordering</code>: The initial state of a hosted connection provisioned on an interconnect. The connection stays in the ordering state until the owner of the hosted connection confirms or declines the connection order.</p> </li> <li> <p> <code>requested</code>: The initial state of a standard connection. The connection stays in the requested state until the Letter of Authorization (LOA) is sent to the customer.</p> </li> <li> <p> <code>pending</code>: The connection has been approved and is being initialized.</p> </li> <li> <p> <code>available</code>: The network link is up and the connection is ready for use.</p> </li> <li> <p> <code>down</code>: The network link is down.</p> </li> <li> <p> <code>deleting</code>: The connection is being deleted.</p> </li> <li> <p> <code>deleted</code>: The connection has been deleted.</p> </li> <li> <p> <code>rejected</code>: A hosted connection in the <code>ordering</code> state enters the <code>rejected</code> state if it is deleted by the customer.</p> </li> <li> <p> <code>unknown</code>: The state of the connection is not available.</p> </li> </ul></p>
     #[serde(rename = "connectionState")]
@@ -260,7 +263,7 @@ pub struct ConfirmPrivateVirtualInterfaceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ConfirmPrivateVirtualInterfaceResponse {
     /// <p><p>The state of the virtual interface. The following are the possible values:</p> <ul> <li> <p> <code>confirming</code>: The creation of the virtual interface is pending confirmation from the virtual interface owner. If the owner of the virtual interface is different from the owner of the connection on which it is provisioned, then the virtual interface will remain in this state until it is confirmed by the virtual interface owner.</p> </li> <li> <p> <code>verifying</code>: This state only applies to public virtual interfaces. Each public virtual interface needs validation before the virtual interface can be created.</p> </li> <li> <p> <code>pending</code>: A virtual interface is in this state from the time that it is created until the virtual interface is ready to forward traffic.</p> </li> <li> <p> <code>available</code>: A virtual interface that is able to forward traffic.</p> </li> <li> <p> <code>down</code>: A virtual interface that is BGP down.</p> </li> <li> <p> <code>deleting</code>: A virtual interface is in this state immediately after calling <a>DeleteVirtualInterface</a> until it can no longer forward traffic.</p> </li> <li> <p> <code>deleted</code>: A virtual interface that cannot forward traffic.</p> </li> <li> <p> <code>rejected</code>: The virtual interface owner has declined creation of the virtual interface. If a virtual interface in the <code>Confirming</code> state is deleted by the virtual interface owner, the virtual interface enters the <code>Rejected</code> state.</p> </li> <li> <p> <code>unknown</code>: The state of the virtual interface is not available.</p> </li> </ul></p>
     #[serde(rename = "virtualInterfaceState")]
@@ -276,7 +279,7 @@ pub struct ConfirmPublicVirtualInterfaceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ConfirmPublicVirtualInterfaceResponse {
     /// <p><p>The state of the virtual interface. The following are the possible values:</p> <ul> <li> <p> <code>confirming</code>: The creation of the virtual interface is pending confirmation from the virtual interface owner. If the owner of the virtual interface is different from the owner of the connection on which it is provisioned, then the virtual interface will remain in this state until it is confirmed by the virtual interface owner.</p> </li> <li> <p> <code>verifying</code>: This state only applies to public virtual interfaces. Each public virtual interface needs validation before the virtual interface can be created.</p> </li> <li> <p> <code>pending</code>: A virtual interface is in this state from the time that it is created until the virtual interface is ready to forward traffic.</p> </li> <li> <p> <code>available</code>: A virtual interface that is able to forward traffic.</p> </li> <li> <p> <code>down</code>: A virtual interface that is BGP down.</p> </li> <li> <p> <code>deleting</code>: A virtual interface is in this state immediately after calling <a>DeleteVirtualInterface</a> until it can no longer forward traffic.</p> </li> <li> <p> <code>deleted</code>: A virtual interface that cannot forward traffic.</p> </li> <li> <p> <code>rejected</code>: The virtual interface owner has declined creation of the virtual interface. If a virtual interface in the <code>Confirming</code> state is deleted by the virtual interface owner, the virtual interface enters the <code>Rejected</code> state.</p> </li> <li> <p> <code>unknown</code>: The state of the virtual interface is not available.</p> </li> </ul></p>
     #[serde(rename = "virtualInterfaceState")]
@@ -295,7 +298,7 @@ pub struct ConfirmTransitVirtualInterfaceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ConfirmTransitVirtualInterfaceResponse {
     /// <p><p>The state of the virtual interface. The following are the possible values:</p> <ul> <li> <p> <code>confirming</code>: The creation of the virtual interface is pending confirmation from the virtual interface owner. If the owner of the virtual interface is different from the owner of the connection on which it is provisioned, then the virtual interface will remain in this state until it is confirmed by the virtual interface owner.</p> </li> <li> <p> <code>verifying</code>: This state only applies to public virtual interfaces. Each public virtual interface needs validation before the virtual interface can be created.</p> </li> <li> <p> <code>pending</code>: A virtual interface is in this state from the time that it is created until the virtual interface is ready to forward traffic.</p> </li> <li> <p> <code>available</code>: A virtual interface that is able to forward traffic.</p> </li> <li> <p> <code>down</code>: A virtual interface that is BGP down.</p> </li> <li> <p> <code>deleting</code>: A virtual interface is in this state immediately after calling <a>DeleteVirtualInterface</a> until it can no longer forward traffic.</p> </li> <li> <p> <code>deleted</code>: A virtual interface that cannot forward traffic.</p> </li> <li> <p> <code>rejected</code>: The virtual interface owner has declined creation of the virtual interface. If a virtual interface in the <code>Confirming</code> state is deleted by the virtual interface owner, the virtual interface enters the <code>Rejected</code> state.</p> </li> <li> <p> <code>unknown</code>: The state of the virtual interface is not available.</p> </li> </ul></p>
     #[serde(rename = "virtualInterfaceState")]
@@ -305,7 +308,7 @@ pub struct ConfirmTransitVirtualInterfaceResponse {
 
 /// <p>Information about an AWS Direct Connect connection.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Connection {
     /// <p>The Direct Connect endpoint on which the physical connection terminates.</p>
     #[serde(rename = "awsDevice")]
@@ -363,6 +366,10 @@ pub struct Connection {
     #[serde(rename = "region")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub region: Option<String>,
+    /// <p>Any tags assigned to the connection.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
     /// <p>The ID of the VLAN.</p>
     #[serde(rename = "vlan")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -370,7 +377,7 @@ pub struct Connection {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Connections {
     /// <p>The connections.</p>
     #[serde(rename = "connections")]
@@ -391,7 +398,7 @@ pub struct CreateBGPPeerRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateBGPPeerResponse {
     /// <p>The virtual interface.</p>
     #[serde(rename = "virtualInterface")]
@@ -414,6 +421,10 @@ pub struct CreateConnectionRequest {
     /// <p>The location of the connection.</p>
     #[serde(rename = "location")]
     pub location: String,
+    /// <p>The tags to assign to the connection.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -438,7 +449,7 @@ pub struct CreateDirectConnectGatewayAssociationProposalRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDirectConnectGatewayAssociationProposalResult {
     /// <p>Information about the Direct Connect gateway proposal.</p>
     #[serde(rename = "directConnectGatewayAssociationProposal")]
@@ -449,7 +460,7 @@ pub struct CreateDirectConnectGatewayAssociationProposalResult {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateDirectConnectGatewayAssociationRequest {
-    /// <p>The Amazon VPC prefixes to advertise to the Direct Connect gateway</p>
+    /// <p>The Amazon VPC prefixes to advertise to the Direct Connect gateway</p> <p>For information about how to set the prefixes, see <a href="https://docs.aws.amazon.com/directconnect/latest/UserGuide/multi-account-associate-vgw.html#allowed-prefixes">Allowed Prefixes</a> in the <i>AWS Direct Connect User Guide</i>.</p>
     #[serde(rename = "addAllowedPrefixesToDirectConnectGateway")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub add_allowed_prefixes_to_direct_connect_gateway: Option<Vec<RouteFilterPrefix>>,
@@ -467,7 +478,7 @@ pub struct CreateDirectConnectGatewayAssociationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDirectConnectGatewayAssociationResult {
     /// <p>The association to be created.</p>
     #[serde(rename = "directConnectGatewayAssociation")]
@@ -487,7 +498,7 @@ pub struct CreateDirectConnectGatewayRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDirectConnectGatewayResult {
     /// <p>The Direct Connect gateway.</p>
     #[serde(rename = "directConnectGateway")]
@@ -510,10 +521,18 @@ pub struct CreateInterconnectRequest {
     /// <p>The location of the interconnect.</p>
     #[serde(rename = "location")]
     pub location: String,
+    /// <p>The tags to assign to the interconnect,</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateLagRequest {
+    /// <p>The tags to assign to the child connections of the LAG. Only newly created child connections as the result of creating a LAG connection are assigned the provided tags. The tags are not assigned to an existing connection that is provided via the “connectionId” parameter that will be migrated to the LAG.</p>
+    #[serde(rename = "childConnectionTags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub child_connection_tags: Option<Vec<Tag>>,
     /// <p>The ID of an existing connection to migrate to the LAG.</p>
     #[serde(rename = "connectionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -530,6 +549,10 @@ pub struct CreateLagRequest {
     /// <p>The number of physical connections initially provisioned and bundled by the LAG.</p>
     #[serde(rename = "numberOfConnections")]
     pub number_of_connections: i64,
+    /// <p>The tags to assign to the link aggregation group (LAG).</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -563,7 +586,7 @@ pub struct CreateTransitVirtualInterfaceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateTransitVirtualInterfaceResult {
     #[serde(rename = "virtualInterface")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -591,7 +614,7 @@ pub struct DeleteBGPPeerRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteBGPPeerResponse {
     /// <p>The virtual interface.</p>
     #[serde(rename = "virtualInterface")]
@@ -614,7 +637,7 @@ pub struct DeleteDirectConnectGatewayAssociationProposalRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDirectConnectGatewayAssociationProposalResult {
     /// <p>The ID of the associated gateway.</p>
     #[serde(rename = "directConnectGatewayAssociationProposal")]
@@ -640,7 +663,7 @@ pub struct DeleteDirectConnectGatewayAssociationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDirectConnectGatewayAssociationResult {
     /// <p>Information about the deleted association.</p>
     #[serde(rename = "directConnectGatewayAssociation")]
@@ -656,7 +679,7 @@ pub struct DeleteDirectConnectGatewayRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDirectConnectGatewayResult {
     /// <p>The Direct Connect gateway.</p>
     #[serde(rename = "directConnectGateway")]
@@ -672,7 +695,7 @@ pub struct DeleteInterconnectRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteInterconnectResponse {
     /// <p><p>The state of the interconnect. The following are the possible values:</p> <ul> <li> <p> <code>requested</code>: The initial state of an interconnect. The interconnect stays in the requested state until the Letter of Authorization (LOA) is sent to the customer.</p> </li> <li> <p> <code>pending</code>: The interconnect is approved, and is being initialized.</p> </li> <li> <p> <code>available</code>: The network link is up, and the interconnect is ready for use.</p> </li> <li> <p> <code>down</code>: The network link is down.</p> </li> <li> <p> <code>deleting</code>: The interconnect is being deleted.</p> </li> <li> <p> <code>deleted</code>: The interconnect is deleted.</p> </li> <li> <p> <code>unknown</code>: The state of the interconnect is not available.</p> </li> </ul></p>
     #[serde(rename = "interconnectState")]
@@ -695,7 +718,7 @@ pub struct DeleteVirtualInterfaceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteVirtualInterfaceResponse {
     /// <p><p>The state of the virtual interface. The following are the possible values:</p> <ul> <li> <p> <code>confirming</code>: The creation of the virtual interface is pending confirmation from the virtual interface owner. If the owner of the virtual interface is different from the owner of the connection on which it is provisioned, then the virtual interface will remain in this state until it is confirmed by the virtual interface owner.</p> </li> <li> <p> <code>verifying</code>: This state only applies to public virtual interfaces. Each public virtual interface needs validation before the virtual interface can be created.</p> </li> <li> <p> <code>pending</code>: A virtual interface is in this state from the time that it is created until the virtual interface is ready to forward traffic.</p> </li> <li> <p> <code>available</code>: A virtual interface that is able to forward traffic.</p> </li> <li> <p> <code>down</code>: A virtual interface that is BGP down.</p> </li> <li> <p> <code>deleting</code>: A virtual interface is in this state immediately after calling <a>DeleteVirtualInterface</a> until it can no longer forward traffic.</p> </li> <li> <p> <code>deleted</code>: A virtual interface that cannot forward traffic.</p> </li> <li> <p> <code>rejected</code>: The virtual interface owner has declined creation of the virtual interface. If a virtual interface in the <code>Confirming</code> state is deleted by the virtual interface owner, the virtual interface enters the <code>Rejected</code> state.</p> </li> <li> <p> <code>unknown</code>: The state of the virtual interface is not available.</p> </li> </ul></p>
     #[serde(rename = "virtualInterfaceState")]
@@ -719,7 +742,7 @@ pub struct DescribeConnectionLoaRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeConnectionLoaResponse {
     /// <p>The Letter of Authorization - Connecting Facility Assignment (LOA-CFA).</p>
     #[serde(rename = "loa")]
@@ -767,7 +790,7 @@ pub struct DescribeDirectConnectGatewayAssociationProposalsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDirectConnectGatewayAssociationProposalsResult {
     /// <p>Describes the Direct Connect gateway association proposals.</p>
     #[serde(rename = "directConnectGatewayAssociationProposals")]
@@ -809,7 +832,7 @@ pub struct DescribeDirectConnectGatewayAssociationsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDirectConnectGatewayAssociationsResult {
     /// <p>Information about the associations.</p>
     #[serde(rename = "directConnectGatewayAssociations")]
@@ -842,7 +865,7 @@ pub struct DescribeDirectConnectGatewayAttachmentsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDirectConnectGatewayAttachmentsResult {
     /// <p>The attachments.</p>
     #[serde(rename = "directConnectGatewayAttachments")]
@@ -871,7 +894,7 @@ pub struct DescribeDirectConnectGatewaysRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDirectConnectGatewaysResult {
     /// <p>The Direct Connect gateways.</p>
     #[serde(rename = "directConnectGateways")]
@@ -906,7 +929,7 @@ pub struct DescribeInterconnectLoaRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeInterconnectLoaResponse {
     /// <p>The Letter of Authorization - Connecting Facility Assignment (LOA-CFA).</p>
     #[serde(rename = "loa")]
@@ -953,7 +976,7 @@ pub struct DescribeTagsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeTagsResponse {
     /// <p>Information about the tags.</p>
     #[serde(rename = "resourceTags")]
@@ -975,7 +998,7 @@ pub struct DescribeVirtualInterfacesRequest {
 
 /// <p>Information about a Direct Connect gateway, which enables you to connect virtual interfaces and virtual private gateway or transit gateways.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DirectConnectGateway {
     /// <p>The autonomous system number (ASN) for the Amazon side of the connection.</p>
     #[serde(rename = "amazonSideAsn")]
@@ -1005,7 +1028,7 @@ pub struct DirectConnectGateway {
 
 /// <p>Information about an association between a Direct Connect gateway and a virtual private gateway or transit gateway.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DirectConnectGatewayAssociation {
     /// <p>The Amazon VPC prefixes to advertise to the Direct Connect gateway.</p>
     #[serde(rename = "allowedPrefixesToDirectConnectGateway")]
@@ -1051,7 +1074,7 @@ pub struct DirectConnectGatewayAssociation {
 
 /// <p>Information about the proposal request to attach a virtual private gateway to a Direct Connect gateway. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DirectConnectGatewayAssociationProposal {
     /// <p>Information about the associated gateway.</p>
     #[serde(rename = "associatedGateway")]
@@ -1085,13 +1108,13 @@ pub struct DirectConnectGatewayAssociationProposal {
 
 /// <p>Information about an attachment between a Direct Connect gateway and a virtual interface.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DirectConnectGatewayAttachment {
     /// <p><p>The state of the attachment. The following are the possible values:</p> <ul> <li> <p> <code>attaching</code>: The initial state after a virtual interface is created using the Direct Connect gateway.</p> </li> <li> <p> <code>attached</code>: The Direct Connect gateway and virtual interface are attached and ready to pass traffic.</p> </li> <li> <p> <code>detaching</code>: The initial state after calling <a>DeleteVirtualInterface</a>.</p> </li> <li> <p> <code>detached</code>: The virtual interface is detached from the Direct Connect gateway. Traffic flow between the Direct Connect gateway and virtual interface is stopped.</p> </li> </ul></p>
     #[serde(rename = "attachmentState")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub attachment_state: Option<String>,
-    /// <p>The type of attachment.</p>
+    /// <p>The interface type.</p>
     #[serde(rename = "attachmentType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub attachment_type: Option<String>,
@@ -1129,7 +1152,7 @@ pub struct DisassociateConnectionFromLagRequest {
 
 /// <p>Information about an interconnect.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Interconnect {
     /// <p>The Direct Connect endpoint on which the physical connection terminates.</p>
     #[serde(rename = "awsDevice")]
@@ -1179,10 +1202,14 @@ pub struct Interconnect {
     #[serde(rename = "region")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub region: Option<String>,
+    /// <p>Any tags assigned to the interconnect.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Interconnects {
     /// <p>The interconnects.</p>
     #[serde(rename = "interconnects")]
@@ -1192,7 +1219,7 @@ pub struct Interconnects {
 
 /// <p>Information about a link aggregation group (LAG).</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Lag {
     /// <p>Indicates whether the LAG can host other connections.</p>
     #[serde(rename = "allowsHostedConnections")]
@@ -1254,10 +1281,14 @@ pub struct Lag {
     #[serde(rename = "region")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub region: Option<String>,
+    /// <p>Any tags assigned to link aggregation group (LAG).</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Lags {
     /// <p>The LAGs.</p>
     #[serde(rename = "lags")]
@@ -1267,7 +1298,7 @@ pub struct Lags {
 
 /// <p>Information about a Letter of Authorization - Connecting Facility Assignment (LOA-CFA) for a connection.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Loa {
     /// <p>The binary contents of the LOA-CFA document.</p>
     #[serde(rename = "loaContent")]
@@ -1286,7 +1317,7 @@ pub struct Loa {
 
 /// <p>Information about an AWS Direct Connect location.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Location {
     /// <p>The available port speeds for the location.</p>
     #[serde(rename = "availablePortSpeeds")]
@@ -1307,7 +1338,7 @@ pub struct Location {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Locations {
     /// <p>The locations.</p>
     #[serde(rename = "locations")]
@@ -1330,7 +1361,7 @@ pub struct NewBGPPeer {
     #[serde(rename = "asn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub asn: Option<i64>,
-    /// <p>The authentication key for BGP configuration.</p>
+    /// <p>The authentication key for BGP configuration. This string has a minimum length of 6 characters and and a maximun lenth of 80 characters.</p>
     #[serde(rename = "authKey")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auth_key: Option<String>,
@@ -1354,7 +1385,7 @@ pub struct NewPrivateVirtualInterface {
     /// <p>The autonomous system (AS) number for Border Gateway Protocol (BGP) configuration.</p>
     #[serde(rename = "asn")]
     pub asn: i64,
-    /// <p>The authentication key for BGP configuration.</p>
+    /// <p>The authentication key for BGP configuration. This string has a minimum length of 6 characters and and a maximun lenth of 80 characters.</p>
     #[serde(rename = "authKey")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auth_key: Option<String>,
@@ -1370,6 +1401,10 @@ pub struct NewPrivateVirtualInterface {
     #[serde(rename = "mtu")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mtu: Option<i64>,
+    /// <p>Any tags assigned to the private virtual interface.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
     /// <p>The ID of the virtual private gateway.</p>
     #[serde(rename = "virtualGatewayId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1396,7 +1431,7 @@ pub struct NewPrivateVirtualInterfaceAllocation {
     /// <p>The autonomous system (AS) number for Border Gateway Protocol (BGP) configuration.</p>
     #[serde(rename = "asn")]
     pub asn: i64,
-    /// <p>The authentication key for BGP configuration.</p>
+    /// <p>The authentication key for BGP configuration. This string has a minimum length of 6 characters and and a maximun lenth of 80 characters.</p>
     #[serde(rename = "authKey")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auth_key: Option<String>,
@@ -1408,6 +1443,10 @@ pub struct NewPrivateVirtualInterfaceAllocation {
     #[serde(rename = "mtu")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mtu: Option<i64>,
+    /// <p>Any tags assigned to the private virtual interface to be provisioned on a connection.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
     /// <p>The name of the virtual interface assigned by the customer network.</p>
     #[serde(rename = "virtualInterfaceName")]
     pub virtual_interface_name: String,
@@ -1430,7 +1469,7 @@ pub struct NewPublicVirtualInterface {
     /// <p>The autonomous system (AS) number for Border Gateway Protocol (BGP) configuration.</p>
     #[serde(rename = "asn")]
     pub asn: i64,
-    /// <p>The authentication key for BGP configuration.</p>
+    /// <p>The authentication key for BGP configuration. This string has a minimum length of 6 characters and and a maximun lenth of 80 characters.</p>
     #[serde(rename = "authKey")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auth_key: Option<String>,
@@ -1442,6 +1481,10 @@ pub struct NewPublicVirtualInterface {
     #[serde(rename = "routeFilterPrefixes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub route_filter_prefixes: Option<Vec<RouteFilterPrefix>>,
+    /// <p>Any tags assigned to the public virtual interface.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
     /// <p>The name of the virtual interface assigned by the customer network.</p>
     #[serde(rename = "virtualInterfaceName")]
     pub virtual_interface_name: String,
@@ -1464,7 +1507,7 @@ pub struct NewPublicVirtualInterfaceAllocation {
     /// <p>The autonomous system (AS) number for Border Gateway Protocol (BGP) configuration.</p>
     #[serde(rename = "asn")]
     pub asn: i64,
-    /// <p>The authentication key for BGP configuration.</p>
+    /// <p>The authentication key for BGP configuration. This string has a minimum length of 6 characters and and a maximun lenth of 80 characters.</p>
     #[serde(rename = "authKey")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auth_key: Option<String>,
@@ -1476,6 +1519,10 @@ pub struct NewPublicVirtualInterfaceAllocation {
     #[serde(rename = "routeFilterPrefixes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub route_filter_prefixes: Option<Vec<RouteFilterPrefix>>,
+    /// <p>Any tags assigned to the public virtual interface to be provisioned on a connection.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
     /// <p>The name of the virtual interface assigned by the customer network.</p>
     #[serde(rename = "virtualInterfaceName")]
     pub virtual_interface_name: String,
@@ -1484,7 +1531,7 @@ pub struct NewPublicVirtualInterfaceAllocation {
     pub vlan: i64,
 }
 
-/// <p>Information about a transit virtual interface.</p>
+/// <p>Information about the transit virtual interface.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct NewTransitVirtualInterface {
     /// <p>The address family for the BGP peer.</p>
@@ -1511,10 +1558,14 @@ pub struct NewTransitVirtualInterface {
     #[serde(rename = "directConnectGatewayId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub direct_connect_gateway_id: Option<String>,
-    /// <p>The maximum transmission unit (MTU), in bytes. The supported values are 1500 and 9001. The default value is 1500.</p>
+    /// <p>The maximum transmission unit (MTU), in bytes. The supported values are 1500 and 8500. The default value is 1500. </p>
     #[serde(rename = "mtu")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mtu: Option<i64>,
+    /// <p>Any tags assigned to the transit virtual interface.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
     /// <p>The name of the virtual interface assigned by the customer network.</p>
     #[serde(rename = "virtualInterfaceName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1525,7 +1576,7 @@ pub struct NewTransitVirtualInterface {
     pub vlan: Option<i64>,
 }
 
-/// <p>Information about a transit virtual interface to be provisioned on a connection.</p>
+/// <p>Information about a transit virtual interface.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct NewTransitVirtualInterfaceAllocation {
     /// <p>The address family for the BGP peer.</p>
@@ -1548,10 +1599,14 @@ pub struct NewTransitVirtualInterfaceAllocation {
     #[serde(rename = "customerAddress")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub customer_address: Option<String>,
-    /// <p>The maximum transmission unit (MTU), in bytes. The supported values are 1500 and 9001. The default value is 1500. </p>
+    /// <p>The maximum transmission unit (MTU), in bytes. The supported values are 1500 and 8500. The default value is 1500. </p>
     #[serde(rename = "mtu")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mtu: Option<i64>,
+    /// <p>Any tags assigned to the transit virtual interface.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
     /// <p>The name of the virtual interface assigned by the customer network.</p>
     #[serde(rename = "virtualInterfaceName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1564,7 +1619,7 @@ pub struct NewTransitVirtualInterfaceAllocation {
 
 /// <p>Information about a tag associated with an AWS Direct Connect resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResourceTag {
     /// <p>The Amazon Resource Name (ARN) of the resource.</p>
     #[serde(rename = "resourceArn")]
@@ -1602,13 +1657,13 @@ pub struct TagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource.</p>
     #[serde(rename = "resourceArn")]
     pub resource_arn: String,
-    /// <p>The tags to add.</p>
+    /// <p>The tags to assign.</p>
     #[serde(rename = "tags")]
     pub tags: Vec<Tag>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1622,7 +1677,7 @@ pub struct UntagResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1642,7 +1697,7 @@ pub struct UpdateDirectConnectGatewayAssociationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDirectConnectGatewayAssociationResult {
     #[serde(rename = "directConnectGatewayAssociation")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1677,7 +1732,7 @@ pub struct UpdateVirtualInterfaceAttributesRequest {
 
 /// <p>Information about a virtual private gateway for a private virtual interface.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct VirtualGateway {
     /// <p>The ID of the virtual private gateway.</p>
     #[serde(rename = "virtualGatewayId")]
@@ -1690,7 +1745,7 @@ pub struct VirtualGateway {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct VirtualGateways {
     /// <p>The virtual private gateways.</p>
     #[serde(rename = "virtualGateways")]
@@ -1700,7 +1755,7 @@ pub struct VirtualGateways {
 
 /// <p>Information about a virtual interface.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct VirtualInterface {
     /// <p>The address family for the BGP peer.</p>
     #[serde(rename = "addressFamily")]
@@ -1718,7 +1773,7 @@ pub struct VirtualInterface {
     #[serde(rename = "asn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub asn: Option<i64>,
-    /// <p>The authentication key for BGP configuration.</p>
+    /// <p>The authentication key for BGP configuration. This string has a minimum length of 6 characters and and a maximun lenth of 80 characters.</p>
     #[serde(rename = "authKey")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auth_key: Option<String>,
@@ -1770,6 +1825,10 @@ pub struct VirtualInterface {
     #[serde(rename = "routeFilterPrefixes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub route_filter_prefixes: Option<Vec<RouteFilterPrefix>>,
+    /// <p>Any tags assigned to the virtual interface.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
     /// <p>The ID of the virtual private gateway. Applies only to private virtual interfaces.</p>
     #[serde(rename = "virtualGatewayId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1797,7 +1856,7 @@ pub struct VirtualInterface {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct VirtualInterfaces {
     /// <p>The virtual interfaces</p>
     #[serde(rename = "virtualInterfaces")]
@@ -1910,6 +1969,10 @@ pub enum AllocateHostedConnectionError {
     DirectConnectClient(String),
     /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
+    /// <p>A tag key was specified more than once.</p>
+    DuplicateTagKeys(String),
+    /// <p>You have reached the limit on the number of tags that can be assigned.</p>
+    TooManyTags(String),
 }
 
 impl AllocateHostedConnectionError {
@@ -1925,6 +1988,16 @@ impl AllocateHostedConnectionError {
                     return RusotoError::Service(
                         AllocateHostedConnectionError::DirectConnectServer(err.msg),
                     )
+                }
+                "DuplicateTagKeysException" => {
+                    return RusotoError::Service(AllocateHostedConnectionError::DuplicateTagKeys(
+                        err.msg,
+                    ))
+                }
+                "TooManyTagsException" => {
+                    return RusotoError::Service(AllocateHostedConnectionError::TooManyTags(
+                        err.msg,
+                    ))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -1943,6 +2016,8 @@ impl Error for AllocateHostedConnectionError {
         match *self {
             AllocateHostedConnectionError::DirectConnectClient(ref cause) => cause,
             AllocateHostedConnectionError::DirectConnectServer(ref cause) => cause,
+            AllocateHostedConnectionError::DuplicateTagKeys(ref cause) => cause,
+            AllocateHostedConnectionError::TooManyTags(ref cause) => cause,
         }
     }
 }
@@ -1953,6 +2028,10 @@ pub enum AllocatePrivateVirtualInterfaceError {
     DirectConnectClient(String),
     /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
+    /// <p>A tag key was specified more than once.</p>
+    DuplicateTagKeys(String),
+    /// <p>You have reached the limit on the number of tags that can be assigned.</p>
+    TooManyTags(String),
 }
 
 impl AllocatePrivateVirtualInterfaceError {
@@ -1971,6 +2050,16 @@ impl AllocatePrivateVirtualInterfaceError {
                         AllocatePrivateVirtualInterfaceError::DirectConnectServer(err.msg),
                     )
                 }
+                "DuplicateTagKeysException" => {
+                    return RusotoError::Service(
+                        AllocatePrivateVirtualInterfaceError::DuplicateTagKeys(err.msg),
+                    )
+                }
+                "TooManyTagsException" => {
+                    return RusotoError::Service(AllocatePrivateVirtualInterfaceError::TooManyTags(
+                        err.msg,
+                    ))
+                }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
@@ -1988,6 +2077,8 @@ impl Error for AllocatePrivateVirtualInterfaceError {
         match *self {
             AllocatePrivateVirtualInterfaceError::DirectConnectClient(ref cause) => cause,
             AllocatePrivateVirtualInterfaceError::DirectConnectServer(ref cause) => cause,
+            AllocatePrivateVirtualInterfaceError::DuplicateTagKeys(ref cause) => cause,
+            AllocatePrivateVirtualInterfaceError::TooManyTags(ref cause) => cause,
         }
     }
 }
@@ -1998,6 +2089,10 @@ pub enum AllocatePublicVirtualInterfaceError {
     DirectConnectClient(String),
     /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
+    /// <p>A tag key was specified more than once.</p>
+    DuplicateTagKeys(String),
+    /// <p>You have reached the limit on the number of tags that can be assigned.</p>
+    TooManyTags(String),
 }
 
 impl AllocatePublicVirtualInterfaceError {
@@ -2016,6 +2111,16 @@ impl AllocatePublicVirtualInterfaceError {
                         AllocatePublicVirtualInterfaceError::DirectConnectServer(err.msg),
                     )
                 }
+                "DuplicateTagKeysException" => {
+                    return RusotoError::Service(
+                        AllocatePublicVirtualInterfaceError::DuplicateTagKeys(err.msg),
+                    )
+                }
+                "TooManyTagsException" => {
+                    return RusotoError::Service(AllocatePublicVirtualInterfaceError::TooManyTags(
+                        err.msg,
+                    ))
+                }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
@@ -2033,6 +2138,8 @@ impl Error for AllocatePublicVirtualInterfaceError {
         match *self {
             AllocatePublicVirtualInterfaceError::DirectConnectClient(ref cause) => cause,
             AllocatePublicVirtualInterfaceError::DirectConnectServer(ref cause) => cause,
+            AllocatePublicVirtualInterfaceError::DuplicateTagKeys(ref cause) => cause,
+            AllocatePublicVirtualInterfaceError::TooManyTags(ref cause) => cause,
         }
     }
 }
@@ -2043,6 +2150,10 @@ pub enum AllocateTransitVirtualInterfaceError {
     DirectConnectClient(String),
     /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
+    /// <p>A tag key was specified more than once.</p>
+    DuplicateTagKeys(String),
+    /// <p>You have reached the limit on the number of tags that can be assigned.</p>
+    TooManyTags(String),
 }
 
 impl AllocateTransitVirtualInterfaceError {
@@ -2061,6 +2172,16 @@ impl AllocateTransitVirtualInterfaceError {
                         AllocateTransitVirtualInterfaceError::DirectConnectServer(err.msg),
                     )
                 }
+                "DuplicateTagKeysException" => {
+                    return RusotoError::Service(
+                        AllocateTransitVirtualInterfaceError::DuplicateTagKeys(err.msg),
+                    )
+                }
+                "TooManyTagsException" => {
+                    return RusotoError::Service(AllocateTransitVirtualInterfaceError::TooManyTags(
+                        err.msg,
+                    ))
+                }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
@@ -2078,6 +2199,8 @@ impl Error for AllocateTransitVirtualInterfaceError {
         match *self {
             AllocateTransitVirtualInterfaceError::DirectConnectClient(ref cause) => cause,
             AllocateTransitVirtualInterfaceError::DirectConnectServer(ref cause) => cause,
+            AllocateTransitVirtualInterfaceError::DuplicateTagKeys(ref cause) => cause,
+            AllocateTransitVirtualInterfaceError::TooManyTags(ref cause) => cause,
         }
     }
 }
@@ -2436,6 +2559,10 @@ pub enum CreateConnectionError {
     DirectConnectClient(String),
     /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
+    /// <p>A tag key was specified more than once.</p>
+    DuplicateTagKeys(String),
+    /// <p>You have reached the limit on the number of tags that can be assigned.</p>
+    TooManyTags(String),
 }
 
 impl CreateConnectionError {
@@ -2451,6 +2578,12 @@ impl CreateConnectionError {
                     return RusotoError::Service(CreateConnectionError::DirectConnectServer(
                         err.msg,
                     ))
+                }
+                "DuplicateTagKeysException" => {
+                    return RusotoError::Service(CreateConnectionError::DuplicateTagKeys(err.msg))
+                }
+                "TooManyTagsException" => {
+                    return RusotoError::Service(CreateConnectionError::TooManyTags(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -2469,6 +2602,8 @@ impl Error for CreateConnectionError {
         match *self {
             CreateConnectionError::DirectConnectClient(ref cause) => cause,
             CreateConnectionError::DirectConnectServer(ref cause) => cause,
+            CreateConnectionError::DuplicateTagKeys(ref cause) => cause,
+            CreateConnectionError::TooManyTags(ref cause) => cause,
         }
     }
 }
@@ -2622,6 +2757,10 @@ pub enum CreateInterconnectError {
     DirectConnectClient(String),
     /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
+    /// <p>A tag key was specified more than once.</p>
+    DuplicateTagKeys(String),
+    /// <p>You have reached the limit on the number of tags that can be assigned.</p>
+    TooManyTags(String),
 }
 
 impl CreateInterconnectError {
@@ -2637,6 +2776,12 @@ impl CreateInterconnectError {
                     return RusotoError::Service(CreateInterconnectError::DirectConnectServer(
                         err.msg,
                     ))
+                }
+                "DuplicateTagKeysException" => {
+                    return RusotoError::Service(CreateInterconnectError::DuplicateTagKeys(err.msg))
+                }
+                "TooManyTagsException" => {
+                    return RusotoError::Service(CreateInterconnectError::TooManyTags(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -2655,6 +2800,8 @@ impl Error for CreateInterconnectError {
         match *self {
             CreateInterconnectError::DirectConnectClient(ref cause) => cause,
             CreateInterconnectError::DirectConnectServer(ref cause) => cause,
+            CreateInterconnectError::DuplicateTagKeys(ref cause) => cause,
+            CreateInterconnectError::TooManyTags(ref cause) => cause,
         }
     }
 }
@@ -2665,6 +2812,10 @@ pub enum CreateLagError {
     DirectConnectClient(String),
     /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
+    /// <p>A tag key was specified more than once.</p>
+    DuplicateTagKeys(String),
+    /// <p>You have reached the limit on the number of tags that can be assigned.</p>
+    TooManyTags(String),
 }
 
 impl CreateLagError {
@@ -2676,6 +2827,12 @@ impl CreateLagError {
                 }
                 "DirectConnectServerException" => {
                     return RusotoError::Service(CreateLagError::DirectConnectServer(err.msg))
+                }
+                "DuplicateTagKeysException" => {
+                    return RusotoError::Service(CreateLagError::DuplicateTagKeys(err.msg))
+                }
+                "TooManyTagsException" => {
+                    return RusotoError::Service(CreateLagError::TooManyTags(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -2694,6 +2851,8 @@ impl Error for CreateLagError {
         match *self {
             CreateLagError::DirectConnectClient(ref cause) => cause,
             CreateLagError::DirectConnectServer(ref cause) => cause,
+            CreateLagError::DuplicateTagKeys(ref cause) => cause,
+            CreateLagError::TooManyTags(ref cause) => cause,
         }
     }
 }
@@ -2704,6 +2863,10 @@ pub enum CreatePrivateVirtualInterfaceError {
     DirectConnectClient(String),
     /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
+    /// <p>A tag key was specified more than once.</p>
+    DuplicateTagKeys(String),
+    /// <p>You have reached the limit on the number of tags that can be assigned.</p>
+    TooManyTags(String),
 }
 
 impl CreatePrivateVirtualInterfaceError {
@@ -2722,6 +2885,16 @@ impl CreatePrivateVirtualInterfaceError {
                         CreatePrivateVirtualInterfaceError::DirectConnectServer(err.msg),
                     )
                 }
+                "DuplicateTagKeysException" => {
+                    return RusotoError::Service(
+                        CreatePrivateVirtualInterfaceError::DuplicateTagKeys(err.msg),
+                    )
+                }
+                "TooManyTagsException" => {
+                    return RusotoError::Service(CreatePrivateVirtualInterfaceError::TooManyTags(
+                        err.msg,
+                    ))
+                }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
@@ -2739,6 +2912,8 @@ impl Error for CreatePrivateVirtualInterfaceError {
         match *self {
             CreatePrivateVirtualInterfaceError::DirectConnectClient(ref cause) => cause,
             CreatePrivateVirtualInterfaceError::DirectConnectServer(ref cause) => cause,
+            CreatePrivateVirtualInterfaceError::DuplicateTagKeys(ref cause) => cause,
+            CreatePrivateVirtualInterfaceError::TooManyTags(ref cause) => cause,
         }
     }
 }
@@ -2749,6 +2924,10 @@ pub enum CreatePublicVirtualInterfaceError {
     DirectConnectClient(String),
     /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
+    /// <p>A tag key was specified more than once.</p>
+    DuplicateTagKeys(String),
+    /// <p>You have reached the limit on the number of tags that can be assigned.</p>
+    TooManyTags(String),
 }
 
 impl CreatePublicVirtualInterfaceError {
@@ -2767,6 +2946,16 @@ impl CreatePublicVirtualInterfaceError {
                         CreatePublicVirtualInterfaceError::DirectConnectServer(err.msg),
                     )
                 }
+                "DuplicateTagKeysException" => {
+                    return RusotoError::Service(
+                        CreatePublicVirtualInterfaceError::DuplicateTagKeys(err.msg),
+                    )
+                }
+                "TooManyTagsException" => {
+                    return RusotoError::Service(CreatePublicVirtualInterfaceError::TooManyTags(
+                        err.msg,
+                    ))
+                }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
@@ -2784,6 +2973,8 @@ impl Error for CreatePublicVirtualInterfaceError {
         match *self {
             CreatePublicVirtualInterfaceError::DirectConnectClient(ref cause) => cause,
             CreatePublicVirtualInterfaceError::DirectConnectServer(ref cause) => cause,
+            CreatePublicVirtualInterfaceError::DuplicateTagKeys(ref cause) => cause,
+            CreatePublicVirtualInterfaceError::TooManyTags(ref cause) => cause,
         }
     }
 }
@@ -2794,6 +2985,10 @@ pub enum CreateTransitVirtualInterfaceError {
     DirectConnectClient(String),
     /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
+    /// <p>A tag key was specified more than once.</p>
+    DuplicateTagKeys(String),
+    /// <p>You have reached the limit on the number of tags that can be assigned.</p>
+    TooManyTags(String),
 }
 
 impl CreateTransitVirtualInterfaceError {
@@ -2812,6 +3007,16 @@ impl CreateTransitVirtualInterfaceError {
                         CreateTransitVirtualInterfaceError::DirectConnectServer(err.msg),
                     )
                 }
+                "DuplicateTagKeysException" => {
+                    return RusotoError::Service(
+                        CreateTransitVirtualInterfaceError::DuplicateTagKeys(err.msg),
+                    )
+                }
+                "TooManyTagsException" => {
+                    return RusotoError::Service(CreateTransitVirtualInterfaceError::TooManyTags(
+                        err.msg,
+                    ))
+                }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
@@ -2829,6 +3034,8 @@ impl Error for CreateTransitVirtualInterfaceError {
         match *self {
             CreateTransitVirtualInterfaceError::DirectConnectClient(ref cause) => cause,
             CreateTransitVirtualInterfaceError::DirectConnectServer(ref cause) => cause,
+            CreateTransitVirtualInterfaceError::DuplicateTagKeys(ref cause) => cause,
+            CreateTransitVirtualInterfaceError::TooManyTags(ref cause) => cause,
         }
     }
 }
@@ -4280,7 +4487,7 @@ pub trait DirectConnect {
         input: CreatePublicVirtualInterfaceRequest,
     ) -> RusotoFuture<VirtualInterface, CreatePublicVirtualInterfaceError>;
 
-    /// <p>Creates a transit virtual interface. A transit virtual interface is a VLAN that transports traffic from a Direct Connect gateway to one or more transit gateways. A transit virtual interface enables the connection of multiple VPCs attached to a transit gateway to a Direct Connect gateway.</p>
+    /// <p><p>Creates a transit virtual interface. A transit virtual interface should be used to access one or more transit gateways associated with Direct Connect gateways. A transit virtual interface enables the connection of multiple VPCs attached to a transit gateway to a Direct Connect gateway.</p> <important> <p>If you associate your transit gateway with one or more Direct Connect gateways, the Autonomous System Number (ASN) used by the transit gateway and the Direct Connect gateway must be different. For example, if you use the default ASN 64512 for both your the transit gateway and Direct Connect gateway, the association request fails.</p> </important></p>
     fn create_transit_virtual_interface(
         &self,
         input: CreateTransitVirtualInterfaceRequest,
@@ -4480,10 +4687,7 @@ impl DirectConnectClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> DirectConnectClient {
-        DirectConnectClient {
-            client: Client::shared(),
-            region,
-        }
+        Self::new_with_client(Client::shared(), region)
     }
 
     pub fn new_with<P, D>(
@@ -4497,10 +4701,14 @@ impl DirectConnectClient {
         D: DispatchSignedRequest + Send + Sync + 'static,
         D::Future: Send,
     {
-        DirectConnectClient {
-            client: Client::new_with(credentials_provider, request_dispatcher),
+        Self::new_with_client(
+            Client::new_with(credentials_provider, request_dispatcher),
             region,
-        }
+        )
+    }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> DirectConnectClient {
+        DirectConnectClient { client, region }
     }
 }
 
@@ -5139,7 +5347,7 @@ impl DirectConnect for DirectConnectClient {
         })
     }
 
-    /// <p>Creates a transit virtual interface. A transit virtual interface is a VLAN that transports traffic from a Direct Connect gateway to one or more transit gateways. A transit virtual interface enables the connection of multiple VPCs attached to a transit gateway to a Direct Connect gateway.</p>
+    /// <p><p>Creates a transit virtual interface. A transit virtual interface should be used to access one or more transit gateways associated with Direct Connect gateways. A transit virtual interface enables the connection of multiple VPCs attached to a transit gateway to a Direct Connect gateway.</p> <important> <p>If you associate your transit gateway with one or more Direct Connect gateways, the Autonomous System Number (ASN) used by the transit gateway and the Direct Connect gateway must be different. For example, if you use the default ASN 64512 for both your the transit gateway and Direct Connect gateway, the association request fails.</p> </important></p>
     fn create_transit_virtual_interface(
         &self,
         input: CreateTransitVirtualInterfaceRequest,

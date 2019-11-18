@@ -9,17 +9,16 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
+#![allow(warnings)]
 
-use std::error::Error;
-use std::fmt;
-
-#[allow(warnings)]
 use futures::future;
 use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
+use std::error::Error;
+use std::fmt;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto::xml::error::*;
@@ -71,6 +70,8 @@ impl AllowedNodeGroupIdDeserializer {
 /// <p>Represents the allowed node types you can use to modify your cluster or replication group.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct AllowedNodeTypeModificationsMessage {
+    /// <p>A string list, each element of which specifies a cache node type which you can use to scale your cluster or replication group.</p> <p>When scaling down on a Redis cluster or replication group using <code>ModifyCacheCluster</code> or <code>ModifyReplicationGroup</code>, use a value from this list for the <code>CacheNodeType</code> parameter.</p>
+    pub scale_down_modifications: Option<Vec<String>>,
     /// <p>A string list, each element of which specifies a cache node type which you can use to scale your cluster or replication group.</p> <p>When scaling up a Redis cluster or replication group using <code>ModifyCacheCluster</code> or <code>ModifyReplicationGroup</code>, use a value from this list for the <code>CacheNodeType</code> parameter.</p>
     pub scale_up_modifications: Option<Vec<String>>,
 }
@@ -87,6 +88,11 @@ impl AllowedNodeTypeModificationsMessageDeserializer {
             stack,
             |name, stack, obj| {
                 match name {
+                    "ScaleDownModifications" => {
+                        obj.scale_down_modifications.get_or_insert(vec![]).extend(
+                            NodeTypeListDeserializer::deserialize("ScaleDownModifications", stack)?,
+                        );
+                    }
                     "ScaleUpModifications" => {
                         obj.scale_up_modifications.get_or_insert(vec![]).extend(
                             NodeTypeListDeserializer::deserialize("ScaleUpModifications", stack)?,
@@ -313,7 +319,7 @@ impl BooleanOptionalDeserializer {
 /// <p>Contains all of the attributes of a specific cluster.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CacheCluster {
-    /// <p>A flag that enables encryption at-rest when set to <code>true</code>.</p> <p>You cannot modify the value of <code>AtRestEncryptionEnabled</code> after the cluster is created. To enable at-rest encryption on a cluster you must set <code>AtRestEncryptionEnabled</code> to <code>true</code> when you create a cluster.</p> <p> <b>Required:</b> Only available when creating a replication group in an Amazon VPC using redis version <code>3.2.6</code> or <code>4.x</code>.</p> <p>Default: <code>false</code> </p>
+    /// <p>A flag that enables encryption at-rest when set to <code>true</code>.</p> <p>You cannot modify the value of <code>AtRestEncryptionEnabled</code> after the cluster is created. To enable at-rest encryption on a cluster you must set <code>AtRestEncryptionEnabled</code> to <code>true</code> when you create a cluster.</p> <p> <b>Required:</b> Only available when creating a replication group in an Amazon VPC using redis version <code>3.2.6</code>, <code>4.x</code> or later.</p> <p>Default: <code>false</code> </p>
     pub at_rest_encryption_enabled: Option<bool>,
     /// <p>A flag that enables using an <code>AuthToken</code> (password) when issuing Redis commands.</p> <p>Default: <code>false</code> </p>
     pub auth_token_enabled: Option<bool>,
@@ -360,7 +366,7 @@ pub struct CacheCluster {
     pub snapshot_retention_limit: Option<i64>,
     /// <p>The daily time range (in UTC) during which ElastiCache begins taking a daily snapshot of your cluster.</p> <p>Example: <code>05:00-09:00</code> </p>
     pub snapshot_window: Option<String>,
-    /// <p>A flag that enables in-transit encryption when set to <code>true</code>.</p> <p>You cannot modify the value of <code>TransitEncryptionEnabled</code> after the cluster is created. To enable in-transit encryption on a cluster you must set <code>TransitEncryptionEnabled</code> to <code>true</code> when you create a cluster.</p> <p> <b>Required:</b> Only available when creating a replication group in an Amazon VPC using redis version <code>3.2.6</code> or <code>4.x</code>.</p> <p>Default: <code>false</code> </p>
+    /// <p>A flag that enables in-transit encryption when set to <code>true</code>.</p> <p>You cannot modify the value of <code>TransitEncryptionEnabled</code> after the cluster is created. To enable in-transit encryption on a cluster you must set <code>TransitEncryptionEnabled</code> to <code>true</code> when you create a cluster.</p> <p> <b>Required:</b> Only available when creating a replication group in an Amazon VPC using redis version <code>3.2.6</code>, <code>4.x</code> or later.</p> <p>Default: <code>false</code> </p>
     pub transit_encryption_enabled: Option<bool>,
 }
 
@@ -1533,6 +1539,8 @@ impl ConfigureShardSerializer {
 /// <p>Represents the input of a <code>CopySnapshotMessage</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CopySnapshotMessage {
+    /// <p>The ID of the KMS key used to encrypt the target snapshot.</p>
+    pub kms_key_id: Option<String>,
     /// <p>The name of an existing snapshot from which to make a copy.</p>
     pub source_snapshot_name: String,
     /// <p>The Amazon S3 bucket to which the snapshot is exported. This parameter is used only when exporting a snapshot for external access.</p> <p>When using this parameter to export a snapshot, be sure Amazon ElastiCache has the needed permissions to this S3 bucket. For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/backups-exporting.html#backups-exporting-grant-access">Step 2: Grant ElastiCache Access to Your Amazon S3 Bucket</a> in the <i>Amazon ElastiCache User Guide</i>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/Snapshots.Exporting.html">Exporting a Snapshot</a> in the <i>Amazon ElastiCache User Guide</i>.</p>
@@ -1550,6 +1558,9 @@ impl CopySnapshotMessageSerializer {
             prefix.push_str(".");
         }
 
+        if let Some(ref field_value) = obj.kms_key_id {
+            params.put(&format!("{}{}", prefix, "KmsKeyId"), &field_value);
+        }
         params.put(
             &format!("{}{}", prefix, "SourceSnapshotName"),
             &obj.source_snapshot_name,
@@ -1596,7 +1607,7 @@ pub struct CreateCacheClusterMessage {
     pub auth_token: Option<String>,
     /// <p>This parameter is currently disabled.</p>
     pub auto_minor_version_upgrade: Option<bool>,
-    /// <p><p>The node group (shard) identifier. This parameter is stored as a lowercase string.</p> <p> <b>Constraints:</b> </p> <ul> <li> <p>A name must contain from 1 to 20 alphanumeric characters or hyphens.</p> </li> <li> <p>The first character must be a letter.</p> </li> <li> <p>A name cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul></p>
+    /// <p><p>The node group (shard) identifier. This parameter is stored as a lowercase string.</p> <p> <b>Constraints:</b> </p> <ul> <li> <p>A name must contain from 1 to 50 alphanumeric characters or hyphens.</p> </li> <li> <p>The first character must be a letter.</p> </li> <li> <p>A name cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul></p>
     pub cache_cluster_id: String,
     /// <p><p>The compute and memory capacity of the nodes in the node group (shard).</p> <p>The following node types are supported by ElastiCache. Generally speaking, the current generation types provide more memory and computational power at lower cost when compared to their equivalent previous generation counterparts.</p> <ul> <li> <p>General purpose:</p> <ul> <li> <p>Current generation: </p> <p> <b>M5 node types:</b> <code>cache.m5.large</code>, <code>cache.m5.xlarge</code>, <code>cache.m5.2xlarge</code>, <code>cache.m5.4xlarge</code>, <code>cache.m5.12xlarge</code>, <code>cache.m5.24xlarge</code> </p> <p> <b>M4 node types:</b> <code>cache.m4.large</code>, <code>cache.m4.xlarge</code>, <code>cache.m4.2xlarge</code>, <code>cache.m4.4xlarge</code>, <code>cache.m4.10xlarge</code> </p> <p> <b>T2 node types:</b> <code>cache.t2.micro</code>, <code>cache.t2.small</code>, <code>cache.t2.medium</code> </p> </li> <li> <p>Previous generation: (not recommended)</p> <p> <b>T1 node types:</b> <code>cache.t1.micro</code> </p> <p> <b>M1 node types:</b> <code>cache.m1.small</code>, <code>cache.m1.medium</code>, <code>cache.m1.large</code>, <code>cache.m1.xlarge</code> </p> <p> <b>M3 node types:</b> <code>cache.m3.medium</code>, <code>cache.m3.large</code>, <code>cache.m3.xlarge</code>, <code>cache.m3.2xlarge</code> </p> </li> </ul> </li> <li> <p>Compute optimized:</p> <ul> <li> <p>Previous generation: (not recommended)</p> <p> <b>C1 node types:</b> <code>cache.c1.xlarge</code> </p> </li> </ul> </li> <li> <p>Memory optimized:</p> <ul> <li> <p>Current generation: </p> <p> <b>R5 node types:</b> <code>cache.r5.large</code>, <code>cache.r5.xlarge</code>, <code>cache.r5.2xlarge</code>, <code>cache.r5.4xlarge</code>, <code>cache.r5.12xlarge</code>, <code>cache.r5.24xlarge</code> </p> <p> <b>R4 node types:</b> <code>cache.r4.large</code>, <code>cache.r4.xlarge</code>, <code>cache.r4.2xlarge</code>, <code>cache.r4.4xlarge</code>, <code>cache.r4.8xlarge</code>, <code>cache.r4.16xlarge</code> </p> </li> <li> <p>Previous generation: (not recommended)</p> <p> <b>M2 node types:</b> <code>cache.m2.xlarge</code>, <code>cache.m2.2xlarge</code>, <code>cache.m2.4xlarge</code> </p> <p> <b>R3 node types:</b> <code>cache.r3.large</code>, <code>cache.r3.xlarge</code>, <code>cache.r3.2xlarge</code>, <code>cache.r3.4xlarge</code>, <code>cache.r3.8xlarge</code> </p> </li> </ul> </li> </ul> <p> <b>Additional node type info</b> </p> <ul> <li> <p>All current generation instance types are created in Amazon VPC by default.</p> </li> <li> <p>Redis append-only files (AOF) are not supported for T1 or T2 instances.</p> </li> <li> <p>Redis Multi-AZ with automatic failover is not supported on T1 instances.</p> </li> <li> <p>Redis configuration variables <code>appendonly</code> and <code>appendfsync</code> are not supported on Redis version 2.8.22 and later.</p> </li> </ul></p>
     pub cache_node_type: Option<String>,
@@ -1976,7 +1987,7 @@ impl CreateCacheSubnetGroupResultDeserializer {
 /// <p>Represents the input of a <code>CreateReplicationGroup</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateReplicationGroupMessage {
-    /// <p>A flag that enables encryption at rest when set to <code>true</code>.</p> <p>You cannot modify the value of <code>AtRestEncryptionEnabled</code> after the replication group is created. To enable encryption at rest on a replication group you must set <code>AtRestEncryptionEnabled</code> to <code>true</code> when you create the replication group. </p> <p> <b>Required:</b> Only available when creating a replication group in an Amazon VPC using redis version <code>3.2.6</code> or <code>4.x</code>.</p> <p>Default: <code>false</code> </p>
+    /// <p>A flag that enables encryption at rest when set to <code>true</code>.</p> <p>You cannot modify the value of <code>AtRestEncryptionEnabled</code> after the replication group is created. To enable encryption at rest on a replication group you must set <code>AtRestEncryptionEnabled</code> to <code>true</code> when you create the replication group. </p> <p> <b>Required:</b> Only available when creating a replication group in an Amazon VPC using redis version <code>3.2.6</code>, <code>4.x</code> or later.</p> <p>Default: <code>false</code> </p>
     pub at_rest_encryption_enabled: Option<bool>,
     /// <p> <b>Reserved parameter.</b> The password used to access a password protected server.</p> <p> <code>AuthToken</code> can be specified only on replication groups where <code>TransitEncryptionEnabled</code> is <code>true</code>.</p> <important> <p>For HIPAA compliance, you must specify <code>TransitEncryptionEnabled</code> as <code>true</code>, an <code>AuthToken</code>, and a <code>CacheSubnetGroup</code>.</p> </important> <p>Password constraints:</p> <ul> <li> <p>Must be only printable ASCII characters.</p> </li> <li> <p>Must be at least 16 characters and no more than 128 characters in length.</p> </li> <li> <p>Cannot contain any of the following characters: '/', '"', or '@'. </p> </li> </ul> <p>For more information, see <a href="http://redis.io/commands/AUTH">AUTH password</a> at http://redis.io/commands/AUTH.</p>
     pub auth_token: Option<String>,
@@ -1996,6 +2007,8 @@ pub struct CreateReplicationGroupMessage {
     pub engine: Option<String>,
     /// <p>The version number of the cache engine to be used for the clusters in this replication group. To view the supported cache engine versions, use the <code>DescribeCacheEngineVersions</code> operation.</p> <p> <b>Important:</b> You can upgrade to a newer engine version (see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/SelectEngine.html#VersionManagement">Selecting a Cache Engine and Version</a>) in the <i>ElastiCache User Guide</i>, but you cannot downgrade to an earlier engine version. If you want to use an earlier engine version, you must delete the existing cluster or replication group and create it anew with the earlier engine version. </p>
     pub engine_version: Option<String>,
+    /// <p>The ID of the KMS key used to encrypt the disk on the cluster.</p>
+    pub kms_key_id: Option<String>,
     /// <p>A list of node group (shard) configuration options. Each node group (shard) configuration has the following members: <code>PrimaryAvailabilityZone</code>, <code>ReplicaAvailabilityZones</code>, <code>ReplicaCount</code>, and <code>Slots</code>.</p> <p>If you're creating a Redis (cluster mode disabled) or a Redis (cluster mode enabled) replication group, you can use this parameter to individually configure each node group (shard), or you can omit this parameter. However, when seeding a Redis (cluster mode enabled) cluster from a S3 rdb file, you must configure each node group (shard) using this parameter because you must specify the slots for each node group.</p>
     pub node_group_configuration: Option<Vec<NodeGroupConfiguration>>,
     /// <p><p>The Amazon Resource Name (ARN) of the Amazon Simple Notification Service (SNS) topic to which notifications are sent.</p> <note> <p>The Amazon SNS topic owner must be the same as the cluster owner.</p> </note></p>
@@ -2016,7 +2029,7 @@ pub struct CreateReplicationGroupMessage {
     pub replicas_per_node_group: Option<i64>,
     /// <p>A user-created description for the replication group.</p>
     pub replication_group_description: String,
-    /// <p><p>The replication group identifier. This parameter is stored as a lowercase string.</p> <p>Constraints:</p> <ul> <li> <p>A name must contain from 1 to 20 alphanumeric characters or hyphens.</p> </li> <li> <p>The first character must be a letter.</p> </li> <li> <p>A name cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul></p>
+    /// <p><p>The replication group identifier. This parameter is stored as a lowercase string.</p> <p>Constraints:</p> <ul> <li> <p>A name must contain from 1 to 40 alphanumeric characters or hyphens.</p> </li> <li> <p>The first character must be a letter.</p> </li> <li> <p>A name cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul></p>
     pub replication_group_id: String,
     /// <p>One or more Amazon VPC security groups associated with this replication group.</p> <p>Use this parameter only when you are creating a replication group in an Amazon Virtual Private Cloud (Amazon VPC).</p>
     pub security_group_ids: Option<Vec<String>>,
@@ -2030,7 +2043,7 @@ pub struct CreateReplicationGroupMessage {
     pub snapshot_window: Option<String>,
     /// <p>A list of cost allocation tags to be added to this resource. Tags are comma-separated key,value pairs (e.g. Key=<code>myKey</code>, Value=<code>myKeyValue</code>. You can include multiple tags as shown following: Key=<code>myKey</code>, Value=<code>myKeyValue</code> Key=<code>mySecondKey</code>, Value=<code>mySecondKeyValue</code>.</p>
     pub tags: Option<Vec<Tag>>,
-    /// <p><p>A flag that enables in-transit encryption when set to <code>true</code>.</p> <p>You cannot modify the value of <code>TransitEncryptionEnabled</code> after the cluster is created. To enable in-transit encryption on a cluster you must set <code>TransitEncryptionEnabled</code> to <code>true</code> when you create a cluster.</p> <p>This parameter is valid only if the <code>Engine</code> parameter is <code>redis</code>, the <code>EngineVersion</code> parameter is <code>3.2.6</code> or <code>4.x</code>, and the cluster is being created in an Amazon VPC.</p> <p>If you enable in-transit encryption, you must also specify a value for <code>CacheSubnetGroup</code>.</p> <p> <b>Required:</b> Only available when creating a replication group in an Amazon VPC using redis version <code>3.2.6</code> or <code>4.x</code>.</p> <p>Default: <code>false</code> </p> <important> <p>For HIPAA compliance, you must specify <code>TransitEncryptionEnabled</code> as <code>true</code>, an <code>AuthToken</code>, and a <code>CacheSubnetGroup</code>.</p> </important></p>
+    /// <p><p>A flag that enables in-transit encryption when set to <code>true</code>.</p> <p>You cannot modify the value of <code>TransitEncryptionEnabled</code> after the cluster is created. To enable in-transit encryption on a cluster you must set <code>TransitEncryptionEnabled</code> to <code>true</code> when you create a cluster.</p> <p>This parameter is valid only if the <code>Engine</code> parameter is <code>redis</code>, the <code>EngineVersion</code> parameter is <code>3.2.6</code>, <code>4.x</code> or later, and the cluster is being created in an Amazon VPC.</p> <p>If you enable in-transit encryption, you must also specify a value for <code>CacheSubnetGroup</code>.</p> <p> <b>Required:</b> Only available when creating a replication group in an Amazon VPC using redis version <code>3.2.6</code>, <code>4.x</code> or later.</p> <p>Default: <code>false</code> </p> <important> <p>For HIPAA compliance, you must specify <code>TransitEncryptionEnabled</code> as <code>true</code>, an <code>AuthToken</code>, and a <code>CacheSubnetGroup</code>.</p> </important></p>
     pub transit_encryption_enabled: Option<bool>,
 }
 
@@ -2091,6 +2104,9 @@ impl CreateReplicationGroupMessageSerializer {
         }
         if let Some(ref field_value) = obj.engine_version {
             params.put(&format!("{}{}", prefix, "EngineVersion"), &field_value);
+        }
+        if let Some(ref field_value) = obj.kms_key_id {
+            params.put(&format!("{}{}", prefix, "KmsKeyId"), &field_value);
         }
         if let Some(ref field_value) = obj.node_group_configuration {
             NodeGroupConfigurationListSerializer::serialize(
@@ -2217,6 +2233,8 @@ impl CreateReplicationGroupResultDeserializer {
 pub struct CreateSnapshotMessage {
     /// <p>The identifier of an existing cluster. The snapshot is created from this cluster.</p>
     pub cache_cluster_id: Option<String>,
+    /// <p>The ID of the KMS key used to encrypt the snapshot.</p>
+    pub kms_key_id: Option<String>,
     /// <p>The identifier of an existing replication group. The snapshot is created from this replication group.</p>
     pub replication_group_id: Option<String>,
     /// <p>A name for the snapshot being created.</p>
@@ -2234,6 +2252,9 @@ impl CreateSnapshotMessageSerializer {
 
         if let Some(ref field_value) = obj.cache_cluster_id {
             params.put(&format!("{}{}", prefix, "CacheClusterId"), &field_value);
+        }
+        if let Some(ref field_value) = obj.kms_key_id {
+            params.put(&format!("{}{}", prefix, "KmsKeyId"), &field_value);
         }
         if let Some(ref field_value) = obj.replication_group_id {
             params.put(&format!("{}{}", prefix, "ReplicationGroupId"), &field_value);
@@ -3699,7 +3720,7 @@ impl ListTagsForResourceMessageSerializer {
 /// <p>Represents the input of a <code>ModifyCacheCluster</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyCacheClusterMessage {
-    /// <p><p>Specifies whether the new nodes in this Memcached cluster are all created in a single Availability Zone or created across multiple Availability Zones.</p> <p>Valid values: <code>single-az</code> | <code>cross-az</code>.</p> <p>This option is only supported for Memcached clusters.</p> <note> <p>You cannot specify <code>single-az</code> if the Memcached cluster already has cache nodes in different Availability Zones. If <code>cross-az</code> is specified, existing Memcached nodes remain in their current Availability Zone.</p> <p>Only newly created nodes are located in different Availability Zones. For instructions on how to move existing Memcached nodes to different Availability Zones, see the <b>Availability Zone Considerations</b> section of <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/mem-ug/CacheNode.Memcached.html">Cache Node Considerations for Memcached</a>.</p> </note></p>
+    /// <p><p>Specifies whether the new nodes in this Memcached cluster are all created in a single Availability Zone or created across multiple Availability Zones.</p> <p>Valid values: <code>single-az</code> | <code>cross-az</code>.</p> <p>This option is only supported for Memcached clusters.</p> <note> <p>You cannot specify <code>single-az</code> if the Memcached cluster already has cache nodes in different Availability Zones. If <code>cross-az</code> is specified, existing Memcached nodes remain in their current Availability Zone.</p> <p>Only newly created nodes are located in different Availability Zones. For instructions on how to move existing Memcached nodes to different Availability Zones, see the <b>Availability Zone Considerations</b> section of <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/mem-ug/CacheNodes.SupportedTypes.html">Cache Node Considerations for Memcached</a>.</p> </note></p>
     pub az_mode: Option<String>,
     /// <p>If <code>true</code>, this parameter causes the modifications in this request and any pending modifications to be applied, asynchronously and as soon as possible, regardless of the <code>PreferredMaintenanceWindow</code> setting for the cluster.</p> <p>If <code>false</code>, changes to the cluster are applied on the next maintenance reboot, or the next failure reboot, whichever occurs first.</p> <important> <p>If you perform a <code>ModifyCacheCluster</code> before a pending modification is applied, the pending modification is replaced by the newer modification.</p> </important> <p>Valid values: <code>true</code> | <code>false</code> </p> <p>Default: <code>false</code> </p>
     pub apply_immediately: Option<bool>,
@@ -3717,7 +3738,7 @@ pub struct ModifyCacheClusterMessage {
     pub cache_security_group_names: Option<Vec<String>>,
     /// <p>The upgraded version of the cache engine to be run on the cache nodes.</p> <p> <b>Important:</b> You can upgrade to a newer engine version (see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/SelectEngine.html#VersionManagement">Selecting a Cache Engine and Version</a>), but you cannot downgrade to an earlier engine version. If you want to use an earlier engine version, you must delete the existing cluster and create it anew with the earlier engine version. </p>
     pub engine_version: Option<String>,
-    /// <p><p>The list of Availability Zones where the new Memcached cache nodes are created.</p> <p>This parameter is only valid when <code>NumCacheNodes</code> in the request is greater than the sum of the number of active cache nodes and the number of cache nodes pending creation (which may be zero). The number of Availability Zones supplied in this list must match the cache nodes being added in this request.</p> <p>This option is only supported on Memcached clusters.</p> <p>Scenarios:</p> <ul> <li> <p> <b>Scenario 1:</b> You have 3 active nodes and wish to add 2 nodes. Specify <code>NumCacheNodes=5</code> (3 + 2) and optionally specify two Availability Zones for the two new nodes.</p> </li> <li> <p> <b>Scenario 2:</b> You have 3 active nodes and 2 nodes pending creation (from the scenario 1 call) and want to add 1 more node. Specify <code>NumCacheNodes=6</code> ((3 + 2) + 1) and optionally specify an Availability Zone for the new node.</p> </li> <li> <p> <b>Scenario 3:</b> You want to cancel all pending operations. Specify <code>NumCacheNodes=3</code> to cancel all pending operations.</p> </li> </ul> <p>The Availability Zone placement of nodes pending creation cannot be modified. If you wish to cancel any nodes pending creation, add 0 nodes by setting <code>NumCacheNodes</code> to the number of current nodes.</p> <p>If <code>cross-az</code> is specified, existing Memcached nodes remain in their current Availability Zone. Only newly created nodes can be located in different Availability Zones. For guidance on how to move existing Memcached nodes to different Availability Zones, see the <b>Availability Zone Considerations</b> section of <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/mem-ug/CacheNode.Memcached.html">Cache Node Considerations for Memcached</a>.</p> <p> <b>Impact of new add/remove requests upon pending requests</b> </p> <ul> <li> <p>Scenario-1</p> <ul> <li> <p>Pending Action: Delete</p> </li> <li> <p>New Request: Delete</p> </li> <li> <p>Result: The new delete, pending or immediate, replaces the pending delete.</p> </li> </ul> </li> <li> <p>Scenario-2</p> <ul> <li> <p>Pending Action: Delete</p> </li> <li> <p>New Request: Create</p> </li> <li> <p>Result: The new create, pending or immediate, replaces the pending delete.</p> </li> </ul> </li> <li> <p>Scenario-3</p> <ul> <li> <p>Pending Action: Create</p> </li> <li> <p>New Request: Delete</p> </li> <li> <p>Result: The new delete, pending or immediate, replaces the pending create.</p> </li> </ul> </li> <li> <p>Scenario-4</p> <ul> <li> <p>Pending Action: Create</p> </li> <li> <p>New Request: Create</p> </li> <li> <p>Result: The new create is added to the pending create.</p> <important> <p> <b>Important:</b> If the new create request is <b>Apply Immediately - Yes</b>, all creates are performed immediately. If the new create request is <b>Apply Immediately - No</b>, all creates are pending.</p> </important> </li> </ul> </li> </ul></p>
+    /// <p><p>The list of Availability Zones where the new Memcached cache nodes are created.</p> <p>This parameter is only valid when <code>NumCacheNodes</code> in the request is greater than the sum of the number of active cache nodes and the number of cache nodes pending creation (which may be zero). The number of Availability Zones supplied in this list must match the cache nodes being added in this request.</p> <p>This option is only supported on Memcached clusters.</p> <p>Scenarios:</p> <ul> <li> <p> <b>Scenario 1:</b> You have 3 active nodes and wish to add 2 nodes. Specify <code>NumCacheNodes=5</code> (3 + 2) and optionally specify two Availability Zones for the two new nodes.</p> </li> <li> <p> <b>Scenario 2:</b> You have 3 active nodes and 2 nodes pending creation (from the scenario 1 call) and want to add 1 more node. Specify <code>NumCacheNodes=6</code> ((3 + 2) + 1) and optionally specify an Availability Zone for the new node.</p> </li> <li> <p> <b>Scenario 3:</b> You want to cancel all pending operations. Specify <code>NumCacheNodes=3</code> to cancel all pending operations.</p> </li> </ul> <p>The Availability Zone placement of nodes pending creation cannot be modified. If you wish to cancel any nodes pending creation, add 0 nodes by setting <code>NumCacheNodes</code> to the number of current nodes.</p> <p>If <code>cross-az</code> is specified, existing Memcached nodes remain in their current Availability Zone. Only newly created nodes can be located in different Availability Zones. For guidance on how to move existing Memcached nodes to different Availability Zones, see the <b>Availability Zone Considerations</b> section of <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/mem-ug/CacheNodes.SupportedTypes.html">Cache Node Considerations for Memcached</a>.</p> <p> <b>Impact of new add/remove requests upon pending requests</b> </p> <ul> <li> <p>Scenario-1</p> <ul> <li> <p>Pending Action: Delete</p> </li> <li> <p>New Request: Delete</p> </li> <li> <p>Result: The new delete, pending or immediate, replaces the pending delete.</p> </li> </ul> </li> <li> <p>Scenario-2</p> <ul> <li> <p>Pending Action: Delete</p> </li> <li> <p>New Request: Create</p> </li> <li> <p>Result: The new create, pending or immediate, replaces the pending delete.</p> </li> </ul> </li> <li> <p>Scenario-3</p> <ul> <li> <p>Pending Action: Create</p> </li> <li> <p>New Request: Delete</p> </li> <li> <p>Result: The new delete, pending or immediate, replaces the pending create.</p> </li> </ul> </li> <li> <p>Scenario-4</p> <ul> <li> <p>Pending Action: Create</p> </li> <li> <p>New Request: Create</p> </li> <li> <p>Result: The new create is added to the pending create.</p> <important> <p> <b>Important:</b> If the new create request is <b>Apply Immediately - Yes</b>, all creates are performed immediately. If the new create request is <b>Apply Immediately - No</b>, all creates are pending.</p> </important> </li> </ul> </li> </ul></p>
     pub new_availability_zones: Option<Vec<String>>,
     /// <p><p>The Amazon Resource Name (ARN) of the Amazon SNS topic to which notifications are sent.</p> <note> <p>The Amazon SNS topic owner must be same as the cluster owner.</p> </note></p>
     pub notification_topic_arn: Option<String>,
@@ -4231,12 +4252,14 @@ impl ModifyReplicationGroupShardConfigurationResultDeserializer {
 /// <p>Represents a collection of cache nodes in a replication group. One node in the node group is the read/write primary node. All the other nodes are read-only Replica nodes.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct NodeGroup {
-    /// <p>The identifier for the node group (shard). A Redis (cluster mode disabled) replication group contains only 1 node group; therefore, the node group ID is 0001. A Redis (cluster mode enabled) replication group contains 1 to 15 node groups numbered 0001 to 0015. Optionally, the user can provide the id for a node group. </p>
+    /// <p>The identifier for the node group (shard). A Redis (cluster mode disabled) replication group contains only 1 node group; therefore, the node group ID is 0001. A Redis (cluster mode enabled) replication group contains 1 to 90 node groups numbered 0001 to 0090. Optionally, the user can provide the id for a node group. </p>
     pub node_group_id: Option<String>,
     /// <p>A list containing information about individual nodes within the node group (shard).</p>
     pub node_group_members: Option<Vec<NodeGroupMember>>,
     /// <p>The endpoint of the primary node in this node group (shard).</p>
     pub primary_endpoint: Option<Endpoint>,
+    /// <p>The endpoint of the replica nodes in this node group (shard).</p>
+    pub reader_endpoint: Option<Endpoint>,
     /// <p>The keyspace for this node group (shard).</p>
     pub slots: Option<String>,
     /// <p>The current state of this replication group - <code>creating</code>, <code>available</code>, etc.</p>
@@ -4264,6 +4287,10 @@ impl NodeGroupDeserializer {
                 "PrimaryEndpoint" => {
                     obj.primary_endpoint =
                         Some(EndpointDeserializer::deserialize("PrimaryEndpoint", stack)?);
+                }
+                "ReaderEndpoint" => {
+                    obj.reader_endpoint =
+                        Some(EndpointDeserializer::deserialize("ReaderEndpoint", stack)?);
                 }
                 "Slots" => {
                     obj.slots = Some(StringDeserializer::deserialize("Slots", stack)?);
@@ -5310,7 +5337,7 @@ impl ReplicaConfigurationListSerializer {
 /// <p>Contains all of the attributes of a specific Redis replication group.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ReplicationGroup {
-    /// <p>A flag that enables encryption at-rest when set to <code>true</code>.</p> <p>You cannot modify the value of <code>AtRestEncryptionEnabled</code> after the cluster is created. To enable encryption at-rest on a cluster you must set <code>AtRestEncryptionEnabled</code> to <code>true</code> when you create a cluster.</p> <p> <b>Required:</b> Only available when creating a replication group in an Amazon VPC using redis version <code>3.2.6</code> or <code>4.x</code>.</p> <p>Default: <code>false</code> </p>
+    /// <p>A flag that enables encryption at-rest when set to <code>true</code>.</p> <p>You cannot modify the value of <code>AtRestEncryptionEnabled</code> after the cluster is created. To enable encryption at-rest on a cluster you must set <code>AtRestEncryptionEnabled</code> to <code>true</code> when you create a cluster.</p> <p> <b>Required:</b> Only available when creating a replication group in an Amazon VPC using redis version <code>3.2.6</code>, <code>4.x</code> or later.</p> <p>Default: <code>false</code> </p>
     pub at_rest_encryption_enabled: Option<bool>,
     /// <p>A flag that enables using an <code>AuthToken</code> (password) when issuing Redis commands.</p> <p>Default: <code>false</code> </p>
     pub auth_token_enabled: Option<bool>,
@@ -5324,6 +5351,8 @@ pub struct ReplicationGroup {
     pub configuration_endpoint: Option<Endpoint>,
     /// <p>The user supplied description of the replication group.</p>
     pub description: Option<String>,
+    /// <p>The ID of the KMS key used to encrypt the disk in the cluster.</p>
+    pub kms_key_id: Option<String>,
     /// <p>The names of all the cache clusters that are part of this replication group.</p>
     pub member_clusters: Option<Vec<String>>,
     /// <p>A list of node groups in this replication group. For Redis (cluster mode disabled) replication groups, this is a single-element list. For Redis (cluster mode enabled) replication groups, the list contains an entry for each node group (shard).</p>
@@ -5340,7 +5369,7 @@ pub struct ReplicationGroup {
     pub snapshotting_cluster_id: Option<String>,
     /// <p>The current state of this replication group - <code>creating</code>, <code>available</code>, <code>modifying</code>, <code>deleting</code>, <code>create-failed</code>, <code>snapshotting</code>.</p>
     pub status: Option<String>,
-    /// <p>A flag that enables in-transit encryption when set to <code>true</code>.</p> <p>You cannot modify the value of <code>TransitEncryptionEnabled</code> after the cluster is created. To enable in-transit encryption on a cluster you must set <code>TransitEncryptionEnabled</code> to <code>true</code> when you create a cluster.</p> <p> <b>Required:</b> Only available when creating a replication group in an Amazon VPC using redis version <code>3.2.6</code> or <code>4.x</code>.</p> <p>Default: <code>false</code> </p>
+    /// <p>A flag that enables in-transit encryption when set to <code>true</code>.</p> <p>You cannot modify the value of <code>TransitEncryptionEnabled</code> after the cluster is created. To enable in-transit encryption on a cluster you must set <code>TransitEncryptionEnabled</code> to <code>true</code> when you create a cluster.</p> <p> <b>Required:</b> Only available when creating a replication group in an Amazon VPC using redis version <code>3.2.6</code>, <code>4.x</code> or later.</p> <p>Default: <code>false</code> </p>
     pub transit_encryption_enabled: Option<bool>,
 }
 
@@ -5389,6 +5418,9 @@ impl ReplicationGroupDeserializer {
                 }
                 "Description" => {
                     obj.description = Some(StringDeserializer::deserialize("Description", stack)?);
+                }
+                "KmsKeyId" => {
+                    obj.kms_key_id = Some(StringDeserializer::deserialize("KmsKeyId", stack)?);
                 }
                 "MemberClusters" => {
                     obj.member_clusters.get_or_insert(vec![]).extend(
@@ -6367,6 +6399,8 @@ pub struct Snapshot {
     pub engine: Option<String>,
     /// <p>The version of the cache engine version that is used by the source cluster.</p>
     pub engine_version: Option<String>,
+    /// <p>The ID of the KMS key used to encrypt the snapshot.</p>
+    pub kms_key_id: Option<String>,
     /// <p>A list of the cache nodes in the source cluster.</p>
     pub node_snapshots: Option<Vec<NodeSnapshot>>,
     /// <p>The number of cache nodes in the source cluster.</p> <p>For clusters running Redis, this value must be 1. For clusters running Memcached, this value must be between 1 and 20.</p>
@@ -6453,6 +6487,9 @@ impl SnapshotDeserializer {
                 "EngineVersion" => {
                     obj.engine_version =
                         Some(StringDeserializer::deserialize("EngineVersion", stack)?);
+                }
+                "KmsKeyId" => {
+                    obj.kms_key_id = Some(StringDeserializer::deserialize("KmsKeyId", stack)?);
                 }
                 "NodeSnapshots" => {
                     obj.node_snapshots.get_or_insert(vec![]).extend(
@@ -7940,7 +7977,7 @@ pub enum CreateReplicationGroupError {
     InvalidParameterValue(String),
     /// <p>The VPC network is in an invalid state.</p>
     InvalidVPCNetworkStateFault(String),
-    /// <p>The request cannot be processed because it would exceed the maximum allowed number of node groups (shards) in a single replication group. The default maximum is 15</p>
+    /// <p>The request cannot be processed because it would exceed the maximum allowed number of node groups (shards) in a single replication group. The default maximum is 90</p>
     NodeGroupsPerReplicationGroupQuotaExceededFault(String),
     /// <p>The request cannot be processed because it would exceed the allowed number of cache nodes in a single cluster.</p>
     NodeQuotaForClusterExceededFault(String),
@@ -8141,7 +8178,7 @@ pub enum DecreaseReplicaCountError {
     InvalidVPCNetworkStateFault(String),
     /// <p>The operation was not performed because no changes were required.</p>
     NoOperationFault(String),
-    /// <p>The request cannot be processed because it would exceed the maximum allowed number of node groups (shards) in a single replication group. The default maximum is 15</p>
+    /// <p>The request cannot be processed because it would exceed the maximum allowed number of node groups (shards) in a single replication group. The default maximum is 90</p>
     NodeGroupsPerReplicationGroupQuotaExceededFault(String),
     /// <p>The request cannot be processed because it would exceed the allowed number of cache nodes per customer.</p>
     NodeQuotaForCustomerExceededFault(String),
@@ -9667,6 +9704,8 @@ pub enum IncreaseReplicaCountError {
     InsufficientCacheClusterCapacityFault(String),
     /// <p>The requested cluster is not in the <code>available</code> state.</p>
     InvalidCacheClusterStateFault(String),
+    /// <p>The KMS key supplied is not valid.</p>
+    InvalidKMSKeyFault(String),
     /// <p>Two or more incompatible parameters were specified.</p>
     InvalidParameterCombination(String),
     /// <p>The value for a parameter is invalid.</p>
@@ -9677,7 +9716,7 @@ pub enum IncreaseReplicaCountError {
     InvalidVPCNetworkStateFault(String),
     /// <p>The operation was not performed because no changes were required.</p>
     NoOperationFault(String),
-    /// <p>The request cannot be processed because it would exceed the maximum allowed number of node groups (shards) in a single replication group. The default maximum is 15</p>
+    /// <p>The request cannot be processed because it would exceed the maximum allowed number of node groups (shards) in a single replication group. The default maximum is 90</p>
     NodeGroupsPerReplicationGroupQuotaExceededFault(String),
     /// <p>The request cannot be processed because it would exceed the allowed number of cache nodes per customer.</p>
     NodeQuotaForCustomerExceededFault(String),
@@ -9713,6 +9752,11 @@ impl IncreaseReplicaCountError {
                                 parsed_error.message,
                             ),
                         )
+                    }
+                    "InvalidKMSKeyFault" => {
+                        return RusotoError::Service(IncreaseReplicaCountError::InvalidKMSKeyFault(
+                            parsed_error.message,
+                        ))
                     }
                     "InvalidParameterCombination" => {
                         return RusotoError::Service(
@@ -9790,6 +9834,7 @@ impl Error for IncreaseReplicaCountError {
             IncreaseReplicaCountError::ClusterQuotaForCustomerExceededFault(ref cause) => cause,
             IncreaseReplicaCountError::InsufficientCacheClusterCapacityFault(ref cause) => cause,
             IncreaseReplicaCountError::InvalidCacheClusterStateFault(ref cause) => cause,
+            IncreaseReplicaCountError::InvalidKMSKeyFault(ref cause) => cause,
             IncreaseReplicaCountError::InvalidParameterCombination(ref cause) => cause,
             IncreaseReplicaCountError::InvalidParameterValue(ref cause) => cause,
             IncreaseReplicaCountError::InvalidReplicationGroupStateFault(ref cause) => cause,
@@ -10269,6 +10314,8 @@ pub enum ModifyReplicationGroupError {
     InvalidCacheClusterStateFault(String),
     /// <p>The current state of the cache security group does not allow deletion.</p>
     InvalidCacheSecurityGroupStateFault(String),
+    /// <p>The KMS key supplied is not valid.</p>
+    InvalidKMSKeyFault(String),
     /// <p>Two or more incompatible parameters were specified.</p>
     InvalidParameterCombination(String),
     /// <p>The value for a parameter is invalid.</p>
@@ -10333,6 +10380,11 @@ impl ModifyReplicationGroupError {
                             ModifyReplicationGroupError::InvalidCacheSecurityGroupStateFault(
                                 parsed_error.message,
                             ),
+                        )
+                    }
+                    "InvalidKMSKeyFault" => {
+                        return RusotoError::Service(
+                            ModifyReplicationGroupError::InvalidKMSKeyFault(parsed_error.message),
                         )
                     }
                     "InvalidParameterCombination" => {
@@ -10413,6 +10465,7 @@ impl Error for ModifyReplicationGroupError {
             ModifyReplicationGroupError::InsufficientCacheClusterCapacityFault(ref cause) => cause,
             ModifyReplicationGroupError::InvalidCacheClusterStateFault(ref cause) => cause,
             ModifyReplicationGroupError::InvalidCacheSecurityGroupStateFault(ref cause) => cause,
+            ModifyReplicationGroupError::InvalidKMSKeyFault(ref cause) => cause,
             ModifyReplicationGroupError::InvalidParameterCombination(ref cause) => cause,
             ModifyReplicationGroupError::InvalidParameterValue(ref cause) => cause,
             ModifyReplicationGroupError::InvalidReplicationGroupStateFault(ref cause) => cause,
@@ -10430,6 +10483,8 @@ pub enum ModifyReplicationGroupShardConfigurationError {
     InsufficientCacheClusterCapacityFault(String),
     /// <p>The requested cluster is not in the <code>available</code> state.</p>
     InvalidCacheClusterStateFault(String),
+    /// <p>The KMS key supplied is not valid.</p>
+    InvalidKMSKeyFault(String),
     /// <p>Two or more incompatible parameters were specified.</p>
     InvalidParameterCombination(String),
     /// <p>The value for a parameter is invalid.</p>
@@ -10438,7 +10493,7 @@ pub enum ModifyReplicationGroupShardConfigurationError {
     InvalidReplicationGroupStateFault(String),
     /// <p>The VPC network is in an invalid state.</p>
     InvalidVPCNetworkStateFault(String),
-    /// <p>The request cannot be processed because it would exceed the maximum allowed number of node groups (shards) in a single replication group. The default maximum is 15</p>
+    /// <p>The request cannot be processed because it would exceed the maximum allowed number of node groups (shards) in a single replication group. The default maximum is 90</p>
     NodeGroupsPerReplicationGroupQuotaExceededFault(String),
     /// <p>The request cannot be processed because it would exceed the allowed number of cache nodes per customer.</p>
     NodeQuotaForCustomerExceededFault(String),
@@ -10456,7 +10511,7 @@ impl ModifyReplicationGroupShardConfigurationError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "InsufficientCacheClusterCapacity" => return RusotoError::Service(ModifyReplicationGroupShardConfigurationError::InsufficientCacheClusterCapacityFault(parsed_error.message)),"InvalidCacheClusterState" => return RusotoError::Service(ModifyReplicationGroupShardConfigurationError::InvalidCacheClusterStateFault(parsed_error.message)),"InvalidParameterCombination" => return RusotoError::Service(ModifyReplicationGroupShardConfigurationError::InvalidParameterCombination(parsed_error.message)),"InvalidParameterValue" => return RusotoError::Service(ModifyReplicationGroupShardConfigurationError::InvalidParameterValue(parsed_error.message)),"InvalidReplicationGroupState" => return RusotoError::Service(ModifyReplicationGroupShardConfigurationError::InvalidReplicationGroupStateFault(parsed_error.message)),"InvalidVPCNetworkStateFault" => return RusotoError::Service(ModifyReplicationGroupShardConfigurationError::InvalidVPCNetworkStateFault(parsed_error.message)),"NodeGroupsPerReplicationGroupQuotaExceeded" => return RusotoError::Service(ModifyReplicationGroupShardConfigurationError::NodeGroupsPerReplicationGroupQuotaExceededFault(parsed_error.message)),"NodeQuotaForCustomerExceeded" => return RusotoError::Service(ModifyReplicationGroupShardConfigurationError::NodeQuotaForCustomerExceededFault(parsed_error.message)),"ReplicationGroupNotFoundFault" => return RusotoError::Service(ModifyReplicationGroupShardConfigurationError::ReplicationGroupNotFoundFault(parsed_error.message)),_ => {}
+                                    "InsufficientCacheClusterCapacity" => return RusotoError::Service(ModifyReplicationGroupShardConfigurationError::InsufficientCacheClusterCapacityFault(parsed_error.message)),"InvalidCacheClusterState" => return RusotoError::Service(ModifyReplicationGroupShardConfigurationError::InvalidCacheClusterStateFault(parsed_error.message)),"InvalidKMSKeyFault" => return RusotoError::Service(ModifyReplicationGroupShardConfigurationError::InvalidKMSKeyFault(parsed_error.message)),"InvalidParameterCombination" => return RusotoError::Service(ModifyReplicationGroupShardConfigurationError::InvalidParameterCombination(parsed_error.message)),"InvalidParameterValue" => return RusotoError::Service(ModifyReplicationGroupShardConfigurationError::InvalidParameterValue(parsed_error.message)),"InvalidReplicationGroupState" => return RusotoError::Service(ModifyReplicationGroupShardConfigurationError::InvalidReplicationGroupStateFault(parsed_error.message)),"InvalidVPCNetworkStateFault" => return RusotoError::Service(ModifyReplicationGroupShardConfigurationError::InvalidVPCNetworkStateFault(parsed_error.message)),"NodeGroupsPerReplicationGroupQuotaExceeded" => return RusotoError::Service(ModifyReplicationGroupShardConfigurationError::NodeGroupsPerReplicationGroupQuotaExceededFault(parsed_error.message)),"NodeQuotaForCustomerExceeded" => return RusotoError::Service(ModifyReplicationGroupShardConfigurationError::NodeQuotaForCustomerExceededFault(parsed_error.message)),"ReplicationGroupNotFoundFault" => return RusotoError::Service(ModifyReplicationGroupShardConfigurationError::ReplicationGroupNotFoundFault(parsed_error.message)),_ => {}
                                 }
             }
         }
@@ -10481,6 +10536,7 @@ impl Error for ModifyReplicationGroupShardConfigurationError {
         match *self {
                             ModifyReplicationGroupShardConfigurationError::InsufficientCacheClusterCapacityFault(ref cause) => cause,
 ModifyReplicationGroupShardConfigurationError::InvalidCacheClusterStateFault(ref cause) => cause,
+ModifyReplicationGroupShardConfigurationError::InvalidKMSKeyFault(ref cause) => cause,
 ModifyReplicationGroupShardConfigurationError::InvalidParameterCombination(ref cause) => cause,
 ModifyReplicationGroupShardConfigurationError::InvalidParameterValue(ref cause) => cause,
 ModifyReplicationGroupShardConfigurationError::InvalidReplicationGroupStateFault(ref cause) => cause,
@@ -10868,6 +10924,8 @@ pub enum TestFailoverError {
     APICallRateForCustomerExceededFault(String),
     /// <p>The requested cluster is not in the <code>available</code> state.</p>
     InvalidCacheClusterStateFault(String),
+    /// <p>The KMS key supplied is not valid.</p>
+    InvalidKMSKeyFault(String),
     /// <p>Two or more incompatible parameters were specified.</p>
     InvalidParameterCombination(String),
     /// <p>The value for a parameter is invalid.</p>
@@ -10901,6 +10959,11 @@ impl TestFailoverError {
                         return RusotoError::Service(
                             TestFailoverError::InvalidCacheClusterStateFault(parsed_error.message),
                         )
+                    }
+                    "InvalidKMSKeyFault" => {
+                        return RusotoError::Service(TestFailoverError::InvalidKMSKeyFault(
+                            parsed_error.message,
+                        ))
                     }
                     "InvalidParameterCombination" => {
                         return RusotoError::Service(
@@ -10959,6 +11022,7 @@ impl Error for TestFailoverError {
         match *self {
             TestFailoverError::APICallRateForCustomerExceededFault(ref cause) => cause,
             TestFailoverError::InvalidCacheClusterStateFault(ref cause) => cause,
+            TestFailoverError::InvalidKMSKeyFault(ref cause) => cause,
             TestFailoverError::InvalidParameterCombination(ref cause) => cause,
             TestFailoverError::InvalidParameterValue(ref cause) => cause,
             TestFailoverError::InvalidReplicationGroupStateFault(ref cause) => cause,
@@ -10985,7 +11049,7 @@ pub trait ElastiCache {
         AuthorizeCacheSecurityGroupIngressError,
     >;
 
-    /// <p>Apply the service update. For more information on service updates and applying them, see <a href="https://docs.aws.amazon.com/http:/docs.aws.amazon.com/Amazon/red-ug/applying-updates.html">Applying Service Updates</a>.</p>
+    /// <p>Apply the service update. For more information on service updates and applying them, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/applying-updates.html">Applying Service Updates</a>.</p>
     fn batch_apply_update_action(
         &self,
         input: BatchApplyUpdateActionMessage,
@@ -10997,7 +11061,7 @@ pub trait ElastiCache {
         input: BatchStopUpdateActionMessage,
     ) -> RusotoFuture<UpdateActionResultsMessage, BatchStopUpdateActionError>;
 
-    /// <p><p>Makes a copy of an existing snapshot.</p> <note> <p>This operation is valid for Redis only.</p> </note> <important> <p>Users or groups that have permissions to use the <code>CopySnapshot</code> operation can create their own Amazon S3 buckets and copy snapshots to it. To control access to your snapshots, use an IAM policy to control who has the ability to use the <code>CopySnapshot</code> operation. For more information about using IAM to control the use of ElastiCache operations, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/backups-exporting.html">Exporting Snapshots</a> and <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/IAM.html">Authentication &amp; Access Control</a>.</p> </important> <p>You could receive the following error messages.</p> <p class="title"> <b>Error Messages</b> </p> <ul> <li> <p> <b>Error Message:</b> The S3 bucket %s is outside of the region.</p> <p> <b>Solution:</b> Create an Amazon S3 bucket in the same region as your snapshot. For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/backups-exporting.html#backups-exporting-create-s3-bucket">Step 1: Create an Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message:</b> The S3 bucket %s does not exist.</p> <p> <b>Solution:</b> Create an Amazon S3 bucket in the same region as your snapshot. For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/backups-exporting.html#backups-exporting-create-s3-bucket">Step 1: Create an Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message:</b> The S3 bucket %s is not owned by the authenticated user.</p> <p> <b>Solution:</b> Create an Amazon S3 bucket in the same region as your snapshot. For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/backups-exporting.html#backups-exporting-create-s3-bucket">Step 1: Create an Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message:</b> The authenticated user does not have sufficient permissions to perform the desired activity.</p> <p> <b>Solution:</b> Contact your system administrator to get the needed permissions.</p> </li> <li> <p> <b>Error Message:</b> The S3 bucket %s already contains an object with key %s.</p> <p> <b>Solution:</b> Give the <code>TargetSnapshotName</code> a new and unique value. If exporting a snapshot, you could alternatively create a new Amazon S3 bucket and use this same value for <code>TargetSnapshotName</code>.</p> </li> <li> <p> <b>Error Message: </b> ElastiCache has not been granted READ permissions %s on the S3 Bucket.</p> <p> <b>Solution:</b> Add List and Read permissions on the bucket. For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/backups-exporting.html#backups-exporting-grant-access.html">Step 2: Grant ElastiCache Access to Your Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message: </b> ElastiCache has not been granted WRITE permissions %s on the S3 Bucket.</p> <p> <b>Solution:</b> Add Upload/Delete permissions on the bucket. For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/backups-exporting.html#backups-exporting-grant-access.html">Step 2: Grant ElastiCache Access to Your Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message: </b> ElastiCache has not been granted READ_ACP permissions %s on the S3 Bucket.</p> <p> <b>Solution:</b> Add View Permissions on the bucket. For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/backups-exporting.html#backups-exporting-grant-access.html">Step 2: Grant ElastiCache Access to Your Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> </ul></p>
+    /// <p><p>Makes a copy of an existing snapshot.</p> <note> <p>This operation is valid for Redis only.</p> </note> <important> <p>Users or groups that have permissions to use the <code>CopySnapshot</code> operation can create their own Amazon S3 buckets and copy snapshots to it. To control access to your snapshots, use an IAM policy to control who has the ability to use the <code>CopySnapshot</code> operation. For more information about using IAM to control the use of ElastiCache operations, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/backups-exporting.html">Exporting Snapshots</a> and <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/IAM.html">Authentication &amp; Access Control</a>.</p> </important> <p>You could receive the following error messages.</p> <p class="title"> <b>Error Messages</b> </p> <ul> <li> <p> <b>Error Message:</b> The S3 bucket %s is outside of the region.</p> <p> <b>Solution:</b> Create an Amazon S3 bucket in the same region as your snapshot. For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/backups-exporting.html#backups-exporting-create-s3-bucket">Step 1: Create an Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message:</b> The S3 bucket %s does not exist.</p> <p> <b>Solution:</b> Create an Amazon S3 bucket in the same region as your snapshot. For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/backups-exporting.html#backups-exporting-create-s3-bucket">Step 1: Create an Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message:</b> The S3 bucket %s is not owned by the authenticated user.</p> <p> <b>Solution:</b> Create an Amazon S3 bucket in the same region as your snapshot. For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/backups-exporting.html#backups-exporting-create-s3-bucket">Step 1: Create an Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message:</b> The authenticated user does not have sufficient permissions to perform the desired activity.</p> <p> <b>Solution:</b> Contact your system administrator to get the needed permissions.</p> </li> <li> <p> <b>Error Message:</b> The S3 bucket %s already contains an object with key %s.</p> <p> <b>Solution:</b> Give the <code>TargetSnapshotName</code> a new and unique value. If exporting a snapshot, you could alternatively create a new Amazon S3 bucket and use this same value for <code>TargetSnapshotName</code>.</p> </li> <li> <p> <b>Error Message: </b> ElastiCache has not been granted READ permissions %s on the S3 Bucket.</p> <p> <b>Solution:</b> Add List and Read permissions on the bucket. For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/backups-exporting.html#backups-exporting-grant-access">Step 2: Grant ElastiCache Access to Your Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message: </b> ElastiCache has not been granted WRITE permissions %s on the S3 Bucket.</p> <p> <b>Solution:</b> Add Upload/Delete permissions on the bucket. For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/backups-exporting.html#backups-exporting-grant-access">Step 2: Grant ElastiCache Access to Your Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message: </b> ElastiCache has not been granted READ_ACP permissions %s on the S3 Bucket.</p> <p> <b>Solution:</b> Add View Permissions on the bucket. For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/backups-exporting.html#backups-exporting-grant-access">Step 2: Grant ElastiCache Access to Your Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> </ul></p>
     fn copy_snapshot(
         &self,
         input: CopySnapshotMessage,
@@ -11027,7 +11091,7 @@ pub trait ElastiCache {
         input: CreateCacheSubnetGroupMessage,
     ) -> RusotoFuture<CreateCacheSubnetGroupResult, CreateCacheSubnetGroupError>;
 
-    /// <p><p>Creates a Redis (cluster mode disabled) or a Redis (cluster mode enabled) replication group.</p> <p>A Redis (cluster mode disabled) replication group is a collection of clusters, where one of the clusters is a read/write primary and the others are read-only replicas. Writes to the primary are asynchronously propagated to the replicas.</p> <p>A Redis (cluster mode enabled) replication group is a collection of 1 to 15 node groups (shards). Each node group (shard) has one read/write primary node and up to 5 read-only replica nodes. Writes to the primary are asynchronously propagated to the replicas. Redis (cluster mode enabled) replication groups partition the data across node groups (shards).</p> <p>When a Redis (cluster mode disabled) replication group has been successfully created, you can add one or more read replicas to it, up to a total of 5 read replicas. You cannot alter a Redis (cluster mode enabled) replication group after it has been created. However, if you need to increase or decrease the number of node groups (console: shards), you can avail yourself of ElastiCache for Redis&#39; enhanced backup and restore. For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/backups-restoring.html">Restoring From a Backup with Cluster Resizing</a> in the <i>ElastiCache User Guide</i>.</p> <note> <p>This operation is valid for Redis only.</p> </note></p>
+    /// <p><p>Creates a Redis (cluster mode disabled) or a Redis (cluster mode enabled) replication group.</p> <p>A Redis (cluster mode disabled) replication group is a collection of clusters, where one of the clusters is a read/write primary and the others are read-only replicas. Writes to the primary are asynchronously propagated to the replicas.</p> <p>A Redis (cluster mode enabled) replication group is a collection of 1 to 90 node groups (shards). Each node group (shard) has one read/write primary node and up to 5 read-only replica nodes. Writes to the primary are asynchronously propagated to the replicas. Redis (cluster mode enabled) replication groups partition the data across node groups (shards).</p> <p>When a Redis (cluster mode disabled) replication group has been successfully created, you can add one or more read replicas to it, up to a total of 5 read replicas. You cannot alter a Redis (cluster mode enabled) replication group after it has been created. However, if you need to increase or decrease the number of node groups (console: shards), you can avail yourself of ElastiCache for Redis&#39; enhanced backup and restore. For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/backups-restoring.html">Restoring From a Backup with Cluster Resizing</a> in the <i>ElastiCache User Guide</i>.</p> <note> <p>This operation is valid for Redis only.</p> </note></p>
     fn create_replication_group(
         &self,
         input: CreateReplicationGroupMessage,
@@ -11171,7 +11235,7 @@ pub trait ElastiCache {
         input: IncreaseReplicaCountMessage,
     ) -> RusotoFuture<IncreaseReplicaCountResult, IncreaseReplicaCountError>;
 
-    /// <p>Lists all available node types that you can scale your Redis cluster's or replication group's current node type up to.</p> <p>When you use the <code>ModifyCacheCluster</code> or <code>ModifyReplicationGroup</code> operations to scale up your cluster or replication group, the value of the <code>CacheNodeType</code> parameter must be one of the node types returned by this operation.</p>
+    /// <p>Lists all available node types that you can scale your Redis cluster's or replication group's current node type.</p> <p>When you use the <code>ModifyCacheCluster</code> or <code>ModifyReplicationGroup</code> operations to scale your cluster or replication group, the value of the <code>CacheNodeType</code> parameter must be one of the node types returned by this operation.</p>
     fn list_allowed_node_type_modifications(
         &self,
         input: ListAllowedNodeTypeModificationsMessage,
@@ -11267,10 +11331,7 @@ impl ElastiCacheClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> ElastiCacheClient {
-        ElastiCacheClient {
-            client: Client::shared(),
-            region,
-        }
+        Self::new_with_client(Client::shared(), region)
     }
 
     pub fn new_with<P, D>(
@@ -11284,10 +11345,14 @@ impl ElastiCacheClient {
         D: DispatchSignedRequest + Send + Sync + 'static,
         D::Future: Send,
     {
-        ElastiCacheClient {
-            client: Client::new_with(credentials_provider, request_dispatcher),
+        Self::new_with_client(
+            Client::new_with(credentials_provider, request_dispatcher),
             region,
-        }
+        )
+    }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> ElastiCacheClient {
+        ElastiCacheClient { client, region }
     }
 }
 
@@ -11324,7 +11389,7 @@ impl ElastiCache for ElastiCacheClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -11377,7 +11442,7 @@ impl ElastiCache for ElastiCacheClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -11396,7 +11461,7 @@ impl ElastiCache for ElastiCacheClient {
         })
     }
 
-    /// <p>Apply the service update. For more information on service updates and applying them, see <a href="https://docs.aws.amazon.com/http:/docs.aws.amazon.com/Amazon/red-ug/applying-updates.html">Applying Service Updates</a>.</p>
+    /// <p>Apply the service update. For more information on service updates and applying them, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/applying-updates.html">Applying Service Updates</a>.</p>
     fn batch_apply_update_action(
         &self,
         input: BatchApplyUpdateActionMessage,
@@ -11425,7 +11490,7 @@ impl ElastiCache for ElastiCacheClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -11473,7 +11538,7 @@ impl ElastiCache for ElastiCacheClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -11492,7 +11557,7 @@ impl ElastiCache for ElastiCacheClient {
         })
     }
 
-    /// <p><p>Makes a copy of an existing snapshot.</p> <note> <p>This operation is valid for Redis only.</p> </note> <important> <p>Users or groups that have permissions to use the <code>CopySnapshot</code> operation can create their own Amazon S3 buckets and copy snapshots to it. To control access to your snapshots, use an IAM policy to control who has the ability to use the <code>CopySnapshot</code> operation. For more information about using IAM to control the use of ElastiCache operations, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/backups-exporting.html">Exporting Snapshots</a> and <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/IAM.html">Authentication &amp; Access Control</a>.</p> </important> <p>You could receive the following error messages.</p> <p class="title"> <b>Error Messages</b> </p> <ul> <li> <p> <b>Error Message:</b> The S3 bucket %s is outside of the region.</p> <p> <b>Solution:</b> Create an Amazon S3 bucket in the same region as your snapshot. For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/backups-exporting.html#backups-exporting-create-s3-bucket">Step 1: Create an Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message:</b> The S3 bucket %s does not exist.</p> <p> <b>Solution:</b> Create an Amazon S3 bucket in the same region as your snapshot. For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/backups-exporting.html#backups-exporting-create-s3-bucket">Step 1: Create an Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message:</b> The S3 bucket %s is not owned by the authenticated user.</p> <p> <b>Solution:</b> Create an Amazon S3 bucket in the same region as your snapshot. For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/backups-exporting.html#backups-exporting-create-s3-bucket">Step 1: Create an Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message:</b> The authenticated user does not have sufficient permissions to perform the desired activity.</p> <p> <b>Solution:</b> Contact your system administrator to get the needed permissions.</p> </li> <li> <p> <b>Error Message:</b> The S3 bucket %s already contains an object with key %s.</p> <p> <b>Solution:</b> Give the <code>TargetSnapshotName</code> a new and unique value. If exporting a snapshot, you could alternatively create a new Amazon S3 bucket and use this same value for <code>TargetSnapshotName</code>.</p> </li> <li> <p> <b>Error Message: </b> ElastiCache has not been granted READ permissions %s on the S3 Bucket.</p> <p> <b>Solution:</b> Add List and Read permissions on the bucket. For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/backups-exporting.html#backups-exporting-grant-access.html">Step 2: Grant ElastiCache Access to Your Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message: </b> ElastiCache has not been granted WRITE permissions %s on the S3 Bucket.</p> <p> <b>Solution:</b> Add Upload/Delete permissions on the bucket. For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/backups-exporting.html#backups-exporting-grant-access.html">Step 2: Grant ElastiCache Access to Your Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message: </b> ElastiCache has not been granted READ_ACP permissions %s on the S3 Bucket.</p> <p> <b>Solution:</b> Add View Permissions on the bucket. For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/backups-exporting.html#backups-exporting-grant-access.html">Step 2: Grant ElastiCache Access to Your Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> </ul></p>
+    /// <p><p>Makes a copy of an existing snapshot.</p> <note> <p>This operation is valid for Redis only.</p> </note> <important> <p>Users or groups that have permissions to use the <code>CopySnapshot</code> operation can create their own Amazon S3 buckets and copy snapshots to it. To control access to your snapshots, use an IAM policy to control who has the ability to use the <code>CopySnapshot</code> operation. For more information about using IAM to control the use of ElastiCache operations, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/backups-exporting.html">Exporting Snapshots</a> and <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/IAM.html">Authentication &amp; Access Control</a>.</p> </important> <p>You could receive the following error messages.</p> <p class="title"> <b>Error Messages</b> </p> <ul> <li> <p> <b>Error Message:</b> The S3 bucket %s is outside of the region.</p> <p> <b>Solution:</b> Create an Amazon S3 bucket in the same region as your snapshot. For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/backups-exporting.html#backups-exporting-create-s3-bucket">Step 1: Create an Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message:</b> The S3 bucket %s does not exist.</p> <p> <b>Solution:</b> Create an Amazon S3 bucket in the same region as your snapshot. For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/backups-exporting.html#backups-exporting-create-s3-bucket">Step 1: Create an Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message:</b> The S3 bucket %s is not owned by the authenticated user.</p> <p> <b>Solution:</b> Create an Amazon S3 bucket in the same region as your snapshot. For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/backups-exporting.html#backups-exporting-create-s3-bucket">Step 1: Create an Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message:</b> The authenticated user does not have sufficient permissions to perform the desired activity.</p> <p> <b>Solution:</b> Contact your system administrator to get the needed permissions.</p> </li> <li> <p> <b>Error Message:</b> The S3 bucket %s already contains an object with key %s.</p> <p> <b>Solution:</b> Give the <code>TargetSnapshotName</code> a new and unique value. If exporting a snapshot, you could alternatively create a new Amazon S3 bucket and use this same value for <code>TargetSnapshotName</code>.</p> </li> <li> <p> <b>Error Message: </b> ElastiCache has not been granted READ permissions %s on the S3 Bucket.</p> <p> <b>Solution:</b> Add List and Read permissions on the bucket. For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/backups-exporting.html#backups-exporting-grant-access">Step 2: Grant ElastiCache Access to Your Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message: </b> ElastiCache has not been granted WRITE permissions %s on the S3 Bucket.</p> <p> <b>Solution:</b> Add Upload/Delete permissions on the bucket. For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/backups-exporting.html#backups-exporting-grant-access">Step 2: Grant ElastiCache Access to Your Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> <li> <p> <b>Error Message: </b> ElastiCache has not been granted READ_ACP permissions %s on the S3 Bucket.</p> <p> <b>Solution:</b> Add View Permissions on the bucket. For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/backups-exporting.html#backups-exporting-grant-access">Step 2: Grant ElastiCache Access to Your Amazon S3 Bucket</a> in the ElastiCache User Guide.</p> </li> </ul></p>
     fn copy_snapshot(
         &self,
         input: CopySnapshotMessage,
@@ -11524,7 +11589,7 @@ impl ElastiCache for ElastiCacheClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -11575,7 +11640,7 @@ impl ElastiCache for ElastiCacheClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -11623,7 +11688,7 @@ impl ElastiCache for ElastiCacheClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -11671,7 +11736,7 @@ impl ElastiCache for ElastiCacheClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -11719,7 +11784,7 @@ impl ElastiCache for ElastiCacheClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -11738,7 +11803,7 @@ impl ElastiCache for ElastiCacheClient {
         })
     }
 
-    /// <p><p>Creates a Redis (cluster mode disabled) or a Redis (cluster mode enabled) replication group.</p> <p>A Redis (cluster mode disabled) replication group is a collection of clusters, where one of the clusters is a read/write primary and the others are read-only replicas. Writes to the primary are asynchronously propagated to the replicas.</p> <p>A Redis (cluster mode enabled) replication group is a collection of 1 to 15 node groups (shards). Each node group (shard) has one read/write primary node and up to 5 read-only replica nodes. Writes to the primary are asynchronously propagated to the replicas. Redis (cluster mode enabled) replication groups partition the data across node groups (shards).</p> <p>When a Redis (cluster mode disabled) replication group has been successfully created, you can add one or more read replicas to it, up to a total of 5 read replicas. You cannot alter a Redis (cluster mode enabled) replication group after it has been created. However, if you need to increase or decrease the number of node groups (console: shards), you can avail yourself of ElastiCache for Redis&#39; enhanced backup and restore. For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/backups-restoring.html">Restoring From a Backup with Cluster Resizing</a> in the <i>ElastiCache User Guide</i>.</p> <note> <p>This operation is valid for Redis only.</p> </note></p>
+    /// <p><p>Creates a Redis (cluster mode disabled) or a Redis (cluster mode enabled) replication group.</p> <p>A Redis (cluster mode disabled) replication group is a collection of clusters, where one of the clusters is a read/write primary and the others are read-only replicas. Writes to the primary are asynchronously propagated to the replicas.</p> <p>A Redis (cluster mode enabled) replication group is a collection of 1 to 90 node groups (shards). Each node group (shard) has one read/write primary node and up to 5 read-only replica nodes. Writes to the primary are asynchronously propagated to the replicas. Redis (cluster mode enabled) replication groups partition the data across node groups (shards).</p> <p>When a Redis (cluster mode disabled) replication group has been successfully created, you can add one or more read replicas to it, up to a total of 5 read replicas. You cannot alter a Redis (cluster mode enabled) replication group after it has been created. However, if you need to increase or decrease the number of node groups (console: shards), you can avail yourself of ElastiCache for Redis&#39; enhanced backup and restore. For more information, see <a href="https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/backups-restoring.html">Restoring From a Backup with Cluster Resizing</a> in the <i>ElastiCache User Guide</i>.</p> <note> <p>This operation is valid for Redis only.</p> </note></p>
     fn create_replication_group(
         &self,
         input: CreateReplicationGroupMessage,
@@ -11767,7 +11832,7 @@ impl ElastiCache for ElastiCacheClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -11818,7 +11883,7 @@ impl ElastiCache for ElastiCacheClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -11868,7 +11933,7 @@ impl ElastiCache for ElastiCacheClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -11919,7 +11984,7 @@ impl ElastiCache for ElastiCacheClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -12042,7 +12107,7 @@ impl ElastiCache for ElastiCacheClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -12093,7 +12158,7 @@ impl ElastiCache for ElastiCacheClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -12141,7 +12206,7 @@ impl ElastiCache for ElastiCacheClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -12189,7 +12254,7 @@ impl ElastiCache for ElastiCacheClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -12237,7 +12302,7 @@ impl ElastiCache for ElastiCacheClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -12285,7 +12350,7 @@ impl ElastiCache for ElastiCacheClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -12333,7 +12398,7 @@ impl ElastiCache for ElastiCacheClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -12381,7 +12446,7 @@ impl ElastiCache for ElastiCacheClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -12432,7 +12497,7 @@ impl ElastiCache for ElastiCacheClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -12483,7 +12548,7 @@ impl ElastiCache for ElastiCacheClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -12529,7 +12594,7 @@ impl ElastiCache for ElastiCacheClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -12577,7 +12642,7 @@ impl ElastiCache for ElastiCacheClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -12628,7 +12693,7 @@ impl ElastiCache for ElastiCacheClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -12676,7 +12741,7 @@ impl ElastiCache for ElastiCacheClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -12727,7 +12792,7 @@ impl ElastiCache for ElastiCacheClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -12775,7 +12840,7 @@ impl ElastiCache for ElastiCacheClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -12825,7 +12890,7 @@ impl ElastiCache for ElastiCacheClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -12844,7 +12909,7 @@ impl ElastiCache for ElastiCacheClient {
         })
     }
 
-    /// <p>Lists all available node types that you can scale your Redis cluster's or replication group's current node type up to.</p> <p>When you use the <code>ModifyCacheCluster</code> or <code>ModifyReplicationGroup</code> operations to scale up your cluster or replication group, the value of the <code>CacheNodeType</code> parameter must be one of the node types returned by this operation.</p>
+    /// <p>Lists all available node types that you can scale your Redis cluster's or replication group's current node type.</p> <p>When you use the <code>ModifyCacheCluster</code> or <code>ModifyReplicationGroup</code> operations to scale your cluster or replication group, the value of the <code>CacheNodeType</code> parameter must be one of the node types returned by this operation.</p>
     fn list_allowed_node_type_modifications(
         &self,
         input: ListAllowedNodeTypeModificationsMessage,
@@ -12876,7 +12941,7 @@ impl ElastiCache for ElastiCacheClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -12926,7 +12991,7 @@ impl ElastiCache for ElastiCacheClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -12977,7 +13042,7 @@ impl ElastiCache for ElastiCacheClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -13025,7 +13090,7 @@ impl ElastiCache for ElastiCacheClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -13073,7 +13138,7 @@ impl ElastiCache for ElastiCacheClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -13121,7 +13186,7 @@ impl ElastiCache for ElastiCacheClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -13176,7 +13241,7 @@ impl ElastiCache for ElastiCacheClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -13230,7 +13295,7 @@ impl ElastiCache for ElastiCacheClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -13281,7 +13346,7 @@ impl ElastiCache for ElastiCacheClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -13329,7 +13394,7 @@ impl ElastiCache for ElastiCacheClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -13377,7 +13442,7 @@ impl ElastiCache for ElastiCacheClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -13428,7 +13493,7 @@ impl ElastiCache for ElastiCacheClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -13479,7 +13544,7 @@ impl ElastiCache for ElastiCacheClient {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();

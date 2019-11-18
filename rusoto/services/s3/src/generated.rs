@@ -9,17 +9,16 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
+#![allow(warnings)]
 
-use std::error::Error;
-use std::fmt;
-
-#[allow(warnings)]
 use futures::future;
 use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
+use std::error::Error;
+use std::fmt;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto::xml::error::*;
@@ -2134,6 +2133,8 @@ pub struct CopyObjectOutput {
     pub sse_customer_algorithm: Option<String>,
     /// <p>If server-side encryption with a customer-provided encryption key was requested, the response will include this header to provide round trip message integrity verification of the customer-provided encryption key.</p>
     pub sse_customer_key_md5: Option<String>,
+    /// <p>If present, specifies the AWS KMS Encryption Context to use for object encryption. The value of this header is a base64-encoded UTF-8 string holding JSON with the encryption context key-value pairs.</p>
+    pub ssekms_encryption_context: Option<String>,
     /// <p>If present, specifies the ID of the AWS Key Management Service (KMS) master encryption key that was used for the object.</p>
     pub ssekms_key_id: Option<String>,
     /// <p>The Server-side encryption algorithm used when storing this object in S3 (e.g., AES256, aws:kms).</p>
@@ -2219,6 +2220,8 @@ pub struct CopyObjectRequest {
     pub sse_customer_key: Option<String>,
     /// <p>Specifies the 128-bit MD5 digest of the encryption key according to RFC 1321. Amazon S3 uses this header for a message integrity check to ensure the encryption key was transmitted without error.</p>
     pub sse_customer_key_md5: Option<String>,
+    /// <p>Specifies the AWS KMS Encryption Context to use for object encryption. The value of this header is a base64-encoded UTF-8 string holding JSON with the encryption context key-value pairs.</p>
+    pub ssekms_encryption_context: Option<String>,
     /// <p>Specifies the AWS KMS key ID to use for object encryption. All GET and PUT requests for an object protected by AWS KMS will fail if not made via SSL or using SigV4. Documentation on configuring any of the officially supported AWS SDKs and CLI can be found at http://docs.aws.amazon.com/AmazonS3/latest/dev/UsingAWSSDK.html#specify-signature-version</p>
     pub ssekms_key_id: Option<String>,
     /// <p>The Server-side encryption algorithm used when storing this object in S3 (e.g., AES256, aws:kms).</p>
@@ -2389,6 +2392,8 @@ pub struct CreateMultipartUploadOutput {
     pub sse_customer_algorithm: Option<String>,
     /// <p>If server-side encryption with a customer-provided encryption key was requested, the response will include this header to provide round trip message integrity verification of the customer-provided encryption key.</p>
     pub sse_customer_key_md5: Option<String>,
+    /// <p>If present, specifies the AWS KMS Encryption Context to use for object encryption. The value of this header is a base64-encoded UTF-8 string holding JSON with the encryption context key-value pairs.</p>
+    pub ssekms_encryption_context: Option<String>,
     /// <p>If present, specifies the ID of the AWS Key Management Service (KMS) master encryption key that was used for the object.</p>
     pub ssekms_key_id: Option<String>,
     /// <p>The Server-side encryption algorithm used when storing this object in S3 (e.g., AES256, aws:kms).</p>
@@ -2470,6 +2475,8 @@ pub struct CreateMultipartUploadRequest {
     pub sse_customer_key: Option<String>,
     /// <p>Specifies the 128-bit MD5 digest of the encryption key according to RFC 1321. Amazon S3 uses this header for a message integrity check to ensure the encryption key was transmitted without error.</p>
     pub sse_customer_key_md5: Option<String>,
+    /// <p>Specifies the AWS KMS Encryption Context to use for object encryption. The value of this header is a base64-encoded UTF-8 string holding JSON with the encryption context key-value pairs.</p>
+    pub ssekms_encryption_context: Option<String>,
     /// <p>Specifies the AWS KMS key ID to use for object encryption. All GET and PUT requests for an object protected by AWS KMS will fail if not made via SSL or using SigV4. Documentation on configuring any of the officially supported AWS SDKs and CLI can be found at http://docs.aws.amazon.com/AmazonS3/latest/dev/UsingAWSSDK.html#specify-signature-version</p>
     pub ssekms_key_id: Option<String>,
     /// <p>The Server-side encryption algorithm used when storing this object in S3 (e.g., AES256, aws:kms).</p>
@@ -10875,6 +10882,8 @@ pub struct PutObjectOutput {
     pub sse_customer_algorithm: Option<String>,
     /// <p>If server-side encryption with a customer-provided encryption key was requested, the response will include this header to provide round trip message integrity verification of the customer-provided encryption key.</p>
     pub sse_customer_key_md5: Option<String>,
+    /// <p>If present, specifies the AWS KMS Encryption Context to use for object encryption. The value of this header is a base64-encoded UTF-8 string holding JSON with the encryption context key-value pairs.</p>
+    pub ssekms_encryption_context: Option<String>,
     /// <p>If present, specifies the ID of the AWS Key Management Service (KMS) master encryption key that was used for the object.</p>
     pub ssekms_key_id: Option<String>,
     /// <p>The Server-side encryption algorithm used when storing this object in S3 (e.g., AES256, aws:kms).</p>
@@ -10948,6 +10957,8 @@ pub struct PutObjectRequest {
     pub sse_customer_key: Option<String>,
     /// <p>Specifies the 128-bit MD5 digest of the encryption key according to RFC 1321. Amazon S3 uses this header for a message integrity check to ensure the encryption key was transmitted without error.</p>
     pub sse_customer_key_md5: Option<String>,
+    /// <p>Specifies the AWS KMS Encryption Context to use for object encryption. The value of this header is a base64-encoded UTF-8 string holding JSON with the encryption context key-value pairs.</p>
+    pub ssekms_encryption_context: Option<String>,
     /// <p>Specifies the AWS KMS key ID to use for object encryption. All GET and PUT requests for an object protected by AWS KMS will fail if not made via SSL or using SigV4. Documentation on configuring any of the officially supported AWS SDKs and CLI can be found at http://docs.aws.amazon.com/AmazonS3/latest/dev/UsingAWSSDK.html#specify-signature-version</p>
     pub ssekms_key_id: Option<String>,
     /// <p>The Server-side encryption algorithm used when storing this object in S3 (e.g., AES256, aws:kms).</p>
@@ -11741,7 +11752,7 @@ pub struct ReplicationRule {
     pub filter: Option<ReplicationRuleFilter>,
     /// <p>A unique identifier for the rule. The maximum value is 255 characters.</p>
     pub id: Option<String>,
-    /// <p>The priority associated with the rule. If you specify multiple rules in a replication configuration, Amazon S3 prioritizes the rules to prevent conflicts when filtering. If two or more rules identify the same object based on a specified filter, the rule with higher priority takes precedence. For example:</p> <ul> <li> <p>Same object quality prefix based filter criteria If prefixes you specified in multiple rules overlap </p> </li> <li> <p>Same object qualify tag based filter criteria specified in multiple rules</p> </li> </ul> <p>For more information, see <a href=" https://docs.aws.amazon.com/AmazonS3/latest/dev/crr.html">Cross-Region Replication (CRR)</a> in the <i>Amazon S3 Developer Guide</i>.</p>
+    /// <p>The priority associated with the rule. If you specify multiple rules in a replication configuration, Amazon S3 prioritizes the rules to prevent conflicts when filtering. If two or more rules identify the same object based on a specified filter, the rule with higher priority takes precedence. For example:</p> <ul> <li> <p>Same object quality prefix based filter criteria If prefixes you specified in multiple rules overlap </p> </li> <li> <p>Same object qualify tag based filter criteria specified in multiple rules</p> </li> </ul> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/crr.html">Cross-Region Replication (CRR)</a> in the <i>Amazon S3 Developer Guide</i>.</p>
     pub priority: Option<i64>,
     /// <p>A container that describes additional filters for identifying the source objects that you want to replicate. You can choose to enable or disable the replication of these objects. Currently, Amazon S3 supports only the filter that you can specify for objects created with server-side encryption using an AWS KMS-Managed Key (SSE-KMS).</p>
     pub source_selection_criteria: Option<SourceSelectionCriteria>,
@@ -18393,7 +18404,7 @@ pub trait S3 {
         input: DeleteBucketPolicyRequest,
     ) -> RusotoFuture<(), DeleteBucketPolicyError>;
 
-    /// <p> Deletes the replication configuration from the bucket. For information about replication configuration, see <a href=" https://docs.aws.amazon.com/AmazonS3/latest/dev/crr.html">Cross-Region Replication (CRR)</a> in the <i>Amazon S3 Developer Guide</i>. </p>
+    /// <p> Deletes the replication configuration from the bucket. For information about replication configuration, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/crr.html">Cross-Region Replication (CRR)</a> in the <i>Amazon S3 Developer Guide</i>. </p>
     fn delete_bucket_replication(
         &self,
         input: DeleteBucketReplicationRequest,
@@ -18834,10 +18845,7 @@ impl S3Client {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> S3Client {
-        S3Client {
-            client: Client::shared(),
-            region,
-        }
+        Self::new_with_client(Client::shared(), region)
     }
 
     pub fn new_with<P, D>(
@@ -18851,10 +18859,14 @@ impl S3Client {
         D: DispatchSignedRequest + Send + Sync + 'static,
         D::Future: Send,
     {
-        S3Client {
-            client: Client::new_with(credentials_provider, request_dispatcher),
+        Self::new_with_client(
+            Client::new_with(credentials_provider, request_dispatcher),
             region,
-        }
+        )
+    }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> S3Client {
+        S3Client { client, region }
     }
 }
 
@@ -18893,7 +18905,7 @@ impl S3 for S3Client {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -18955,7 +18967,7 @@ impl S3 for S3Client {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -19155,6 +19167,13 @@ impl S3 for S3Client {
             );
         }
 
+        if let Some(ref ssekms_encryption_context) = input.ssekms_encryption_context {
+            request.add_header(
+                "x-amz-server-side-encryption-context",
+                &ssekms_encryption_context.to_string(),
+            );
+        }
+
         if let Some(ref ssekms_key_id) = input.ssekms_key_id {
             request.add_header(
                 "x-amz-server-side-encryption-aws-kms-key-id",
@@ -19206,7 +19225,7 @@ impl S3 for S3Client {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -19241,6 +19260,12 @@ impl S3 for S3Client {
                 {
                     let value = sse_customer_key_md5.to_owned();
                     result.sse_customer_key_md5 = Some(value)
+                };
+                if let Some(ssekms_encryption_context) =
+                    response.headers.get("x-amz-server-side-encryption-context")
+                {
+                    let value = ssekms_encryption_context.to_owned();
+                    result.ssekms_encryption_context = Some(value)
                 };
                 if let Some(ssekms_key_id) = response
                     .headers
@@ -19335,7 +19360,7 @@ impl S3 for S3Client {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -19456,6 +19481,13 @@ impl S3 for S3Client {
             );
         }
 
+        if let Some(ref ssekms_encryption_context) = input.ssekms_encryption_context {
+            request.add_header(
+                "x-amz-server-side-encryption-context",
+                &ssekms_encryption_context.to_string(),
+            );
+        }
+
         if let Some(ref ssekms_key_id) = input.ssekms_key_id {
             request.add_header(
                 "x-amz-server-side-encryption-aws-kms-key-id",
@@ -19503,7 +19535,7 @@ impl S3 for S3Client {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -19538,6 +19570,12 @@ impl S3 for S3Client {
                 {
                     let value = sse_customer_key_md5.to_owned();
                     result.sse_customer_key_md5 = Some(value)
+                };
+                if let Some(ssekms_encryption_context) =
+                    response.headers.get("x-amz-server-side-encryption-context")
+                {
+                    let value = ssekms_encryption_context.to_owned();
+                    result.ssekms_encryption_context = Some(value)
                 };
                 if let Some(ssekms_key_id) = response
                     .headers
@@ -19768,7 +19806,7 @@ impl S3 for S3Client {
         })
     }
 
-    /// <p> Deletes the replication configuration from the bucket. For information about replication configuration, see <a href=" https://docs.aws.amazon.com/AmazonS3/latest/dev/crr.html">Cross-Region Replication (CRR)</a> in the <i>Amazon S3 Developer Guide</i>. </p>
+    /// <p> Deletes the replication configuration from the bucket. For information about replication configuration, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/crr.html">Cross-Region Replication (CRR)</a> in the <i>Amazon S3 Developer Guide</i>. </p>
     #[allow(unused_variables, warnings)]
     fn delete_bucket_replication(
         &self,
@@ -19895,7 +19933,7 @@ impl S3 for S3Client {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -19954,7 +19992,7 @@ impl S3 for S3Client {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -20023,7 +20061,7 @@ impl S3 for S3Client {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -20097,7 +20135,7 @@ impl S3 for S3Client {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -20145,7 +20183,7 @@ impl S3 for S3Client {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -20192,7 +20230,7 @@ impl S3 for S3Client {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -20240,7 +20278,7 @@ impl S3 for S3Client {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -20285,7 +20323,7 @@ impl S3 for S3Client {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -20334,7 +20372,7 @@ impl S3 for S3Client {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -20382,7 +20420,7 @@ impl S3 for S3Client {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -20430,7 +20468,7 @@ impl S3 for S3Client {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -20478,7 +20516,7 @@ impl S3 for S3Client {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -20526,7 +20564,7 @@ impl S3 for S3Client {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -20572,7 +20610,7 @@ impl S3 for S3Client {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -20617,7 +20655,7 @@ impl S3 for S3Client {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -20664,7 +20702,7 @@ impl S3 for S3Client {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -20742,7 +20780,7 @@ impl S3 for S3Client {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -20789,7 +20827,7 @@ impl S3 for S3Client {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -20834,7 +20872,7 @@ impl S3 for S3Client {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -20882,7 +20920,7 @@ impl S3 for S3Client {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -20929,7 +20967,7 @@ impl S3 for S3Client {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -20977,7 +21015,7 @@ impl S3 for S3Client {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -21268,7 +21306,7 @@ impl S3 for S3Client {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -21323,7 +21361,7 @@ impl S3 for S3Client {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -21368,7 +21406,7 @@ impl S3 for S3Client {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -21422,7 +21460,7 @@ impl S3 for S3Client {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -21473,7 +21511,7 @@ impl S3 for S3Client {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -21560,7 +21598,7 @@ impl S3 for S3Client {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -21678,7 +21716,7 @@ impl S3 for S3Client {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -21861,7 +21899,7 @@ impl S3 for S3Client {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -21912,7 +21950,7 @@ impl S3 for S3Client {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -21963,7 +22001,7 @@ impl S3 for S3Client {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -22004,7 +22042,7 @@ impl S3 for S3Client {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -22067,7 +22105,7 @@ impl S3 for S3Client {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -22133,7 +22171,7 @@ impl S3 for S3Client {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -22198,7 +22236,7 @@ impl S3 for S3Client {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -22268,7 +22306,7 @@ impl S3 for S3Client {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -22320,7 +22358,7 @@ impl S3 for S3Client {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -23147,6 +23185,13 @@ impl S3 for S3Client {
             );
         }
 
+        if let Some(ref ssekms_encryption_context) = input.ssekms_encryption_context {
+            request.add_header(
+                "x-amz-server-side-encryption-context",
+                &ssekms_encryption_context.to_string(),
+            );
+        }
+
         if let Some(ref ssekms_key_id) = input.ssekms_key_id {
             request.add_header(
                 "x-amz-server-side-encryption-aws-kms-key-id",
@@ -23198,7 +23243,7 @@ impl S3 for S3Client {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -23231,6 +23276,12 @@ impl S3 for S3Client {
                 {
                     let value = sse_customer_key_md5.to_owned();
                     result.sse_customer_key_md5 = Some(value)
+                };
+                if let Some(ssekms_encryption_context) =
+                    response.headers.get("x-amz-server-side-encryption-context")
+                {
+                    let value = ssekms_encryption_context.to_owned();
+                    result.ssekms_encryption_context = Some(value)
                 };
                 if let Some(ssekms_key_id) = response
                     .headers
@@ -23331,7 +23382,7 @@ impl S3 for S3Client {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -23401,7 +23452,7 @@ impl S3 for S3Client {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -23471,7 +23522,7 @@ impl S3 for S3Client {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -23550,7 +23601,7 @@ impl S3 for S3Client {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -23610,7 +23661,7 @@ impl S3 for S3Client {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -23715,7 +23766,7 @@ impl S3 for S3Client {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -23768,7 +23819,8 @@ impl S3 for S3Client {
             );
         }
         let mut params = Params::new();
-        params.put("select&select-type", "2");
+        params.put_key("select");
+        params.put("select-type", "2");
         request.set_params(params);
         let mut writer = EventWriter::new(Vec::new());
         SelectObjectContentRequestSerializer::serialize(
@@ -23796,7 +23848,7 @@ impl S3 for S3Client {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -23880,7 +23932,7 @@ impl S3 for S3Client {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();
@@ -24042,7 +24094,7 @@ impl S3 for S3Client {
                 } else {
                     let reader = EventReader::new_with_config(
                         response.body.as_ref(),
-                        ParserConfig::new().trim_whitespace(true),
+                        ParserConfig::new().trim_whitespace(false),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
                     let _start_document = stack.next();

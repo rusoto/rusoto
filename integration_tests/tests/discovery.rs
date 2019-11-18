@@ -7,8 +7,7 @@ extern crate rusoto_discovery;
 
 use rusoto_core::{Region, RusotoError};
 use rusoto_discovery::{
-    DescribeTagsRequest, Discovery, DiscoveryClient,
-    ListConfigurationsRequest,
+    DescribeTagsRequest, Discovery, DiscoveryClient, ListConfigurationsRequest,
 };
 
 use std::str;

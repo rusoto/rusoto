@@ -9,17 +9,16 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
+#![allow(warnings)]
 
-use std::error::Error;
-use std::fmt;
-
-#[allow(warnings)]
 use futures::future;
 use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
+use std::error::Error;
+use std::fmt;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
@@ -41,7 +40,7 @@ pub struct AccessLogSettings {
 
 /// <p>Represents an API.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Api {
     /// <p>The URI of the API, of the form {api-id}.execute-api.{region}.amazonaws.com. The
     /// stage name is typically appended to this URI to form a complete path to a deployed
@@ -78,6 +77,10 @@ pub struct Api {
     /// <p>The route selection expression for the API.</p>
     #[serde(rename = "RouteSelectionExpression")]
     pub route_selection_expression: String,
+    /// <p>The key-value map of strings. The valid character set is [a-zA-Z+-=._:/]. The tag key can be up to 128 characters and must not start with aws:. The tag value can be up to 256 characters..</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
     /// <p>A version identifier for the API.</p>
     #[serde(rename = "Version")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -91,7 +94,7 @@ pub struct Api {
 
 /// <p>Represents an API mapping.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ApiMapping {
     /// <p>The API identifier.</p>
     #[serde(rename = "ApiId")]
@@ -111,7 +114,7 @@ pub struct ApiMapping {
 
 /// <p>Represents an authorizer.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Authorizer {
     /// <p>Specifies the required credentials as an IAM role for API Gateway to invoke the
     /// authorizer. To specify an IAM role for API Gateway to assume, use the role's Amazon
@@ -201,7 +204,7 @@ pub struct CreateApiMappingRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateApiMappingResponse {
     /// <p>The API identifier.</p>
     #[serde(rename = "ApiId")]
@@ -244,6 +247,10 @@ pub struct CreateApiRequest {
     /// <p>The route selection expression for the API.</p>
     #[serde(rename = "RouteSelectionExpression")]
     pub route_selection_expression: String,
+    /// <p>The key-value map of strings. The valid character set is [a-zA-Z+-=._:/]. The tag key can be up to 128 characters and must not start with aws:. The tag value can be up to 256 characters..</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
     /// <p>A version identifier for the API.</p>
     #[serde(rename = "Version")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -251,7 +258,7 @@ pub struct CreateApiRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateApiResponse {
     /// <p>The URI of the API, of the form {api-id}.execute-api.{region}.amazonaws.com. The
     /// stage name is typically appended to this URI to form a complete path to a deployed
@@ -291,6 +298,10 @@ pub struct CreateApiResponse {
     #[serde(rename = "RouteSelectionExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub route_selection_expression: Option<String>,
+    /// <p>The key-value map of strings. The valid character set is [a-zA-Z+-=._:/]. The tag key can be up to 128 characters and must not start with aws:. The tag value can be up to 256 characters..</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
     /// <p>A version identifier for the API.</p>
     #[serde(rename = "Version")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -371,7 +382,7 @@ pub struct CreateAuthorizerRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateAuthorizerResponse {
     /// <p>Specifies the required credentials as an IAM role for API Gateway to invoke the
     /// authorizer. To specify an IAM role for API Gateway to assume, use the role's Amazon
@@ -461,7 +472,7 @@ pub struct CreateDeploymentRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDeploymentResponse {
     /// <p>The date and time when the Deployment resource was created.</p>
     #[serde(rename = "CreatedDate")]
@@ -495,10 +506,14 @@ pub struct CreateDomainNameRequest {
     #[serde(rename = "DomainNameConfigurations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub domain_name_configurations: Option<Vec<DomainNameConfiguration>>,
+    /// <p>The key-value map of strings. The valid character set is [a-zA-Z+-=._:/]. The tag key can be up to 128 characters and must not start with aws:. The tag value can be up to 256 characters..</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDomainNameResponse {
     /// <p>The API mapping selection expression.</p>
     #[serde(rename = "ApiMappingSelectionExpression")]
@@ -512,6 +527,10 @@ pub struct CreateDomainNameResponse {
     #[serde(rename = "DomainNameConfigurations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub domain_name_configurations: Option<Vec<DomainNameConfiguration>>,
+    /// <p>The key-value map of strings. The valid character set is [a-zA-Z+-=._:/]. The tag key can be up to 128 characters and must not start with aws:. The tag value can be up to 256 characters..</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -630,7 +649,7 @@ pub struct CreateIntegrationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateIntegrationResponse {
     /// <p>The connection ID.</p>
     #[serde(rename = "ConnectionId")]
@@ -801,7 +820,7 @@ pub struct CreateIntegrationResponseRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateIntegrationResponseResponse {
     /// <p>Specifies how to handle response payload content type conversions. Supported
     /// values are CONVERT_TO_BINARY and CONVERT_TO_TEXT, with the
@@ -870,7 +889,7 @@ pub struct CreateModelRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateModelResponse {
     /// <p>The content-type for the model, for example, "application/json".</p>
     #[serde(rename = "ContentType")]
@@ -953,7 +972,7 @@ pub struct CreateRouteRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateRouteResponse {
     /// <p>Specifies whether an API key is required for this route.</p>
     #[serde(rename = "ApiKeyRequired")]
@@ -1043,7 +1062,7 @@ pub struct CreateRouteResponseRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateRouteResponseResponse {
     /// <p>Represents the model selection expression of a route response.</p>
     #[serde(rename = "ModelSelectionExpression")]
@@ -1105,10 +1124,14 @@ pub struct CreateStageRequest {
     #[serde(rename = "StageVariables")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stage_variables: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The key-value map of strings. The valid character set is [a-zA-Z+-=._:/]. The tag key can be up to 128 characters and must not start with aws:. The tag value can be up to 256 characters..</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateStageResponse {
     /// <p>Settings for logging access in this stage.</p>
     #[serde(rename = "AccessLogSettings")]
@@ -1153,6 +1176,10 @@ pub struct CreateStageResponse {
     #[serde(rename = "StageVariables")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stage_variables: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The key-value map of strings. The valid character set is [a-zA-Z+-=._:/]. The tag key can be up to 128 characters and must not start with aws:. The tag value can be up to 256 characters..</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1269,7 +1296,7 @@ pub struct DeleteStageRequest {
 /// Deployment must be associated with a Stage for it to be
 /// callable over the internet.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Deployment {
     /// <p>The date and time when the Deployment resource was created.</p>
     #[serde(rename = "CreatedDate")]
@@ -1296,7 +1323,7 @@ pub struct Deployment {
 
 /// <p>Represents a domain name.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DomainName {
     /// <p>The API mapping selection expression.</p>
     #[serde(rename = "ApiMappingSelectionExpression")]
@@ -1309,6 +1336,10 @@ pub struct DomainName {
     #[serde(rename = "DomainNameConfigurations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub domain_name_configurations: Option<Vec<DomainNameConfiguration>>,
+    /// <p>The key-value map of strings. The valid character set is [a-zA-Z+-=._:/]. The tag key can be up to 128 characters and must not start with aws:. The tag value can be up to 256 characters..</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 /// <p>The domain name configuration.</p>
@@ -1333,6 +1364,14 @@ pub struct DomainNameConfiguration {
     #[serde(rename = "CertificateUploadDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_upload_date: Option<f64>,
+    /// <p>The status of the domain name migration. The valid values are AVAILABLE and UPDATING. If the status is UPDATING, the domain cannot be modified further until the existing operation is complete. If it is AVAILABLE, the domain can be updated.</p>
+    #[serde(rename = "DomainNameStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain_name_status: Option<String>,
+    /// <p>An optional text message containing detailed information about status of the domain name migration.</p>
+    #[serde(rename = "DomainNameStatusMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain_name_status_message: Option<String>,
     /// <p>The endpoint type.</p>
     #[serde(rename = "EndpointType")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1341,6 +1380,10 @@ pub struct DomainNameConfiguration {
     #[serde(rename = "HostedZoneId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub hosted_zone_id: Option<String>,
+    /// <p>The Transport Layer Security (TLS) version of the security policy for this domain name. The valid values are TLS_1_0 and TLS_1_2.</p>
+    #[serde(rename = "SecurityPolicy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub security_policy: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1354,7 +1397,7 @@ pub struct GetApiMappingRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetApiMappingResponse {
     /// <p>The API identifier.</p>
     #[serde(rename = "ApiId")]
@@ -1391,7 +1434,7 @@ pub struct GetApiMappingsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetApiMappingsResponse {
     /// <p>The elements from this collection.</p>
     #[serde(rename = "Items")]
@@ -1412,7 +1455,7 @@ pub struct GetApiRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetApiResponse {
     /// <p>The URI of the API, of the form {api-id}.execute-api.{region}.amazonaws.com. The
     /// stage name is typically appended to this URI to form a complete path to a deployed
@@ -1452,6 +1495,10 @@ pub struct GetApiResponse {
     #[serde(rename = "RouteSelectionExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub route_selection_expression: Option<String>,
+    /// <p>The key-value map of strings. The valid character set is [a-zA-Z+-=._:/]. The tag key can be up to 128 characters and must not start with aws:. The tag value can be up to 256 characters..</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
     /// <p>A version identifier for the API.</p>
     #[serde(rename = "Version")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1477,7 +1524,7 @@ pub struct GetApisRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetApisResponse {
     /// <p>The elements from this collection.</p>
     #[serde(rename = "Items")]
@@ -1501,7 +1548,7 @@ pub struct GetAuthorizerRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAuthorizerResponse {
     /// <p>Specifies the required credentials as an IAM role for API Gateway to invoke the
     /// authorizer. To specify an IAM role for API Gateway to assume, use the role's Amazon
@@ -1591,7 +1638,7 @@ pub struct GetAuthorizersRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAuthorizersResponse {
     /// <p>The elements from this collection.</p>
     #[serde(rename = "Items")]
@@ -1615,7 +1662,7 @@ pub struct GetDeploymentRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDeploymentResponse {
     /// <p>The date and time when the Deployment resource was created.</p>
     #[serde(rename = "CreatedDate")]
@@ -1657,7 +1704,7 @@ pub struct GetDeploymentsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDeploymentsResponse {
     /// <p>The elements from this collection.</p>
     #[serde(rename = "Items")]
@@ -1678,7 +1725,7 @@ pub struct GetDomainNameRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDomainNameResponse {
     /// <p>The API mapping selection expression.</p>
     #[serde(rename = "ApiMappingSelectionExpression")]
@@ -1692,6 +1739,10 @@ pub struct GetDomainNameResponse {
     #[serde(rename = "DomainNameConfigurations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub domain_name_configurations: Option<Vec<DomainNameConfiguration>>,
+    /// <p>The key-value map of strings. The valid character set is [a-zA-Z+-=._:/]. The tag key can be up to 128 characters and must not start with aws:. The tag value can be up to 256 characters..</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1708,7 +1759,7 @@ pub struct GetDomainNamesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDomainNamesResponse {
     /// <p>The elements from this collection.</p>
     #[serde(rename = "Items")]
@@ -1732,7 +1783,7 @@ pub struct GetIntegrationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetIntegrationResponse {
     /// <p>The connection ID.</p>
     #[serde(rename = "ConnectionId")]
@@ -1867,7 +1918,7 @@ pub struct GetIntegrationResponseRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetIntegrationResponseResponse {
     /// <p>Specifies how to handle response payload content type conversions. Supported
     /// values are CONVERT_TO_BINARY and CONVERT_TO_TEXT, with the
@@ -1933,7 +1984,7 @@ pub struct GetIntegrationResponsesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetIntegrationResponsesResponse {
     /// <p>The elements from this collection.</p>
     #[serde(rename = "Items")]
@@ -1963,7 +2014,7 @@ pub struct GetIntegrationsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetIntegrationsResponse {
     /// <p>The elements from this collection.</p>
     #[serde(rename = "Items")]
@@ -1987,7 +2038,7 @@ pub struct GetModelRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetModelResponse {
     /// <p>The content-type for the model, for example, "application/json".</p>
     #[serde(rename = "ContentType")]
@@ -2023,7 +2074,7 @@ pub struct GetModelTemplateRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetModelTemplateResponse {
     /// <p>The template value.</p>
     #[serde(rename = "Value")]
@@ -2048,7 +2099,7 @@ pub struct GetModelsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetModelsResponse {
     /// <p>The elements from this collection.</p>
     #[serde(rename = "Items")]
@@ -2072,7 +2123,7 @@ pub struct GetRouteRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRouteResponse {
     /// <p>Specifies whether an API key is required for this route.</p>
     #[serde(rename = "ApiKeyRequired")]
@@ -2150,7 +2201,7 @@ pub struct GetRouteResponseRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRouteResponseResponse {
     /// <p>Represents the model selection expression of a route response.</p>
     #[serde(rename = "ModelSelectionExpression")]
@@ -2194,7 +2245,7 @@ pub struct GetRouteResponsesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRouteResponsesResponse {
     /// <p>The elements from this collection.</p>
     #[serde(rename = "Items")]
@@ -2224,7 +2275,7 @@ pub struct GetRoutesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetRoutesResponse {
     /// <p>The elements from this collection.</p>
     #[serde(rename = "Items")]
@@ -2248,7 +2299,7 @@ pub struct GetStageRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetStageResponse {
     /// <p>Settings for logging access in this stage.</p>
     #[serde(rename = "AccessLogSettings")]
@@ -2293,6 +2344,10 @@ pub struct GetStageResponse {
     #[serde(rename = "StageVariables")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stage_variables: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The key-value map of strings. The valid character set is [a-zA-Z+-=._:/]. The tag key can be up to 128 characters and must not start with aws:. The tag value can be up to 256 characters..</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -2312,7 +2367,7 @@ pub struct GetStagesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetStagesResponse {
     /// <p>The elements from this collection.</p>
     #[serde(rename = "Items")]
@@ -2325,9 +2380,23 @@ pub struct GetStagesResponse {
     pub next_token: Option<String>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetTagsRequest {
+    #[serde(rename = "ResourceArn")]
+    pub resource_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetTagsResponse {
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
 /// <p>Represents an integration.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Integration {
     /// <p>The connection ID.</p>
     #[serde(rename = "ConnectionId")]
@@ -2450,7 +2519,7 @@ pub struct Integration {
 
 /// <p>Represents an integration response.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct IntegrationResponse {
     /// <p>Specifies how to handle response payload content type conversions. Supported
     /// values are CONVERT_TO_BINARY and CONVERT_TO_TEXT, with the
@@ -2498,7 +2567,7 @@ pub struct IntegrationResponse {
 /// <p>Represents a data model for an API. See <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/models-mappings.html">Create Models and Mapping Templates for Request and Response
 /// Mappings</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Model {
     /// <p>The content-type for the model, for example, "application/json".</p>
     #[serde(rename = "ContentType")]
@@ -2534,7 +2603,7 @@ pub struct ParameterConstraints {
 
 /// <p>Represents a route.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Route {
     /// <p>Specifies whether an API key is required for this route.</p>
     #[serde(rename = "ApiKeyRequired")]
@@ -2599,7 +2668,7 @@ pub struct Route {
 
 /// <p>Represents a route response.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RouteResponse {
     /// <p>Represents the model selection expression of a route response.</p>
     #[serde(rename = "ModelSelectionExpression")]
@@ -2653,7 +2722,7 @@ pub struct RouteSettings {
 
 /// <p>Represents an API stage.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Stage {
     /// <p>Settings for logging access in this stage.</p>
     #[serde(rename = "AccessLogSettings")]
@@ -2697,6 +2766,35 @@ pub struct Stage {
     #[serde(rename = "StageVariables")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stage_variables: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The key-value map of strings. The valid character set is [a-zA-Z+-=._:/]. The tag key can be up to 128 characters and must not start with aws:. The tag value can be up to 256 characters..</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct TagResourceRequest {
+    /// <p>AWS resource arn </p>
+    #[serde(rename = "ResourceArn")]
+    pub resource_arn: String,
+    /// <p>The key-value map of strings. The valid character set is [a-zA-Z+-=._:/]. The tag key can be up to 128 characters and must not start with aws:. The tag value can be up to 256 characters..</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct TagResourceResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UntagResourceRequest {
+    /// <p>AWS resource arn </p>
+    #[serde(rename = "ResourceArn")]
+    pub resource_arn: String,
+    /// <p>The Tag keys to delete</p>
+    #[serde(rename = "TagKeys")]
+    pub tag_keys: Vec<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -2721,7 +2819,7 @@ pub struct UpdateApiMappingRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateApiMappingResponse {
     /// <p>The API identifier.</p>
     #[serde(rename = "ApiId")]
@@ -2773,7 +2871,7 @@ pub struct UpdateApiRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateApiResponse {
     /// <p>The URI of the API, of the form {api-id}.execute-api.{region}.amazonaws.com. The
     /// stage name is typically appended to this URI to form a complete path to a deployed
@@ -2813,6 +2911,10 @@ pub struct UpdateApiResponse {
     #[serde(rename = "RouteSelectionExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub route_selection_expression: Option<String>,
+    /// <p>The key-value map of strings. The valid character set is [a-zA-Z+-=._:/]. The tag key can be up to 128 characters and must not start with aws:. The tag value can be up to 256 characters..</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
     /// <p>A version identifier for the API.</p>
     #[serde(rename = "Version")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2899,7 +3001,7 @@ pub struct UpdateAuthorizerRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateAuthorizerResponse {
     /// <p>Specifies the required credentials as an IAM role for API Gateway to invoke the
     /// authorizer. To specify an IAM role for API Gateway to assume, use the role's Amazon
@@ -2987,7 +3089,7 @@ pub struct UpdateDeploymentRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDeploymentResponse {
     /// <p>The date and time when the Deployment resource was created.</p>
     #[serde(rename = "CreatedDate")]
@@ -3024,7 +3126,7 @@ pub struct UpdateDomainNameRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDomainNameResponse {
     /// <p>The API mapping selection expression.</p>
     #[serde(rename = "ApiMappingSelectionExpression")]
@@ -3038,6 +3140,10 @@ pub struct UpdateDomainNameResponse {
     #[serde(rename = "DomainNameConfigurations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub domain_name_configurations: Option<Vec<DomainNameConfiguration>>,
+    /// <p>The key-value map of strings. The valid character set is [a-zA-Z+-=._:/]. The tag key can be up to 128 characters and must not start with aws:. The tag value can be up to 256 characters..</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -3160,7 +3266,7 @@ pub struct UpdateIntegrationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateIntegrationResponse {
     /// <p>The connection ID.</p>
     #[serde(rename = "ConnectionId")]
@@ -3340,7 +3446,7 @@ pub struct UpdateIntegrationResponseRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateIntegrationResponseResponse {
     /// <p>Specifies how to handle response payload content type conversions. Supported
     /// values are CONVERT_TO_BINARY and CONVERT_TO_TEXT, with the
@@ -3414,7 +3520,7 @@ pub struct UpdateModelRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateModelResponse {
     /// <p>The content-type for the model, for example, "application/json".</p>
     #[serde(rename = "ContentType")]
@@ -3501,7 +3607,7 @@ pub struct UpdateRouteRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateRouteResponse {
     /// <p>Specifies whether an API key is required for this route.</p>
     #[serde(rename = "ApiKeyRequired")]
@@ -3595,7 +3701,7 @@ pub struct UpdateRouteResponseRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateRouteResponseResponse {
     /// <p>Represents the model selection expression of a route response.</p>
     #[serde(rename = "ModelSelectionExpression")]
@@ -3660,7 +3766,7 @@ pub struct UpdateStageRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateStageResponse {
     /// <p>Settings for logging access in this stage.</p>
     #[serde(rename = "AccessLogSettings")]
@@ -3705,6 +3811,10 @@ pub struct UpdateStageResponse {
     #[serde(rename = "StageVariables")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stage_variables: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The key-value map of strings. The valid character set is [a-zA-Z+-=._:/]. The tag key can be up to 128 characters and must not start with aws:. The tag value can be up to 256 characters..</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 /// Errors returned by CreateApi
@@ -5771,6 +5881,171 @@ impl Error for GetStagesError {
         }
     }
 }
+/// Errors returned by GetTags
+#[derive(Debug, PartialEq)]
+pub enum GetTagsError {
+    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See
+    /// the accompanying error message for details.</p>
+    BadRequest(String),
+    /// <p>The requested operation would cause a conflict with the current state of a service
+    /// resource associated with the request. Resolve the conflict before retrying this
+    /// request. See the accompanying error message for details.</p>
+    Conflict(String),
+    /// <p>The resource specified in the request was not found. See the message
+    /// field for more information.</p>
+    NotFound(String),
+    /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
+    TooManyRequests(String),
+}
+
+impl GetTagsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetTagsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(GetTagsError::BadRequest(err.msg))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(GetTagsError::Conflict(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(GetTagsError::NotFound(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(GetTagsError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for GetTagsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetTagsError {
+    fn description(&self) -> &str {
+        match *self {
+            GetTagsError::BadRequest(ref cause) => cause,
+            GetTagsError::Conflict(ref cause) => cause,
+            GetTagsError::NotFound(ref cause) => cause,
+            GetTagsError::TooManyRequests(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by TagResource
+#[derive(Debug, PartialEq)]
+pub enum TagResourceError {
+    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See
+    /// the accompanying error message for details.</p>
+    BadRequest(String),
+    /// <p>The requested operation would cause a conflict with the current state of a service
+    /// resource associated with the request. Resolve the conflict before retrying this
+    /// request. See the accompanying error message for details.</p>
+    Conflict(String),
+    /// <p>The resource specified in the request was not found. See the message
+    /// field for more information.</p>
+    NotFound(String),
+    /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
+    TooManyRequests(String),
+}
+
+impl TagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(TagResourceError::BadRequest(err.msg))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(TagResourceError::Conflict(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(TagResourceError::NotFound(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(TagResourceError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for TagResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for TagResourceError {
+    fn description(&self) -> &str {
+        match *self {
+            TagResourceError::BadRequest(ref cause) => cause,
+            TagResourceError::Conflict(ref cause) => cause,
+            TagResourceError::NotFound(ref cause) => cause,
+            TagResourceError::TooManyRequests(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by UntagResource
+#[derive(Debug, PartialEq)]
+pub enum UntagResourceError {
+    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See
+    /// the accompanying error message for details.</p>
+    BadRequest(String),
+    /// <p>The requested operation would cause a conflict with the current state of a service
+    /// resource associated with the request. Resolve the conflict before retrying this
+    /// request. See the accompanying error message for details.</p>
+    Conflict(String),
+    /// <p>The resource specified in the request was not found. See the message
+    /// field for more information.</p>
+    NotFound(String),
+    /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
+    TooManyRequests(String),
+}
+
+impl UntagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(UntagResourceError::BadRequest(err.msg))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(UntagResourceError::Conflict(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(UntagResourceError::NotFound(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(UntagResourceError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for UntagResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UntagResourceError {
+    fn description(&self) -> &str {
+        match *self {
+            UntagResourceError::BadRequest(ref cause) => cause,
+            UntagResourceError::Conflict(ref cause) => cause,
+            UntagResourceError::NotFound(ref cause) => cause,
+            UntagResourceError::TooManyRequests(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by UpdateApi
 #[derive(Debug, PartialEq)]
 pub enum UpdateApiError {
@@ -6625,6 +6900,18 @@ pub trait ApiGatewayV2 {
         input: GetStagesRequest,
     ) -> RusotoFuture<GetStagesResponse, GetStagesError>;
 
+    /// <p>Gets the Tags for an API.</p>
+    fn get_tags(&self, input: GetTagsRequest) -> RusotoFuture<GetTagsResponse, GetTagsError>;
+
+    /// <p>Tag an APIGW resource</p>
+    fn tag_resource(
+        &self,
+        input: TagResourceRequest,
+    ) -> RusotoFuture<TagResourceResponse, TagResourceError>;
+
+    /// <p>Untag an APIGW resource</p>
+    fn untag_resource(&self, input: UntagResourceRequest) -> RusotoFuture<(), UntagResourceError>;
+
     /// <p>Updates an Api resource.</p>
     fn update_api(
         &self,
@@ -6703,10 +6990,7 @@ impl ApiGatewayV2Client {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> ApiGatewayV2Client {
-        ApiGatewayV2Client {
-            client: Client::shared(),
-            region,
-        }
+        Self::new_with_client(Client::shared(), region)
     }
 
     pub fn new_with<P, D>(
@@ -6720,10 +7004,14 @@ impl ApiGatewayV2Client {
         D: DispatchSignedRequest + Send + Sync + 'static,
         D::Future: Send,
     {
-        ApiGatewayV2Client {
-            client: Client::new_with(credentials_provider, request_dispatcher),
+        Self::new_with_client(
+            Client::new_with(credentials_provider, request_dispatcher),
             region,
-        }
+        )
+    }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> ApiGatewayV2Client {
+        ApiGatewayV2Client { client, region }
     }
 }
 
@@ -8208,6 +8496,95 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
                         .buffer()
                         .from_err()
                         .and_then(|response| Err(GetStagesError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Gets the Tags for an API.</p>
+    fn get_tags(&self, input: GetTagsRequest) -> RusotoFuture<GetTagsResponse, GetTagsError> {
+        let request_uri = format!("/v2/tags/{resource_arn}", resource_arn = input.resource_arn);
+
+        let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 200 {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetTagsResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetTagsError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Tag an APIGW resource</p>
+    fn tag_resource(
+        &self,
+        input: TagResourceRequest,
+    ) -> RusotoFuture<TagResourceResponse, TagResourceError> {
+        let request_uri = format!("/v2/tags/{resource_arn}", resource_arn = input.resource_arn);
+
+        let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 201 {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<TagResourceResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(TagResourceError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Untag an APIGW resource</p>
+    fn untag_resource(&self, input: UntagResourceRequest) -> RusotoFuture<(), UntagResourceError> {
+        let request_uri = format!("/v2/tags/{resource_arn}", resource_arn = input.resource_arn);
+
+        let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        for item in input.tag_keys.iter() {
+            params.put("tagKeys", item);
+        }
+        request.set_params(params);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 204 {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = ::std::mem::drop(response);
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UntagResourceError::from_response(response))),
                 )
             }
         })

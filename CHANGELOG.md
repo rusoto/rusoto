@@ -3,6 +3,42 @@
 ## [Unreleased]
 
 (Please put changes here)
+- Use static initializer for AWS profile regex
+- Add QLDB service
+- Add QLDB Session service
+- Update Skeptic tests for Rusoto v0.41
+- Don't decode query string parameters before encoding it. Results in fixing the prefix and marker
+params for s3 `list_objects` methods
+- Add Textract service
+- Update CloudDirectory API definition to `2017-01-11`
+- Add SecurityHub service
+- Add Transfer service
+- Introducing `rusoto_signature`, a standalone crate for signing HTTP requests.
+- Make static credentials into a credential provider
+- Add anonymous credentials support
+- Don't trim whitepsace when parsing xml payload. Fixes truncating of items with spaces in payloads
+such as an S3 key returned in `list_objects_v2`
+
+## [0.41.0] - 2019-10-07
+
+- Add `HttpClient::from_builder`
+- Upgrade to botocore from `1.12.163` to `1.12.230`
+- The types `rusoto_events::{CloudWatchEvents,CloudWatchEventsClient}` were renamed to `rusoto_events::{EventBridge,EventBridgeClient}`
+- Deserialize PostTextResponse correctly by allowing null values in the slots field
+- Fix Profile Config Loading: should ignore comments with '=' chars
+- Add App Mesh service
+- Fix service_crategen to parse operations with multiple static params
+- Refactor S3 integration tests - about a `#[test]` per behavior
+- Add support for non signing clients
+- Add EC2 Instance Connect service
+- Allow deserialization of regions without an endpoint specified
+- Add ApNortheast3 region
+- Add MeSouth1 region
+- Add x-amz-content-sha256 header to signed and canonical headers
+- Added `Eq` and `Hash` implementations on `Region`
+- Fixed parsing of Athena error messages
+- Fix credential_process behavior when using the non-default profile
+- Correctly read session tokens from credential_process
 
 ## [0.40.0] - 2019-06-28
 

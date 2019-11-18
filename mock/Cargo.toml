@@ -11,7 +11,7 @@ keywords = ["AWS", "Amazon", "mock", "testing"]
 license = "MIT"
 name = "rusoto_mock"
 repository = "https://github.com/rusoto/rusoto"
-version = "0.40.0"
+version = "0.41.0"
 homepage = "https://www.rusoto.org/"
 categories = [
   "development-tools::testing"
@@ -19,8 +19,8 @@ categories = [
 edition = "2018"
 
 [badges]
-appveyor = { repository = "rusoto/rusoto", branch = "master" }
-azure-devops = { project = "Rusoto", pipeline = "rusoto.rusoto", build="1" }
+appveyor = { repository = "matthewkmayer/rusoto", branch = "master" }
+azure-devops = { project = "matthewkmayer/Rusoto", pipeline = "rusoto.rusoto", build="1" }
 
 [dependencies]
 chrono = "0.4.0"
@@ -36,8 +36,10 @@ version = "0.0"
 version = "> 0.25.0"
 path = "../rusoto/core"
 default_features = false
-features = ["native-tls"]
 
 [features]
 nightly-testing = ["rusoto_core/nightly-testing"]
 unstable = []
+rustls = ["rusoto_core/rustls"]
+native-tls = ["rusoto_core/native-tls"]
+default = ["native-tls"]

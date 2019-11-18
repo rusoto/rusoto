@@ -3,7 +3,9 @@ use std::time::Duration;
 
 use futures::{Async, Future, Poll};
 
-use crate::credential::{CredentialsError, DefaultCredentialsProvider, ProvideAwsCredentials};
+use crate::credential::{
+    Anonymous, CredentialsError, DefaultCredentialsProvider, ProvideAwsCredentials, StaticProvider,
+};
 use crate::error::RusotoError;
 use crate::future::{self, RusotoFuture};
 use crate::request::{DispatchSignedRequest, HttpClient, HttpDispatchError, HttpResponse};
@@ -31,7 +33,7 @@ impl Client {
             DefaultCredentialsProvider::new().expect("failed to create credentials provider");
         let dispatcher = HttpClient::new().expect("failed to create request dispatcher");
         let inner = Arc::new(ClientInner {
-            credentials_provider: Arc::new(credentials_provider),
+            credentials_provider: Some(Arc::new(credentials_provider)),
             dispatcher: Arc::new(dispatcher),
         });
         *lock = Arc::downgrade(&inner);
@@ -47,7 +49,26 @@ impl Client {
         D::Future: Send,
     {
         let inner = ClientInner {
-            credentials_provider: Arc::new(credentials_provider),
+            credentials_provider: Some(Arc::new(credentials_provider)),
+            dispatcher: Arc::new(dispatcher),
+        };
+        Client {
+            inner: Arc::new(inner),
+        }
+    }
+
+    /// Create a client from a request dispatcher without a credentials provider. The client will
+    /// neither fetch any default credentials nor sign any requests. A non-signing client can be
+    /// useful for calling APIs like `Sts::assume_role_with_web_identity` and
+    /// `Sts::assume_role_with_saml` which do not require any request signing or when calling
+    /// AWS compatible third party API endpoints which employ different authentication mechanisms.
+    pub fn new_not_signing<D>(dispatcher: D) -> Self
+    where
+        D: DispatchSignedRequest + Send + Sync + 'static,
+        D::Future: Send,
+    {
+        let inner = ClientInner::<StaticProvider, D> {
+            credentials_provider: None,
             dispatcher: Arc::new(dispatcher),
         };
         Client {
@@ -59,7 +80,9 @@ impl Client {
     pub fn sign_and_dispatch<T, E>(
         &self,
         request: SignedRequest,
-        response_handler: fn(HttpResponse) -> Box<dyn Future<Item = T, Error = RusotoError<E>> + Send>,
+        response_handler: fn(
+            HttpResponse,
+        ) -> Box<dyn Future<Item = T, Error = RusotoError<E>> + Send>,
     ) -> RusotoFuture<T, E> {
         future::new(self.inner.sign_and_dispatch(request), response_handler)
     }
@@ -83,7 +106,7 @@ pub trait TimeoutFuture: Future {
 }
 
 struct ClientInner<P, D> {
-    credentials_provider: Arc<P>,
+    credentials_provider: Option<Arc<P>>,
     dispatcher: Arc<D>,
 }
 
@@ -159,9 +182,19 @@ where
 
     fn poll(&mut self) -> Poll<Self::Item, Self::Error> {
         match self.state.take().unwrap() {
-            SignAndDispatchState::Lazy { request } => {
-                let future = self.inner.credentials_provider.credentials();
-                self.state = Some(SignAndDispatchState::FetchingCredentials { future, request });
+            SignAndDispatchState::Lazy { mut request } => {
+                match self.inner.credentials_provider.as_ref() {
+                    Some(p) => {
+                        let future = p.credentials();
+                        self.state =
+                            Some(SignAndDispatchState::FetchingCredentials { future, request });
+                    }
+                    None => {
+                        request.complement_with_plus(true);
+                        let future = self.inner.dispatcher.dispatch(request, self.timeout);
+                        self.state = Some(SignAndDispatchState::Dispatching { future });
+                    }
+                }
                 self.poll()
             }
             SignAndDispatchState::FetchingCredentials {
@@ -175,7 +208,11 @@ where
                     Ok(Async::NotReady)
                 }
                 Ok(Async::Ready(credentials)) => {
-                    request.sign_with_plus(&credentials, true);
+                    if credentials.is_anonymous() {
+                        request.complement_with_plus(true);
+                    } else {
+                        request.sign_with_plus(&credentials, true);
+                    }
                     let future = self.inner.dispatcher.dispatch(request, self.timeout);
                     self.state = Some(SignAndDispatchState::Dispatching { future });
                     self.poll()

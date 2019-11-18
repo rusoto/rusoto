@@ -9,24 +9,23 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
+#![allow(warnings)]
 
-use std::error::Error;
-use std::fmt;
-
-#[allow(warnings)]
 use futures::future;
 use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
+use std::error::Error;
+use std::fmt;
 
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
 /// <p>Describes a modification to the configuration of bring your own license (BYOL) for the specified account. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AccountModification {
     /// <p>The IP address range, specified as an IPv4 CIDR block, for the management network interface used for the account.</p>
     #[serde(rename = "DedicatedTenancyManagementCidrRange")]
@@ -65,7 +64,7 @@ pub struct AssociateIpGroupsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateIpGroupsResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -79,7 +78,7 @@ pub struct AuthorizeIpRulesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AuthorizeIpRulesResult {}
 
 /// <p>Describes an Amazon WorkSpaces client.</p>
@@ -93,7 +92,7 @@ pub struct ClientProperties {
 
 /// <p>Information about the Amazon WorkSpaces client.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ClientPropertiesResult {
     /// <p>Information about the Amazon WorkSpaces client.</p>
     #[serde(rename = "ClientProperties")]
@@ -107,12 +106,42 @@ pub struct ClientPropertiesResult {
 
 /// <p>Describes the compute type.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ComputeType {
     /// <p>The compute type.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CopyWorkspaceImageRequest {
+    /// <p>A description of the image.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The name of the image.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p>The identifier of the source image.</p>
+    #[serde(rename = "SourceImageId")]
+    pub source_image_id: String,
+    /// <p>The identifier of the source Region.</p>
+    #[serde(rename = "SourceRegion")]
+    pub source_region: String,
+    /// <p>The tags for the image.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CopyWorkspaceImageResult {
+    /// <p>The identifier of the image.</p>
+    #[serde(rename = "ImageId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_id: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -135,7 +164,7 @@ pub struct CreateIpGroupRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateIpGroupResult {
     /// <p>The identifier of the group.</p>
     #[serde(rename = "GroupId")]
@@ -154,7 +183,7 @@ pub struct CreateTagsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateTagsResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -165,7 +194,7 @@ pub struct CreateWorkspacesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateWorkspacesResult {
     /// <p>Information about the WorkSpaces that could not be created.</p>
     #[serde(rename = "FailedRequests")]
@@ -179,7 +208,7 @@ pub struct CreateWorkspacesResult {
 
 /// <p>Describes the default values used to create a WorkSpace.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DefaultWorkspaceCreationProperties {
     /// <p>The identifier of any security groups to apply to WorkSpaces when they are created.</p>
     #[serde(rename = "CustomSecurityGroupId")]
@@ -211,7 +240,7 @@ pub struct DeleteIpGroupRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteIpGroupResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -225,7 +254,7 @@ pub struct DeleteTagsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteTagsResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -236,7 +265,7 @@ pub struct DeleteWorkspaceImageRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteWorkspaceImageResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -248,7 +277,7 @@ pub struct DescribeAccountModificationsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAccountModificationsResult {
     /// <p>The list of modifications to the configuration of BYOL.</p>
     #[serde(rename = "AccountModifications")]
@@ -264,7 +293,7 @@ pub struct DescribeAccountModificationsResult {
 pub struct DescribeAccountRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAccountResult {
     /// <p>The IP address range, specified as an IPv4 CIDR block, used for the management network interface.</p> <p>The management network interface is connected to a secure Amazon WorkSpaces management network. It is used for interactive streaming of the WorkSpace desktop to Amazon WorkSpaces clients, and to allow Amazon WorkSpaces to manage the WorkSpace.</p>
     #[serde(rename = "DedicatedTenancyManagementCidrRange")]
@@ -284,7 +313,7 @@ pub struct DescribeClientPropertiesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeClientPropertiesResult {
     /// <p>Information about the specified Amazon WorkSpaces clients.</p>
     #[serde(rename = "ClientPropertiesList")]
@@ -309,7 +338,7 @@ pub struct DescribeIpGroupsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeIpGroupsResult {
     /// <p>The token to use to retrieve the next set of results, or null if no more results are available.</p>
     #[serde(rename = "NextToken")]
@@ -329,7 +358,7 @@ pub struct DescribeTagsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeTagsResult {
     /// <p>The tags.</p>
     #[serde(rename = "TagList")]
@@ -354,7 +383,7 @@ pub struct DescribeWorkspaceBundlesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeWorkspaceBundlesResult {
     /// <p>Information about the bundles.</p>
     #[serde(rename = "Bundles")]
@@ -379,7 +408,7 @@ pub struct DescribeWorkspaceDirectoriesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeWorkspaceDirectoriesResult {
     /// <p>Information about the directories.</p>
     #[serde(rename = "Directories")]
@@ -408,7 +437,7 @@ pub struct DescribeWorkspaceImagesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeWorkspaceImagesResult {
     /// <p>Information about the images.</p>
     #[serde(rename = "Images")]
@@ -433,7 +462,7 @@ pub struct DescribeWorkspacesConnectionStatusRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeWorkspacesConnectionStatusResult {
     /// <p>The token to use to retrieve the next set of results, or null if no more results are available.</p>
     #[serde(rename = "NextToken")]
@@ -474,7 +503,7 @@ pub struct DescribeWorkspacesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeWorkspacesResult {
     /// <p>The token to use to retrieve the next set of results, or null if no more results are available.</p>
     #[serde(rename = "NextToken")]
@@ -497,12 +526,12 @@ pub struct DisassociateIpGroupsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateIpGroupsResult {}
 
 /// <p>Describes a WorkSpace that cannot be created.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FailedCreateWorkspaceRequest {
     /// <p>The error code that is returned if the WorkSpace cannot be created.</p>
     #[serde(rename = "ErrorCode")]
@@ -520,7 +549,7 @@ pub struct FailedCreateWorkspaceRequest {
 
 /// <p>Describes a WorkSpace that could not be rebooted. (<a>RebootWorkspaces</a>), rebuilt (<a>RebuildWorkspaces</a>), terminated (<a>TerminateWorkspaces</a>), started (<a>StartWorkspaces</a>), or stopped (<a>StopWorkspaces</a>).</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FailedWorkspaceChangeRequest {
     /// <p>The error code that is returned if the WorkSpace cannot be rebooted.</p>
     #[serde(rename = "ErrorCode")]
@@ -557,7 +586,7 @@ pub struct ImportWorkspaceImageRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ImportWorkspaceImageResult {
     /// <p>The identifier of the WorkSpace image.</p>
     #[serde(rename = "ImageId")]
@@ -594,7 +623,7 @@ pub struct ListAvailableManagementCidrRangesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAvailableManagementCidrRangesResult {
     /// <p>The list of available IP address ranges, specified as IPv4 CIDR blocks.</p>
     #[serde(rename = "ManagementCidrRanges")]
@@ -608,7 +637,7 @@ pub struct ListAvailableManagementCidrRangesResult {
 
 /// <p>Describes a WorkSpace modification.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ModificationState {
     /// <p>The resource.</p>
     #[serde(rename = "Resource")]
@@ -633,7 +662,7 @@ pub struct ModifyAccountRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ModifyAccountResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -647,7 +676,7 @@ pub struct ModifyClientPropertiesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ModifyClientPropertiesResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -661,7 +690,7 @@ pub struct ModifyWorkspacePropertiesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ModifyWorkspacePropertiesResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -675,12 +704,12 @@ pub struct ModifyWorkspaceStateRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ModifyWorkspaceStateResult {}
 
 /// <p>The operating system that the image is running.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct OperatingSystem {
     /// <p>The operating system.</p>
     #[serde(rename = "Type")]
@@ -704,7 +733,7 @@ pub struct RebootWorkspacesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RebootWorkspacesResult {
     /// <p>Information about the WorkSpaces that could not be rebooted.</p>
     #[serde(rename = "FailedRequests")]
@@ -722,17 +751,13 @@ pub struct RebuildRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RebuildWorkspacesRequest {
-    /// <p>Reserved.</p>
-    #[serde(rename = "AdditionalInfo")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub additional_info: Option<String>,
     /// <p>The WorkSpace to rebuild. You can specify a single WorkSpace.</p>
     #[serde(rename = "RebuildWorkspaceRequests")]
     pub rebuild_workspace_requests: Vec<RebuildRequest>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RebuildWorkspacesResult {
     /// <p>Information about the WorkSpace that could not be rebuilt.</p>
     #[serde(rename = "FailedRequests")]
@@ -751,12 +776,12 @@ pub struct RevokeIpRulesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RevokeIpRulesResult {}
 
 /// <p>Describes the root volume for a WorkSpace bundle.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RootStorage {
     /// <p>The size of the root volume.</p>
     #[serde(rename = "Capacity")]
@@ -781,7 +806,7 @@ pub struct StartWorkspacesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartWorkspacesResult {
     /// <p>Information about the WorkSpaces that could not be started.</p>
     #[serde(rename = "FailedRequests")]
@@ -806,7 +831,7 @@ pub struct StopWorkspacesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopWorkspacesResult {
     /// <p>Information about the WorkSpaces that could not be stopped.</p>
     #[serde(rename = "FailedRequests")]
@@ -842,7 +867,7 @@ pub struct TerminateWorkspacesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TerminateWorkspacesResult {
     /// <p>Information about the WorkSpaces that could not be terminated.</p>
     #[serde(rename = "FailedRequests")]
@@ -861,12 +886,12 @@ pub struct UpdateRulesOfIpGroupRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateRulesOfIpGroupResult {}
 
 /// <p>Describes the user storage for a WorkSpace bundle.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UserStorage {
     /// <p>The size of the user storage.</p>
     #[serde(rename = "Capacity")]
@@ -876,7 +901,7 @@ pub struct UserStorage {
 
 /// <p>Describes a WorkSpace.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Workspace {
     /// <p>The identifier of the bundle used to create the WorkSpace.</p>
     #[serde(rename = "BundleId")]
@@ -942,7 +967,7 @@ pub struct Workspace {
 
 /// <p>Describes a WorkSpace bundle.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct WorkspaceBundle {
     /// <p>The bundle identifier.</p>
     #[serde(rename = "BundleId")]
@@ -976,7 +1001,7 @@ pub struct WorkspaceBundle {
 
 /// <p>Describes the connection status of a WorkSpace.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct WorkspaceConnectionStatus {
     /// <p>The connection state of the WorkSpace. The connection state is unknown if the WorkSpace is stopped.</p>
     #[serde(rename = "ConnectionState")]
@@ -998,7 +1023,7 @@ pub struct WorkspaceConnectionStatus {
 
 /// <p>Describes an AWS Directory Service directory that is used with Amazon WorkSpaces.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct WorkspaceDirectory {
     /// <p>The directory alias.</p>
     #[serde(rename = "Alias")]
@@ -1056,7 +1081,7 @@ pub struct WorkspaceDirectory {
 
 /// <p>Describes a WorkSpace image.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct WorkspaceImage {
     /// <p>The description of the image.</p>
     #[serde(rename = "Description")]
@@ -1153,7 +1178,7 @@ pub struct WorkspaceRequest {
 
 /// <p>Describes an IP access control group.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct WorkspacesIpGroup {
     /// <p>The description of the group.</p>
     #[serde(rename = "groupDesc")]
@@ -1304,6 +1329,85 @@ impl Error for AuthorizeIpRulesError {
             AuthorizeIpRulesError::InvalidResourceState(ref cause) => cause,
             AuthorizeIpRulesError::ResourceLimitExceeded(ref cause) => cause,
             AuthorizeIpRulesError::ResourceNotFound(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by CopyWorkspaceImage
+#[derive(Debug, PartialEq)]
+pub enum CopyWorkspaceImageError {
+    /// <p>The user is not authorized to access a resource.</p>
+    AccessDenied(String),
+    /// <p>One or more parameter values are not valid.</p>
+    InvalidParameterValues(String),
+    /// <p>This operation is not supported.</p>
+    OperationNotSupported(String),
+    /// <p>The specified resource already exists.</p>
+    ResourceAlreadyExists(String),
+    /// <p>Your resource limits have been exceeded.</p>
+    ResourceLimitExceeded(String),
+    /// <p>The resource could not be found.</p>
+    ResourceNotFound(String),
+    /// <p>The specified resource is not available.</p>
+    ResourceUnavailable(String),
+}
+
+impl CopyWorkspaceImageError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CopyWorkspaceImageError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(CopyWorkspaceImageError::AccessDenied(err.msg))
+                }
+                "InvalidParameterValuesException" => {
+                    return RusotoError::Service(CopyWorkspaceImageError::InvalidParameterValues(
+                        err.msg,
+                    ))
+                }
+                "OperationNotSupportedException" => {
+                    return RusotoError::Service(CopyWorkspaceImageError::OperationNotSupported(
+                        err.msg,
+                    ))
+                }
+                "ResourceAlreadyExistsException" => {
+                    return RusotoError::Service(CopyWorkspaceImageError::ResourceAlreadyExists(
+                        err.msg,
+                    ))
+                }
+                "ResourceLimitExceededException" => {
+                    return RusotoError::Service(CopyWorkspaceImageError::ResourceLimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(CopyWorkspaceImageError::ResourceNotFound(err.msg))
+                }
+                "ResourceUnavailableException" => {
+                    return RusotoError::Service(CopyWorkspaceImageError::ResourceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for CopyWorkspaceImageError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CopyWorkspaceImageError {
+    fn description(&self) -> &str {
+        match *self {
+            CopyWorkspaceImageError::AccessDenied(ref cause) => cause,
+            CopyWorkspaceImageError::InvalidParameterValues(ref cause) => cause,
+            CopyWorkspaceImageError::OperationNotSupported(ref cause) => cause,
+            CopyWorkspaceImageError::ResourceAlreadyExists(ref cause) => cause,
+            CopyWorkspaceImageError::ResourceLimitExceeded(ref cause) => cause,
+            CopyWorkspaceImageError::ResourceNotFound(ref cause) => cause,
+            CopyWorkspaceImageError::ResourceUnavailable(ref cause) => cause,
         }
     }
 }
@@ -2653,6 +2757,12 @@ pub trait Workspaces {
         input: AuthorizeIpRulesRequest,
     ) -> RusotoFuture<AuthorizeIpRulesResult, AuthorizeIpRulesError>;
 
+    /// <p>Copies the specified image from the specified Region to the current Region.</p>
+    fn copy_workspace_image(
+        &self,
+        input: CopyWorkspaceImageRequest,
+    ) -> RusotoFuture<CopyWorkspaceImageResult, CopyWorkspaceImageError>;
+
     /// <p>Creates an IP access control group.</p> <p>An IP access control group provides you with the ability to control the IP addresses from which users are allowed to access their WorkSpaces. To specify the CIDR address ranges, add rules to your IP access control group and then associate the group with your directory. You can add rules when you create the group or at any time using <a>AuthorizeIpRules</a>.</p> <p>There is a default IP access control group associated with your directory. If you don't associate an IP access control group with your directory, the default group is used. The default group includes a default rule that allows users to access their WorkSpaces from anywhere. You cannot modify the default IP access control group for your directory.</p>
     fn create_ip_group(
         &self,
@@ -2683,7 +2793,7 @@ pub trait Workspaces {
         input: DeleteTagsRequest,
     ) -> RusotoFuture<DeleteTagsResult, DeleteTagsError>;
 
-    /// <p>Deletes the specified image from your account. To delete an image, you must first delete any bundles that are associated with the image. </p>
+    /// <p>Deletes the specified image from your account. To delete an image, you must first delete any bundles that are associated with the image and un-share the image if it is shared with other accounts. </p>
     fn delete_workspace_image(
         &self,
         input: DeleteWorkspaceImageRequest,
@@ -2785,7 +2895,7 @@ pub trait Workspaces {
         input: ModifyWorkspacePropertiesRequest,
     ) -> RusotoFuture<ModifyWorkspacePropertiesResult, ModifyWorkspacePropertiesError>;
 
-    /// <p>Sets the state of the specified WorkSpace.</p> <p>To maintain a WorkSpace without being interrupted, set the WorkSpace state to <code>ADMIN_MAINTENANCE</code>. WorkSpaces in this state do not respond to requests to reboot, stop, start, or rebuild. An AutoStop WorkSpace in this state is not stopped. Users can log into a WorkSpace in the <code>ADMIN_MAINTENANCE</code> state.</p>
+    /// <p>Sets the state of the specified WorkSpace.</p> <p>To maintain a WorkSpace without being interrupted, set the WorkSpace state to <code>ADMIN_MAINTENANCE</code>. WorkSpaces in this state do not respond to requests to reboot, stop, start, rebuild, or restore. An AutoStop WorkSpace in this state is not stopped. Users cannot log into a WorkSpace in the <code>ADMIN_MAINTENANCE</code> state.</p>
     fn modify_workspace_state(
         &self,
         input: ModifyWorkspaceStateRequest,
@@ -2845,10 +2955,7 @@ impl WorkspacesClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> WorkspacesClient {
-        WorkspacesClient {
-            client: Client::shared(),
-            region,
-        }
+        Self::new_with_client(Client::shared(), region)
     }
 
     pub fn new_with<P, D>(
@@ -2862,10 +2969,14 @@ impl WorkspacesClient {
         D: DispatchSignedRequest + Send + Sync + 'static,
         D::Future: Send,
     {
-        WorkspacesClient {
-            client: Client::new_with(credentials_provider, request_dispatcher),
+        Self::new_with_client(
+            Client::new_with(credentials_provider, request_dispatcher),
             region,
-        }
+        )
+    }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> WorkspacesClient {
+        WorkspacesClient { client, region }
     }
 }
 
@@ -2923,6 +3034,35 @@ impl Workspaces for WorkspacesClient {
                         .buffer()
                         .from_err()
                         .and_then(|response| Err(AuthorizeIpRulesError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Copies the specified image from the specified Region to the current Region.</p>
+    fn copy_workspace_image(
+        &self,
+        input: CopyWorkspaceImageRequest,
+    ) -> RusotoFuture<CopyWorkspaceImageResult, CopyWorkspaceImageError> {
+        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "WorkspacesService.CopyWorkspaceImage");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CopyWorkspaceImageResult, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CopyWorkspaceImageError::from_response(response))),
                 )
             }
         })
@@ -3073,7 +3213,7 @@ impl Workspaces for WorkspacesClient {
         })
     }
 
-    /// <p>Deletes the specified image from your account. To delete an image, you must first delete any bundles that are associated with the image. </p>
+    /// <p>Deletes the specified image from your account. To delete an image, you must first delete any bundles that are associated with the image and un-share the image if it is shared with other accounts. </p>
     fn delete_workspace_image(
         &self,
         input: DeleteWorkspaceImageRequest,
@@ -3557,7 +3697,7 @@ impl Workspaces for WorkspacesClient {
         })
     }
 
-    /// <p>Sets the state of the specified WorkSpace.</p> <p>To maintain a WorkSpace without being interrupted, set the WorkSpace state to <code>ADMIN_MAINTENANCE</code>. WorkSpaces in this state do not respond to requests to reboot, stop, start, or rebuild. An AutoStop WorkSpace in this state is not stopped. Users can log into a WorkSpace in the <code>ADMIN_MAINTENANCE</code> state.</p>
+    /// <p>Sets the state of the specified WorkSpace.</p> <p>To maintain a WorkSpace without being interrupted, set the WorkSpace state to <code>ADMIN_MAINTENANCE</code>. WorkSpaces in this state do not respond to requests to reboot, stop, start, rebuild, or restore. An AutoStop WorkSpace in this state is not stopped. Users cannot log into a WorkSpace in the <code>ADMIN_MAINTENANCE</code> state.</p>
     fn modify_workspace_state(
         &self,
         input: ModifyWorkspaceStateRequest,

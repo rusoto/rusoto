@@ -9,24 +9,23 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
+#![allow(warnings)]
 
-use std::error::Error;
-use std::fmt;
-
-#[allow(warnings)]
 use futures::future;
 use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
+use std::error::Error;
+use std::fmt;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Attributes {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -37,7 +36,7 @@ pub struct ClaimDevicesByClaimCodeRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ClaimDevicesByClaimCodeResponse {
     /// <p>The claim code provided by the device manufacturer.</p>
     #[serde(rename = "ClaimCode")]
@@ -58,7 +57,7 @@ pub struct DescribeDeviceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeDeviceResponse {
     /// <p>Device details.</p>
     #[serde(rename = "DeviceDescription")]
@@ -67,7 +66,7 @@ pub struct DescribeDeviceResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Device {
     /// <p>The user specified attributes associated with the device for an event.</p>
     #[serde(rename = "Attributes")]
@@ -84,7 +83,7 @@ pub struct Device {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeviceDescription {
     /// <p>The ARN of the device.</p>
     #[serde(rename = "Arn")]
@@ -119,7 +118,7 @@ pub struct DeviceDescription {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeviceEvent {
     /// <p>An object representing the device associated with the event.</p>
     #[serde(rename = "Device")]
@@ -159,7 +158,7 @@ pub struct FinalizeDeviceClaimRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FinalizeDeviceClaimResponse {
     /// <p>The device's final claim state.</p>
     #[serde(rename = "State")]
@@ -175,7 +174,7 @@ pub struct GetDeviceMethodsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDeviceMethodsResponse {
     /// <p>List of available device APIs.</p>
     #[serde(rename = "DeviceMethods")]
@@ -191,7 +190,7 @@ pub struct InitiateDeviceClaimRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InitiateDeviceClaimResponse {
     /// <p>The device's final claim state.</p>
     #[serde(rename = "State")]
@@ -215,7 +214,7 @@ pub struct InvokeDeviceMethodRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InvokeDeviceMethodResponse {
     /// <p>A JSON encoded string containing the device method response.</p>
     #[serde(rename = "DeviceMethodResponse")]
@@ -250,7 +249,7 @@ pub struct ListDeviceEventsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDeviceEventsResponse {
     /// <p>An array of zero or more elements describing the event(s) associated with the
     /// device.</p>
@@ -281,7 +280,7 @@ pub struct ListDevicesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDevicesResponse {
     /// <p>A list of devices.</p>
     #[serde(rename = "Devices")]
@@ -301,7 +300,7 @@ pub struct ListTagsForResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
     /// <p>A collection of key/value pairs defining the resource tags. For example, {
     /// "tags": {"key1": "value1", "key2": "value2"} }. For more information, see <a href="https://aws.amazon.com/answers/account-management/aws-tagging-strategies/">AWS
@@ -335,7 +334,7 @@ pub struct UnclaimDeviceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UnclaimDeviceResponse {
     /// <p>The device's final claim state.</p>
     #[serde(rename = "State")]
@@ -366,7 +365,7 @@ pub struct UpdateDeviceStateRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDeviceStateResponse {}
 
 /// Errors returned by ClaimDevicesByClaimCode
@@ -1102,10 +1101,7 @@ impl Iot1ClickDevicesClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> Iot1ClickDevicesClient {
-        Iot1ClickDevicesClient {
-            client: Client::shared(),
-            region,
-        }
+        Self::new_with_client(Client::shared(), region)
     }
 
     pub fn new_with<P, D>(
@@ -1119,10 +1115,14 @@ impl Iot1ClickDevicesClient {
         D: DispatchSignedRequest + Send + Sync + 'static,
         D::Future: Send,
     {
-        Iot1ClickDevicesClient {
-            client: Client::new_with(credentials_provider, request_dispatcher),
+        Self::new_with_client(
+            Client::new_with(credentials_provider, request_dispatcher),
             region,
-        }
+        )
+    }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> Iot1ClickDevicesClient {
+        Iot1ClickDevicesClient { client, region }
     }
 }
 

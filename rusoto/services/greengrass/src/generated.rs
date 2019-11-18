@@ -9,17 +9,16 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
+#![allow(warnings)]
 
-use std::error::Error;
-use std::fmt;
-
-#[allow(warnings)]
 use futures::future;
 use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
+use std::error::Error;
+use std::fmt;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
@@ -30,14 +29,13 @@ pub struct AssociateRoleToGroupRequest {
     /// <p>The ID of the Greengrass group.</p>
     #[serde(rename = "GroupId")]
     pub group_id: String,
-    /// <p>The ARN of the role you wish to associate with this group.</p>
+    /// <p>The ARN of the role you wish to associate with this group. The existence of the role is not validated.</p>
     #[serde(rename = "RoleArn")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub role_arn: Option<String>,
+    pub role_arn: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateRoleToGroupResponse {
     /// <p>The time, in milliseconds since the epoch, when the role ARN was associated with the group.</p>
     #[serde(rename = "AssociatedAt")]
@@ -49,12 +47,11 @@ pub struct AssociateRoleToGroupResponse {
 pub struct AssociateServiceRoleToAccountRequest {
     /// <p>The ARN of the service role you wish to associate with your account.</p>
     #[serde(rename = "RoleArn")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub role_arn: Option<String>,
+    pub role_arn: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateServiceRoleToAccountResponse {
     /// <p>The time when the service role was associated with the account.</p>
     #[serde(rename = "AssociatedAt")]
@@ -64,7 +61,7 @@ pub struct AssociateServiceRoleToAccountResponse {
 
 /// <p>Information about a bulk deployment. You cannot start a new bulk deployment while another one is still running or in a non-terminal state.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BulkDeployment {
     /// <p>The ARN of the bulk deployment.</p>
     #[serde(rename = "BulkDeploymentArn")]
@@ -82,7 +79,7 @@ pub struct BulkDeployment {
 
 /// <p>Relevant metrics on input records processed during bulk deployment.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BulkDeploymentMetrics {
     /// <p>The total number of records that returned a non-retryable error. For example, this can occur if a group record from the input file uses an invalid format or specifies a nonexistent group version, or if the execution role doesn&#39;t grant permission to deploy a group or group version.</p>
     #[serde(rename = "InvalidInputRecords")]
@@ -100,7 +97,7 @@ pub struct BulkDeploymentMetrics {
 
 /// <p>Information about an individual group deployment in a bulk deployment operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BulkDeploymentResult {
     /// <p>The time, in ISO format, when the deployment was created.</p>
     #[serde(rename = "CreatedAt")]
@@ -162,12 +159,10 @@ pub struct ConnectivityInfo {
 pub struct Connector {
     /// <p>The ARN of the connector.</p>
     #[serde(rename = "ConnectorArn")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub connector_arn: Option<String>,
+    pub connector_arn: String,
     /// <p>A descriptive or arbitrary ID for the connector. This value must be unique within the connector definition version. Max length is 128 characters with pattern [a-zA-Z0-9:_-]+.</p>
     #[serde(rename = "Id")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub id: Option<String>,
+    pub id: String,
     /// <p>The parameters or configuration that the connector uses.</p>
     #[serde(rename = "Parameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -188,20 +183,17 @@ pub struct ConnectorDefinitionVersion {
 pub struct Core {
     /// <p>The ARN of the certificate associated with the core.</p>
     #[serde(rename = "CertificateArn")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub certificate_arn: Option<String>,
+    pub certificate_arn: String,
     /// <p>A descriptive or arbitrary ID for the core. This value must be unique within the core definition version. Max length is 128 characters with pattern &#39;&#39;[a-zA-Z0-9:_-]+&#39;&#39;.</p>
     #[serde(rename = "Id")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub id: Option<String>,
+    pub id: String,
     /// <p>If true, the core&#39;s local shadow is automatically synced with the cloud.</p>
     #[serde(rename = "SyncShadow")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sync_shadow: Option<bool>,
     /// <p>The ARN of the thing which is the core.</p>
     #[serde(rename = "ThingArn")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub thing_arn: Option<String>,
+    pub thing_arn: String,
 }
 
 /// <p>Information about a core definition version.</p>
@@ -227,14 +219,14 @@ pub struct CreateConnectorDefinitionRequest {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>Tag(s) to add to the new resource</p>
+    /// <p>Tag(s) to add to the new resource.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateConnectorDefinitionResponse {
     /// <p>The ARN of the definition.</p>
     #[serde(rename = "Arn")]
@@ -252,11 +244,11 @@ pub struct CreateConnectorDefinitionResponse {
     #[serde(rename = "LastUpdatedTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_timestamp: Option<String>,
-    /// <p>The latest version of the definition.</p>
+    /// <p>The ID of the latest version associated with the definition.</p>
     #[serde(rename = "LatestVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_version: Option<String>,
-    /// <p>The ARN of the latest version of the definition.</p>
+    /// <p>The ARN of the latest version associated with the definition.</p>
     #[serde(rename = "LatestVersionArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_version_arn: Option<String>,
@@ -282,7 +274,7 @@ pub struct CreateConnectorDefinitionVersionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateConnectorDefinitionVersionResponse {
     /// <p>The ARN of the version.</p>
     #[serde(rename = "Arn")]
@@ -317,14 +309,14 @@ pub struct CreateCoreDefinitionRequest {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>Tag(s) to add to the new resource</p>
+    /// <p>Tag(s) to add to the new resource.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateCoreDefinitionResponse {
     /// <p>The ARN of the definition.</p>
     #[serde(rename = "Arn")]
@@ -342,11 +334,11 @@ pub struct CreateCoreDefinitionResponse {
     #[serde(rename = "LastUpdatedTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_timestamp: Option<String>,
-    /// <p>The latest version of the definition.</p>
+    /// <p>The ID of the latest version associated with the definition.</p>
     #[serde(rename = "LatestVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_version: Option<String>,
-    /// <p>The ARN of the latest version of the definition.</p>
+    /// <p>The ARN of the latest version associated with the definition.</p>
     #[serde(rename = "LatestVersionArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_version_arn: Option<String>,
@@ -372,7 +364,7 @@ pub struct CreateCoreDefinitionVersionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateCoreDefinitionVersionResponse {
     /// <p>The ARN of the version.</p>
     #[serde(rename = "Arn")]
@@ -404,8 +396,7 @@ pub struct CreateDeploymentRequest {
     pub deployment_id: Option<String>,
     /// <p>The type of deployment. When used for &#39;&#39;CreateDeployment&#39;&#39;, only &#39;&#39;NewDeployment&#39;&#39; and &#39;&#39;Redeployment&#39;&#39; are valid.</p>
     #[serde(rename = "DeploymentType")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub deployment_type: Option<String>,
+    pub deployment_type: String,
     /// <p>The ID of the Greengrass group.</p>
     #[serde(rename = "GroupId")]
     pub group_id: String,
@@ -416,7 +407,7 @@ pub struct CreateDeploymentRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDeploymentResponse {
     /// <p>The ARN of the deployment.</p>
     #[serde(rename = "DeploymentArn")]
@@ -442,14 +433,14 @@ pub struct CreateDeviceDefinitionRequest {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>Tag(s) to add to the new resource</p>
+    /// <p>Tag(s) to add to the new resource.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDeviceDefinitionResponse {
     /// <p>The ARN of the definition.</p>
     #[serde(rename = "Arn")]
@@ -467,11 +458,11 @@ pub struct CreateDeviceDefinitionResponse {
     #[serde(rename = "LastUpdatedTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_timestamp: Option<String>,
-    /// <p>The latest version of the definition.</p>
+    /// <p>The ID of the latest version associated with the definition.</p>
     #[serde(rename = "LatestVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_version: Option<String>,
-    /// <p>The ARN of the latest version of the definition.</p>
+    /// <p>The ARN of the latest version associated with the definition.</p>
     #[serde(rename = "LatestVersionArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_version_arn: Option<String>,
@@ -497,7 +488,7 @@ pub struct CreateDeviceDefinitionVersionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDeviceDefinitionVersionResponse {
     /// <p>The ARN of the version.</p>
     #[serde(rename = "Arn")]
@@ -531,14 +522,14 @@ pub struct CreateFunctionDefinitionRequest {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>Tag(s) to add to the new resource</p>
+    /// <p>Tag(s) to add to the new resource.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateFunctionDefinitionResponse {
     /// <p>The ARN of the definition.</p>
     #[serde(rename = "Arn")]
@@ -556,11 +547,11 @@ pub struct CreateFunctionDefinitionResponse {
     #[serde(rename = "LastUpdatedTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_timestamp: Option<String>,
-    /// <p>The latest version of the definition.</p>
+    /// <p>The ID of the latest version associated with the definition.</p>
     #[serde(rename = "LatestVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_version: Option<String>,
-    /// <p>The ARN of the latest version of the definition.</p>
+    /// <p>The ARN of the latest version associated with the definition.</p>
     #[serde(rename = "LatestVersionArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_version_arn: Option<String>,
@@ -591,7 +582,7 @@ pub struct CreateFunctionDefinitionVersionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateFunctionDefinitionVersionResponse {
     /// <p>The ARN of the version.</p>
     #[serde(rename = "Arn")]
@@ -623,7 +614,7 @@ pub struct CreateGroupCertificateAuthorityRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateGroupCertificateAuthorityResponse {
     /// <p>The ARN of the group certificate authority.</p>
     #[serde(rename = "GroupCertificateAuthorityArn")]
@@ -645,14 +636,14 @@ pub struct CreateGroupRequest {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>Tag(s) to add to the new resource</p>
+    /// <p>Tag(s) to add to the new resource.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateGroupResponse {
     /// <p>The ARN of the definition.</p>
     #[serde(rename = "Arn")]
@@ -670,11 +661,11 @@ pub struct CreateGroupResponse {
     #[serde(rename = "LastUpdatedTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_timestamp: Option<String>,
-    /// <p>The latest version of the definition.</p>
+    /// <p>The ID of the latest version associated with the definition.</p>
     #[serde(rename = "LatestVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_version: Option<String>,
-    /// <p>The ARN of the latest version of the definition.</p>
+    /// <p>The ARN of the latest version associated with the definition.</p>
     #[serde(rename = "LatestVersionArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_version_arn: Option<String>,
@@ -724,7 +715,7 @@ pub struct CreateGroupVersionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateGroupVersionResponse {
     /// <p>The ARN of the version.</p>
     #[serde(rename = "Arn")]
@@ -758,14 +749,14 @@ pub struct CreateLoggerDefinitionRequest {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>Tag(s) to add to the new resource</p>
+    /// <p>Tag(s) to add to the new resource.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateLoggerDefinitionResponse {
     /// <p>The ARN of the definition.</p>
     #[serde(rename = "Arn")]
@@ -783,11 +774,11 @@ pub struct CreateLoggerDefinitionResponse {
     #[serde(rename = "LastUpdatedTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_timestamp: Option<String>,
-    /// <p>The latest version of the definition.</p>
+    /// <p>The ID of the latest version associated with the definition.</p>
     #[serde(rename = "LatestVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_version: Option<String>,
-    /// <p>The ARN of the latest version of the definition.</p>
+    /// <p>The ARN of the latest version associated with the definition.</p>
     #[serde(rename = "LatestVersionArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_version_arn: Option<String>,
@@ -813,7 +804,7 @@ pub struct CreateLoggerDefinitionVersionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateLoggerDefinitionVersionResponse {
     /// <p>The ARN of the version.</p>
     #[serde(rename = "Arn")]
@@ -847,14 +838,14 @@ pub struct CreateResourceDefinitionRequest {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>Tag(s) to add to the new resource</p>
+    /// <p>Tag(s) to add to the new resource.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateResourceDefinitionResponse {
     /// <p>The ARN of the definition.</p>
     #[serde(rename = "Arn")]
@@ -872,11 +863,11 @@ pub struct CreateResourceDefinitionResponse {
     #[serde(rename = "LastUpdatedTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_timestamp: Option<String>,
-    /// <p>The latest version of the definition.</p>
+    /// <p>The ID of the latest version associated with the definition.</p>
     #[serde(rename = "LatestVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_version: Option<String>,
-    /// <p>The ARN of the latest version of the definition.</p>
+    /// <p>The ARN of the latest version associated with the definition.</p>
     #[serde(rename = "LatestVersionArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_version_arn: Option<String>,
@@ -902,7 +893,7 @@ pub struct CreateResourceDefinitionVersionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateResourceDefinitionVersionResponse {
     /// <p>The ARN of the version.</p>
     #[serde(rename = "Arn")]
@@ -929,27 +920,22 @@ pub struct CreateSoftwareUpdateJobRequest {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub amzn_client_token: Option<String>,
     #[serde(rename = "S3UrlSignerRole")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub s3_url_signer_role: Option<String>,
+    pub s3_url_signer_role: String,
     #[serde(rename = "SoftwareToUpdate")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub software_to_update: Option<String>,
+    pub software_to_update: String,
     #[serde(rename = "UpdateAgentLogLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub update_agent_log_level: Option<String>,
     #[serde(rename = "UpdateTargets")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub update_targets: Option<Vec<String>>,
+    pub update_targets: Vec<String>,
     #[serde(rename = "UpdateTargetsArchitecture")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub update_targets_architecture: Option<String>,
+    pub update_targets_architecture: String,
     #[serde(rename = "UpdateTargetsOperatingSystem")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub update_targets_operating_system: Option<String>,
+    pub update_targets_operating_system: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateSoftwareUpdateJobResponse {
     /// <p>The IoT Job ARN corresponding to this update.</p>
     #[serde(rename = "IotJobArn")]
@@ -975,14 +961,14 @@ pub struct CreateSubscriptionDefinitionRequest {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>Tag(s) to add to the new resource</p>
+    /// <p>Tag(s) to add to the new resource.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateSubscriptionDefinitionResponse {
     /// <p>The ARN of the definition.</p>
     #[serde(rename = "Arn")]
@@ -1000,11 +986,11 @@ pub struct CreateSubscriptionDefinitionResponse {
     #[serde(rename = "LastUpdatedTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_timestamp: Option<String>,
-    /// <p>The latest version of the definition.</p>
+    /// <p>The ID of the latest version associated with the definition.</p>
     #[serde(rename = "LatestVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_version: Option<String>,
-    /// <p>The ARN of the latest version of the definition.</p>
+    /// <p>The ARN of the latest version associated with the definition.</p>
     #[serde(rename = "LatestVersionArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_version_arn: Option<String>,
@@ -1030,7 +1016,7 @@ pub struct CreateSubscriptionDefinitionVersionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateSubscriptionDefinitionVersionResponse {
     /// <p>The ARN of the version.</p>
     #[serde(rename = "Arn")]
@@ -1052,7 +1038,7 @@ pub struct CreateSubscriptionDefinitionVersionResponse {
 
 /// <p>Information about a definition.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DefinitionInformation {
     /// <p>The ARN of the definition.</p>
     #[serde(rename = "Arn")]
@@ -1070,11 +1056,11 @@ pub struct DefinitionInformation {
     #[serde(rename = "LastUpdatedTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_timestamp: Option<String>,
-    /// <p>The latest version of the definition.</p>
+    /// <p>The ID of the latest version associated with the definition.</p>
     #[serde(rename = "LatestVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_version: Option<String>,
-    /// <p>The ARN of the latest version of the definition.</p>
+    /// <p>The ARN of the latest version associated with the definition.</p>
     #[serde(rename = "LatestVersionArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_version_arn: Option<String>,
@@ -1082,7 +1068,7 @@ pub struct DefinitionInformation {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The tags for the definition.</p>
+    /// <p>Tag(s) attached to the resource arn.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
@@ -1096,7 +1082,7 @@ pub struct DeleteConnectorDefinitionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteConnectorDefinitionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1107,7 +1093,7 @@ pub struct DeleteCoreDefinitionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteCoreDefinitionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1118,7 +1104,7 @@ pub struct DeleteDeviceDefinitionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDeviceDefinitionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1129,7 +1115,7 @@ pub struct DeleteFunctionDefinitionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteFunctionDefinitionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1140,7 +1126,7 @@ pub struct DeleteGroupRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteGroupResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1151,7 +1137,7 @@ pub struct DeleteLoggerDefinitionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteLoggerDefinitionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1162,7 +1148,7 @@ pub struct DeleteResourceDefinitionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteResourceDefinitionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1173,12 +1159,12 @@ pub struct DeleteSubscriptionDefinitionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteSubscriptionDefinitionResponse {}
 
 /// <p>Information about a deployment.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Deployment {
     /// <p>The time, in milliseconds since the epoch, when the deployment was created.</p>
     #[serde(rename = "CreatedAt")]
@@ -1207,20 +1193,17 @@ pub struct Deployment {
 pub struct Device {
     /// <p>The ARN of the certificate associated with the device.</p>
     #[serde(rename = "CertificateArn")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub certificate_arn: Option<String>,
+    pub certificate_arn: String,
     /// <p>A descriptive or arbitrary ID for the device. This value must be unique within the device definition version. Max length is 128 characters with pattern &#39;&#39;[a-zA-Z0-9:_-]+&#39;&#39;.</p>
     #[serde(rename = "Id")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub id: Option<String>,
+    pub id: String,
     /// <p>If true, the device&#39;s local shadow will be automatically synced with the cloud.</p>
     #[serde(rename = "SyncShadow")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sync_shadow: Option<bool>,
     /// <p>The thing ARN of the device.</p>
     #[serde(rename = "ThingArn")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub thing_arn: Option<String>,
+    pub thing_arn: String,
 }
 
 /// <p>Information about a device definition version.</p>
@@ -1240,7 +1223,7 @@ pub struct DisassociateRoleFromGroupRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateRoleFromGroupResponse {
     /// <p>The time, in milliseconds since the epoch, when the role was disassociated from the group.</p>
     #[serde(rename = "DisassociatedAt")]
@@ -1252,7 +1235,7 @@ pub struct DisassociateRoleFromGroupResponse {
 pub struct DisassociateServiceRoleFromAccountRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateServiceRoleFromAccountResponse {
     /// <p>The time when the service role was disassociated from the account.</p>
     #[serde(rename = "DisassociatedAt")]
@@ -1262,7 +1245,7 @@ pub struct DisassociateServiceRoleFromAccountResponse {
 
 /// <p>Details about the error.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ErrorDetail {
     /// <p>A detailed error code.</p>
     #[serde(rename = "DetailedErrorCode")]
@@ -1287,8 +1270,7 @@ pub struct Function {
     pub function_configuration: Option<FunctionConfiguration>,
     /// <p>A descriptive or arbitrary ID for the function. This value must be unique within the function definition version. Max length is 128 characters with pattern &#39;&#39;[a-zA-Z0-9:_-]+&#39;&#39;.</p>
     #[serde(rename = "Id")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub id: Option<String>,
+    pub id: String,
 }
 
 /// <p>The configuration of the Lambda function.</p>
@@ -1409,7 +1391,7 @@ pub struct GetAssociatedRoleRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAssociatedRoleResponse {
     /// <p>The time when the role was associated with the group.</p>
     #[serde(rename = "AssociatedAt")]
@@ -1429,7 +1411,7 @@ pub struct GetBulkDeploymentStatusRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetBulkDeploymentStatusResponse {
     /// <p>Relevant metrics on input records processed during bulk deployment.</p>
     #[serde(rename = "BulkDeploymentMetrics")]
@@ -1451,7 +1433,7 @@ pub struct GetBulkDeploymentStatusResponse {
     #[serde(rename = "ErrorMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub error_message: Option<String>,
-    /// <p>The tags for the definition.</p>
+    /// <p>Tag(s) attached to the resource arn.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
@@ -1465,7 +1447,7 @@ pub struct GetConnectivityInfoRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetConnectivityInfoResponse {
     /// <p>Connectivity info list.</p>
     #[serde(rename = "ConnectivityInfo")]
@@ -1485,7 +1467,7 @@ pub struct GetConnectorDefinitionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetConnectorDefinitionResponse {
     /// <p>The ARN of the definition.</p>
     #[serde(rename = "Arn")]
@@ -1503,11 +1485,11 @@ pub struct GetConnectorDefinitionResponse {
     #[serde(rename = "LastUpdatedTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_timestamp: Option<String>,
-    /// <p>The latest version of the definition.</p>
+    /// <p>The ID of the latest version associated with the definition.</p>
     #[serde(rename = "LatestVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_version: Option<String>,
-    /// <p>The ARN of the latest version of the definition.</p>
+    /// <p>The ARN of the latest version associated with the definition.</p>
     #[serde(rename = "LatestVersionArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_version_arn: Option<String>,
@@ -1515,7 +1497,7 @@ pub struct GetConnectorDefinitionResponse {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The tags for the definition.</p>
+    /// <p>Tag(s) attached to the resource arn.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
@@ -1526,7 +1508,7 @@ pub struct GetConnectorDefinitionVersionRequest {
     /// <p>The ID of the connector definition.</p>
     #[serde(rename = "ConnectorDefinitionId")]
     pub connector_definition_id: String,
-    /// <p>The ID of the connector definition version.</p>
+    /// <p>The ID of the connector definition version. This value maps to the &#39;&#39;Version&#39;&#39; property of the corresponding &#39;&#39;VersionInformation&#39;&#39; object, which is returned by &#39;&#39;ListConnectorDefinitionVersions&#39;&#39; requests. If the version is the last one that was associated with a connector definition, the value also maps to the &#39;&#39;LatestVersion&#39;&#39; property of the corresponding &#39;&#39;DefinitionInformation&#39;&#39; object.</p>
     #[serde(rename = "ConnectorDefinitionVersionId")]
     pub connector_definition_version_id: String,
     /// <p>The token for the next set of results, or &#39;&#39;null&#39;&#39; if there are no additional results.</p>
@@ -1536,7 +1518,7 @@ pub struct GetConnectorDefinitionVersionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetConnectorDefinitionVersionResponse {
     /// <p>The ARN of the connector definition version.</p>
     #[serde(rename = "Arn")]
@@ -1572,7 +1554,7 @@ pub struct GetCoreDefinitionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetCoreDefinitionResponse {
     /// <p>The ARN of the definition.</p>
     #[serde(rename = "Arn")]
@@ -1590,11 +1572,11 @@ pub struct GetCoreDefinitionResponse {
     #[serde(rename = "LastUpdatedTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_timestamp: Option<String>,
-    /// <p>The latest version of the definition.</p>
+    /// <p>The ID of the latest version associated with the definition.</p>
     #[serde(rename = "LatestVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_version: Option<String>,
-    /// <p>The ARN of the latest version of the definition.</p>
+    /// <p>The ARN of the latest version associated with the definition.</p>
     #[serde(rename = "LatestVersionArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_version_arn: Option<String>,
@@ -1602,7 +1584,7 @@ pub struct GetCoreDefinitionResponse {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The tags for the definition.</p>
+    /// <p>Tag(s) attached to the resource arn.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
@@ -1613,13 +1595,13 @@ pub struct GetCoreDefinitionVersionRequest {
     /// <p>The ID of the core definition.</p>
     #[serde(rename = "CoreDefinitionId")]
     pub core_definition_id: String,
-    /// <p>The ID of the core definition version.</p>
+    /// <p>The ID of the core definition version. This value maps to the &#39;&#39;Version&#39;&#39; property of the corresponding &#39;&#39;VersionInformation&#39;&#39; object, which is returned by &#39;&#39;ListCoreDefinitionVersions&#39;&#39; requests. If the version is the last one that was associated with a core definition, the value also maps to the &#39;&#39;LatestVersion&#39;&#39; property of the corresponding &#39;&#39;DefinitionInformation&#39;&#39; object.</p>
     #[serde(rename = "CoreDefinitionVersionId")]
     pub core_definition_version_id: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetCoreDefinitionVersionResponse {
     /// <p>The ARN of the core definition version.</p>
     #[serde(rename = "Arn")]
@@ -1658,7 +1640,7 @@ pub struct GetDeploymentStatusRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDeploymentStatusResponse {
     /// <p>The status of the deployment: &#39;&#39;InProgress&#39;&#39;, &#39;&#39;Building&#39;&#39;, &#39;&#39;Success&#39;&#39;, or &#39;&#39;Failure&#39;&#39;.</p>
     #[serde(rename = "DeploymentStatus")]
@@ -1690,7 +1672,7 @@ pub struct GetDeviceDefinitionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDeviceDefinitionResponse {
     /// <p>The ARN of the definition.</p>
     #[serde(rename = "Arn")]
@@ -1708,11 +1690,11 @@ pub struct GetDeviceDefinitionResponse {
     #[serde(rename = "LastUpdatedTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_timestamp: Option<String>,
-    /// <p>The latest version of the definition.</p>
+    /// <p>The ID of the latest version associated with the definition.</p>
     #[serde(rename = "LatestVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_version: Option<String>,
-    /// <p>The ARN of the latest version of the definition.</p>
+    /// <p>The ARN of the latest version associated with the definition.</p>
     #[serde(rename = "LatestVersionArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_version_arn: Option<String>,
@@ -1720,7 +1702,7 @@ pub struct GetDeviceDefinitionResponse {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The tags for the definition.</p>
+    /// <p>Tag(s) attached to the resource arn.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
@@ -1731,7 +1713,7 @@ pub struct GetDeviceDefinitionVersionRequest {
     /// <p>The ID of the device definition.</p>
     #[serde(rename = "DeviceDefinitionId")]
     pub device_definition_id: String,
-    /// <p>The ID of the device definition version.</p>
+    /// <p>The ID of the device definition version. This value maps to the &#39;&#39;Version&#39;&#39; property of the corresponding &#39;&#39;VersionInformation&#39;&#39; object, which is returned by &#39;&#39;ListDeviceDefinitionVersions&#39;&#39; requests. If the version is the last one that was associated with a device definition, the value also maps to the &#39;&#39;LatestVersion&#39;&#39; property of the corresponding &#39;&#39;DefinitionInformation&#39;&#39; object.</p>
     #[serde(rename = "DeviceDefinitionVersionId")]
     pub device_definition_version_id: String,
     /// <p>The token for the next set of results, or &#39;&#39;null&#39;&#39; if there are no additional results.</p>
@@ -1741,7 +1723,7 @@ pub struct GetDeviceDefinitionVersionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDeviceDefinitionVersionResponse {
     /// <p>The ARN of the device definition version.</p>
     #[serde(rename = "Arn")]
@@ -1777,7 +1759,7 @@ pub struct GetFunctionDefinitionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetFunctionDefinitionResponse {
     /// <p>The ARN of the definition.</p>
     #[serde(rename = "Arn")]
@@ -1795,11 +1777,11 @@ pub struct GetFunctionDefinitionResponse {
     #[serde(rename = "LastUpdatedTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_timestamp: Option<String>,
-    /// <p>The latest version of the definition.</p>
+    /// <p>The ID of the latest version associated with the definition.</p>
     #[serde(rename = "LatestVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_version: Option<String>,
-    /// <p>The ARN of the latest version of the definition.</p>
+    /// <p>The ARN of the latest version associated with the definition.</p>
     #[serde(rename = "LatestVersionArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_version_arn: Option<String>,
@@ -1807,7 +1789,7 @@ pub struct GetFunctionDefinitionResponse {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The tags for the definition.</p>
+    /// <p>Tag(s) attached to the resource arn.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
@@ -1818,7 +1800,7 @@ pub struct GetFunctionDefinitionVersionRequest {
     /// <p>The ID of the Lambda function definition.</p>
     #[serde(rename = "FunctionDefinitionId")]
     pub function_definition_id: String,
-    /// <p>The ID of the function definition version.</p>
+    /// <p>The ID of the function definition version. This value maps to the &#39;&#39;Version&#39;&#39; property of the corresponding &#39;&#39;VersionInformation&#39;&#39; object, which is returned by &#39;&#39;ListFunctionDefinitionVersions&#39;&#39; requests. If the version is the last one that was associated with a function definition, the value also maps to the &#39;&#39;LatestVersion&#39;&#39; property of the corresponding &#39;&#39;DefinitionInformation&#39;&#39; object.</p>
     #[serde(rename = "FunctionDefinitionVersionId")]
     pub function_definition_version_id: String,
     /// <p>The token for the next set of results, or &#39;&#39;null&#39;&#39; if there are no additional results.</p>
@@ -1828,7 +1810,7 @@ pub struct GetFunctionDefinitionVersionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetFunctionDefinitionVersionResponse {
     /// <p>The ARN of the function definition version.</p>
     #[serde(rename = "Arn")]
@@ -1867,7 +1849,7 @@ pub struct GetGroupCertificateAuthorityRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetGroupCertificateAuthorityResponse {
     /// <p>The ARN of the certificate authority for the group.</p>
     #[serde(rename = "GroupCertificateAuthorityArn")]
@@ -1891,7 +1873,7 @@ pub struct GetGroupCertificateConfigurationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetGroupCertificateConfigurationResponse {
     /// <p>The amount of time remaining before the certificate authority expires, in milliseconds.</p>
     #[serde(rename = "CertificateAuthorityExpiryInMilliseconds")]
@@ -1915,7 +1897,7 @@ pub struct GetGroupRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetGroupResponse {
     /// <p>The ARN of the definition.</p>
     #[serde(rename = "Arn")]
@@ -1933,11 +1915,11 @@ pub struct GetGroupResponse {
     #[serde(rename = "LastUpdatedTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_timestamp: Option<String>,
-    /// <p>The latest version of the definition.</p>
+    /// <p>The ID of the latest version associated with the definition.</p>
     #[serde(rename = "LatestVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_version: Option<String>,
-    /// <p>The ARN of the latest version of the definition.</p>
+    /// <p>The ARN of the latest version associated with the definition.</p>
     #[serde(rename = "LatestVersionArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_version_arn: Option<String>,
@@ -1945,7 +1927,7 @@ pub struct GetGroupResponse {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The tags for the definition.</p>
+    /// <p>Tag(s) attached to the resource arn.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
@@ -1956,13 +1938,13 @@ pub struct GetGroupVersionRequest {
     /// <p>The ID of the Greengrass group.</p>
     #[serde(rename = "GroupId")]
     pub group_id: String,
-    /// <p>The ID of the group version.</p>
+    /// <p>The ID of the group version. This value maps to the &#39;&#39;Version&#39;&#39; property of the corresponding &#39;&#39;VersionInformation&#39;&#39; object, which is returned by &#39;&#39;ListGroupVersions&#39;&#39; requests. If the version is the last one that was associated with a group, the value also maps to the &#39;&#39;LatestVersion&#39;&#39; property of the corresponding &#39;&#39;GroupInformation&#39;&#39; object.</p>
     #[serde(rename = "GroupVersionId")]
     pub group_version_id: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetGroupVersionResponse {
     /// <p>The ARN of the group version.</p>
     #[serde(rename = "Arn")]
@@ -1994,7 +1976,7 @@ pub struct GetLoggerDefinitionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetLoggerDefinitionResponse {
     /// <p>The ARN of the definition.</p>
     #[serde(rename = "Arn")]
@@ -2012,11 +1994,11 @@ pub struct GetLoggerDefinitionResponse {
     #[serde(rename = "LastUpdatedTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_timestamp: Option<String>,
-    /// <p>The latest version of the definition.</p>
+    /// <p>The ID of the latest version associated with the definition.</p>
     #[serde(rename = "LatestVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_version: Option<String>,
-    /// <p>The ARN of the latest version of the definition.</p>
+    /// <p>The ARN of the latest version associated with the definition.</p>
     #[serde(rename = "LatestVersionArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_version_arn: Option<String>,
@@ -2024,7 +2006,7 @@ pub struct GetLoggerDefinitionResponse {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The tags for the definition.</p>
+    /// <p>Tag(s) attached to the resource arn.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
@@ -2035,7 +2017,7 @@ pub struct GetLoggerDefinitionVersionRequest {
     /// <p>The ID of the logger definition.</p>
     #[serde(rename = "LoggerDefinitionId")]
     pub logger_definition_id: String,
-    /// <p>The ID of the logger definition version.</p>
+    /// <p>The ID of the logger definition version. This value maps to the &#39;&#39;Version&#39;&#39; property of the corresponding &#39;&#39;VersionInformation&#39;&#39; object, which is returned by &#39;&#39;ListLoggerDefinitionVersions&#39;&#39; requests. If the version is the last one that was associated with a logger definition, the value also maps to the &#39;&#39;LatestVersion&#39;&#39; property of the corresponding &#39;&#39;DefinitionInformation&#39;&#39; object.</p>
     #[serde(rename = "LoggerDefinitionVersionId")]
     pub logger_definition_version_id: String,
     /// <p>The token for the next set of results, or &#39;&#39;null&#39;&#39; if there are no additional results.</p>
@@ -2045,7 +2027,7 @@ pub struct GetLoggerDefinitionVersionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetLoggerDefinitionVersionResponse {
     /// <p>The ARN of the logger definition version.</p>
     #[serde(rename = "Arn")]
@@ -2077,7 +2059,7 @@ pub struct GetResourceDefinitionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetResourceDefinitionResponse {
     /// <p>The ARN of the definition.</p>
     #[serde(rename = "Arn")]
@@ -2095,11 +2077,11 @@ pub struct GetResourceDefinitionResponse {
     #[serde(rename = "LastUpdatedTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_timestamp: Option<String>,
-    /// <p>The latest version of the definition.</p>
+    /// <p>The ID of the latest version associated with the definition.</p>
     #[serde(rename = "LatestVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_version: Option<String>,
-    /// <p>The ARN of the latest version of the definition.</p>
+    /// <p>The ARN of the latest version associated with the definition.</p>
     #[serde(rename = "LatestVersionArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_version_arn: Option<String>,
@@ -2107,7 +2089,7 @@ pub struct GetResourceDefinitionResponse {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The tags for the definition.</p>
+    /// <p>Tag(s) attached to the resource arn.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
@@ -2118,13 +2100,13 @@ pub struct GetResourceDefinitionVersionRequest {
     /// <p>The ID of the resource definition.</p>
     #[serde(rename = "ResourceDefinitionId")]
     pub resource_definition_id: String,
-    /// <p>The ID of the resource definition version.</p>
+    /// <p>The ID of the resource definition version. This value maps to the &#39;&#39;Version&#39;&#39; property of the corresponding &#39;&#39;VersionInformation&#39;&#39; object, which is returned by &#39;&#39;ListResourceDefinitionVersions&#39;&#39; requests. If the version is the last one that was associated with a resource definition, the value also maps to the &#39;&#39;LatestVersion&#39;&#39; property of the corresponding &#39;&#39;DefinitionInformation&#39;&#39; object.</p>
     #[serde(rename = "ResourceDefinitionVersionId")]
     pub resource_definition_version_id: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetResourceDefinitionVersionResponse {
     /// <p>Arn of the resource definition version.</p>
     #[serde(rename = "Arn")]
@@ -2152,7 +2134,7 @@ pub struct GetResourceDefinitionVersionResponse {
 pub struct GetServiceRoleForAccountRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetServiceRoleForAccountResponse {
     /// <p>The time when the service role was associated with the account.</p>
     #[serde(rename = "AssociatedAt")]
@@ -2172,7 +2154,7 @@ pub struct GetSubscriptionDefinitionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSubscriptionDefinitionResponse {
     /// <p>The ARN of the definition.</p>
     #[serde(rename = "Arn")]
@@ -2190,11 +2172,11 @@ pub struct GetSubscriptionDefinitionResponse {
     #[serde(rename = "LastUpdatedTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_timestamp: Option<String>,
-    /// <p>The latest version of the definition.</p>
+    /// <p>The ID of the latest version associated with the definition.</p>
     #[serde(rename = "LatestVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_version: Option<String>,
-    /// <p>The ARN of the latest version of the definition.</p>
+    /// <p>The ARN of the latest version associated with the definition.</p>
     #[serde(rename = "LatestVersionArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_version_arn: Option<String>,
@@ -2202,7 +2184,7 @@ pub struct GetSubscriptionDefinitionResponse {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The tags for the definition.</p>
+    /// <p>Tag(s) attached to the resource arn.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
@@ -2217,13 +2199,13 @@ pub struct GetSubscriptionDefinitionVersionRequest {
     /// <p>The ID of the subscription definition.</p>
     #[serde(rename = "SubscriptionDefinitionId")]
     pub subscription_definition_id: String,
-    /// <p>The ID of the subscription definition version.</p>
+    /// <p>The ID of the subscription definition version. This value maps to the &#39;&#39;Version&#39;&#39; property of the corresponding &#39;&#39;VersionInformation&#39;&#39; object, which is returned by &#39;&#39;ListSubscriptionDefinitionVersions&#39;&#39; requests. If the version is the last one that was associated with a subscription definition, the value also maps to the &#39;&#39;LatestVersion&#39;&#39; property of the corresponding &#39;&#39;DefinitionInformation&#39;&#39; object.</p>
     #[serde(rename = "SubscriptionDefinitionVersionId")]
     pub subscription_definition_version_id: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSubscriptionDefinitionVersionResponse {
     /// <p>The ARN of the subscription definition version.</p>
     #[serde(rename = "Arn")]
@@ -2253,7 +2235,7 @@ pub struct GetSubscriptionDefinitionVersionResponse {
 
 /// <p>Information about a certificate authority for a group.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GroupCertificateAuthorityProperties {
     /// <p>The ARN of the certificate authority for the group.</p>
     #[serde(rename = "GroupCertificateAuthorityArn")]
@@ -2267,7 +2249,7 @@ pub struct GroupCertificateAuthorityProperties {
 
 /// <p>Information about a group.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GroupInformation {
     /// <p>The ARN of the group.</p>
     #[serde(rename = "Arn")]
@@ -2285,11 +2267,11 @@ pub struct GroupInformation {
     #[serde(rename = "LastUpdatedTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_timestamp: Option<String>,
-    /// <p>The latest version of the group.</p>
+    /// <p>The ID of the latest version associated with the group.</p>
     #[serde(rename = "LatestVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_version: Option<String>,
-    /// <p>The ARN of the latest version of the group.</p>
+    /// <p>The ARN of the latest version associated with the group.</p>
     #[serde(rename = "LatestVersionArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_version_arn: Option<String>,
@@ -2361,7 +2343,7 @@ pub struct ListBulkDeploymentDetailedReportsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListBulkDeploymentDetailedReportsResponse {
     /// <p>A list of the individual group deployments in the bulk deployment operation.</p>
     #[serde(rename = "Deployments")]
@@ -2386,7 +2368,7 @@ pub struct ListBulkDeploymentsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListBulkDeploymentsResponse {
     /// <p>A list of bulk deployments.</p>
     #[serde(rename = "BulkDeployments")]
@@ -2414,7 +2396,7 @@ pub struct ListConnectorDefinitionVersionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListConnectorDefinitionVersionsResponse {
     /// <p>The token for the next set of results, or &#39;&#39;null&#39;&#39; if there are no additional results.</p>
     #[serde(rename = "NextToken")]
@@ -2439,7 +2421,7 @@ pub struct ListConnectorDefinitionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListConnectorDefinitionsResponse {
     /// <p>Information about a definition.</p>
     #[serde(rename = "Definitions")]
@@ -2467,7 +2449,7 @@ pub struct ListCoreDefinitionVersionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListCoreDefinitionVersionsResponse {
     /// <p>The token for the next set of results, or &#39;&#39;null&#39;&#39; if there are no additional results.</p>
     #[serde(rename = "NextToken")]
@@ -2492,7 +2474,7 @@ pub struct ListCoreDefinitionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListCoreDefinitionsResponse {
     /// <p>Information about a definition.</p>
     #[serde(rename = "Definitions")]
@@ -2520,7 +2502,7 @@ pub struct ListDeploymentsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDeploymentsResponse {
     /// <p>A list of deployments for the requested groups.</p>
     #[serde(rename = "Deployments")]
@@ -2548,7 +2530,7 @@ pub struct ListDeviceDefinitionVersionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDeviceDefinitionVersionsResponse {
     /// <p>The token for the next set of results, or &#39;&#39;null&#39;&#39; if there are no additional results.</p>
     #[serde(rename = "NextToken")]
@@ -2573,7 +2555,7 @@ pub struct ListDeviceDefinitionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDeviceDefinitionsResponse {
     /// <p>Information about a definition.</p>
     #[serde(rename = "Definitions")]
@@ -2601,7 +2583,7 @@ pub struct ListFunctionDefinitionVersionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListFunctionDefinitionVersionsResponse {
     /// <p>The token for the next set of results, or &#39;&#39;null&#39;&#39; if there are no additional results.</p>
     #[serde(rename = "NextToken")]
@@ -2626,7 +2608,7 @@ pub struct ListFunctionDefinitionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListFunctionDefinitionsResponse {
     /// <p>Information about a definition.</p>
     #[serde(rename = "Definitions")]
@@ -2646,7 +2628,7 @@ pub struct ListGroupCertificateAuthoritiesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListGroupCertificateAuthoritiesResponse {
     /// <p>A list of certificate authorities associated with the group.</p>
     #[serde(rename = "GroupCertificateAuthorities")]
@@ -2670,7 +2652,7 @@ pub struct ListGroupVersionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListGroupVersionsResponse {
     /// <p>The token for the next set of results, or &#39;&#39;null&#39;&#39; if there are no additional results.</p>
     #[serde(rename = "NextToken")]
@@ -2695,7 +2677,7 @@ pub struct ListGroupsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListGroupsResponse {
     /// <p>Information about a group.</p>
     #[serde(rename = "Groups")]
@@ -2723,7 +2705,7 @@ pub struct ListLoggerDefinitionVersionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListLoggerDefinitionVersionsResponse {
     /// <p>The token for the next set of results, or &#39;&#39;null&#39;&#39; if there are no additional results.</p>
     #[serde(rename = "NextToken")]
@@ -2748,7 +2730,7 @@ pub struct ListLoggerDefinitionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListLoggerDefinitionsResponse {
     /// <p>Information about a definition.</p>
     #[serde(rename = "Definitions")]
@@ -2776,7 +2758,7 @@ pub struct ListResourceDefinitionVersionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListResourceDefinitionVersionsResponse {
     /// <p>The token for the next set of results, or &#39;&#39;null&#39;&#39; if there are no additional results.</p>
     #[serde(rename = "NextToken")]
@@ -2801,7 +2783,7 @@ pub struct ListResourceDefinitionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListResourceDefinitionsResponse {
     /// <p>Information about a definition.</p>
     #[serde(rename = "Definitions")]
@@ -2829,7 +2811,7 @@ pub struct ListSubscriptionDefinitionVersionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSubscriptionDefinitionVersionsResponse {
     /// <p>The token for the next set of results, or &#39;&#39;null&#39;&#39; if there are no additional results.</p>
     #[serde(rename = "NextToken")]
@@ -2854,7 +2836,7 @@ pub struct ListSubscriptionDefinitionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListSubscriptionDefinitionsResponse {
     /// <p>Information about a definition.</p>
     #[serde(rename = "Definitions")]
@@ -2874,9 +2856,8 @@ pub struct ListTagsForResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
-    /// <p>A map of the key-value pairs for the resource tag.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
@@ -2917,24 +2898,20 @@ pub struct LocalVolumeResourceData {
 pub struct Logger {
     /// <p>The component that will be subject to logging.</p>
     #[serde(rename = "Component")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub component: Option<String>,
+    pub component: String,
     /// <p>A descriptive or arbitrary ID for the logger. This value must be unique within the logger definition version. Max length is 128 characters with pattern &#39;&#39;[a-zA-Z0-9:_-]+&#39;&#39;.</p>
     #[serde(rename = "Id")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub id: Option<String>,
+    pub id: String,
     /// <p>The level of the logs.</p>
     #[serde(rename = "Level")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub level: Option<String>,
+    pub level: String,
     /// <p>The amount of file space, in KB, to use if the local file system is used for logging purposes.</p>
     #[serde(rename = "Space")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub space: Option<i64>,
     /// <p>The type of log output which will be used.</p>
     #[serde(rename = "Type")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: String,
 }
 
 /// <p>Information about a logger definition version.</p>
@@ -2963,7 +2940,7 @@ pub struct ResetDeploymentsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResetDeploymentsResponse {
     /// <p>The ARN of the deployment.</p>
     #[serde(rename = "DeploymentArn")]
@@ -2980,16 +2957,13 @@ pub struct ResetDeploymentsResponse {
 pub struct Resource {
     /// <p>The resource ID, used to refer to a resource in the Lambda function configuration. Max length is 128 characters with pattern &#39;&#39;[a-zA-Z0-9:_-]+&#39;&#39;. This must be unique within a Greengrass group.</p>
     #[serde(rename = "Id")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub id: Option<String>,
+    pub id: String,
     /// <p>The descriptive resource name, which is displayed on the AWS IoT Greengrass console. Max length 128 characters with pattern &#39;&#39;[a-zA-Z0-9:_-]+&#39;&#39;. This must be unique within a Greengrass group.</p>
     #[serde(rename = "Name")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
+    pub name: String,
     /// <p>A container of data for all resource types.</p>
     #[serde(rename = "ResourceDataContainer")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub resource_data_container: Option<ResourceDataContainer>,
+    pub resource_data_container: ResourceDataContainer,
 }
 
 /// <p>A policy used by the function to access a resource.</p>
@@ -3001,8 +2975,7 @@ pub struct ResourceAccessPolicy {
     pub permission: Option<String>,
     /// <p>The ID of the resource. (This ID is assigned to the resource when you create the resource definiton.)</p>
     #[serde(rename = "ResourceId")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub resource_id: Option<String>,
+    pub resource_id: String,
 }
 
 /// <p>A container for resource data. The container takes only one of the following supported resource data types: &#39;&#39;LocalDeviceResourceData&#39;&#39;, &#39;&#39;LocalVolumeResourceData&#39;&#39;, &#39;&#39;SageMakerMachineLearningModelResourceData&#39;&#39;, &#39;&#39;S3MachineLearningModelResourceData&#39;&#39;, &#39;&#39;SecretsManagerSecretResourceData&#39;&#39;.</p>
@@ -3087,20 +3060,18 @@ pub struct StartBulkDeploymentRequest {
     pub amzn_client_token: Option<String>,
     /// <p>The ARN of the execution role to associate with the bulk deployment operation. This IAM role must allow the &#39;&#39;greengrass:CreateDeployment&#39;&#39; action for all group versions that are listed in the input file. This IAM role must have access to the S3 bucket containing the input file.</p>
     #[serde(rename = "ExecutionRoleArn")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub execution_role_arn: Option<String>,
+    pub execution_role_arn: String,
     /// <p>The URI of the input file contained in the S3 bucket. The execution role must have &#39;&#39;getObject&#39;&#39; permissions on this bucket to access the input file. The input file is a JSON-serialized, line delimited file with UTF-8 encoding that provides a list of group and version IDs and the deployment type. This file must be less than 100 MB. Currently, AWS IoT Greengrass supports only &#39;&#39;NewDeployment&#39;&#39; deployment types.</p>
     #[serde(rename = "InputFileUri")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub input_file_uri: Option<String>,
-    /// <p>Tag(s) to add to the new resource</p>
+    pub input_file_uri: String,
+    /// <p>Tag(s) to add to the new resource.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartBulkDeploymentResponse {
     /// <p>The ARN of the bulk deployment.</p>
     #[serde(rename = "BulkDeploymentArn")]
@@ -3120,7 +3091,7 @@ pub struct StopBulkDeploymentRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StopBulkDeploymentResponse {}
 
 /// <p>Information about a subscription.</p>
@@ -3128,20 +3099,16 @@ pub struct StopBulkDeploymentResponse {}
 pub struct Subscription {
     /// <p>A descriptive or arbitrary ID for the subscription. This value must be unique within the subscription definition version. Max length is 128 characters with pattern &#39;&#39;[a-zA-Z0-9:_-]+&#39;&#39;.</p>
     #[serde(rename = "Id")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub id: Option<String>,
+    pub id: String,
     /// <p>The source of the subscription. Can be a thing ARN, a Lambda function ARN, a connector ARN, &#39;cloud&#39; (which represents the AWS IoT cloud), or &#39;GGShadowService&#39;.</p>
     #[serde(rename = "Source")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub source: Option<String>,
+    pub source: String,
     /// <p>The MQTT topic used to route the message.</p>
     #[serde(rename = "Subject")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub subject: Option<String>,
+    pub subject: String,
     /// <p>Where the message is sent to. Can be a thing ARN, a Lambda function ARN, a connector ARN, &#39;cloud&#39; (which represents the AWS IoT cloud), or &#39;GGShadowService&#39;.</p>
     #[serde(rename = "Target")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub target: Option<String>,
+    pub target: String,
 }
 
 /// <p>Information about a subscription definition version.</p>
@@ -3153,14 +3120,15 @@ pub struct SubscriptionDefinitionVersion {
     pub subscriptions: Option<Vec<Subscription>>,
 }
 
+/// <p>A map of the key-value pairs for the resource tag.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct TagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource.</p>
     #[serde(rename = "ResourceArn")]
     pub resource_arn: String,
-    /// <p>A map of the key-value pairs for the resource tag.</p>
     #[serde(rename = "tags")]
-    pub tags: ::std::collections::HashMap<String, String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -3168,7 +3136,7 @@ pub struct UntagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource.</p>
     #[serde(rename = "ResourceArn")]
     pub resource_arn: String,
-    /// <p>A list of the keys to remove from the resource tags.</p>
+    /// <p>An array of tag keys to delete</p>
     #[serde(rename = "TagKeys")]
     pub tag_keys: Vec<String>,
 }
@@ -3186,7 +3154,7 @@ pub struct UpdateConnectivityInfoRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateConnectivityInfoResponse {
     /// <p>A message about the connectivity info update request.</p>
     #[serde(rename = "Message")]
@@ -3210,7 +3178,7 @@ pub struct UpdateConnectorDefinitionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateConnectorDefinitionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -3225,7 +3193,7 @@ pub struct UpdateCoreDefinitionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateCoreDefinitionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -3240,7 +3208,7 @@ pub struct UpdateDeviceDefinitionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDeviceDefinitionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -3255,7 +3223,7 @@ pub struct UpdateFunctionDefinitionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateFunctionDefinitionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -3270,7 +3238,7 @@ pub struct UpdateGroupCertificateConfigurationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateGroupCertificateConfigurationResponse {
     /// <p>The amount of time remaining before the certificate authority expires, in milliseconds.</p>
     #[serde(rename = "CertificateAuthorityExpiryInMilliseconds")]
@@ -3298,7 +3266,7 @@ pub struct UpdateGroupRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateGroupResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -3313,7 +3281,7 @@ pub struct UpdateLoggerDefinitionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateLoggerDefinitionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -3328,7 +3296,7 @@ pub struct UpdateResourceDefinitionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateResourceDefinitionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -3343,12 +3311,12 @@ pub struct UpdateSubscriptionDefinitionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateSubscriptionDefinitionResponse {}
 
 /// <p>Information about a version.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct VersionInformation {
     /// <p>The ARN of the version.</p>
     #[serde(rename = "Arn")]
@@ -6961,7 +6929,7 @@ pub trait GreenGrass {
         input: ListSubscriptionDefinitionsRequest,
     ) -> RusotoFuture<ListSubscriptionDefinitionsResponse, ListSubscriptionDefinitionsError>;
 
-    /// <p>Retrieves the tags for a resource.</p>
+    /// <p>Retrieves a list of resource tags for a resource arn.</p>
     fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
@@ -6985,10 +6953,10 @@ pub trait GreenGrass {
         input: StopBulkDeploymentRequest,
     ) -> RusotoFuture<StopBulkDeploymentResponse, StopBulkDeploymentError>;
 
-    /// <p>Add tags to a resource.</p>
+    /// <p>Add resource tags to a Greengrass Resource. Valid resources are Group, Connector, Core, Device, Function, Logger, Subscription, and Resource Defintions, and also BulkDeploymentIds.</p>
     fn tag_resource(&self, input: TagResourceRequest) -> RusotoFuture<(), TagResourceError>;
 
-    /// <p>Remove tags with specified keys from a resource.</p>
+    /// <p>Remove resource tags from a Greengrass Resource.</p>
     fn untag_resource(&self, input: UntagResourceRequest) -> RusotoFuture<(), UntagResourceError>;
 
     /// <p>Updates the connectivity information for the core. Any devices that belong to the group which has this core will receive this information in order to find the location of the core and connect to it.</p>
@@ -7066,10 +7034,7 @@ impl GreenGrassClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> GreenGrassClient {
-        GreenGrassClient {
-            client: Client::shared(),
-            region,
-        }
+        Self::new_with_client(Client::shared(), region)
     }
 
     pub fn new_with<P, D>(
@@ -7083,10 +7048,14 @@ impl GreenGrassClient {
         D: DispatchSignedRequest + Send + Sync + 'static,
         D::Future: Send,
     {
-        GreenGrassClient {
-            client: Client::new_with(credentials_provider, request_dispatcher),
+        Self::new_with_client(
+            Client::new_with(credentials_provider, request_dispatcher),
             region,
-        }
+        )
+    }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> GreenGrassClient {
+        GreenGrassClient { client, region }
     }
 }
 
@@ -9601,7 +9570,7 @@ impl GreenGrass for GreenGrassClient {
         })
     }
 
-    /// <p>Retrieves the tags for a resource.</p>
+    /// <p>Retrieves a list of resource tags for a resource arn.</p>
     fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
@@ -9735,7 +9704,7 @@ impl GreenGrass for GreenGrassClient {
         })
     }
 
-    /// <p>Add tags to a resource.</p>
+    /// <p>Add resource tags to a Greengrass Resource. Valid resources are Group, Connector, Core, Device, Function, Logger, Subscription, and Resource Defintions, and also BulkDeploymentIds.</p>
     fn tag_resource(&self, input: TagResourceRequest) -> RusotoFuture<(), TagResourceError> {
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
@@ -9763,7 +9732,7 @@ impl GreenGrass for GreenGrassClient {
         })
     }
 
-    /// <p>Remove tags with specified keys from a resource.</p>
+    /// <p>Remove resource tags from a Greengrass Resource.</p>
     fn untag_resource(&self, input: UntagResourceRequest) -> RusotoFuture<(), UntagResourceError> {
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 

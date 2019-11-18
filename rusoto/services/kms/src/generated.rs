@@ -9,24 +9,23 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
+#![allow(warnings)]
 
-use std::error::Error;
-use std::fmt;
-
-#[allow(warnings)]
 use futures::future;
 use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
+use std::error::Error;
+use std::fmt;
 
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
 /// <p>Contains information about an alias.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AliasListEntry {
     /// <p>String that contains the key ARN.</p>
     #[serde(rename = "AliasArn")]
@@ -50,7 +49,7 @@ pub struct CancelKeyDeletionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CancelKeyDeletionResponse {
     /// <p>The unique identifier of the master key for which deletion is canceled.</p>
     #[serde(rename = "KeyId")]
@@ -66,7 +65,7 @@ pub struct ConnectCustomKeyStoreRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ConnectCustomKeyStoreResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -96,7 +95,7 @@ pub struct CreateCustomKeyStoreRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateCustomKeyStoreResponse {
     /// <p>A unique identifier for the new custom key store.</p>
     #[serde(rename = "CustomKeyStoreId")]
@@ -134,7 +133,7 @@ pub struct CreateGrantRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateGrantResponse {
     /// <p>The unique identifier for the grant.</p> <p>You can use the <code>GrantId</code> in a subsequent <a>RetireGrant</a> or <a>RevokeGrant</a> operation.</p>
     #[serde(rename = "GrantId")]
@@ -179,7 +178,7 @@ pub struct CreateKeyRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateKeyResponse {
     /// <p>Metadata associated with the CMK.</p>
     #[serde(rename = "KeyMetadata")]
@@ -189,7 +188,7 @@ pub struct CreateKeyResponse {
 
 /// <p>Contains information about each custom key store in the custom key store list.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CustomKeyStoresListEntry {
     /// <p>A unique identifier for the AWS CloudHSM cluster that is associated with the custom key store.</p>
     #[serde(rename = "CloudHsmClusterId")]
@@ -242,7 +241,7 @@ pub struct DecryptRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DecryptResponse {
     /// <p>ARN of the key used to perform the decryption. This value is returned if no errors are encountered during the operation.</p>
     #[serde(rename = "KeyId")]
@@ -274,7 +273,7 @@ pub struct DeleteCustomKeyStoreRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteCustomKeyStoreResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -305,7 +304,7 @@ pub struct DescribeCustomKeyStoresRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeCustomKeyStoresResponse {
     /// <p>Contains metadata about each custom key store.</p>
     #[serde(rename = "CustomKeyStores")]
@@ -333,7 +332,7 @@ pub struct DescribeKeyRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeKeyResponse {
     /// <p>Metadata associated with the key.</p>
     #[serde(rename = "KeyMetadata")]
@@ -363,7 +362,7 @@ pub struct DisconnectCustomKeyStoreRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisconnectCustomKeyStoreResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -404,7 +403,7 @@ pub struct EncryptRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EncryptResponse {
     /// <p>The encrypted plaintext. When you use the HTTP API or the AWS CLI, the value is Base64-encoded. Otherwise, it is not encoded.</p>
     #[serde(rename = "CiphertextBlob")]
@@ -445,7 +444,7 @@ pub struct GenerateDataKeyRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GenerateDataKeyResponse {
     /// <p>The encrypted copy of the data key. When you use the HTTP API or the AWS CLI, the value is Base64-encoded. Otherwise, it is not encoded.</p>
     #[serde(rename = "CiphertextBlob")]
@@ -495,7 +494,7 @@ pub struct GenerateDataKeyWithoutPlaintextRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GenerateDataKeyWithoutPlaintextResponse {
     /// <p>The encrypted data key. When you use the HTTP API or the AWS CLI, the value is Base64-encoded. Otherwise, it is not encoded.</p>
     #[serde(rename = "CiphertextBlob")]
@@ -525,7 +524,7 @@ pub struct GenerateRandomRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GenerateRandomResponse {
     /// <p>The random byte string. When you use the HTTP API or the AWS CLI, the value is Base64-encoded. Otherwise, it is not encoded.</p>
     #[serde(rename = "Plaintext")]
@@ -549,7 +548,7 @@ pub struct GetKeyPolicyRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetKeyPolicyResponse {
     /// <p>A key policy document in JSON format.</p>
     #[serde(rename = "Policy")]
@@ -565,7 +564,7 @@ pub struct GetKeyRotationStatusRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetKeyRotationStatusResponse {
     /// <p>A Boolean value that specifies whether key rotation is enabled.</p>
     #[serde(rename = "KeyRotationEnabled")]
@@ -587,7 +586,7 @@ pub struct GetParametersForImportRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetParametersForImportResponse {
     /// <p>The import token to send in a subsequent <a>ImportKeyMaterial</a> request.</p>
     #[serde(rename = "ImportToken")]
@@ -632,7 +631,7 @@ pub struct GrantConstraints {
 
 /// <p>Contains information about an entry in a list of grants.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GrantListEntry {
     /// <p>A list of key-value pairs that must be present in the encryption context of certain subsequent operations that the grant allows.</p>
     #[serde(rename = "Constraints")]
@@ -704,12 +703,12 @@ pub struct ImportKeyMaterialRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ImportKeyMaterialResponse {}
 
 /// <p>Contains information about each entry in the key list.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct KeyListEntry {
     /// <p>ARN of the key.</p>
     #[serde(rename = "KeyArn")]
@@ -723,7 +722,7 @@ pub struct KeyListEntry {
 
 /// <p>Contains metadata about a customer master key (CMK).</p> <p>This data type is used as a response element for the <a>CreateKey</a> and <a>DescribeKey</a> operations.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct KeyMetadata {
     /// <p>The twelve-digit account ID of the AWS account that owns the CMK.</p>
     #[serde(rename = "AWSAccountId")]
@@ -803,7 +802,7 @@ pub struct ListAliasesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAliasesResponse {
     /// <p>A list of aliases.</p>
     #[serde(rename = "Aliases")]
@@ -835,7 +834,7 @@ pub struct ListGrantsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListGrantsResponse {
     /// <p>A list of grants.</p>
     #[serde(rename = "Grants")]
@@ -867,7 +866,7 @@ pub struct ListKeyPoliciesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListKeyPoliciesResponse {
     /// <p>When <code>Truncated</code> is true, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent request.</p>
     #[serde(rename = "NextMarker")]
@@ -896,7 +895,7 @@ pub struct ListKeysRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListKeysResponse {
     /// <p>A list of customer master keys (CMKs).</p>
     #[serde(rename = "Keys")]
@@ -928,7 +927,7 @@ pub struct ListResourceTagsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListResourceTagsResponse {
     /// <p>When <code>Truncated</code> is true, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent request.</p> <p>Do not assume or infer any information from this value.</p>
     #[serde(rename = "NextMarker")]
@@ -1004,7 +1003,7 @@ pub struct ReEncryptRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ReEncryptResponse {
     /// <p>The reencrypted data. When you use the HTTP API or the AWS CLI, the value is Base64-encoded. Otherwise, it is not encoded.</p>
     #[serde(rename = "CiphertextBlob")]
@@ -1063,7 +1062,7 @@ pub struct ScheduleKeyDeletionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ScheduleKeyDeletionResponse {
     /// <p>The date and time after which AWS KMS deletes the customer master key (CMK).</p>
     #[serde(rename = "DeletionDate")]
@@ -1136,7 +1135,7 @@ pub struct UpdateCustomKeyStoreRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateCustomKeyStoreResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -4047,10 +4046,7 @@ impl KmsClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> KmsClient {
-        KmsClient {
-            client: Client::shared(),
-            region,
-        }
+        Self::new_with_client(Client::shared(), region)
     }
 
     pub fn new_with<P, D>(
@@ -4064,10 +4060,14 @@ impl KmsClient {
         D: DispatchSignedRequest + Send + Sync + 'static,
         D::Future: Send,
     {
-        KmsClient {
-            client: Client::new_with(credentials_provider, request_dispatcher),
+        Self::new_with_client(
+            Client::new_with(credentials_provider, request_dispatcher),
             region,
-        }
+        )
+    }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> KmsClient {
+        KmsClient { client, region }
     }
 }
 

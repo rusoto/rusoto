@@ -4,7 +4,7 @@ extern crate rusoto_core;
 extern crate rusoto_fsx;
 
 use rusoto_core::Region;
-use rusoto_fsx::{Fsx, FsxClient, DescribeFileSystemsRequest};
+use rusoto_fsx::{DescribeFileSystemsRequest, Fsx, FsxClient};
 
 #[test]
 fn should_describe_filesystems() {

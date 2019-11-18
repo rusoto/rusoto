@@ -13,14 +13,14 @@ license = "MIT"
 name = "rusoto_core"
 readme = "README.md"
 repository = "https://github.com/rusoto/rusoto"
-version = "0.40.0"
+version = "0.41.0"
 homepage = "https://www.rusoto.org/"
 exclude = ["test_resources/*"]
 edition = "2018"
 
 [badges]
-appveyor = { repository = "rusoto/rusoto", branch = "master" }
-azure-devops = { project = "Rusoto", pipeline = "rusoto.rusoto", build="1" }
+appveyor = { repository = "matthewkmayer/rusoto", branch = "master" }
+azure-devops = { project = "matthewkmayer/Rusoto", pipeline = "rusoto.rusoto", build="1" }
 
 [build-dependencies]
 rustc_version = "0.2.1"
@@ -28,37 +28,36 @@ rustc_version = "0.2.1"
 [dependencies]
 bytes = "0.4.12"
 futures = "0.1.16"
-hmac = "0.5.0"
 http = "0.1.17"
 hyper = "0.12"
 hyper-tls = { version = "0.3.0", optional = true }
-hyper-rustls = { version = "0.16.0", optional = true }
+hyper-rustls = { version = "0.17.1", optional = true }
 lazy_static = "1.0"
 log = "0.4.1"
-md5 = "0.3.6"
-base64 = "0.9"
-hex = "0.3"
+base64 = "0.11"
 serde = "1.0.2"
 serde_derive = "1.0.2"
 serde_json = "1.0.2"
-sha2 = "0.7.0"
 time = "0.1.35"
-url = "1.6.0"
 tokio = "0.1.7"
 tokio-timer = "0.2.6"
-xml-rs = "0.7"
+xml-rs = "0.8"
 
 [dependencies.rusoto_credential]
 path = "../credential"
-version = "0.40"
+version = "0.41"
+
+[dependencies.rusoto_signature]
+path = "../signature"
+version = "0.41"
 
 [dependencies.clippy]
 optional = true
 version = "0.0"
 
 [dev-dependencies]
-env_logger = "0.5"
-rand = "0.4.2"
+env_logger = "0.7"
+rand = "0.7"
 serde_json = "1.0.1"
 serde_test = "1.0.1"
 

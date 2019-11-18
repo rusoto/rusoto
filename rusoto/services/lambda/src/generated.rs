@@ -9,17 +9,16 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
+#![allow(warnings)]
 
-use std::error::Error;
-use std::fmt;
-
-#[allow(warnings)]
 use futures::future;
 use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
+use std::error::Error;
+use std::fmt;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
@@ -27,7 +26,7 @@ use rusoto_core::signature::SignedRequest;
 use serde_json;
 /// <p>Limits that are related to concurrency and code storage. All file and storage sizes are in bytes.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AccountLimit {
     /// <p>The maximum size of your function's code and layers when they're extracted.</p>
     #[serde(rename = "CodeSizeUnzipped")]
@@ -53,7 +52,7 @@ pub struct AccountLimit {
 
 /// <p>The number of functions and amount of storage in use.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AccountUsage {
     /// <p>The number of Lambda functions.</p>
     #[serde(rename = "FunctionCount")]
@@ -93,7 +92,7 @@ pub struct AddLayerVersionPermissionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AddLayerVersionPermissionResponse {
     /// <p>A unique identifier for the current revision of the policy.</p>
     #[serde(rename = "RevisionId")]
@@ -142,7 +141,7 @@ pub struct AddPermissionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AddPermissionResponse {
     /// <p>The permission statement that's added to the function policy.</p>
     #[serde(rename = "Statement")]
@@ -152,7 +151,7 @@ pub struct AddPermissionResponse {
 
 /// <p>Provides configuration information about a Lambda function <a href="https://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">alias</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AliasConfiguration {
     /// <p>The Amazon Resource Name (ARN) of the alias.</p>
     #[serde(rename = "AliasArn")]
@@ -190,7 +189,7 @@ pub struct AliasRoutingConfiguration {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Concurrency {
     /// <p>The number of concurrent executions that are reserved for this function. For more information, see <a href="https://docs.aws.amazon.com/lambda/latest/dg/concurrent-executions.html">Managing Concurrency</a>.</p>
     #[serde(rename = "ReservedConcurrentExecutions")]
@@ -235,6 +234,9 @@ pub struct CreateEventSourceMappingRequest {
     /// <p>The name of the Lambda function.</p> <p class="title"> <b>Name formats</b> </p> <ul> <li> <p> <b>Function name</b> - <code>MyFunction</code>.</p> </li> <li> <p> <b>Function ARN</b> - <code>arn:aws:lambda:us-west-2:123456789012:function:MyFunction</code>.</p> </li> <li> <p> <b>Version or Alias ARN</b> - <code>arn:aws:lambda:us-west-2:123456789012:function:MyFunction:PROD</code>.</p> </li> <li> <p> <b>Partial ARN</b> - <code>123456789012:function:MyFunction</code>.</p> </li> </ul> <p>The length constraint applies only to the full ARN. If you specify only the function name, it's limited to 64 characters in length.</p>
     #[serde(rename = "FunctionName")]
     pub function_name: String,
+    #[serde(rename = "MaximumBatchingWindowInSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub maximum_batching_window_in_seconds: Option<i64>,
     /// <p>The position in a stream from which to start reading. Required for Amazon Kinesis and Amazon DynamoDB Streams sources. <code>AT_TIMESTAMP</code> is only supported for Amazon Kinesis streams.</p>
     #[serde(rename = "StartingPosition")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -373,7 +375,7 @@ pub struct Environment {
 
 /// <p>Error messages for environment variables that couldn't be applied.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EnvironmentError {
     /// <p>The error code.</p>
     #[serde(rename = "ErrorCode")]
@@ -387,7 +389,7 @@ pub struct EnvironmentError {
 
 /// <p>The results of a configuration update that applied environment variables.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EnvironmentResponse {
     /// <p>Error messages for environment variables that couldn't be applied.</p>
     #[serde(rename = "Error")]
@@ -401,7 +403,7 @@ pub struct EnvironmentResponse {
 
 /// <p>A mapping between an AWS resource and an AWS Lambda function. See <a>CreateEventSourceMapping</a> for details.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EventSourceMappingConfiguration {
     /// <p>The maximum number of items to retrieve in a single batch.</p>
     #[serde(rename = "BatchSize")]
@@ -423,6 +425,9 @@ pub struct EventSourceMappingConfiguration {
     #[serde(rename = "LastProcessingResult")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_processing_result: Option<String>,
+    #[serde(rename = "MaximumBatchingWindowInSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub maximum_batching_window_in_seconds: Option<i64>,
     /// <p>The state of the event source mapping. It can be one of the following: <code>Creating</code>, <code>Enabling</code>, <code>Enabled</code>, <code>Disabling</code>, <code>Disabled</code>, <code>Updating</code>, or <code>Deleting</code>.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -465,7 +470,7 @@ pub struct FunctionCode {
 
 /// <p>Details about a function's deployment package.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FunctionCodeLocation {
     /// <p>A presigned URL that you can use to download the deployment package.</p>
     #[serde(rename = "Location")]
@@ -479,7 +484,7 @@ pub struct FunctionCodeLocation {
 
 /// <p>Details about a function's configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FunctionConfiguration {
     /// <p>The SHA256 hash of the function's deployment package.</p>
     #[serde(rename = "CodeSha256")]
@@ -567,7 +572,7 @@ pub struct FunctionConfiguration {
 pub struct GetAccountSettingsRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAccountSettingsResponse {
     /// <p>Limits that are related to concurrency and code storage.</p>
     #[serde(rename = "AccountLimit")]
@@ -619,7 +624,7 @@ pub struct GetFunctionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetFunctionResponse {
     /// <p>The deployment package of the function or version.</p>
     #[serde(rename = "Code")]
@@ -657,7 +662,7 @@ pub struct GetLayerVersionPolicyRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetLayerVersionPolicyResponse {
     /// <p>The policy document.</p>
     #[serde(rename = "Policy")]
@@ -680,7 +685,7 @@ pub struct GetLayerVersionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetLayerVersionResponse {
     /// <p>The layer's compatible runtimes.</p>
     #[serde(rename = "CompatibleRuntimes")]
@@ -728,7 +733,7 @@ pub struct GetPolicyRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetPolicyResponse {
     /// <p>The resource-based policy.</p>
     #[serde(rename = "Policy")]
@@ -803,7 +808,7 @@ pub struct InvokeAsyncRequest {
 
 /// <p>A success response (<code>202 Accepted</code>) indicates that the request is queued for invocation. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InvokeAsyncResponse {
     /// <p>The status code.</p>
     #[serde(rename = "Status")]
@@ -813,7 +818,7 @@ pub struct InvokeAsyncResponse {
 
 /// <p>An <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html">AWS Lambda layer</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Layer {
     /// <p>The Amazon Resource Name (ARN) of the function layer.</p>
     #[serde(rename = "Arn")]
@@ -853,7 +858,7 @@ pub struct LayerVersionContentInput {
 
 /// <p>Details about a version of an <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html">AWS Lambda layer</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct LayerVersionContentOutput {
     /// <p>The SHA-256 hash of the layer archive.</p>
     #[serde(rename = "CodeSha256")]
@@ -871,7 +876,7 @@ pub struct LayerVersionContentOutput {
 
 /// <p>Details about a version of an <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html">AWS Lambda layer</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct LayerVersionsListItem {
     /// <p>The layer's compatible runtimes.</p>
     #[serde(rename = "CompatibleRuntimes")]
@@ -901,7 +906,7 @@ pub struct LayerVersionsListItem {
 
 /// <p>Details about an <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html">AWS Lambda layer</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct LayersListItem {
     /// <p>The newest version of the layer.</p>
     #[serde(rename = "LatestMatchingVersion")]
@@ -937,7 +942,7 @@ pub struct ListAliasesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAliasesResponse {
     /// <p>A list of aliases.</p>
     #[serde(rename = "Aliases")]
@@ -970,7 +975,7 @@ pub struct ListEventSourceMappingsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListEventSourceMappingsResponse {
     /// <p>A list of event source mappings.</p>
     #[serde(rename = "EventSourceMappings")]
@@ -1004,7 +1009,7 @@ pub struct ListFunctionsRequest {
 
 /// <p>A list of Lambda functions.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListFunctionsResponse {
     /// <p>A list of Lambda functions.</p>
     #[serde(rename = "Functions")]
@@ -1036,7 +1041,7 @@ pub struct ListLayerVersionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListLayerVersionsResponse {
     /// <p>A list of versions.</p>
     #[serde(rename = "LayerVersions")]
@@ -1065,7 +1070,7 @@ pub struct ListLayersRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListLayersResponse {
     /// <p>A list of function layers.</p>
     #[serde(rename = "Layers")]
@@ -1085,7 +1090,7 @@ pub struct ListTagsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsResponse {
     /// <p>The function's tags.</p>
     #[serde(rename = "Tags")]
@@ -1109,7 +1114,7 @@ pub struct ListVersionsByFunctionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListVersionsByFunctionResponse {
     /// <p>The pagination token that's included if more results are available.</p>
     #[serde(rename = "NextMarker")]
@@ -1144,7 +1149,7 @@ pub struct PublishLayerVersionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PublishLayerVersionResponse {
     /// <p>The layer's compatible runtimes.</p>
     #[serde(rename = "CompatibleRuntimes")]
@@ -1265,7 +1270,7 @@ pub struct TracingConfig {
 
 /// <p>The function's AWS X-Ray tracing configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TracingConfigResponse {
     /// <p>The tracing mode.</p>
     #[serde(rename = "Mode")]
@@ -1323,6 +1328,9 @@ pub struct UpdateEventSourceMappingRequest {
     #[serde(rename = "FunctionName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub function_name: Option<String>,
+    #[serde(rename = "MaximumBatchingWindowInSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub maximum_batching_window_in_seconds: Option<i64>,
     /// <p>The identifier of the event source mapping.</p>
     #[serde(rename = "UUID")]
     pub uuid: String,
@@ -1442,7 +1450,7 @@ pub struct VpcConfig {
 
 /// <p>The VPC security groups and subnets that are attached to a Lambda function.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct VpcConfigResponse {
     /// <p>A list of VPC security groups IDs.</p>
     #[serde(rename = "SecurityGroupIds")]
@@ -4002,10 +4010,7 @@ impl LambdaClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> LambdaClient {
-        LambdaClient {
-            client: Client::shared(),
-            region,
-        }
+        Self::new_with_client(Client::shared(), region)
     }
 
     pub fn new_with<P, D>(
@@ -4019,10 +4024,14 @@ impl LambdaClient {
         D: DispatchSignedRequest + Send + Sync + 'static,
         D::Future: Send,
     {
-        LambdaClient {
-            client: Client::new_with(credentials_provider, request_dispatcher),
+        Self::new_with_client(
+            Client::new_with(credentials_provider, request_dispatcher),
             region,
-        }
+        )
+    }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> LambdaClient {
+        LambdaClient { client, region }
     }
 }
 

@@ -9,17 +9,16 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
+#![allow(warnings)]
 
-use std::error::Error;
-use std::fmt;
-
-#[allow(warnings)]
 use futures::future;
 use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
+use std::error::Error;
+use std::fmt;
 
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
@@ -35,7 +34,7 @@ pub struct AddAttributesToFindingsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AddAttributesToFindingsResponse {
     /// <p>Attribute details that cannot be described. An error code is provided for each failed item.</p>
     #[serde(rename = "failedItems")]
@@ -64,7 +63,7 @@ pub struct AgentFilter {
 
 /// <p>Used as a response element in the <a>PreviewAgents</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AgentPreview {
     /// <p>The health status of the Amazon Inspector Agent.</p>
     #[serde(rename = "agentHealth")]
@@ -101,7 +100,7 @@ pub struct AgentPreview {
 
 /// <p>A snapshot of an Amazon Inspector assessment run that contains the findings of the assessment run .</p> <p>Used as the response element in the <a>DescribeAssessmentRuns</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssessmentRun {
     /// <p>The ARN of the assessment run.</p>
     #[serde(rename = "arn")]
@@ -154,7 +153,7 @@ pub struct AssessmentRun {
 
 /// <p>Contains information about an Amazon Inspector agent. This data type is used as a response element in the <a>ListAssessmentRunAgents</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssessmentRunAgent {
     /// <p>The current health state of the agent.</p>
     #[serde(rename = "agentHealth")]
@@ -216,7 +215,7 @@ pub struct AssessmentRunFilter {
 
 /// <p>Used as one of the elements of the <a>AssessmentRun</a> data type.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssessmentRunNotification {
     /// <p>The date of the notification.</p>
     #[serde(rename = "date")]
@@ -243,7 +242,7 @@ pub struct AssessmentRunNotification {
 
 /// <p>Used as one of the elements of the <a>AssessmentRun</a> data type.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssessmentRunStateChange {
     /// <p>The assessment run state.</p>
     #[serde(rename = "state")]
@@ -255,7 +254,7 @@ pub struct AssessmentRunStateChange {
 
 /// <p>Contains information about an Amazon Inspector application. This data type is used as the response element in the <a>DescribeAssessmentTargets</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssessmentTarget {
     /// <p>The ARN that specifies the Amazon Inspector assessment target.</p>
     #[serde(rename = "arn")]
@@ -286,7 +285,7 @@ pub struct AssessmentTargetFilter {
 
 /// <p>Contains information about an Amazon Inspector assessment template. This data type is used as the response element in the <a>DescribeAssessmentTemplates</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssessmentTemplate {
     /// <p>The ARN of the assessment template.</p>
     #[serde(rename = "arn")]
@@ -337,7 +336,7 @@ pub struct AssessmentTemplateFilter {
 
 /// <p>A collection of attributes of the host from which the finding is generated.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssetAttributes {
     /// <p>The ID of the agent that is installed on the EC2 instance where the finding is generated.</p>
     #[serde(rename = "agentId")]
@@ -396,7 +395,7 @@ pub struct CreateAssessmentTargetRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateAssessmentTargetResponse {
     /// <p>The ARN that specifies the assessment target that is created.</p>
     #[serde(rename = "assessmentTargetArn")]
@@ -424,7 +423,7 @@ pub struct CreateAssessmentTemplateRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateAssessmentTemplateResponse {
     /// <p>The ARN that specifies the assessment template that is created.</p>
     #[serde(rename = "assessmentTemplateArn")]
@@ -439,7 +438,7 @@ pub struct CreateExclusionsPreviewRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateExclusionsPreviewResponse {
     /// <p>Specifies the unique identifier of the requested exclusions preview. You can use the unique identifier to retrieve the exclusions preview when running the GetExclusionsPreview API.</p>
     #[serde(rename = "previewToken")]
@@ -454,7 +453,7 @@ pub struct CreateResourceGroupRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateResourceGroupResponse {
     /// <p>The ARN that specifies the resource group that is created.</p>
     #[serde(rename = "resourceGroupArn")]
@@ -490,7 +489,7 @@ pub struct DescribeAssessmentRunsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAssessmentRunsResponse {
     /// <p>Information about the assessment run.</p>
     #[serde(rename = "assessmentRuns")]
@@ -508,7 +507,7 @@ pub struct DescribeAssessmentTargetsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAssessmentTargetsResponse {
     /// <p>Information about the assessment targets.</p>
     #[serde(rename = "assessmentTargets")]
@@ -525,7 +524,7 @@ pub struct DescribeAssessmentTemplatesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAssessmentTemplatesResponse {
     /// <p>Information about the assessment templates.</p>
     #[serde(rename = "assessmentTemplates")]
@@ -536,7 +535,7 @@ pub struct DescribeAssessmentTemplatesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeCrossAccountAccessRoleResponse {
     /// <p>The date when the cross-account access role was registered.</p>
     #[serde(rename = "registeredAt")]
@@ -561,7 +560,7 @@ pub struct DescribeExclusionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeExclusionsResponse {
     /// <p>Information about the exclusions.</p>
     #[serde(rename = "exclusions")]
@@ -583,7 +582,7 @@ pub struct DescribeFindingsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeFindingsResponse {
     /// <p>Finding details that cannot be described. An error code is provided for each failed item.</p>
     #[serde(rename = "failedItems")]
@@ -601,7 +600,7 @@ pub struct DescribeResourceGroupsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeResourceGroupsResponse {
     /// <p>Resource group details that cannot be described. An error code is provided for each failed item.</p>
     #[serde(rename = "failedItems")]
@@ -623,7 +622,7 @@ pub struct DescribeRulesPackagesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeRulesPackagesResponse {
     /// <p>Rules package details that cannot be described. An error code is provided for each failed item.</p>
     #[serde(rename = "failedItems")]
@@ -648,7 +647,7 @@ pub struct DurationRange {
 
 /// <p>This data type is used in the <a>Subscription</a> data type.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EventSubscription {
     /// <p>The event for which Amazon Simple Notification Service (SNS) notifications are sent.</p>
     #[serde(rename = "event")]
@@ -660,7 +659,7 @@ pub struct EventSubscription {
 
 /// <p>Contains information about what was excluded from an assessment run.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Exclusion {
     /// <p>The ARN that specifies the exclusion.</p>
     #[serde(rename = "arn")]
@@ -685,7 +684,7 @@ pub struct Exclusion {
 
 /// <p>Contains information about what is excluded from an assessment run given the current state of the assessment template.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ExclusionPreview {
     /// <p>The system-defined attributes for the exclusion preview.</p>
     #[serde(rename = "attributes")]
@@ -707,7 +706,7 @@ pub struct ExclusionPreview {
 
 /// <p>Includes details about the failed items.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FailedItemDetails {
     /// <p>The status code of a failed item.</p>
     #[serde(rename = "failureCode")]
@@ -719,7 +718,7 @@ pub struct FailedItemDetails {
 
 /// <p>Contains information about an Amazon Inspector finding. This data type is used as the response element in the <a>DescribeFindings</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Finding {
     /// <p>The ARN that specifies the finding.</p>
     #[serde(rename = "arn")]
@@ -841,7 +840,7 @@ pub struct GetAssessmentReportRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAssessmentReportResponse {
     /// <p>Specifies the status of the request to generate an assessment report. </p>
     #[serde(rename = "status")]
@@ -875,7 +874,7 @@ pub struct GetExclusionsPreviewRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetExclusionsPreviewResponse {
     /// <p>Information about the exclusions included in the preview.</p>
     #[serde(rename = "exclusionPreviews")]
@@ -898,7 +897,7 @@ pub struct GetTelemetryMetadataRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetTelemetryMetadataResponse {
     /// <p>Telemetry details.</p>
     #[serde(rename = "telemetryMetadata")]
@@ -907,7 +906,7 @@ pub struct GetTelemetryMetadataResponse {
 
 /// <p>This data type is used in the <a>Finding</a> data type.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct InspectorServiceAttributes {
     /// <p>The ARN of the assessment run during which the finding is generated.</p>
     #[serde(rename = "assessmentRunArn")]
@@ -942,7 +941,7 @@ pub struct ListAssessmentRunAgentsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAssessmentRunAgentsResponse {
     /// <p>A list of ARNs that specifies the agents returned by the action.</p>
     #[serde(rename = "assessmentRunAgents")]
@@ -974,7 +973,7 @@ pub struct ListAssessmentRunsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAssessmentRunsResponse {
     /// <p>A list of ARNs that specifies the assessment runs that are returned by the action.</p>
     #[serde(rename = "assessmentRunArns")]
@@ -1002,7 +1001,7 @@ pub struct ListAssessmentTargetsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAssessmentTargetsResponse {
     /// <p>A list of ARNs that specifies the assessment targets that are returned by the action.</p>
     #[serde(rename = "assessmentTargetArns")]
@@ -1034,7 +1033,7 @@ pub struct ListAssessmentTemplatesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAssessmentTemplatesResponse {
     /// <p>A list of ARNs that specifies the assessment templates returned by the action.</p>
     #[serde(rename = "assessmentTemplateArns")]
@@ -1062,7 +1061,7 @@ pub struct ListEventSubscriptionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListEventSubscriptionsResponse {
     /// <p> When a response is generated, if there is more data to be listed, this parameter is present in the response and contains the value to use for the <b>nextToken</b> parameter in a subsequent pagination request. If there is no more data to be listed, this parameter is set to null.</p>
     #[serde(rename = "nextToken")]
@@ -1089,7 +1088,7 @@ pub struct ListExclusionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListExclusionsResponse {
     /// <p>A list of exclusions' ARNs returned by the action.</p>
     #[serde(rename = "exclusionArns")]
@@ -1121,7 +1120,7 @@ pub struct ListFindingsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListFindingsResponse {
     /// <p>A list of ARNs that specifies the findings returned by the action.</p>
     #[serde(rename = "findingArns")]
@@ -1145,7 +1144,7 @@ pub struct ListRulesPackagesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListRulesPackagesResponse {
     /// <p> When a response is generated, if there is more data to be listed, this parameter is present in the response and contains the value to use for the <b>nextToken</b> parameter in a subsequent pagination request. If there is no more data to be listed, this parameter is set to null.</p>
     #[serde(rename = "nextToken")]
@@ -1164,7 +1163,7 @@ pub struct ListTagsForResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
     /// <p>A collection of key and value pairs.</p>
     #[serde(rename = "tags")]
@@ -1173,7 +1172,7 @@ pub struct ListTagsForResourceResponse {
 
 /// <p>Contains information about the network interfaces interacting with an EC2 instance. This data type is used as one of the elements of the <a>AssetAttributes</a> data type.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct NetworkInterface {
     /// <p>The IP addresses associated with the network interface.</p>
     #[serde(rename = "ipv6Addresses")]
@@ -1233,7 +1232,7 @@ pub struct PreviewAgentsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PreviewAgentsResponse {
     /// <p>The resulting list of agents.</p>
     #[serde(rename = "agentPreviews")]
@@ -1246,7 +1245,7 @@ pub struct PreviewAgentsResponse {
 
 /// <p>Contains information about a private IP address associated with a network interface. This data type is used as a response element in the <a>DescribeFindings</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PrivateIp {
     /// <p>The DNS name of the private IP address.</p>
     #[serde(rename = "privateDnsName")]
@@ -1276,7 +1275,7 @@ pub struct RemoveAttributesFromFindingsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RemoveAttributesFromFindingsResponse {
     /// <p>Attributes details that cannot be described. An error code is provided for each failed item.</p>
     #[serde(rename = "failedItems")]
@@ -1285,7 +1284,7 @@ pub struct RemoveAttributesFromFindingsResponse {
 
 /// <p>Contains information about a resource group. The resource group defines a set of tags that, when queried, identify the AWS resources that make up the assessment target. This data type is used as the response element in the <a>DescribeResourceGroups</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResourceGroup {
     /// <p>The ARN of the resource group.</p>
     #[serde(rename = "arn")]
@@ -1312,7 +1311,7 @@ pub struct ResourceGroupTag {
 
 /// <p>Contains information about an Amazon Inspector rules package. This data type is used as the response element in the <a>DescribeRulesPackages</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RulesPackage {
     /// <p>The ARN of the rules package.</p>
     #[serde(rename = "arn")]
@@ -1334,7 +1333,7 @@ pub struct RulesPackage {
 
 /// <p>This data type contains key-value pairs that identify various Amazon resources.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Scope {
     /// <p>The type of the scope.</p>
     #[serde(rename = "key")]
@@ -1348,7 +1347,7 @@ pub struct Scope {
 
 /// <p>Contains information about a security group associated with a network interface. This data type is used as one of the elements of the <a>NetworkInterface</a> data type.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SecurityGroup {
     /// <p>The ID of the security group.</p>
     #[serde(rename = "groupId")]
@@ -1383,7 +1382,7 @@ pub struct StartAssessmentRunRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartAssessmentRunResponse {
     /// <p>The ARN of the assessment run that has been started.</p>
     #[serde(rename = "assessmentRunArn")]
@@ -1416,7 +1415,7 @@ pub struct SubscribeToEventRequest {
 
 /// <p>This data type is used as a response element in the <a>ListEventSubscriptions</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Subscription {
     /// <p>The list of existing event subscriptions.</p>
     #[serde(rename = "eventSubscriptions")]
@@ -1443,7 +1442,7 @@ pub struct Tag {
 
 /// <p>The metadata about the Amazon Inspector application data metrics collected by the agent. This data type is used as the response element in the <a>GetTelemetryMetadata</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TelemetryMetadata {
     /// <p>The count of messages that the agent sends to the Amazon Inspector service.</p>
     #[serde(rename = "count")]
@@ -3817,10 +3816,7 @@ impl InspectorClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> InspectorClient {
-        InspectorClient {
-            client: Client::shared(),
-            region,
-        }
+        Self::new_with_client(Client::shared(), region)
     }
 
     pub fn new_with<P, D>(
@@ -3834,10 +3830,14 @@ impl InspectorClient {
         D: DispatchSignedRequest + Send + Sync + 'static,
         D::Future: Send,
     {
-        InspectorClient {
-            client: Client::new_with(credentials_provider, request_dispatcher),
+        Self::new_with_client(
+            Client::new_with(credentials_provider, request_dispatcher),
             region,
-        }
+        )
+    }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> InspectorClient {
+        InspectorClient { client, region }
     }
 }
 

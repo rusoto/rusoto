@@ -9,17 +9,16 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
+#![allow(warnings)]
 
-use std::error::Error;
-use std::fmt;
-
-#[allow(warnings)]
 use futures::future;
 use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
+use std::error::Error;
+use std::fmt;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
@@ -27,7 +26,7 @@ use rusoto_core::signature::SignedRequest;
 use serde_json;
 /// <p>A Channel resource configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Channel {
     /// <p>The Amazon Resource Name (ARN) assigned to the Channel.</p>
     #[serde(rename = "Arn")]
@@ -62,7 +61,7 @@ pub struct CmafEncryption {
 
 /// <p>A Common Media Application Format (CMAF) packaging configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CmafPackage {
     #[serde(rename = "Encryption")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -126,7 +125,7 @@ pub struct CreateChannelRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateChannelResponse {
     /// <p>The Amazon Resource Name (ARN) assigned to the Channel.</p>
     #[serde(rename = "Arn")]
@@ -199,7 +198,7 @@ pub struct CreateOriginEndpointRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateOriginEndpointResponse {
     /// <p>The Amazon Resource Name (ARN) assigned to the OriginEndpoint.</p>
     #[serde(rename = "Arn")]
@@ -270,6 +269,12 @@ pub struct DashEncryption {
 /// <p>A Dynamic Adaptive Streaming over HTTP (DASH) packaging configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DashPackage {
+    #[serde(rename = "AdTriggers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ad_triggers: Option<Vec<String>>,
+    #[serde(rename = "AdsOnDeliveryRestrictions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ads_on_delivery_restrictions: Option<String>,
     #[serde(rename = "Encryption")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub encryption: Option<DashEncryption>,
@@ -326,7 +331,7 @@ pub struct DeleteChannelRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteChannelResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -337,7 +342,7 @@ pub struct DeleteOriginEndpointRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteOriginEndpointResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -348,7 +353,7 @@ pub struct DescribeChannelRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeChannelResponse {
     /// <p>The Amazon Resource Name (ARN) assigned to the Channel.</p>
     #[serde(rename = "Arn")]
@@ -378,7 +383,7 @@ pub struct DescribeOriginEndpointRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeOriginEndpointResponse {
     /// <p>The Amazon Resource Name (ARN) assigned to the OriginEndpoint.</p>
     #[serde(rename = "Arn")]
@@ -461,7 +466,7 @@ pub struct HlsEncryption {
 
 /// <p>An HTTP Live Streaming (HLS) ingest resource configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct HlsIngest {
     /// <p>A list of endpoints to which the source stream should be sent.</p>
     #[serde(rename = "IngestEndpoints")]
@@ -471,7 +476,7 @@ pub struct HlsIngest {
 
 /// <p>A HTTP Live Streaming (HLS) manifest configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct HlsManifest {
     /// <p>This setting controls how ad markers are included in the packaged OriginEndpoint.
     /// &quot;NONE&quot; will omit all SCTE-35 ad markers from the output.
@@ -533,6 +538,12 @@ pub struct HlsManifestCreateOrUpdateParameters {
     #[serde(rename = "AdMarkers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ad_markers: Option<String>,
+    #[serde(rename = "AdTriggers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ad_triggers: Option<Vec<String>>,
+    #[serde(rename = "AdsOnDeliveryRestrictions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ads_on_delivery_restrictions: Option<String>,
     /// <p>The ID of the manifest. The ID must be unique within the OriginEndpoint and it cannot be changed after it is created.</p>
     #[serde(rename = "Id")]
     pub id: String,
@@ -580,6 +591,12 @@ pub struct HlsPackage {
     #[serde(rename = "AdMarkers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ad_markers: Option<String>,
+    #[serde(rename = "AdTriggers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ad_triggers: Option<Vec<String>>,
+    #[serde(rename = "AdsOnDeliveryRestrictions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ads_on_delivery_restrictions: Option<String>,
     #[serde(rename = "Encryption")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub encryption: Option<HlsEncryption>,
@@ -625,7 +642,7 @@ pub struct HlsPackage {
 
 /// <p>An endpoint for ingesting source content for a Channel.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct IngestEndpoint {
     /// <p>The system generated unique identifier for the IngestEndpoint</p>
     #[serde(rename = "Id")]
@@ -658,7 +675,7 @@ pub struct ListChannelsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListChannelsResponse {
     /// <p>A list of Channel records.</p>
     #[serde(rename = "Channels")]
@@ -687,7 +704,7 @@ pub struct ListOriginEndpointsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListOriginEndpointsResponse {
     /// <p>A token that can be used to resume pagination from the end of the collection.</p>
     #[serde(rename = "NextToken")]
@@ -706,7 +723,7 @@ pub struct ListTagsForResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -741,7 +758,7 @@ pub struct MssPackage {
 
 /// <p>An OriginEndpoint resource configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct OriginEndpoint {
     /// <p>The Amazon Resource Name (ARN) assigned to the OriginEndpoint.</p>
     #[serde(rename = "Arn")]
@@ -806,7 +823,7 @@ pub struct RotateChannelCredentialsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RotateChannelCredentialsResponse {
     /// <p>The Amazon Resource Name (ARN) assigned to the Channel.</p>
     #[serde(rename = "Arn")]
@@ -839,7 +856,7 @@ pub struct RotateIngestEndpointCredentialsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct RotateIngestEndpointCredentialsResponse {
     /// <p>The Amazon Resource Name (ARN) assigned to the Channel.</p>
     #[serde(rename = "Arn")]
@@ -932,7 +949,7 @@ pub struct UpdateChannelRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateChannelResponse {
     /// <p>The Amazon Resource Name (ARN) assigned to the Channel.</p>
     #[serde(rename = "Arn")]
@@ -997,7 +1014,7 @@ pub struct UpdateOriginEndpointRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateOriginEndpointResponse {
     /// <p>The Amazon Resource Name (ARN) assigned to the OriginEndpoint.</p>
     #[serde(rename = "Arn")]
@@ -2040,10 +2057,7 @@ impl MediaPackageClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> MediaPackageClient {
-        MediaPackageClient {
-            client: Client::shared(),
-            region,
-        }
+        Self::new_with_client(Client::shared(), region)
     }
 
     pub fn new_with<P, D>(
@@ -2057,10 +2071,14 @@ impl MediaPackageClient {
         D: DispatchSignedRequest + Send + Sync + 'static,
         D::Future: Send,
     {
-        MediaPackageClient {
-            client: Client::new_with(credentials_provider, request_dispatcher),
+        Self::new_with_client(
+            Client::new_with(credentials_provider, request_dispatcher),
             region,
-        }
+        )
+    }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> MediaPackageClient {
+        MediaPackageClient { client, region }
     }
 }
 

@@ -9,17 +9,16 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
+#![allow(warnings)]
 
-use std::error::Error;
-use std::fmt;
-
-#[allow(warnings)]
 use futures::future;
 use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
+use std::error::Error;
+use std::fmt;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
@@ -44,7 +43,7 @@ pub struct AdditionalAuthenticationProvider {
 
 /// <p><p>Describes an API key.</p> <p>Customers invoke AWS AppSync GraphQL API operations with API keys as an identity mechanism. There are two key versions:</p> <p> <b>da1</b>: This version was introduced at launch in November 2017. These keys always expire after 7 days. Key expiration is managed by Amazon DynamoDB TTL. The keys ceased to be valid after February 21, 2018 and should not be used after that date.</p> <ul> <li> <p> <code>ListApiKeys</code> returns the expiration time in milliseconds.</p> </li> <li> <p> <code>CreateApiKey</code> returns the expiration time in milliseconds.</p> </li> <li> <p> <code>UpdateApiKey</code> is not available for this key version.</p> </li> <li> <p> <code>DeleteApiKey</code> deletes the item from the table.</p> </li> <li> <p>Expiration is stored in Amazon DynamoDB as milliseconds. This results in a bug where keys are not automatically deleted because DynamoDB expects the TTL to be stored in seconds. As a one-time action, we will delete these keys from the table after February 21, 2018.</p> </li> </ul> <p> <b>da2</b>: This version was introduced in February 2018 when AppSync added support to extend key expiration.</p> <ul> <li> <p> <code>ListApiKeys</code> returns the expiration time in seconds.</p> </li> <li> <p> <code>CreateApiKey</code> returns the expiration time in seconds and accepts a user-provided expiration time in seconds.</p> </li> <li> <p> <code>UpdateApiKey</code> returns the expiration time in seconds and accepts a user-provided expiration time in seconds. Key expiration can only be updated while the key has not expired.</p> </li> <li> <p> <code>DeleteApiKey</code> deletes the item from the table.</p> </li> <li> <p>Expiration is stored in Amazon DynamoDB as seconds.</p> </li> </ul></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ApiKey {
     /// <p>A description of the purpose of the API key.</p>
     #[serde(rename = "description")]
@@ -116,7 +115,7 @@ pub struct CreateApiKeyRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateApiKeyResponse {
     /// <p>The API key.</p>
     #[serde(rename = "apiKey")]
@@ -166,7 +165,7 @@ pub struct CreateDataSourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDataSourceResponse {
     /// <p>The <code>DataSource</code> object.</p>
     #[serde(rename = "dataSource")]
@@ -202,7 +201,7 @@ pub struct CreateFunctionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateFunctionResponse {
     /// <p>The <code>Function</code> object.</p>
     #[serde(rename = "functionConfiguration")]
@@ -241,7 +240,7 @@ pub struct CreateGraphqlApiRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateGraphqlApiResponse {
     /// <p>The <code>GraphqlApi</code>.</p>
     #[serde(rename = "graphqlApi")]
@@ -282,7 +281,7 @@ pub struct CreateResolverRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateResolverResponse {
     /// <p>The <code>Resolver</code> object.</p>
     #[serde(rename = "resolver")]
@@ -304,7 +303,7 @@ pub struct CreateTypeRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateTypeResponse {
     /// <p>The <code>Type</code> object.</p>
     #[serde(rename = "type")]
@@ -314,7 +313,7 @@ pub struct CreateTypeResponse {
 
 /// <p>Describes a data source.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DataSource {
     /// <p>The data source ARN.</p>
     #[serde(rename = "dataSourceArn")]
@@ -369,7 +368,7 @@ pub struct DeleteApiKeyRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteApiKeyResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -383,7 +382,7 @@ pub struct DeleteDataSourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDataSourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -397,7 +396,7 @@ pub struct DeleteFunctionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteFunctionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -408,7 +407,7 @@ pub struct DeleteGraphqlApiRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteGraphqlApiResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -425,7 +424,7 @@ pub struct DeleteResolverRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteResolverResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -439,7 +438,7 @@ pub struct DeleteTypeRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteTypeResponse {}
 
 /// <p>Describes an Amazon DynamoDB data source configuration.</p>
@@ -470,7 +469,7 @@ pub struct ElasticsearchDataSourceConfig {
 
 /// <p>A function is a reusable entity. Multiple functions can be used to compose the resolver logic.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct FunctionConfiguration {
     /// <p>The name of the <code>DataSource</code>.</p>
     #[serde(rename = "dataSourceName")]
@@ -517,7 +516,7 @@ pub struct GetDataSourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDataSourceResponse {
     /// <p>The <code>DataSource</code> object.</p>
     #[serde(rename = "dataSource")]
@@ -536,7 +535,7 @@ pub struct GetFunctionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetFunctionResponse {
     /// <p>The <code>Function</code> object.</p>
     #[serde(rename = "functionConfiguration")]
@@ -552,7 +551,7 @@ pub struct GetGraphqlApiRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetGraphqlApiResponse {
     /// <p>The <code>GraphqlApi</code> object.</p>
     #[serde(rename = "graphqlApi")]
@@ -594,7 +593,7 @@ pub struct GetResolverRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetResolverResponse {
     /// <p>The <code>Resolver</code> object.</p>
     #[serde(rename = "resolver")]
@@ -610,7 +609,7 @@ pub struct GetSchemaCreationStatusRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSchemaCreationStatusResponse {
     /// <p>Detailed information about the status of the schema creation operation.</p>
     #[serde(rename = "details")]
@@ -636,7 +635,7 @@ pub struct GetTypeRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetTypeResponse {
     /// <p>The <code>Type</code> object.</p>
     #[serde(rename = "type")]
@@ -646,7 +645,7 @@ pub struct GetTypeResponse {
 
 /// <p>Describes a GraphQL API.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GraphqlApi {
     /// <p>A list of additional authentication providers for the <code>GraphqlApi</code> API.</p>
     #[serde(rename = "additionalAuthenticationProviders")]
@@ -727,7 +726,7 @@ pub struct ListApiKeysRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListApiKeysResponse {
     /// <p>The <code>ApiKey</code> objects.</p>
     #[serde(rename = "apiKeys")]
@@ -755,7 +754,7 @@ pub struct ListDataSourcesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDataSourcesResponse {
     /// <p>The <code>DataSource</code> objects.</p>
     #[serde(rename = "dataSources")]
@@ -783,7 +782,7 @@ pub struct ListFunctionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListFunctionsResponse {
     /// <p>A list of <code>Function</code> objects.</p>
     #[serde(rename = "functions")]
@@ -808,7 +807,7 @@ pub struct ListGraphqlApisRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListGraphqlApisResponse {
     /// <p>The <code>GraphqlApi</code> objects.</p>
     #[serde(rename = "graphqlApis")]
@@ -839,7 +838,7 @@ pub struct ListResolversByFunctionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListResolversByFunctionResponse {
     /// <p>An identifier that can be used to return the next set of items in the list.</p>
     #[serde(rename = "nextToken")]
@@ -870,7 +869,7 @@ pub struct ListResolversRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListResolversResponse {
     /// <p>An identifier to be passed in the next request to this operation to return the next set of items in the list.</p>
     #[serde(rename = "nextToken")]
@@ -890,7 +889,7 @@ pub struct ListTagsForResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
     /// <p>A <code>TagMap</code> object.</p>
     #[serde(rename = "tags")]
@@ -917,7 +916,7 @@ pub struct ListTypesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTypesResponse {
     /// <p>An identifier to be passed in the next request to this operation to return the next set of items in the list.</p>
     #[serde(rename = "nextToken")]
@@ -935,6 +934,10 @@ pub struct LogConfig {
     /// <p>The service role that AWS AppSync will assume to publish to Amazon CloudWatch logs in your account. </p>
     #[serde(rename = "cloudWatchLogsRoleArn")]
     pub cloud_watch_logs_role_arn: String,
+    /// <p>Set to TRUE to exclude sections that contain information such as headers, context, and evaluated mapping templates, regardless of logging level.</p>
+    #[serde(rename = "excludeVerboseContent")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub exclude_verbose_content: Option<bool>,
     /// <p><p>The field logging level. Values can be NONE, ERROR, or ALL. </p> <ul> <li> <p> <b>NONE</b>: No field-level logs are captured.</p> </li> <li> <p> <b>ERROR</b>: Logs the following information only for the fields that are in error:</p> <ul> <li> <p>The error section in the server response.</p> </li> <li> <p>Field-level errors.</p> </li> <li> <p>The generated request/response functions that got resolved for error fields.</p> </li> </ul> </li> <li> <p> <b>ALL</b>: The following information is logged for all fields in the query:</p> <ul> <li> <p>Field-level tracing information.</p> </li> <li> <p>The generated request/response functions that got resolved for each field.</p> </li> </ul> </li> </ul></p>
     #[serde(rename = "fieldLogLevel")]
     pub field_log_level: String,
@@ -1009,7 +1012,7 @@ pub struct RelationalDatabaseDataSourceConfig {
 
 /// <p>Describes a resolver.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Resolver {
     /// <p>The resolver data source name.</p>
     #[serde(rename = "dataSourceName")]
@@ -1061,7 +1064,7 @@ pub struct StartSchemaCreationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StartSchemaCreationResponse {
     /// <p>The current state of the schema (PROCESSING, FAILED, SUCCESS, or NOT_APPLICABLE). When the schema is in the ACTIVE state, you can add data.</p>
     #[serde(rename = "status")]
@@ -1080,12 +1083,12 @@ pub struct TagResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
 
 /// <p>Describes a type.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Type {
     /// <p>The type ARN.</p>
     #[serde(rename = "arn")]
@@ -1120,7 +1123,7 @@ pub struct UntagResourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1142,7 +1145,7 @@ pub struct UpdateApiKeyRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateApiKeyResponse {
     /// <p>The API key.</p>
     #[serde(rename = "apiKey")]
@@ -1192,7 +1195,7 @@ pub struct UpdateDataSourceRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDataSourceResponse {
     /// <p>The updated <code>DataSource</code> object.</p>
     #[serde(rename = "dataSource")]
@@ -1231,7 +1234,7 @@ pub struct UpdateFunctionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateFunctionResponse {
     /// <p>The <code>Function</code> object.</p>
     #[serde(rename = "functionConfiguration")]
@@ -1270,7 +1273,7 @@ pub struct UpdateGraphqlApiRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateGraphqlApiResponse {
     /// <p>The updated <code>GraphqlApi</code> object.</p>
     #[serde(rename = "graphqlApi")]
@@ -1311,7 +1314,7 @@ pub struct UpdateResolverRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateResolverResponse {
     /// <p>The updated <code>Resolver</code> object.</p>
     #[serde(rename = "resolver")]
@@ -1337,7 +1340,7 @@ pub struct UpdateTypeRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateTypeResponse {
     /// <p>The updated <code>Type</code> object.</p>
     #[serde(rename = "type")]
@@ -3620,10 +3623,7 @@ impl AppSyncClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> AppSyncClient {
-        AppSyncClient {
-            client: Client::shared(),
-            region,
-        }
+        Self::new_with_client(Client::shared(), region)
     }
 
     pub fn new_with<P, D>(
@@ -3637,10 +3637,14 @@ impl AppSyncClient {
         D: DispatchSignedRequest + Send + Sync + 'static,
         D::Future: Send,
     {
-        AppSyncClient {
-            client: Client::new_with(credentials_provider, request_dispatcher),
+        Self::new_with_client(
+            Client::new_with(credentials_provider, request_dispatcher),
             region,
-        }
+        )
+    }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> AppSyncClient {
+        AppSyncClient { client, region }
     }
 }
 

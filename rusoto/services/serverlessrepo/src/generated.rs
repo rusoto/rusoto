@@ -9,17 +9,16 @@
 //  must be updated to generate the changes.
 //
 // =================================================================
+#![allow(warnings)]
 
-use std::error::Error;
-use std::fmt;
-
-#[allow(warnings)]
 use futures::future;
 use futures::Future;
 use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
+use std::error::Error;
+use std::fmt;
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
@@ -27,7 +26,7 @@ use rusoto_core::signature::SignedRequest;
 use serde_json;
 /// <p>A nested application summary.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ApplicationDependencySummary {
     /// <p>The Amazon Resource Name (ARN) of the nested application.</p>
     #[serde(rename = "ApplicationId")]
@@ -55,7 +54,7 @@ pub struct ApplicationPolicyStatement {
 
 /// <p>Summary of details about the application.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ApplicationSummary {
     /// <p>The application Amazon Resource Name (ARN).</p>
     #[serde(rename = "ApplicationId")]
@@ -154,7 +153,7 @@ pub struct CreateApplicationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateApplicationResponse {
     /// <p>The application Amazon Resource Name (ARN).</p>
     #[serde(rename = "ApplicationId")]
@@ -229,7 +228,7 @@ pub struct CreateApplicationVersionRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateApplicationVersionResponse {
     /// <p>The application Amazon Resource Name (ARN).</p>
     #[serde(rename = "ApplicationId")]
@@ -381,7 +380,7 @@ pub struct CreateCloudFormationChangeSetRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateCloudFormationChangeSetResponse {
     /// <p>The application Amazon Resource Name (ARN).</p>
     #[serde(rename = "ApplicationId")]
@@ -417,7 +416,7 @@ pub struct CreateCloudFormationTemplateRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateCloudFormationTemplateResponse {
     /// <p>The application Amazon Resource Name (ARN).</p>
     #[serde(rename = "ApplicationId")]
@@ -469,7 +468,7 @@ pub struct GetApplicationPolicyRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetApplicationPolicyResponse {
     /// <p>An array of policy statements applied to the application.</p>
     #[serde(rename = "Statements")]
@@ -489,7 +488,7 @@ pub struct GetApplicationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetApplicationResponse {
     /// <p>The application Amazon Resource Name (ARN).</p>
     #[serde(rename = "ApplicationId")]
@@ -548,7 +547,7 @@ pub struct GetCloudFormationTemplateRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetCloudFormationTemplateResponse {
     /// <p>The application Amazon Resource Name (ARN).</p>
     #[serde(rename = "ApplicationId")]
@@ -605,7 +604,7 @@ pub struct ListApplicationDependenciesRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListApplicationDependenciesResponse {
     /// <p>An array of application summaries nested in the application.</p>
     #[serde(rename = "Dependencies")]
@@ -633,7 +632,7 @@ pub struct ListApplicationVersionsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListApplicationVersionsResponse {
     /// <p>The token to request the next page of results.</p>
     #[serde(rename = "NextToken")]
@@ -658,7 +657,7 @@ pub struct ListApplicationsRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListApplicationsResponse {
     /// <p>An array of application summaries.</p>
     #[serde(rename = "Applications")]
@@ -672,7 +671,7 @@ pub struct ListApplicationsResponse {
 
 /// <p>Parameters supported by the application.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ParameterDefinition {
     /// <p>A regular expression that represents the patterns to allow for String types.</p>
     #[serde(rename = "AllowedPattern")]
@@ -766,7 +765,7 @@ pub struct PutApplicationPolicyRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutApplicationPolicyResponse {
     /// <p>An array of policy statements applied to the application.</p>
     #[serde(rename = "Statements")]
@@ -852,7 +851,7 @@ pub struct UpdateApplicationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateApplicationResponse {
     /// <p>The application Amazon Resource Name (ARN).</p>
     #[serde(rename = "ApplicationId")]
@@ -902,7 +901,7 @@ pub struct UpdateApplicationResponse {
 
 /// <p>Application version details.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Version {
     /// <p>The application Amazon Resource Name (ARN).</p>
     #[serde(rename = "ApplicationId")]
@@ -962,7 +961,7 @@ pub struct Version {
 
 /// <p>An application version summary.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct VersionSummary {
     /// <p>The application Amazon Resource Name (ARN).</p>
     #[serde(rename = "ApplicationId")]
@@ -1881,10 +1880,7 @@ impl ServerlessRepoClient {
     ///
     /// The client will use the default credentials provider and tls client.
     pub fn new(region: region::Region) -> ServerlessRepoClient {
-        ServerlessRepoClient {
-            client: Client::shared(),
-            region,
-        }
+        Self::new_with_client(Client::shared(), region)
     }
 
     pub fn new_with<P, D>(
@@ -1898,10 +1894,14 @@ impl ServerlessRepoClient {
         D: DispatchSignedRequest + Send + Sync + 'static,
         D::Future: Send,
     {
-        ServerlessRepoClient {
-            client: Client::new_with(credentials_provider, request_dispatcher),
+        Self::new_with_client(
+            Client::new_with(credentials_provider, request_dispatcher),
             region,
-        }
+        )
+    }
+
+    pub fn new_with_client(client: Client, region: region::Region) -> ServerlessRepoClient {
+        ServerlessRepoClient { client, region }
     }
 }
 

@@ -155,14 +155,10 @@ fn generate_documentation(operation: &Operation, service: &Service<'_>) -> Strin
     };
 
     // Specialized docs for services:
-    match service.name().to_ascii_lowercase().as_ref() {
-        "route 53" => {
+    if let "route 53" = service.name().to_ascii_lowercase().as_ref() {
             if operation.name == "ChangeResourceRecordSets" {
                 docs = format!("/// For TXT records, see <a href=\"./util/fn.quote_txt_record.html\">util::quote_txt_record</a>\n{}", docs);
             }
-            ()
-        }
-        _ => (),
     }
 
     docs
@@ -170,9 +166,7 @@ fn generate_documentation(operation: &Operation, service: &Service<'_>) -> Strin
 
 fn generate_payload_serialization(service: &Service<'_>, operation: &Operation) -> Option<String> {
     // nothing to do if there's no input type
-    if operation.input.is_none() {
-        return None;
-    }
+    operation.input.as_ref()?;
 
     let input = operation.input.as_ref().unwrap();
     let input_shape = service.get_shape(&input.shape).unwrap();
