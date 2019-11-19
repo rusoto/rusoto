@@ -23,7 +23,7 @@ To use `rusoto_mediastore` in your application, add it as a dependency in your `
 
 ```toml
 [dependencies]
-rusoto_mediastore = "0.41.0"
+rusoto_mediastore = "0.42.0"
 ```
 
 ## Crate Features

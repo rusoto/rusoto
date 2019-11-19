@@ -3,6 +3,9 @@
 ## [Unreleased]
 
 (Please put changes here)
+
+## [0.42.0] - 2019-11-18
+
 - Use static initializer for AWS profile regex
 - Add QLDB service
 - Add QLDB Session service

@@ -23,7 +23,7 @@ To use `rusoto_greengrass` in your application, add it as a dependency in your `
 
 ```toml
 [dependencies]
-rusoto_greengrass = "0.41.0"
+rusoto_greengrass = "0.42.0"
 ```
 
 ## Crate Features

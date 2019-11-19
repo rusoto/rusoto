@@ -7,7 +7,7 @@ license = "MIT"
 name = "rusoto_sagemaker_runtime"
 readme = "README.md"
 repository = "https://github.com/rusoto/rusoto"
-version = "0.41.0"
+version = "0.42.0"
 homepage = "https://www.rusoto.org/"
 edition = "2018"
 exclude = ["test_resources/*"]
@@ -21,11 +21,11 @@ serde = "1.0.2"
 serde_derive = "1.0.2"
 
 [dependencies.rusoto_core]
-version = "0.41.0"
+version = "0.42.0"
 path = "../../core"
 default-features = false
 [dev-dependencies.rusoto_mock]
-version = "0.41.0"
+version = "0.42.0"
 path = "../../../mock"
 default-features = false
 

@@ -23,7 +23,7 @@ To use `rusoto_route53domains` in your application, add it as a dependency in yo
 
 ```toml
 [dependencies]
-rusoto_route53domains = "0.41.0"
+rusoto_route53domains = "0.42.0"
 ```
 
 ## Crate Features

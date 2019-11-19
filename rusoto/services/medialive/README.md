@@ -23,7 +23,7 @@ To use `rusoto_medialive` in your application, add it as a dependency in your `C
 
 ```toml
 [dependencies]
-rusoto_medialive = "0.41.0"
+rusoto_medialive = "0.42.0"
 ```
 
 ## Crate Features
