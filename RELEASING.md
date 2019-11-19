@@ -25,7 +25,7 @@ Rusoto uses [semantic versioning 2.0.0](http://semver.org/).
 1. Ensure all PRs included in the release are reflected in [the CHANGELOG](https://github.com/rusoto/rusoto/blob/master/CHANGELOG.md). If in doubt, add an entry so it's recorded. Can be a separate PR or part of the one below.
 2. Make a pull request that bumps version numbers for `rusoto_core`, `rusoto_credential`, `rusoto_signature` and `rusoto_mock`.  Service versions are in the `services.json` file in the codegen project. Otherwise they are in the `Cargo.toml` files for each project. Make sure the root Rusoto README example gets updated with the new version. Also verify all uses of `rusoto_credential` get updated, as they often use `0.42` instead of `0.42.0` and can be missed while using `grep`.
 3. Run integration tests on the release branch: `make integration_test`.
-4. Merge release PR. See below for release checklist.
+4. Merge release PR. See below for [release checklist](https://github.com/rusoto/rusoto/blob/update-releasing-doc/RELEASING.md#publishing-pr-checklist).
 5. Publish new version of `rusoto_credential`.
 6. Publish new version of `rusoto_signature`.
 7. Publish new version of `rusoto_core`.
