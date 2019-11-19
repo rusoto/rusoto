@@ -23,7 +23,7 @@ To use `rusoto_kinesis_video_media` in your application, add it as a dependency 
 
 ```toml
 [dependencies]
-rusoto_kinesis_video_media = "0.41.0"
+rusoto_kinesis_video_media = "0.42.0"
 ```
 
 ## Crate Features

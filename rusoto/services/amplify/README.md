@@ -23,7 +23,7 @@ To use `rusoto_amplify` in your application, add it as a dependency in your `Car
 
 ```toml
 [dependencies]
-rusoto_amplify = "0.41.0"
+rusoto_amplify = "0.42.0"
 ```
 
 ## Crate Features

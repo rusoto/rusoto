@@ -23,7 +23,7 @@ To use `rusoto_codepipeline` in your application, add it as a dependency in your
 
 ```toml
 [dependencies]
-rusoto_codepipeline = "0.41.0"
+rusoto_codepipeline = "0.42.0"
 ```
 
 ## Crate Features

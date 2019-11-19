@@ -23,7 +23,7 @@ To use `rusoto_clouddirectory` in your application, add it as a dependency in yo
 
 ```toml
 [dependencies]
-rusoto_clouddirectory = "0.41.0"
+rusoto_clouddirectory = "0.42.0"
 ```
 
 ## Crate Features
