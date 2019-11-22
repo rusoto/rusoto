@@ -2228,6 +2228,12 @@ impl CodeBuildClient {
     }
 }
 
+impl fmt::Debug for CodeBuildClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "CodeBuildClient {{ region: {:?} }}", &self.region)
+    }
+}
+
 impl CodeBuild for CodeBuildClient {
     /// <p>Deletes one or more builds.</p>
     fn batch_delete_builds(

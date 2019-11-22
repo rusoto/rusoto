@@ -578,6 +578,12 @@ impl IotJobsDataClient {
     }
 }
 
+impl fmt::Debug for IotJobsDataClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "IotJobsDataClient {{ region: {:?} }}", &self.region)
+    }
+}
+
 impl IotJobsData for IotJobsDataClient {
     /// <p>Gets details of a job execution.</p>
     fn describe_job_execution(

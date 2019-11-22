@@ -2058,6 +2058,12 @@ impl CloudTrailClient {
     }
 }
 
+impl fmt::Debug for CloudTrailClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "CloudTrailClient {{ region: {:?} }}", &self.region)
+    }
+}
+
 impl CloudTrail for CloudTrailClient {
     /// <p>Adds one or more tags to a trail, up to a limit of 50. Tags must be unique per trail. Overwrites an existing tag's value when a new value is specified for an existing tag key. If you specify a key without a value, the tag will be created with the specified key and a value of null. You can tag a trail that applies to all regions only from the region in which the trail was created (that is, from its home region).</p>
     fn add_tags(&self, input: AddTagsRequest) -> RusotoFuture<AddTagsResponse, AddTagsError> {

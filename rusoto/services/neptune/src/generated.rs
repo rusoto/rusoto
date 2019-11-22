@@ -12787,6 +12787,12 @@ impl NeptuneClient {
     }
 }
 
+impl fmt::Debug for NeptuneClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "NeptuneClient {{ region: {:?} }}", &self.region)
+    }
+}
+
 impl Neptune for NeptuneClient {
     /// <p>Associates an Identity and Access Management (IAM) role from an Neptune DB cluster.</p>
     fn add_role_to_db_cluster(

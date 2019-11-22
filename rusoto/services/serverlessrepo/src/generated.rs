@@ -1905,6 +1905,12 @@ impl ServerlessRepoClient {
     }
 }
 
+impl fmt::Debug for ServerlessRepoClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "ServerlessRepoClient {{ region: {:?} }}", &self.region)
+    }
+}
+
 impl ServerlessRepo for ServerlessRepoClient {
     /// <p>Creates an application, optionally including an AWS SAM file to create the first application version in the same call.</p>
     fn create_application(

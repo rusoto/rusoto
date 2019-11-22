@@ -2527,6 +2527,16 @@ impl DynamodbAcceleratorClient {
     }
 }
 
+impl fmt::Debug for DynamodbAcceleratorClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(
+            f,
+            "DynamodbAcceleratorClient {{ region: {:?} }}",
+            &self.region
+        )
+    }
+}
+
 impl DynamodbAccelerator for DynamodbAcceleratorClient {
     /// <p>Creates a DAX cluster. All nodes in the cluster run the same DAX caching software.</p>
     fn create_cluster(

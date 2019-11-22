@@ -4191,6 +4191,12 @@ impl SecurityHubClient {
     }
 }
 
+impl fmt::Debug for SecurityHubClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "SecurityHubClient {{ region: {:?} }}", &self.region)
+    }
+}
+
 impl SecurityHub for SecurityHubClient {
     /// <p>Accepts the invitation to be a member account and be monitored by the Security Hub master account that the invitation was sent from. When the member account accepts the invitation, permission is granted to the master account to view findings generated in the member account.</p>
     fn accept_invitation(

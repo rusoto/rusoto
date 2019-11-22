@@ -6366,6 +6366,12 @@ impl CodeDeployClient {
     }
 }
 
+impl fmt::Debug for CodeDeployClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "CodeDeployClient {{ region: {:?} }}", &self.region)
+    }
+}
+
 impl CodeDeploy for CodeDeployClient {
     /// <p>Adds tags to on-premises instances.</p>
     fn add_tags_to_on_premises_instances(

@@ -1836,6 +1836,12 @@ impl LicenseManagerClient {
     }
 }
 
+impl fmt::Debug for LicenseManagerClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "LicenseManagerClient {{ region: {:?} }}", &self.region)
+    }
+}
+
 impl LicenseManager for LicenseManagerClient {
     /// <p>Creates a new license configuration object. A license configuration is an abstraction of a customer license agreement that can be consumed and enforced by License Manager. Components include specifications for the license type (licensing by instance, socket, CPU, or VCPU), tenancy (shared tenancy, Amazon EC2 Dedicated Instance, Amazon EC2 Dedicated Host, or any of these), host affinity (how long a VM must be associated with a host), the number of licenses purchased and used.</p>
     fn create_license_configuration(

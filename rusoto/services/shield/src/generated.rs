@@ -1630,6 +1630,12 @@ impl ShieldClient {
     }
 }
 
+impl fmt::Debug for ShieldClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "ShieldClient {{ region: {:?} }}", &self.region)
+    }
+}
+
 impl Shield for ShieldClient {
     /// <p>Authorizes the DDoS Response team (DRT) to access the specified Amazon S3 bucket containing your AWS WAF logs. You can associate up to 10 Amazon S3 buckets with your subscription.</p> <p>To use the services of the DRT and make an <code>AssociateDRTLogBucket</code> request, you must be subscribed to the <a href="https://aws.amazon.com/premiumsupport/business-support/">Business Support plan</a> or the <a href="https://aws.amazon.com/premiumsupport/enterprise-support/">Enterprise Support plan</a>.</p>
     fn associate_drt_log_bucket(

@@ -1367,6 +1367,12 @@ impl MediaStoreClient {
     }
 }
 
+impl fmt::Debug for MediaStoreClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "MediaStoreClient {{ region: {:?} }}", &self.region)
+    }
+}
+
 impl MediaStore for MediaStoreClient {
     /// <p>Creates a storage container to hold objects. A container is similar to a bucket in the Amazon S3 service.</p>
     fn create_container(

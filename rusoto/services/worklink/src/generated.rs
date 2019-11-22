@@ -2983,6 +2983,12 @@ impl WorklinkClient {
     }
 }
 
+impl fmt::Debug for WorklinkClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "WorklinkClient {{ region: {:?} }}", &self.region)
+    }
+}
+
 impl Worklink for WorklinkClient {
     /// <p>Specifies a domain to be associated to Amazon WorkLink.</p>
     fn associate_domain(

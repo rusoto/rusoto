@@ -6323,6 +6323,12 @@ impl ChimeClient {
     }
 }
 
+impl fmt::Debug for ChimeClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "ChimeClient {{ region: {:?} }}", &self.region)
+    }
+}
+
 impl Chime for ChimeClient {
     /// <p>Associates a phone number with the specified Amazon Chime user.</p>
     fn associate_phone_number_with_user(

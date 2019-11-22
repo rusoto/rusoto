@@ -357,6 +357,12 @@ impl QldbSessionClient {
     }
 }
 
+impl fmt::Debug for QldbSessionClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "QldbSessionClient {{ region: {:?} }}", &self.region)
+    }
+}
+
 impl QldbSession for QldbSessionClient {
     /// <p>Sends a command to an Amazon QLDB ledger.</p>
     fn send_command(

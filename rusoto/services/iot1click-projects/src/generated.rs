@@ -1348,6 +1348,16 @@ impl Iot1ClickProjectsClient {
     }
 }
 
+impl fmt::Debug for Iot1ClickProjectsClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(
+            f,
+            "Iot1ClickProjectsClient {{ region: {:?} }}",
+            &self.region
+        )
+    }
+}
+
 impl Iot1ClickProjects for Iot1ClickProjectsClient {
     /// <p>Associates a physical device with a placement.</p>
     fn associate_device_with_placement(

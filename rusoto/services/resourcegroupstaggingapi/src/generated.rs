@@ -515,6 +515,16 @@ impl ResourceGroupsTaggingApiClient {
     }
 }
 
+impl fmt::Debug for ResourceGroupsTaggingApiClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(
+            f,
+            "ResourceGroupsTaggingApiClient {{ region: {:?} }}",
+            &self.region
+        )
+    }
+}
+
 impl ResourceGroupsTaggingApi for ResourceGroupsTaggingApiClient {
     /// <p><p>Returns all the tagged or previously tagged resources that are located in the specified region for the AWS account. You can optionally specify <i>filters</i> (tags and resource types) in your request, depending on what information you want returned. The response includes all tags that are associated with the requested resources.</p> <note> <p>You can check the <code>PaginationToken</code> response parameter to determine if a query completed. Queries can occasionally return fewer results on a page than allowed. The <code>PaginationToken</code> response parameter value is <code>null</code> <i>only</i> when there are no more results to display. </p> </note></p>
     fn get_resources(

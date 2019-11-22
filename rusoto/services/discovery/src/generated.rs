@@ -2733,6 +2733,12 @@ impl DiscoveryClient {
     }
 }
 
+impl fmt::Debug for DiscoveryClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "DiscoveryClient {{ region: {:?} }}", &self.region)
+    }
+}
+
 impl Discovery for DiscoveryClient {
     /// <p>Associates one or more configuration items with an application.</p>
     fn associate_configuration_items_to_application(

@@ -643,6 +643,12 @@ impl MacieClient {
     }
 }
 
+impl fmt::Debug for MacieClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "MacieClient {{ region: {:?} }}", &self.region)
+    }
+}
+
 impl Macie for MacieClient {
     /// <p>Associates a specified AWS account with Amazon Macie as a member account.</p>
     fn associate_member_account(

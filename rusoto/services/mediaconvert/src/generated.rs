@@ -6031,6 +6031,12 @@ impl MediaConvertClient {
     }
 }
 
+impl fmt::Debug for MediaConvertClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "MediaConvertClient {{ region: {:?} }}", &self.region)
+    }
+}
+
 impl MediaConvert for MediaConvertClient {
     /// <p>Associates an AWS Certificate Manager (ACM) Amazon Resource Name (ARN) with AWS Elemental MediaConvert.</p>
     fn associate_certificate(

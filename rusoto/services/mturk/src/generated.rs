@@ -3395,6 +3395,12 @@ impl MechanicalTurkClient {
     }
 }
 
+impl fmt::Debug for MechanicalTurkClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "MechanicalTurkClient {{ region: {:?} }}", &self.region)
+    }
+}
+
 impl MechanicalTurk for MechanicalTurkClient {
     /// <p> The <code>AcceptQualificationRequest</code> operation approves a Worker's request for a Qualification. </p> <p> Only the owner of the Qualification type can grant a Qualification request for that type. </p> <p> A successful request for the <code>AcceptQualificationRequest</code> operation returns with no errors and an empty body. </p>
     fn accept_qualification_request(

@@ -3982,6 +3982,12 @@ impl IotAnalyticsClient {
     }
 }
 
+impl fmt::Debug for IotAnalyticsClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "IotAnalyticsClient {{ region: {:?} }}", &self.region)
+    }
+}
+
 impl IotAnalytics for IotAnalyticsClient {
     /// <p>Sends messages to a channel.</p>
     fn batch_put_message(

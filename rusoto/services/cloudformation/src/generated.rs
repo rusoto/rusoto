@@ -9827,6 +9827,12 @@ impl CloudFormationClient {
     }
 }
 
+impl fmt::Debug for CloudFormationClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "CloudFormationClient {{ region: {:?} }}", &self.region)
+    }
+}
+
 impl CloudFormation for CloudFormationClient {
     /// <p><p>Cancels an update on the specified stack. If the call completes successfully, the stack rolls back the update and reverts to the previous stack configuration.</p> <note> <p>You can cancel only stacks that are in the UPDATE<em>IN</em>PROGRESS state.</p> </note></p>
     fn cancel_update_stack(

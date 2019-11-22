@@ -508,6 +508,16 @@ impl MarketplaceMeteringClient {
     }
 }
 
+impl fmt::Debug for MarketplaceMeteringClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(
+            f,
+            "MarketplaceMeteringClient {{ region: {:?} }}",
+            &self.region
+        )
+    }
+}
+
 impl MarketplaceMetering for MarketplaceMeteringClient {
     /// <p>BatchMeterUsage is called from a SaaS application listed on the AWS Marketplace to post metering records for a set of customers.</p> <p>For identical requests, the API is idempotent; requests can be retried with the same records or a subset of the input records.</p> <p>Every request to BatchMeterUsage is for one product. If you need to meter usage for multiple products, you must make multiple calls to BatchMeterUsage.</p> <p>BatchMeterUsage can process up to 25 UsageRecords at a time.</p>
     fn batch_meter_usage(

@@ -12597,6 +12597,16 @@ impl CognitoIdentityProviderClient {
     }
 }
 
+impl fmt::Debug for CognitoIdentityProviderClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(
+            f,
+            "CognitoIdentityProviderClient {{ region: {:?} }}",
+            &self.region
+        )
+    }
+}
+
 impl CognitoIdentityProvider for CognitoIdentityProviderClient {
     /// <p>Adds additional user attributes to the user pool schema.</p>
     fn add_custom_attributes(

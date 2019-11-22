@@ -602,6 +602,12 @@ impl TranslateClient {
     }
 }
 
+impl fmt::Debug for TranslateClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "TranslateClient {{ region: {:?} }}", &self.region)
+    }
+}
+
 impl Translate for TranslateClient {
     /// <p>A synchronous action that deletes a custom terminology.</p>
     fn delete_terminology(

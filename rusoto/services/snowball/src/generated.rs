@@ -1791,6 +1791,12 @@ impl SnowballClient {
     }
 }
 
+impl fmt::Debug for SnowballClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "SnowballClient {{ region: {:?} }}", &self.region)
+    }
+}
+
 impl Snowball for SnowballClient {
     /// <p>Cancels a cluster job. You can only cancel a cluster job while it's in the <code>AwaitingQuorum</code> status. You'll have at least an hour after creating a cluster job to cancel it.</p>
     fn cancel_cluster(

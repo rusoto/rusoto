@@ -4470,6 +4470,12 @@ impl AppStreamClient {
     }
 }
 
+impl fmt::Debug for AppStreamClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "AppStreamClient {{ region: {:?} }}", &self.region)
+    }
+}
+
 impl AppStream for AppStreamClient {
     /// <p>Associates the specified fleet with the specified stack.</p>
     fn associate_fleet(

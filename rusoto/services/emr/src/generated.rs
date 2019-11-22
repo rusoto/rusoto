@@ -3752,6 +3752,12 @@ impl EmrClient {
     }
 }
 
+impl fmt::Debug for EmrClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "EmrClient {{ region: {:?} }}", &self.region)
+    }
+}
+
 impl Emr for EmrClient {
     /// <p><p>Adds an instance fleet to a running cluster.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x.</p> </note></p>
     fn add_instance_fleet(

@@ -1003,6 +1003,12 @@ impl MobileClient {
     }
 }
 
+impl fmt::Debug for MobileClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "MobileClient {{ region: {:?} }}", &self.region)
+    }
+}
+
 impl Mobile for MobileClient {
     /// <p> Creates an AWS Mobile Hub project. </p>
     fn create_project(

@@ -3871,6 +3871,12 @@ impl AppMeshClient {
     }
 }
 
+impl fmt::Debug for AppMeshClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "AppMeshClient {{ region: {:?} }}", &self.region)
+    }
+}
+
 impl AppMesh for AppMeshClient {
     /// <p>Creates a service mesh. A service mesh is a logical boundary for network traffic between
     /// the services that reside within it.</p>

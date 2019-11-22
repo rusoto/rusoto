@@ -6483,6 +6483,12 @@ impl ConfigServiceClient {
     }
 }
 
+impl fmt::Debug for ConfigServiceClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "ConfigServiceClient {{ region: {:?} }}", &self.region)
+    }
+}
+
 impl ConfigService for ConfigServiceClient {
     /// <p><p>Returns the current configuration items for resources that are present in your AWS Config aggregator. The operation also returns a list of resources that are not processed in the current request. If there are no unprocessed resources, the operation returns an empty <code>unprocessedResourceIdentifiers</code> list. </p> <note> <ul> <li> <p>The API does not return results for deleted resources.</p> </li> <li> <p> The API does not return tags and relationships.</p> </li> </ul> </note></p>
     fn batch_get_aggregate_resource_config(

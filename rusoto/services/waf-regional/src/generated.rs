@@ -7859,6 +7859,12 @@ impl WAFRegionalClient {
     }
 }
 
+impl fmt::Debug for WAFRegionalClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "WAFRegionalClient {{ region: {:?} }}", &self.region)
+    }
+}
+
 impl WAFRegional for WAFRegionalClient {
     /// <p>Associates a web ACL with a resource, either an application load balancer or Amazon API Gateway stage.</p>
     fn associate_web_acl(

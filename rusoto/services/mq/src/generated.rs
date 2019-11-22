@@ -2477,6 +2477,12 @@ impl MQClient {
     }
 }
 
+impl fmt::Debug for MQClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "MQClient {{ region: {:?} }}", &self.region)
+    }
+}
+
 impl MQ for MQClient {
     /// <p>Creates a broker. Note: This API is asynchronous.</p>
     fn create_broker(

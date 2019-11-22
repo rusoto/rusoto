@@ -3841,6 +3841,12 @@ impl InspectorClient {
     }
 }
 
+impl fmt::Debug for InspectorClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "InspectorClient {{ region: {:?} }}", &self.region)
+    }
+}
+
 impl Inspector for InspectorClient {
     /// <p>Assigns attributes (key and value pairs) to the findings that are specified by the ARNs of the findings.</p>
     fn add_attributes_to_findings(

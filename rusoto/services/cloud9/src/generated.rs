@@ -1201,6 +1201,12 @@ impl Cloud9Client {
     }
 }
 
+impl fmt::Debug for Cloud9Client {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "Cloud9Client {{ region: {:?} }}", &self.region)
+    }
+}
+
 impl Cloud9 for Cloud9Client {
     /// <p>Creates an AWS Cloud9 development environment, launches an Amazon Elastic Compute Cloud (Amazon EC2) instance, and then connects from the instance to the environment.</p>
     fn create_environment_ec2(

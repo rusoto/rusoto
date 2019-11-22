@@ -1903,6 +1903,12 @@ impl CostExplorerClient {
     }
 }
 
+impl fmt::Debug for CostExplorerClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "CostExplorerClient {{ region: {:?} }}", &self.region)
+    }
+}
+
 impl CostExplorer for CostExplorerClient {
     /// <p>Retrieves cost and usage metrics for your account. You can specify which cost and usage-related metric, such as <code>BlendedCosts</code> or <code>UsageQuantity</code>, that you want the request to return. You can also filter and group your data by various dimensions, such as <code>SERVICE</code> or <code>AZ</code>, in a specific time range. For a complete list of valid dimensions, see the <a href="http://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_GetDimensionValues.html">GetDimensionValues</a> operation. Master accounts in an organization in AWS Organizations have access to all member accounts.</p>
     fn get_cost_and_usage(

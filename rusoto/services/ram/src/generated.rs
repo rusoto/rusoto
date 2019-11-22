@@ -2155,6 +2155,12 @@ impl RamClient {
     }
 }
 
+impl fmt::Debug for RamClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "RamClient {{ region: {:?} }}", &self.region)
+    }
+}
+
 impl Ram for RamClient {
     /// <p>Accepts an invitation to a resource share from another AWS account.</p>
     fn accept_resource_share_invitation(

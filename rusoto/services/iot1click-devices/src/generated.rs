@@ -1126,6 +1126,12 @@ impl Iot1ClickDevicesClient {
     }
 }
 
+impl fmt::Debug for Iot1ClickDevicesClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "Iot1ClickDevicesClient {{ region: {:?} }}", &self.region)
+    }
+}
+
 impl Iot1ClickDevices for Iot1ClickDevicesClient {
     /// <p>Adds device(s) to your account (i.e., claim one or more devices) if and only if you
     /// received a claim code with the device(s).</p>

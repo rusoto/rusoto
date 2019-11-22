@@ -275,6 +275,16 @@ impl ApiGatewayManagementApiClient {
     }
 }
 
+impl fmt::Debug for ApiGatewayManagementApiClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(
+            f,
+            "ApiGatewayManagementApiClient {{ region: {:?} }}",
+            &self.region
+        )
+    }
+}
+
 impl ApiGatewayManagementApi for ApiGatewayManagementApiClient {
     /// <p>Delete the connection with the provided id.</p>
     fn delete_connection(

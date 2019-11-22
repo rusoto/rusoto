@@ -9943,6 +9943,12 @@ impl ElasticBeanstalkClient {
     }
 }
 
+impl fmt::Debug for ElasticBeanstalkClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "ElasticBeanstalkClient {{ region: {:?} }}", &self.region)
+    }
+}
+
 impl ElasticBeanstalk for ElasticBeanstalkClient {
     /// <p>Cancels in-progress environment configuration update or application version deployment.</p>
     fn abort_environment_update(

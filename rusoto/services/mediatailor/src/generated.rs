@@ -641,6 +641,12 @@ impl MediaTailorClient {
     }
 }
 
+impl fmt::Debug for MediaTailorClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "MediaTailorClient {{ region: {:?} }}", &self.region)
+    }
+}
+
 impl MediaTailor for MediaTailorClient {
     /// <p>Deletes the playback configuration for the specified name. </p>
     fn delete_playback_configuration(

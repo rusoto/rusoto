@@ -2473,6 +2473,12 @@ impl XRayClient {
     }
 }
 
+impl fmt::Debug for XRayClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "XRayClient {{ region: {:?} }}", &self.region)
+    }
+}
+
 impl XRay for XRayClient {
     /// <p>Retrieves a list of traces specified by ID. Each trace is a collection of segment documents that originates from a single request. Use <code>GetTraceSummaries</code> to get a list of trace IDs.</p>
     fn batch_get_traces(

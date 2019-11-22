@@ -1259,6 +1259,12 @@ impl ResourceGroupsClient {
     }
 }
 
+impl fmt::Debug for ResourceGroupsClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "ResourceGroupsClient {{ region: {:?} }}", &self.region)
+    }
+}
+
 impl ResourceGroups for ResourceGroupsClient {
     /// <p>Creates a group with a specified name, description, and resource query.</p>
     fn create_group(

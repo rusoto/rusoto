@@ -8918,6 +8918,12 @@ impl DocdbClient {
     }
 }
 
+impl fmt::Debug for DocdbClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "DocdbClient {{ region: {:?} }}", &self.region)
+    }
+}
+
 impl Docdb for DocdbClient {
     /// <p>Adds metadata tags to an Amazon DocumentDB resource. You can use these tags with cost allocation reporting to track costs that are associated with Amazon DocumentDB resources. or in a <code>Condition</code> statement in an AWS Identity and Access Management (IAM) policy for Amazon DocumentDB.</p>
     fn add_tags_to_resource(

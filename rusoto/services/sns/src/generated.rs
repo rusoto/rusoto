@@ -5062,6 +5062,12 @@ impl SnsClient {
     }
 }
 
+impl fmt::Debug for SnsClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "SnsClient {{ region: {:?} }}", &self.region)
+    }
+}
+
 impl Sns for SnsClient {
     /// <p>Adds a statement to a topic's access control policy, granting access for the specified AWS accounts to the specified actions.</p>
     fn add_permission(&self, input: AddPermissionInput) -> RusotoFuture<(), AddPermissionError> {

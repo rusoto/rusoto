@@ -7897,6 +7897,12 @@ impl ServiceCatalogClient {
     }
 }
 
+impl fmt::Debug for ServiceCatalogClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "ServiceCatalogClient {{ region: {:?} }}", &self.region)
+    }
+}
+
 impl ServiceCatalog for ServiceCatalogClient {
     /// <p>Accepts an offer to share the specified portfolio.</p>
     fn accept_portfolio_share(

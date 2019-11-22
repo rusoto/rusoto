@@ -2247,6 +2247,12 @@ impl Route53DomainsClient {
     }
 }
 
+impl fmt::Debug for Route53DomainsClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "Route53DomainsClient {{ region: {:?} }}", &self.region)
+    }
+}
+
 impl Route53Domains for Route53DomainsClient {
     /// <p>This operation checks the availability of one domain name. Note that if the availability status of a domain is pending, you must submit another request to determine the availability of the domain name.</p>
     fn check_domain_availability(

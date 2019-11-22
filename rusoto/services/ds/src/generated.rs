@@ -5183,6 +5183,12 @@ impl DirectoryServiceClient {
     }
 }
 
+impl fmt::Debug for DirectoryServiceClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "DirectoryServiceClient {{ region: {:?} }}", &self.region)
+    }
+}
+
 impl DirectoryService for DirectoryServiceClient {
     /// <p>Accepts a directory sharing request that was sent from the directory owner account.</p>
     fn accept_shared_directory(

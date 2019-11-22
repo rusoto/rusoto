@@ -3098,6 +3098,16 @@ impl ServerMigrationServiceClient {
     }
 }
 
+impl fmt::Debug for ServerMigrationServiceClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(
+            f,
+            "ServerMigrationServiceClient {{ region: {:?} }}",
+            &self.region
+        )
+    }
+}
+
 impl ServerMigrationService for ServerMigrationServiceClient {
     /// <p>Creates an application. An application consists of one or more server groups. Each server group contain one or more servers.</p>
     fn create_app(

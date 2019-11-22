@@ -7015,6 +7015,12 @@ impl ApiGatewayV2Client {
     }
 }
 
+impl fmt::Debug for ApiGatewayV2Client {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "ApiGatewayV2Client {{ region: {:?} }}", &self.region)
+    }
+}
+
 impl ApiGatewayV2 for ApiGatewayV2Client {
     /// <p>Creates an Api resource.</p>
     fn create_api(

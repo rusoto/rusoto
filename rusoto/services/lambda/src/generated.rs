@@ -4035,6 +4035,12 @@ impl LambdaClient {
     }
 }
 
+impl fmt::Debug for LambdaClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "LambdaClient {{ region: {:?} }}", &self.region)
+    }
+}
+
 impl Lambda for LambdaClient {
     /// <p>Adds permissions to the resource-based policy of a version of an <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html">AWS Lambda layer</a>. Use this action to grant layer usage permission to other accounts. You can grant permission to a single account, all AWS accounts, or all accounts in an organization.</p> <p>To revoke permission, call <a>RemoveLayerVersionPermission</a> with the statement ID that you specified when you added it.</p>
     fn add_layer_version_permission(

@@ -3861,6 +3861,12 @@ impl GuardDutyClient {
     }
 }
 
+impl fmt::Debug for GuardDutyClient {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "GuardDutyClient {{ region: {:?} }}", &self.region)
+    }
+}
+
 impl GuardDuty for GuardDutyClient {
     /// <p>Accepts the invitation to be monitored by a master GuardDuty account.</p>
     fn accept_invitation(
