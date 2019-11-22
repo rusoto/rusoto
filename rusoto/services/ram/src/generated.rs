@@ -2157,7 +2157,9 @@ impl RamClient {
 
 impl fmt::Debug for RamClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "RamClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("RamClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

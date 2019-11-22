@@ -2479,7 +2479,9 @@ impl MQClient {
 
 impl fmt::Debug for MQClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "MQClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("MQClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

@@ -1682,7 +1682,9 @@ impl TransferClient {
 
 impl fmt::Debug for TransferClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "TransferClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("TransferClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

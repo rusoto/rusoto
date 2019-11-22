@@ -510,11 +510,9 @@ impl MarketplaceMeteringClient {
 
 impl fmt::Debug for MarketplaceMeteringClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(
-            f,
-            "MarketplaceMeteringClient {{ region: {:?} }}",
-            &self.region
-        )
+        f.debug_struct("MarketplaceMeteringClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

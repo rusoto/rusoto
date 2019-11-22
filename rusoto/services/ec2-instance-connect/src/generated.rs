@@ -158,11 +158,9 @@ impl Ec2InstanceConnectClient {
 
 impl fmt::Debug for Ec2InstanceConnectClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(
-            f,
-            "Ec2InstanceConnectClient {{ region: {:?} }}",
-            &self.region
-        )
+        f.debug_struct("Ec2InstanceConnectClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

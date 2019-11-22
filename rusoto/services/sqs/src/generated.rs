@@ -3195,7 +3195,9 @@ impl SqsClient {
 
 impl fmt::Debug for SqsClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "SqsClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("SqsClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

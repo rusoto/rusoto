@@ -755,7 +755,9 @@ impl AWSHealthClient {
 
 impl fmt::Debug for AWSHealthClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "AWSHealthClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("AWSHealthClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

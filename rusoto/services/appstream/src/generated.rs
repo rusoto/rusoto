@@ -4472,7 +4472,9 @@ impl AppStreamClient {
 
 impl fmt::Debug for AppStreamClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "AppStreamClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("AppStreamClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

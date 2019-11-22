@@ -9945,7 +9945,9 @@ impl ElasticBeanstalkClient {
 
 impl fmt::Debug for ElasticBeanstalkClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "ElasticBeanstalkClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("ElasticBeanstalkClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

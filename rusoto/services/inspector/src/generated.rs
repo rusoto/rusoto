@@ -3843,7 +3843,9 @@ impl InspectorClient {
 
 impl fmt::Debug for InspectorClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "InspectorClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("InspectorClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

@@ -4913,7 +4913,9 @@ impl CloudWatchClient {
 
 impl fmt::Debug for CloudWatchClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "CloudWatchClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("CloudWatchClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

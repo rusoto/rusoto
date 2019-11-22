@@ -6033,7 +6033,9 @@ impl MediaConvertClient {
 
 impl fmt::Debug for MediaConvertClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "MediaConvertClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("MediaConvertClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

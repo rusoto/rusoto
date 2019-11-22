@@ -2034,7 +2034,9 @@ impl AcmPcaClient {
 
 impl fmt::Debug for AcmPcaClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "AcmPcaClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("AcmPcaClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

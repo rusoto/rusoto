@@ -400,7 +400,9 @@ impl PricingClient {
 
 impl fmt::Debug for PricingClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "PricingClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("PricingClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

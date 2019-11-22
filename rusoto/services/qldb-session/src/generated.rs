@@ -359,7 +359,9 @@ impl QldbSessionClient {
 
 impl fmt::Debug for QldbSessionClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "QldbSessionClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("QldbSessionClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

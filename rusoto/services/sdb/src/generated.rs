@@ -1670,7 +1670,9 @@ impl SimpleDbClient {
 
 impl fmt::Debug for SimpleDbClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "SimpleDbClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("SimpleDbClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

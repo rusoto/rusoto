@@ -11038,7 +11038,9 @@ impl SesClient {
 
 impl fmt::Debug for SesClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "SesClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("SesClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

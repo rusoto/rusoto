@@ -11882,7 +11882,9 @@ impl Route53Client {
 
 impl fmt::Debug for Route53Client {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "Route53Client {{ region: {:?} }}", &self.region)
+        f.debug_struct("Route53Client")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

@@ -1189,7 +1189,9 @@ impl QldbClient {
 
 impl fmt::Debug for QldbClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "QldbClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("QldbClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

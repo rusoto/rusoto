@@ -5938,7 +5938,9 @@ impl EcsClient {
 
 impl fmt::Debug for EcsClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "EcsClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("EcsClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

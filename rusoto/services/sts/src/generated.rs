@@ -1580,7 +1580,9 @@ impl StsClient {
 
 impl fmt::Debug for StsClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "StsClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("StsClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

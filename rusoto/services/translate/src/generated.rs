@@ -604,7 +604,9 @@ impl TranslateClient {
 
 impl fmt::Debug for TranslateClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "TranslateClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("TranslateClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

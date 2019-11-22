@@ -1249,7 +1249,9 @@ impl AcmClient {
 
 impl fmt::Debug for AcmClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "AcmClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("AcmClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

@@ -6179,7 +6179,9 @@ impl ElbClient {
 
 impl fmt::Debug for ElbClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "ElbClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("ElbClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

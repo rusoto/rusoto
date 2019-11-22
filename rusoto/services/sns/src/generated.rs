@@ -5064,7 +5064,9 @@ impl SnsClient {
 
 impl fmt::Debug for SnsClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "SnsClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("SnsClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

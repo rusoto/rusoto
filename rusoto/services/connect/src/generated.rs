@@ -2406,7 +2406,9 @@ impl ConnectClient {
 
 impl fmt::Debug for ConnectClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "ConnectClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("ConnectClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

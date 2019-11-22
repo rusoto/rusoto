@@ -1056,7 +1056,9 @@ impl PollyClient {
 
 impl fmt::Debug for PollyClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "PollyClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("PollyClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

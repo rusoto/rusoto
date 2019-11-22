@@ -1888,7 +1888,9 @@ impl SecretsManagerClient {
 
 impl fmt::Debug for SecretsManagerClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "SecretsManagerClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("SecretsManagerClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

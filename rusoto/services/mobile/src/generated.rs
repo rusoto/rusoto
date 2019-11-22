@@ -1005,7 +1005,9 @@ impl MobileClient {
 
 impl fmt::Debug for MobileClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "MobileClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("MobileClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

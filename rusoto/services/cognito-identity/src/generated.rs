@@ -2216,7 +2216,9 @@ impl CognitoIdentityClient {
 
 impl fmt::Debug for CognitoIdentityClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "CognitoIdentityClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("CognitoIdentityClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

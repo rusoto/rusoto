@@ -2985,7 +2985,9 @@ impl WorklinkClient {
 
 impl fmt::Debug for WorklinkClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "WorklinkClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("WorklinkClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

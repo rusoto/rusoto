@@ -3100,11 +3100,9 @@ impl ServerMigrationServiceClient {
 
 impl fmt::Debug for ServerMigrationServiceClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(
-            f,
-            "ServerMigrationServiceClient {{ region: {:?} }}",
-            &self.region
-        )
+        f.debug_struct("ServerMigrationServiceClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

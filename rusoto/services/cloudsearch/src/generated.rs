@@ -5623,7 +5623,9 @@ impl CloudSearchClient {
 
 impl fmt::Debug for CloudSearchClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "CloudSearchClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("CloudSearchClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

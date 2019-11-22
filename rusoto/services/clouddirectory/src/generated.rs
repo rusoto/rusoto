@@ -8725,7 +8725,9 @@ impl CloudDirectoryClient {
 
 impl fmt::Debug for CloudDirectoryClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "CloudDirectoryClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("CloudDirectoryClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

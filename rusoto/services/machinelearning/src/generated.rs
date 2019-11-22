@@ -3125,7 +3125,9 @@ impl MachineLearningClient {
 
 impl fmt::Debug for MachineLearningClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "MachineLearningClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("MachineLearningClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

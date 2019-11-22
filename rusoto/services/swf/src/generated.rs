@@ -4913,7 +4913,9 @@ impl SwfClient {
 
 impl fmt::Debug for SwfClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "SwfClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("SwfClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

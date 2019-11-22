@@ -2661,7 +2661,9 @@ impl KinesisAnalyticsClient {
 
 impl fmt::Debug for KinesisAnalyticsClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "KinesisAnalyticsClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("KinesisAnalyticsClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

@@ -643,7 +643,9 @@ impl MediaTailorClient {
 
 impl fmt::Debug for MediaTailorClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "MediaTailorClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("MediaTailorClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

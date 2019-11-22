@@ -1203,7 +1203,9 @@ impl Cloud9Client {
 
 impl fmt::Debug for Cloud9Client {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "Cloud9Client {{ region: {:?} }}", &self.region)
+        f.debug_struct("Cloud9Client")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

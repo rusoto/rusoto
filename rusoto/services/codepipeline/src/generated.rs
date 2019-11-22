@@ -3790,7 +3790,9 @@ impl CodePipelineClient {
 
 impl fmt::Debug for CodePipelineClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "CodePipelineClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("CodePipelineClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

@@ -517,11 +517,9 @@ impl ResourceGroupsTaggingApiClient {
 
 impl fmt::Debug for ResourceGroupsTaggingApiClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(
-            f,
-            "ResourceGroupsTaggingApiClient {{ region: {:?} }}",
-            &self.region
-        )
+        f.debug_struct("ResourceGroupsTaggingApiClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

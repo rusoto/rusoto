@@ -1461,7 +1461,9 @@ impl BudgetsClient {
 
 impl fmt::Debug for BudgetsClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "BudgetsClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("BudgetsClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

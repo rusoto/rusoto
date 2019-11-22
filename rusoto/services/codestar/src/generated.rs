@@ -1663,7 +1663,9 @@ impl CodeStarClient {
 
 impl fmt::Debug for CodeStarClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "CodeStarClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("CodeStarClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

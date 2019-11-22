@@ -10295,7 +10295,9 @@ impl AutoscalingClient {
 
 impl fmt::Debug for AutoscalingClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "AutoscalingClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("AutoscalingClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

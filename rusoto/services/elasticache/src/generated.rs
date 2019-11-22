@@ -11358,7 +11358,9 @@ impl ElastiCacheClient {
 
 impl fmt::Debug for ElastiCacheClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "ElastiCacheClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("ElastiCacheClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

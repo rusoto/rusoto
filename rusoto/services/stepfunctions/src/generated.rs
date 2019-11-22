@@ -2319,7 +2319,9 @@ impl StepFunctionsClient {
 
 impl fmt::Debug for StepFunctionsClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "StepFunctionsClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("StepFunctionsClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

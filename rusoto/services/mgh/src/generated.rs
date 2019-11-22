@@ -1856,7 +1856,9 @@ impl MigrationHubClient {
 
 impl fmt::Debug for MigrationHubClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "MigrationHubClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("MigrationHubClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

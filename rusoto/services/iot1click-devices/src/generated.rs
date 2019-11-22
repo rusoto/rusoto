@@ -1128,7 +1128,9 @@ impl Iot1ClickDevicesClient {
 
 impl fmt::Debug for Iot1ClickDevicesClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "Iot1ClickDevicesClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("Iot1ClickDevicesClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

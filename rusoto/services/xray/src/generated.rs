@@ -2475,7 +2475,9 @@ impl XRayClient {
 
 impl fmt::Debug for XRayClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "XRayClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("XRayClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

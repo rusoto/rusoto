@@ -1403,7 +1403,9 @@ impl CloudHsmv2Client {
 
 impl fmt::Debug for CloudHsmv2Client {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "CloudHsmv2Client {{ region: {:?} }}", &self.region)
+        f.debug_struct("CloudHsmv2Client")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

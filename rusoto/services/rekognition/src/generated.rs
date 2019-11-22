@@ -4802,7 +4802,9 @@ impl RekognitionClient {
 
 impl fmt::Debug for RekognitionClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "RekognitionClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("RekognitionClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

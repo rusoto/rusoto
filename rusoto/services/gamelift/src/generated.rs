@@ -7782,7 +7782,9 @@ impl GameLiftClient {
 
 impl fmt::Debug for GameLiftClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "GameLiftClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("GameLiftClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

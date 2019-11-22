@@ -354,11 +354,9 @@ impl ComprehendMedicalClient {
 
 impl fmt::Debug for ComprehendMedicalClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(
-            f,
-            "ComprehendMedicalClient {{ region: {:?} }}",
-            &self.region
-        )
+        f.debug_struct("ComprehendMedicalClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

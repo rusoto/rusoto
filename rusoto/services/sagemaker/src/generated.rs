@@ -7402,7 +7402,9 @@ impl SageMakerClient {
 
 impl fmt::Debug for SageMakerClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "SageMakerClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("SageMakerClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

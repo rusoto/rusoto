@@ -4193,7 +4193,9 @@ impl SecurityHubClient {
 
 impl fmt::Debug for SecurityHubClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "SecurityHubClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("SecurityHubClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

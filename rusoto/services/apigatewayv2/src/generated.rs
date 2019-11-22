@@ -7017,7 +7017,9 @@ impl ApiGatewayV2Client {
 
 impl fmt::Debug for ApiGatewayV2Client {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "ApiGatewayV2Client {{ region: {:?} }}", &self.region)
+        f.debug_struct("ApiGatewayV2Client")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

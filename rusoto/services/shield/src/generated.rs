@@ -1632,7 +1632,9 @@ impl ShieldClient {
 
 impl fmt::Debug for ShieldClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "ShieldClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("ShieldClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

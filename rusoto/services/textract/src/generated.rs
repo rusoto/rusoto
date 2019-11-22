@@ -1027,7 +1027,9 @@ impl TextractClient {
 
 impl fmt::Debug for TextractClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "TextractClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("TextractClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

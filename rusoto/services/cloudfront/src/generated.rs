@@ -12119,7 +12119,9 @@ impl CloudFrontClient {
 
 impl fmt::Debug for CloudFrontClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "CloudFrontClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("CloudFrontClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

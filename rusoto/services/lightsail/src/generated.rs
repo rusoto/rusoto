@@ -12192,7 +12192,9 @@ impl LightsailClient {
 
 impl fmt::Debug for LightsailClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "LightsailClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("LightsailClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

@@ -1793,7 +1793,9 @@ impl SnowballClient {
 
 impl fmt::Debug for SnowballClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "SnowballClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("SnowballClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

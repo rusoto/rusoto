@@ -19299,7 +19299,9 @@ impl IotClient {
 
 impl fmt::Debug for IotClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "IotClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("IotClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

@@ -3136,7 +3136,9 @@ impl AmplifyClient {
 
 impl fmt::Debug for AmplifyClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "AmplifyClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("AmplifyClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

@@ -4051,7 +4051,9 @@ impl LexModelsClient {
 
 impl fmt::Debug for LexModelsClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "LexModelsClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("LexModelsClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

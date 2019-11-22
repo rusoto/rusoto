@@ -7263,7 +7263,9 @@ impl AlexaForBusinessClient {
 
 impl fmt::Debug for AlexaForBusinessClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "AlexaForBusinessClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("AlexaForBusinessClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

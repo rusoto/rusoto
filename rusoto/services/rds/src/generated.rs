@@ -25239,7 +25239,9 @@ impl RdsClient {
 
 impl fmt::Debug for RdsClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "RdsClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("RdsClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

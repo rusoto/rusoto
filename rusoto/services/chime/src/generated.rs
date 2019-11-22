@@ -6325,7 +6325,9 @@ impl ChimeClient {
 
 impl fmt::Debug for ChimeClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "ChimeClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("ChimeClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

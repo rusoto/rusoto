@@ -10998,7 +10998,9 @@ impl CodeCommitClient {
 
 impl fmt::Debug for CodeCommitClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "CodeCommitClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("CodeCommitClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

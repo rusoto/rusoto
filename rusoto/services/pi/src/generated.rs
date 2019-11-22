@@ -393,11 +393,9 @@ impl PerformanceInsightsClient {
 
 impl fmt::Debug for PerformanceInsightsClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(
-            f,
-            "PerformanceInsightsClient {{ region: {:?} }}",
-            &self.region
-        )
+        f.debug_struct("PerformanceInsightsClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

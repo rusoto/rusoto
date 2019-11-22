@@ -827,7 +827,9 @@ impl AutoscalingPlansClient {
 
 impl fmt::Debug for AutoscalingPlansClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "AutoscalingPlansClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("AutoscalingPlansClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

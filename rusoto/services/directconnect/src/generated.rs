@@ -4714,7 +4714,9 @@ impl DirectConnectClient {
 
 impl fmt::Debug for DirectConnectClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "DirectConnectClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("DirectConnectClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

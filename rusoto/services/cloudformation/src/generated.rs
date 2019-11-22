@@ -9829,7 +9829,9 @@ impl CloudFormationClient {
 
 impl fmt::Debug for CloudFormationClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "CloudFormationClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("CloudFormationClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

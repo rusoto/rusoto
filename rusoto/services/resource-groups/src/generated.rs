@@ -1261,7 +1261,9 @@ impl ResourceGroupsClient {
 
 impl fmt::Debug for ResourceGroupsClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "ResourceGroupsClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("ResourceGroupsClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

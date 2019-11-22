@@ -977,7 +977,9 @@ impl RdsDataClient {
 
 impl fmt::Debug for RdsDataClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "RdsDataClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("RdsDataClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

@@ -1369,7 +1369,9 @@ impl MediaStoreClient {
 
 impl fmt::Debug for MediaStoreClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "MediaStoreClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("MediaStoreClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

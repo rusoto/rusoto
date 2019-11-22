@@ -3984,7 +3984,9 @@ impl IotAnalyticsClient {
 
 impl fmt::Debug for IotAnalyticsClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "IotAnalyticsClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("IotAnalyticsClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

@@ -2060,7 +2060,9 @@ impl BatchClient {
 
 impl fmt::Debug for BatchClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "BatchClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("BatchClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

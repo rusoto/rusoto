@@ -3650,7 +3650,9 @@ impl AppSyncClient {
 
 impl fmt::Debug for AppSyncClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "AppSyncClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("AppSyncClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

@@ -1006,7 +1006,9 @@ impl KinesisVideoClient {
 
 impl fmt::Debug for KinesisVideoClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "KinesisVideoClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("KinesisVideoClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

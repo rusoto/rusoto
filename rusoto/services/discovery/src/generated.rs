@@ -2735,7 +2735,9 @@ impl DiscoveryClient {
 
 impl fmt::Debug for DiscoveryClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "DiscoveryClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("DiscoveryClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

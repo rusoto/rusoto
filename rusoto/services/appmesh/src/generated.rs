@@ -3873,7 +3873,9 @@ impl AppMeshClient {
 
 impl fmt::Debug for AppMeshClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "AppMeshClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("AppMeshClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

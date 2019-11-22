@@ -5256,7 +5256,9 @@ impl ComprehendClient {
 
 impl fmt::Debug for ComprehendClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "ComprehendClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("ComprehendClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

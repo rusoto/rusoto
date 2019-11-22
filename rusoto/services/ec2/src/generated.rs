@@ -69596,7 +69596,9 @@ impl Ec2Client {
 
 impl fmt::Debug for Ec2Client {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "Ec2Client {{ region: {:?} }}", &self.region)
+        f.debug_struct("Ec2Client")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

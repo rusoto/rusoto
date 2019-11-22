@@ -1455,7 +1455,9 @@ impl AWSSupportClient {
 
 impl fmt::Debug for AWSSupportClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "AWSSupportClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("AWSSupportClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

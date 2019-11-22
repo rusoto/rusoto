@@ -1172,7 +1172,9 @@ impl EksClient {
 
 impl fmt::Debug for EksClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "EksClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("EksClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

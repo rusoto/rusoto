@@ -3437,7 +3437,9 @@ impl WorkmailClient {
 
 impl fmt::Debug for WorkmailClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "WorkmailClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("WorkmailClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

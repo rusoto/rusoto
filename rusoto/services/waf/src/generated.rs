@@ -7534,7 +7534,9 @@ impl WafClient {
 
 impl fmt::Debug for WafClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "WafClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("WafClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

@@ -2684,7 +2684,9 @@ impl EcrClient {
 
 impl fmt::Debug for EcrClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "EcrClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("EcrClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

@@ -797,7 +797,9 @@ impl LexRuntimeClient {
 
 impl fmt::Debug for LexRuntimeClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "LexRuntimeClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("LexRuntimeClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

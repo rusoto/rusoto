@@ -6485,7 +6485,9 @@ impl ConfigServiceClient {
 
 impl fmt::Debug for ConfigServiceClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "ConfigServiceClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("ConfigServiceClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

@@ -979,7 +979,9 @@ impl TranscribeClient {
 
 impl fmt::Debug for TranscribeClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "TranscribeClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("TranscribeClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

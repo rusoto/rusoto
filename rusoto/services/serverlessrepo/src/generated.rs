@@ -1907,7 +1907,9 @@ impl ServerlessRepoClient {
 
 impl fmt::Debug for ServerlessRepoClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "ServerlessRepoClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("ServerlessRepoClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

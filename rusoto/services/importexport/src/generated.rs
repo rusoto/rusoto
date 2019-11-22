@@ -1606,7 +1606,9 @@ impl ImportExportClient {
 
 impl fmt::Debug for ImportExportClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "ImportExportClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("ImportExportClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

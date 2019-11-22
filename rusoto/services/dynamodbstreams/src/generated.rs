@@ -623,7 +623,9 @@ impl DynamoDbStreamsClient {
 
 impl fmt::Debug for DynamoDbStreamsClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "DynamoDbStreamsClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("DynamoDbStreamsClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

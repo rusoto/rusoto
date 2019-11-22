@@ -2113,7 +2113,9 @@ impl KinesisFirehoseClient {
 
 impl fmt::Debug for KinesisFirehoseClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "KinesisFirehoseClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("KinesisFirehoseClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

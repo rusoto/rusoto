@@ -1884,7 +1884,9 @@ impl CognitoSyncClient {
 
 impl fmt::Debug for CognitoSyncClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "CognitoSyncClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("CognitoSyncClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

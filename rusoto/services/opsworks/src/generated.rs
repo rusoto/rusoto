@@ -6147,7 +6147,9 @@ impl OpsWorksClient {
 
 impl fmt::Debug for OpsWorksClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "OpsWorksClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("OpsWorksClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

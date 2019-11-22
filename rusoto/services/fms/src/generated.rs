@@ -1270,7 +1270,9 @@ impl FmsClient {
 
 impl fmt::Debug for FmsClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "FmsClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("FmsClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

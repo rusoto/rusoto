@@ -580,7 +580,9 @@ impl IotJobsDataClient {
 
 impl fmt::Debug for IotJobsDataClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "IotJobsDataClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("IotJobsDataClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

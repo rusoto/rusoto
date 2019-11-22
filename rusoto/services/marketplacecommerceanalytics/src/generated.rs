@@ -225,11 +225,9 @@ impl MarketplaceCommerceAnalyticsClient {
 
 impl fmt::Debug for MarketplaceCommerceAnalyticsClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(
-            f,
-            "MarketplaceCommerceAnalyticsClient {{ region: {:?} }}",
-            &self.region
-        )
+        f.debug_struct("MarketplaceCommerceAnalyticsClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

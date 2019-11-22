@@ -342,11 +342,9 @@ impl CostAndUsageReportClient {
 
 impl fmt::Debug for CostAndUsageReportClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(
-            f,
-            "CostAndUsageReportClient {{ region: {:?} }}",
-            &self.region
-        )
+        f.debug_struct("CostAndUsageReportClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

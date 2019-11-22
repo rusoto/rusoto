@@ -2772,7 +2772,9 @@ impl EventBridgeClient {
 
 impl fmt::Debug for EventBridgeClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "EventBridgeClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("EventBridgeClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

@@ -2015,7 +2015,9 @@ impl ServiceDiscoveryClient {
 
 impl fmt::Debug for ServiceDiscoveryClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "ServiceDiscoveryClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("ServiceDiscoveryClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

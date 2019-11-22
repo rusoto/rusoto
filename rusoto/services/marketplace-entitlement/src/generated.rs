@@ -199,11 +199,9 @@ impl MarketplaceEntitlementClient {
 
 impl fmt::Debug for MarketplaceEntitlementClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(
-            f,
-            "MarketplaceEntitlementClient {{ region: {:?} }}",
-            &self.region
-        )
+        f.debug_struct("MarketplaceEntitlementClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

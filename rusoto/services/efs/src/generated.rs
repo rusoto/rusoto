@@ -1399,7 +1399,9 @@ impl EfsClient {
 
 impl fmt::Debug for EfsClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "EfsClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("EfsClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

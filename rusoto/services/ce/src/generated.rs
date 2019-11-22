@@ -1905,7 +1905,9 @@ impl CostExplorerClient {
 
 impl fmt::Debug for CostExplorerClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "CostExplorerClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("CostExplorerClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

@@ -2465,7 +2465,9 @@ impl EtsClient {
 
 impl fmt::Debug for EtsClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "EtsClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("EtsClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

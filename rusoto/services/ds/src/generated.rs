@@ -5185,7 +5185,9 @@ impl DirectoryServiceClient {
 
 impl fmt::Debug for DirectoryServiceClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "DirectoryServiceClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("DirectoryServiceClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

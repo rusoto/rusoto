@@ -2529,11 +2529,9 @@ impl DynamodbAcceleratorClient {
 
 impl fmt::Debug for DynamodbAcceleratorClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(
-            f,
-            "DynamodbAcceleratorClient {{ region: {:?} }}",
-            &self.region
-        )
+        f.debug_struct("DynamodbAcceleratorClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

@@ -4911,7 +4911,9 @@ impl WorkdocsClient {
 
 impl fmt::Debug for WorkdocsClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "WorkdocsClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("WorkdocsClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

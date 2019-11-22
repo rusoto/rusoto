@@ -5173,7 +5173,9 @@ impl OrganizationsClient {
 
 impl fmt::Debug for OrganizationsClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "OrganizationsClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("OrganizationsClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

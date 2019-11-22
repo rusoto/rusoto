@@ -645,7 +645,9 @@ impl MacieClient {
 
 impl fmt::Debug for MacieClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "MacieClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("MacieClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

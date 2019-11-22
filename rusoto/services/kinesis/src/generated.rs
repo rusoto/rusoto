@@ -2795,7 +2795,9 @@ impl KinesisClient {
 
 impl fmt::Debug for KinesisClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "KinesisClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("KinesisClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

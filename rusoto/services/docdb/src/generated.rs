@@ -8920,7 +8920,9 @@ impl DocdbClient {
 
 impl fmt::Debug for DocdbClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "DocdbClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("DocdbClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

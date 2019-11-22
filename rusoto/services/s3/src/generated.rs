@@ -18872,7 +18872,9 @@ impl S3Client {
 
 impl fmt::Debug for S3Client {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "S3Client {{ region: {:?} }}", &self.region)
+        f.debug_struct("S3Client")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

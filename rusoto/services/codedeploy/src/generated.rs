@@ -6368,7 +6368,9 @@ impl CodeDeployClient {
 
 impl fmt::Debug for CodeDeployClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "CodeDeployClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("CodeDeployClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

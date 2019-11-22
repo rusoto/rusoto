@@ -4037,7 +4037,9 @@ impl LambdaClient {
 
 impl fmt::Debug for LambdaClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "LambdaClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("LambdaClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

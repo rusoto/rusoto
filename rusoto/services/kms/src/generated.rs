@@ -4073,7 +4073,9 @@ impl KmsClient {
 
 impl fmt::Debug for KmsClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "KmsClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("KmsClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

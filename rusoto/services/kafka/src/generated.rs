@@ -2444,7 +2444,9 @@ impl KafkaClient {
 
 impl fmt::Debug for KafkaClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "KafkaClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("KafkaClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

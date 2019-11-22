@@ -13297,7 +13297,9 @@ impl GlueClient {
 
 impl fmt::Debug for GlueClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "GlueClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("GlueClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

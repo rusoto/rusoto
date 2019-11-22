@@ -5245,11 +5245,9 @@ impl DatabaseMigrationServiceClient {
 
 impl fmt::Debug for DatabaseMigrationServiceClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(
-            f,
-            "DatabaseMigrationServiceClient {{ region: {:?} }}",
-            &self.region
-        )
+        f.debug_struct("DatabaseMigrationServiceClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

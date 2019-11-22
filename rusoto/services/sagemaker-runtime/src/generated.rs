@@ -159,7 +159,9 @@ impl SageMakerRuntimeClient {
 
 impl fmt::Debug for SageMakerRuntimeClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "SageMakerRuntimeClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("SageMakerRuntimeClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

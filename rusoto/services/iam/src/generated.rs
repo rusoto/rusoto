@@ -20790,7 +20790,9 @@ impl IamClient {
 
 impl fmt::Debug for IamClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "IamClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("IamClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

@@ -12599,11 +12599,9 @@ impl CognitoIdentityProviderClient {
 
 impl fmt::Debug for CognitoIdentityProviderClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(
-            f,
-            "CognitoIdentityProviderClient {{ region: {:?} }}",
-            &self.region
-        )
+        f.debug_struct("CognitoIdentityProviderClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

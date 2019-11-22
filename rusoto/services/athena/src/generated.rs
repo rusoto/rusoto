@@ -1755,7 +1755,9 @@ impl AthenaClient {
 
 impl fmt::Debug for AthenaClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "AthenaClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("AthenaClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

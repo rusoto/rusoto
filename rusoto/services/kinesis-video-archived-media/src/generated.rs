@@ -629,11 +629,9 @@ impl KinesisVideoArchivedMediaClient {
 
 impl fmt::Debug for KinesisVideoArchivedMediaClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(
-            f,
-            "KinesisVideoArchivedMediaClient {{ region: {:?} }}",
-            &self.region
-        )
+        f.debug_struct("KinesisVideoArchivedMediaClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

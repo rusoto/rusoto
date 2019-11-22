@@ -3355,7 +3355,9 @@ impl GlacierClient {
 
 impl fmt::Debug for GlacierClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "GlacierClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("GlacierClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

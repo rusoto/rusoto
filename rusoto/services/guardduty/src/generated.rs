@@ -3863,7 +3863,9 @@ impl GuardDutyClient {
 
 impl fmt::Debug for GuardDutyClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "GuardDutyClient {{ region: {:?} }}", &self.region)
+        f.debug_struct("GuardDutyClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 

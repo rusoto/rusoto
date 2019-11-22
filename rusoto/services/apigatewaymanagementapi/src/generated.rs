@@ -277,11 +277,9 @@ impl ApiGatewayManagementApiClient {
 
 impl fmt::Debug for ApiGatewayManagementApiClient {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(
-            f,
-            "ApiGatewayManagementApiClient {{ region: {:?} }}",
-            &self.region
-        )
+        f.debug_struct("ApiGatewayManagementApiClient")
+            .field("region", &self.region)
+            .finish()
     }
 }
 
