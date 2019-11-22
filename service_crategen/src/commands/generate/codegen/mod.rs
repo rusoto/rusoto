@@ -208,6 +208,12 @@ where
             }}
         }}
 
+        impl fmt::Debug for {type_name} {{
+            fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {{
+                write!(f, \"{type_name} {{{{ region: {{:?}} }}}}\", &self.region)
+            }}
+        }}
+
         impl {trait_name} for {type_name} {{
         ",
         service_name = service.name(),

@@ -2,7 +2,7 @@
 
 ## [Unreleased]
 
-(Please put changes here)
+- Add Debug trait to generated Clients
 
 ## [0.42.0] - 2019-11-18
 
