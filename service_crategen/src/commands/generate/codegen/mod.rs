@@ -210,7 +210,9 @@ where
 
         impl fmt::Debug for {type_name} {{
             fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {{
-                write!(f, \"{type_name} {{{{ region: {{:?}} }}}}\", &self.region)
+                f.debug_struct(\"{type_name}\")
+                    .field(\"region\", &self.region)
+                    .finish()
             }}
         }}
 
