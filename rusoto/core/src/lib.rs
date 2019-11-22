@@ -14,7 +14,7 @@
 )]
 #![allow(dead_code)]
 #![cfg_attr(not(feature = "unstable"), deny(warnings))]
-#![deny(missing_docs, warnings)]
+#![deny(missing_docs)]
 
 //! Rusoto is an [AWS](https://aws.amazon.com/) SDK for Rust.
 //! A high level overview is available in `README.md` at <https://github.com/rusoto/rusoto>.

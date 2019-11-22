@@ -233,7 +233,6 @@ where
                     } else {
                         request.sign_with_plus(&credentials, true);
                     }
-                    println!("Request after sign:\n {:?}", request);
                     let future = self.inner.dispatcher.dispatch(request, self.timeout);
                     self.state = Some(SignAndDispatchState::Dispatching { future });
                     self.poll()
