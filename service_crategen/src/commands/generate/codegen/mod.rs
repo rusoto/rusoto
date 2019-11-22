@@ -135,8 +135,10 @@ where
 
         use std::error::Error;
         use std::fmt;
+        use std::sync::Arc;
         use futures::future;
         use futures::Future;
+        use rusoto_core::encoding::ContentEncoding;
         use rusoto_core::request::{{BufferedHttpResponse, DispatchSignedRequest}};
         use rusoto_core::region;
         use rusoto_core::credential::ProvideAwsCredentials;
@@ -205,6 +207,11 @@ where
                     client,
                     region
                 }}
+            }}
+
+            pub fn set_http_content_encoding(&mut self, content_encoding: ContentEncoding)
+            {{
+                self.client.set_http_content_encoding(content_encoding);
             }}
         }}
 

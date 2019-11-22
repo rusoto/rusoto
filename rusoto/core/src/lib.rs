@@ -14,7 +14,7 @@
 )]
 #![allow(dead_code)]
 #![cfg_attr(not(feature = "unstable"), deny(warnings))]
-#![deny(missing_docs)]
+#![deny(missing_docs, warnings)]
 
 //! Rusoto is an [AWS](https://aws.amazon.com/) SDK for Rust.
 //! A high level overview is available in `README.md` at <https://github.com/rusoto/rusoto>.
@@ -35,6 +35,7 @@ pub extern crate rusoto_credential as credential;
 extern crate serde;
 #[macro_use]
 extern crate serde_derive;
+pub extern crate flate2;
 extern crate serde_json;
 extern crate time;
 extern crate tokio;
@@ -55,6 +56,8 @@ pub mod signature;
 
 #[doc(hidden)]
 pub use crate::client::Client;
+#[doc(hidden)]
+pub mod encoding;
 #[doc(hidden)]
 pub mod proto;
 #[doc(hidden)]

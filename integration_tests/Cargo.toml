@@ -24,6 +24,9 @@ debug = false
 path = "../rusoto/core"
 default-features = false
 
+[dependencies.rusoto_credential]
+path = "../rusoto/credential"
+
 [dependencies.rusoto_acm]
 optional = true
 path = "../rusoto/services/acm"
@@ -974,3 +977,4 @@ disable_minio_unsupported = []
 default = ["native-tls"]
 native-tls = ["rusoto_core/native-tls"]
 rustls = ["rusoto_core/rustls"]
+encoding = ["rusoto_core/encoding"]

@@ -6,6 +6,7 @@ use futures::{Async, Future, Poll};
 use crate::credential::{
     Anonymous, CredentialsError, DefaultCredentialsProvider, ProvideAwsCredentials, StaticProvider,
 };
+use crate::encoding::ContentEncoding;
 use crate::error::RusotoError;
 use crate::future::{self, RusotoFuture};
 use crate::request::{DispatchSignedRequest, HttpClient, HttpDispatchError, HttpResponse};
@@ -35,6 +36,7 @@ impl Client {
         let inner = Arc::new(ClientInner {
             credentials_provider: Some(Arc::new(credentials_provider)),
             dispatcher: Arc::new(dispatcher),
+            content_encoding: Default::default(),
         });
         *lock = Arc::downgrade(&inner);
         Client { inner }
@@ -51,6 +53,7 @@ impl Client {
         let inner = ClientInner {
             credentials_provider: Some(Arc::new(credentials_provider)),
             dispatcher: Arc::new(dispatcher),
+            content_encoding: Default::default(),
         };
         Client {
             inner: Arc::new(inner),
@@ -70,6 +73,7 @@ impl Client {
         let inner = ClientInner::<StaticProvider, D> {
             credentials_provider: None,
             dispatcher: Arc::new(dispatcher),
+            content_encoding: ContentEncoding::Identity,
         };
         Client {
             inner: Arc::new(inner),
@@ -86,6 +90,13 @@ impl Client {
     ) -> RusotoFuture<T, E> {
         future::new(self.inner.sign_and_dispatch(request), response_handler)
     }
+
+    /// Set content_encoding type for http requests which will compress request payload accordingly
+    pub fn set_http_content_encoding(&mut self, content_encoding: ContentEncoding) {
+        let inner = Arc::get_mut(&mut self.inner)
+            .expect("Can't set client encoding because resource has more than one reference");
+        inner.set_content_encoding(content_encoding);
+    }
 }
 
 pub enum SignAndDispatchError {
@@ -98,6 +109,8 @@ trait SignAndDispatch {
         &self,
         request: SignedRequest,
     ) -> Box<dyn TimeoutFuture<Item = HttpResponse, Error = SignAndDispatchError> + Send>;
+
+    fn set_content_encoding(&mut self, content_encoding: ContentEncoding);
 }
 
 pub trait TimeoutFuture: Future {
@@ -108,6 +121,7 @@ pub trait TimeoutFuture: Future {
 struct ClientInner<P, D> {
     credentials_provider: Option<Arc<P>>,
     dispatcher: Arc<D>,
+    content_encoding: ContentEncoding,
 }
 
 impl<P, D> Clone for ClientInner<P, D> {
@@ -115,6 +129,7 @@ impl<P, D> Clone for ClientInner<P, D> {
         ClientInner {
             credentials_provider: self.credentials_provider.clone(),
             dispatcher: self.dispatcher.clone(),
+            content_encoding: self.content_encoding.clone(),
         }
     }
 }
@@ -135,6 +150,10 @@ where
             state: Some(SignAndDispatchState::Lazy { request }),
             timeout: None,
         })
+    }
+
+    fn set_content_encoding(&mut self, content_encoding: ContentEncoding) {
+        self.content_encoding = content_encoding
     }
 }
 
@@ -208,11 +227,14 @@ where
                     Ok(Async::NotReady)
                 }
                 Ok(Async::Ready(credentials)) => {
+                    self.inner.content_encoding.encode(&mut request);
+                    request.sign_with_plus(&credentials, true);
                     if credentials.is_anonymous() {
                         request.complement_with_plus(true);
                     } else {
                         request.sign_with_plus(&credentials, true);
                     }
+                    println!("Request after sign:\n {:?}", request);
                     let future = self.inner.dispatcher.dispatch(request, self.timeout);
                     self.state = Some(SignAndDispatchState::Dispatching { future });
                     self.poll()
