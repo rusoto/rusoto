@@ -73,7 +73,7 @@ impl Client {
         let inner = ClientInner::<StaticProvider, D> {
             credentials_provider: None,
             dispatcher: Arc::new(dispatcher),
-            content_encoding: ContentEncoding::Identity,
+            content_encoding: Default::default(),
         };
         Client {
             inner: Arc::new(inner),
@@ -228,7 +228,6 @@ where
                 }
                 Ok(Async::Ready(credentials)) => {
                     self.inner.content_encoding.encode(&mut request);
-                    request.sign_with_plus(&credentials, true);
                     if credentials.is_anonymous() {
                         request.complement_with_plus(true);
                     } else {

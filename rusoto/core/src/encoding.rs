@@ -11,8 +11,13 @@ pub enum ContentEncoding {
     /// Indicates the identity function (i.e., no compression or modification)
     Identity,
 
-    /// GzipCompressor uses flate::write::GzEncoder internally to compress request payloads.
+    /// GzipCompressor uses flate2 library's GzEncoder internally to compress request payloads.
     /// Streaming requests are not supported yet.
+    ///
+    /// First parameter is for minimum payload. If request payload is lesser than it no compression
+    /// will happen.
+    ///
+    /// Second parameter is Compression level for Gzip
     #[cfg(feature = "encoding")]
     Gzip(Option<usize>, Compression),
 }
@@ -41,7 +46,6 @@ impl ContentEncoding {
                                 return;
                             }
                         }
-                        println!("It runs with Payload= {:?}", payload);
                         let mut encoder = GzEncoder::new(Vec::<u8>::new(), *level);
                         encoder
                             .write_all(payload)
@@ -54,7 +58,6 @@ impl ContentEncoding {
                             return;
                         }
                         let payload_compressed = bytes::Bytes::from(payload_compressed);
-                        println!("Payload has updated= {:?}", payload_compressed);
                         request.payload = Some(SignedRequestPayload::Buffer(payload_compressed));
                     }
                     Some(SignedRequestPayload::Stream(ref stream)) => {
