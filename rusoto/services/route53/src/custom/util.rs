@@ -13,10 +13,10 @@
 /// ```
 pub fn quote_txt_record(record_contents: &str) -> String {
     let mut quoted_string = String::from(record_contents);
-    if !quoted_string.starts_with("\"") {
+    if !quoted_string.starts_with('\"') {
         quoted_string = format!("\"{}", quoted_string);
     }
-    if !quoted_string.ends_with("\"") {
+    if !quoted_string.ends_with('\"') {
         quoted_string = format!("{}\"", quoted_string);
     }
     quoted_string

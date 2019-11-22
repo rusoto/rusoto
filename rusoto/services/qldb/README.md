@@ -23,7 +23,7 @@ To use `rusoto_qldb` in your application, add it as a dependency in your `Cargo.
 
 ```toml
 [dependencies]
-rusoto_qldb = "0.41.0"
+rusoto_qldb = "0.42.0"
 ```
 
 ## Crate Features

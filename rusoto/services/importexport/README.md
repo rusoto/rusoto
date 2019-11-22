@@ -23,7 +23,7 @@ To use `rusoto_importexport` in your application, add it as a dependency in your
 
 ```toml
 [dependencies]
-rusoto_importexport = "0.41.0"
+rusoto_importexport = "0.42.0"
 ```
 
 ## Crate Features

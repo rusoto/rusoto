@@ -23,7 +23,7 @@ To use `rusoto_comprehendmedical` in your application, add it as a dependency in
 
 ```toml
 [dependencies]
-rusoto_comprehendmedical = "0.41.0"
+rusoto_comprehendmedical = "0.42.0"
 ```
 
 ## Crate Features
