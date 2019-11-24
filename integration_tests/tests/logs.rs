@@ -7,13 +7,13 @@ extern crate rusoto_core;
 extern crate rusoto_credential;
 extern crate rusoto_logs;
 
-use rusoto_core::{HttpClient, Region, RusotoError};
 use rusoto_core::encoding::ContentEncoding;
+use rusoto_core::{HttpClient, Region, RusotoError};
 use rusoto_credential::DefaultCredentialsProvider;
 use rusoto_logs::{
     CloudWatchLogs, CloudWatchLogsClient, CreateLogGroupError, CreateLogGroupRequest,
     CreateLogStreamError, CreateLogStreamRequest, DeleteLogGroupRequest, DescribeLogStreamsRequest,
-    GetLogEventsRequest, InputLogEvent, PutLogEventsRequest, GetLogEventsResponse,
+    GetLogEventsRequest, GetLogEventsResponse, InputLogEvent, PutLogEventsRequest,
 };
 use std::fs;
 use std::time::SystemTime;
@@ -112,7 +112,10 @@ fn rusoto_logs_test_executor(client: CloudWatchLogsClient, log_group: &str, log_
         if i == retry_count {
             break None;
         }
-        info!("Trying to get log events: {} out of {} times", i, retry_count);
+        info!(
+            "Trying to get log events: {} out of {} times",
+            i, retry_count
+        );
         let get_log_resp = client
             .get_log_events(get_log_req.clone())
             .sync()
@@ -132,28 +135,28 @@ fn rusoto_logs_test_executor(client: CloudWatchLogsClient, log_group: &str, log_
 
     // Assert that our event is there
     let output_event = &get_log_resp.unwrap().events.unwrap()[0];
-    assert_eq!(output_event.message.as_ref().unwrap(), &input_events[0].message);
+    assert_eq!(
+        output_event.message.as_ref().unwrap(),
+        &input_events[0].message
+    );
     assert_eq!(output_event.timestamp.unwrap(), input_events[0].timestamp);
 
     // Delete log group. This will clear all resources so we would not leak anything.
     let del_log_group_req = DeleteLogGroupRequest {
         log_group_name: log_group.to_owned(),
     };
-    client.delete_log_group(del_log_group_req).sync().unwrap_or_else(|e| {
-        panic!("Failed to delete log group:/n{}", e)
-    });
+    client
+        .delete_log_group(del_log_group_req)
+        .sync()
+        .unwrap_or_else(|e| panic!("Failed to delete log group:/n{}", e));
 }
 
 #[test]
 fn should_put_log_events() {
     let http_client = HttpClient::new().expect("failed to create request dispatcher");
-    let creds_provider = DefaultCredentialsProvider::new()
-        .expect("failed to create default credentials provider");
-    let client = CloudWatchLogsClient::new_with(
-        http_client,
-        creds_provider,
-        Region::UsWest2,
-    );
+    let creds_provider =
+        DefaultCredentialsProvider::new().expect("failed to create default credentials provider");
+    let client = CloudWatchLogsClient::new_with(http_client, creds_provider, Region::UsWest2);
     rusoto_logs_test_executor(client, "should_put_log_events", "should_put_log_events");
 }
 
@@ -161,13 +164,33 @@ fn should_put_log_events() {
 #[test]
 fn should_put_log_events_with_gzip_encoding() {
     let http_client = HttpClient::new().expect("failed to create request dispatcher");
-    let creds_provider = DefaultCredentialsProvider::new()
-        .expect("failed to create default credentials provider");
-    let mut client = CloudWatchLogsClient::new_with(
-        http_client,
-        creds_provider,
-        Region::UsWest2,
+    let creds_provider =
+        DefaultCredentialsProvider::new().expect("failed to create default credentials provider");
+    let mut client = CloudWatchLogsClient::new_with(http_client, creds_provider, Region::UsWest2);
+    client.set_http_content_encoding(ContentEncoding::Gzip(
+        Some(1024),
+        rusoto_core::flate2::Compression::default(),
+    ));
+    rusoto_logs_test_executor(
+        client,
+        "should_put_log_events_with_encoding",
+        "should_put_log_events_with_encoding",
     );
-    client.set_http_content_encoding(ContentEncoding::Gzip(Some(1024), rusoto_core::flate2::Compression::default()));
-    rusoto_logs_test_executor(client, "should_put_log_events_with_encoding", "should_put_log_events_with_encoding");
+}
+
+fn should_put_log_events_with_gzip_encoding_via_shared_client() {
+    let http_client = HttpClient::new().expect("failed to create request dispatcher");
+    let creds_provider =
+        DefaultCredentialsProvider::new().expect("failed to create default credentials provider");
+    let mut client = CloudWatchLogsClient::new_with(http_client, creds_provider, Region::UsWest2);
+    client.set_http_content_encoding(ContentEncoding::Gzip(
+        Some(1024),
+        rusoto_core::flate2::Compression::default(),
+    ));
+    let mut client = rusoto_core::Shared
+    rusoto_logs_test_executor(
+        client,
+        "should_put_log_events_with_gzip_encoding_via_shared_client",
+        "should_put_log_events_with_gzip_encoding_via_shared_client",
+    );
 }
