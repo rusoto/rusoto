@@ -80,6 +80,24 @@ impl Client {
         }
     }
 
+    /// Create a client from a credentials provider and request dispatcher.
+    pub fn new_with<P, D>(credentials_provider: P, dispatcher: D, content_encoding: ContentEncoding) -> Self
+    where
+        P: ProvideAwsCredentials + Send + Sync + 'static,
+        P::Future: Send,
+        D: DispatchSignedRequest + Send + Sync + 'static,
+        D::Future: Send,
+    {
+        let inner = ClientInner {
+            credentials_provider: Some(Arc::new(credentials_provider)),
+            dispatcher: Arc::new(dispatcher),
+            content_encoding,
+        };
+        Client {
+            inner: Arc::new(inner),
+        }
+    }
+
     /// Fetch credentials, sign the request and dispatch it.
     pub fn sign_and_dispatch<T, E>(
         &self,
@@ -91,12 +109,6 @@ impl Client {
         future::new(self.inner.sign_and_dispatch(request), response_handler)
     }
 
-    /// Set content_encoding type for http requests which will compress request payload accordingly
-    pub fn set_http_content_encoding(&mut self, content_encoding: ContentEncoding) {
-        let inner = Arc::get_mut(&mut self.inner)
-            .expect("Can't set client encoding because resource has more than one reference");
-        inner.set_content_encoding(content_encoding);
-    }
 }
 
 pub enum SignAndDispatchError {
@@ -110,7 +122,7 @@ trait SignAndDispatch {
         request: SignedRequest,
     ) -> Box<dyn TimeoutFuture<Item = HttpResponse, Error = SignAndDispatchError> + Send>;
 
-    fn set_content_encoding(&mut self, content_encoding: ContentEncoding);
+    
 }
 
 pub trait TimeoutFuture: Future {
