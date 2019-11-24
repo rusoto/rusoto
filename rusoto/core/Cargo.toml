@@ -63,8 +63,8 @@ serde_json = "1.0.1"
 serde_test = "1.0.1"
 
 [features]
-encoding = []
 default = ["native-tls"]
+encoding = []
 nightly-testing = ["rusoto_credential/nightly-testing"]
 native-tls = ["hyper-tls"]
 rustls = ["hyper-rustls"]

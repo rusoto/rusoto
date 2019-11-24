@@ -8,7 +8,7 @@ extern crate rusoto_credential;
 extern crate rusoto_logs;
 
 use rusoto_core::encoding::ContentEncoding;
-use rusoto_core::{HttpClient, Region, RusotoError};
+use rusoto_core::{Client, HttpClient, Region, RusotoError};
 use rusoto_credential::DefaultCredentialsProvider;
 use rusoto_logs::{
     CloudWatchLogs, CloudWatchLogsClient, CreateLogGroupError, CreateLogGroupRequest,
@@ -160,37 +160,20 @@ fn should_put_log_events() {
     rusoto_logs_test_executor(client, "should_put_log_events", "should_put_log_events");
 }
 
-#[cfg(feature = "encoding")]
 #[test]
 fn should_put_log_events_with_gzip_encoding() {
     let http_client = HttpClient::new().expect("failed to create request dispatcher");
     let creds_provider =
         DefaultCredentialsProvider::new().expect("failed to create default credentials provider");
-    let mut client = CloudWatchLogsClient::new_with(http_client, creds_provider, Region::UsWest2);
-    client.set_http_content_encoding(ContentEncoding::Gzip(
-        Some(1024),
-        rusoto_core::flate2::Compression::default(),
-    ));
-    rusoto_logs_test_executor(
-        client,
-        "should_put_log_events_with_encoding",
-        "should_put_log_events_with_encoding",
+    let encoding = ContentEncoding::Gzip(Some(1024), rusoto_core::flate2::Compression::default());
+    let client = CloudWatchLogsClient::new_with_client(
+        // Use gzip encoding with client
+        Client::new_with_encoding(creds_provider, http_client, encoding),
+        Region::UsWest2,
     );
-}
-
-fn should_put_log_events_with_gzip_encoding_via_shared_client() {
-    let http_client = HttpClient::new().expect("failed to create request dispatcher");
-    let creds_provider =
-        DefaultCredentialsProvider::new().expect("failed to create default credentials provider");
-    let mut client = CloudWatchLogsClient::new_with(http_client, creds_provider, Region::UsWest2);
-    client.set_http_content_encoding(ContentEncoding::Gzip(
-        Some(1024),
-        rusoto_core::flate2::Compression::default(),
-    ));
-    let mut client = rusoto_core::Shared
     rusoto_logs_test_executor(
         client,
-        "should_put_log_events_with_gzip_encoding_via_shared_client",
-        "should_put_log_events_with_gzip_encoding_via_shared_client",
+        "should_put_log_events_with_encoding",
+        "should_put_log_events_with_encoding",
     );
 }

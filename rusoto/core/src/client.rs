@@ -80,8 +80,13 @@ impl Client {
         }
     }
 
-    /// Create a client from a credentials provider and request dispatcher.
-    pub fn new_with<P, D>(credentials_provider: P, dispatcher: D, content_encoding: ContentEncoding) -> Self
+    #[cfg(feature = "encoding")]
+    /// Create a client with content encoding to compress payload before sending requests
+    pub fn new_with_encoding<P, D>(
+        credentials_provider: P,
+        dispatcher: D,
+        content_encoding: ContentEncoding,
+    ) -> Self
     where
         P: ProvideAwsCredentials + Send + Sync + 'static,
         P::Future: Send,
@@ -108,7 +113,6 @@ impl Client {
     ) -> RusotoFuture<T, E> {
         future::new(self.inner.sign_and_dispatch(request), response_handler)
     }
-
 }
 
 pub enum SignAndDispatchError {
@@ -121,8 +125,6 @@ trait SignAndDispatch {
         &self,
         request: SignedRequest,
     ) -> Box<dyn TimeoutFuture<Item = HttpResponse, Error = SignAndDispatchError> + Send>;
-
-    
 }
 
 pub trait TimeoutFuture: Future {
@@ -162,10 +164,6 @@ where
             state: Some(SignAndDispatchState::Lazy { request }),
             timeout: None,
         })
-    }
-
-    fn set_content_encoding(&mut self, content_encoding: ContentEncoding) {
-        self.content_encoding = content_encoding
     }
 }
 
