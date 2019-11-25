@@ -35,7 +35,6 @@ pub extern crate rusoto_credential as credential;
 extern crate serde;
 #[macro_use]
 extern crate serde_derive;
-pub extern crate flate2;
 extern crate serde_json;
 extern crate time;
 extern crate tokio;

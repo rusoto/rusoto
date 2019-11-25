@@ -6,20 +6,24 @@ use flate2::{write::GzEncoder, Compression};
 #[cfg(feature = "encoding")]
 use std::io::Write;
 
+// Default compression level for gzip defined same as flate2
+pub const DEFAULT_GZIP_COMPRESSION_LEVEL: u32 = 6;
+
 #[derive(Debug, Clone)]
 pub enum ContentEncoding {
     /// Indicates the identity function (i.e., no compression or modification)
     Identity,
 
-    /// GzipCompressor uses flate2 library's GzEncoder internally to compress request payloads.
+    /// Gzip encoding uses flate2 library's GzEncoder internally to compress request payloads.
     /// Streaming requests are not supported yet.
     ///
-    /// First parameter is for minimum payload. If request payload is lesser than it no compression
-    /// will happen.
+    /// First parameter is for minimum payload. If request payload length is lesser than it
+    /// no compression will be performed.
     ///
-    /// Second parameter is Compression level for Gzip
+    /// Second parameter is the compression level for gzip on a scale of 0-9 where 0 means
+    /// "no compression" and 9 means "take as long as you'd like".
     #[cfg(feature = "encoding")]
-    Gzip(Option<usize>, Compression),
+    Gzip(Option<usize>, u32),
 }
 
 impl Default for ContentEncoding {
@@ -46,7 +50,7 @@ impl ContentEncoding {
                                 return;
                             }
                         }
-                        let mut encoder = GzEncoder::new(Vec::<u8>::new(), *level);
+                        let mut encoder = GzEncoder::new(Vec::<u8>::new(), Compression::new(*level));
                         encoder
                             .write_all(payload)
                             .expect("Request payload was not written to encoder.");

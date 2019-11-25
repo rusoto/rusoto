@@ -8,6 +8,7 @@ extern crate rusoto_credential;
 extern crate rusoto_logs;
 
 use rusoto_core::encoding::ContentEncoding;
+use rusoto_core::encoding::DEFAULT_GZIP_COMPRESSION_LEVEL;
 use rusoto_core::{Client, HttpClient, Region, RusotoError};
 use rusoto_credential::DefaultCredentialsProvider;
 use rusoto_logs::{
@@ -165,7 +166,7 @@ fn should_put_log_events_with_gzip_encoding() {
     let http_client = HttpClient::new().expect("failed to create request dispatcher");
     let creds_provider =
         DefaultCredentialsProvider::new().expect("failed to create default credentials provider");
-    let encoding = ContentEncoding::Gzip(Some(1024), rusoto_core::flate2::Compression::default());
+    let encoding = ContentEncoding::Gzip(Some(1024), DEFAULT_GZIP_COMPRESSION_LEVEL);
     let client = CloudWatchLogsClient::new_with_client(
         // Use gzip encoding with client
         Client::new_with_encoding(creds_provider, http_client, encoding),
